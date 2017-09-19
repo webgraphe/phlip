@@ -1,0 +1,45 @@
+{
+    "name": "webgraphe/phlip",
+    "description": "A dialect for PHP in the form of s-expressions like LISP",
+    "type": "library",
+    "keywords": [
+        "lisp",
+        "s-expression",
+        "dialect"
+    ],
+    "homepage": "https://github.com/webgraphe/phlip",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jean-Philippe Léveillé",
+            "email": "jpleveille@gmail.com",
+            "role": "lead"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/webgraphe/phlip/issues"
+    },
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "6.3.*"
+    },
+    "bin": [
+        "phlip"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Webgraphe\\Phlip\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Webgraphe\\Phlip\\": "tests/"
+        }
+    },
+    "scripts": {
+        "phpunit": "vendor/bin/phpunit --colors"
+    }
+}

@@ -1,0 +1,1 @@
+(assert (= '(4 bar baz bbq) (cons '4 (cons 'bar '(baz bbq)))))
