@@ -22,13 +22,16 @@ class ConsOperation extends LanguageConstruct
     protected function invoke(ContextContract $context, ExpressionList $expressions)
     {
         /** @var ExpressionContract $head */
-        $head = self::assertType(ExpressionContract::class, $expressions->assertHeadExpression()->evaluate($context));
+        $head = $expressions->assertHeadExpression()->evaluate($context);
         $tail = ExpressionList::asList(
             self::assertType(
                 ExpressionContract::class,
                 $expressions->getTailExpressions()->assertHeadExpression()->evaluate($context)
             )
         );
+        if (!($head instanceof ExpressionContract)) {
+            ExpressionList::fromArray([$head]);
+        }
 
         return new ExpressionList($head, ...$tail->all());
     }

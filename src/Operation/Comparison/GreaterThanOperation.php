@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Comparison;
 
-use Webgraphe\Phlip\Atom\LiteralAtom;
+use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\FunctionContract;
 use Webgraphe\Phlip\Operation;
 
@@ -20,11 +20,11 @@ class GreaterThanOperation extends Operation implements FunctionContract
         $left = array_shift($arguments);
         $right = array_shift($arguments);
 
-        if ($left instanceof LiteralAtom && $right instanceof LiteralAtom) {
-            return $left->getValue() > $right->getValue();
+        if ($left instanceof Atom && $right instanceof Atom) {
+            return $left->greaterThan($right);
         }
 
-        return null;
+        return false;
     }
 
     /**

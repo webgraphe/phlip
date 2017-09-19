@@ -10,20 +10,15 @@ abstract class Atom implements LexemeContract, ExpressionContract
 {
     use AssertsStaticType;
 
-    /** @var string */
+    /** @var string|number|bool|null */
     private $value;
 
-    public function __construct(string $value)
+    protected function __construct(string $value)
     {
         $this->value = $value;
     }
 
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    public function __toString(): string
+    protected function getOriginalValue(): string
     {
         return $this->value;
     }
@@ -32,4 +27,8 @@ abstract class Atom implements LexemeContract, ExpressionContract
     {
         return $against instanceof static && $against->getValue() === $this->getValue();
     }
+
+    abstract public function greaterThan(Atom $other): bool;
+
+    abstract public function lesserThan(Atom $other): bool;
 }

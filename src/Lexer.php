@@ -2,8 +2,11 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\Atom\BooleanAtom;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Atom\LiteralAtom;
+use Webgraphe\Phlip\Atom\NullAtom;
+use Webgraphe\Phlip\Atom\NumberAtom;
+use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Symbol\CloseDelimiterSymbol;
 use Webgraphe\Phlip\Symbol\OpenDelimiterSymbol;
@@ -44,7 +47,19 @@ class Lexer
                     break;
                 default:
                     $lexeme = $this->parseWord($stream);
-                    $lexemes[] = is_numeric($lexeme) ? new LiteralAtom($lexeme) : new IdentifierAtom($lexeme);
+                    switch ($lexeme) {
+                        case NullAtom::isNull($lexeme):
+                            $lexemes[] = NullAtom::instance();
+                            break;
+                        case BooleanAtom::isBoolean($lexeme):
+                            $lexemes[] = 'true' === $lexeme ? BooleanAtom::true() : BooleanAtom::false();
+                            break;
+                        case NumberAtom::isNumber($lexeme):
+                            $lexemes[] = new NumberAtom($lexeme);
+                            break;
+                        default:
+                            $lexemes[] = new IdentifierAtom($lexeme);
+                    }
                     break;
             }
             $stream->next();
@@ -53,7 +68,7 @@ class Lexer
         return new LexemeStream(...$lexemes);
     }
 
-    private function parseString(CharacterStream $stream): LiteralAtom
+    private function parseString(CharacterStream $stream): StringAtom
     {
         $string = '';
         while (true) {
@@ -78,7 +93,7 @@ class Lexer
             $string .= $character;
         }
 
-        return new LiteralAtom($string);
+        return new StringAtom($string);
     }
 
     private function parseComment(CharacterStream $stream): Comment

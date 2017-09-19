@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\ExpressionContract;
 use Webgraphe\Phlip\Contracts\LanguageConstructContract;
@@ -22,6 +23,20 @@ class ExpressionList implements ExpressionContract, \Countable
     public static function asList(ExpressionContract $expression): ExpressionList
     {
         return $expression instanceof ExpressionList ? $expression : new ExpressionList($expression);
+    }
+
+    public static function fromArray(array $array)
+    {
+        $list = [];
+        foreach ($array as $element) {
+            switch (true) {
+                case $element instanceof ExpressionContract:
+                    $list[] = $element;
+                    break;
+                case is_bool($element):
+                    $list[] = new IdentifierAtom($element ? 'true' : 'false');
+            }
+        }
     }
 
     public function getHeadExpression(): ?ExpressionContract
