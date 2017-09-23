@@ -1,1 +1,6 @@
-(assert (= '(4 bar baz bbq) (cons '4 (cons 'bar '(baz bbq)))))
+(test "Cons tests"
+    (assert-equals
+        '("foo" bar 4 true false null)
+        (cons "foo" (cons 'bar (cons (+ 2 2) (cons true (cons false null)))))
+    )
+)

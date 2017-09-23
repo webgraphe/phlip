@@ -2,26 +2,20 @@
 
 namespace Webgraphe\Phlip\Operation\Comparison;
 
-use Webgraphe\Phlip\Atom;
+use Webgraphe\Phlip\Contracts\ExpressionContract;
 use Webgraphe\Phlip\Contracts\FunctionContract;
 use Webgraphe\Phlip\Operation;
 
-class LesserThanOrEqualToOperation extends Operation\Comparison
+class EqualityOperation extends Operation\Comparison
 {
-    const IDENTIFIER = '<=';
-    const IDENTIFIER_ALTERNATIVE= 'lte?';
+    const IDENTIFIER = '=';
 
-    /**
-     * @param array ...$arguments
-     * @return mixed
-     */
     public function __invoke(...$arguments)
     {
         $left = self::assertValue(array_shift($arguments));
         $right = self::assertValue(array_shift($arguments));
 
-        return $left <= $right;
-
+        return $left === $right;
     }
 
     /**
@@ -29,6 +23,6 @@ class LesserThanOrEqualToOperation extends Operation\Comparison
      */
     public function getIdentifiers(): array
     {
-        return [self::IDENTIFIER, self::IDENTIFIER_ALTERNATIVE];
+        return [self::IDENTIFIER];
     }
 }

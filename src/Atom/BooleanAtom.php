@@ -10,31 +10,30 @@ class BooleanAtom extends Atom
     /** @var bool */
     private $boolean;
 
+    protected function __construct($value)
+    {
+        parent::__construct($value);
+
+        $this->boolean = 'true' === $value;
+    }
+
     public static function isBoolean(string $lexeme): bool
     {
-        return 'true' === $lexeme || 'false' === $lexeme;
+        return true === $lexeme || 'true' === $lexeme || false === $lexeme || 'false' === $lexeme;
     }
 
     public static function true(): BooleanAtom
     {
         static $true;
-        if (!$true) {
-            $true = new self('true');
-            $true->boolean = true;
-        }
 
-        return $true;
+        return $true ?? ($true = new self('true'));
     }
 
     public static function false(): BooleanAtom
     {
         static $false;
-        if (!$false) {
-            $false = new self('false');
-            $false->boolean = false;
-        }
 
-        return $false;
+        return $false ?? ($false = new self('false'));
     }
 
     /**
@@ -57,23 +56,5 @@ class BooleanAtom extends Atom
     public function __toString(): string
     {
         return $this->boolean ? 'true' : 'false';
-    }
-
-    public function greaterThan(Atom $other): bool
-    {
-        if ($other instanceof static) {
-            return (int)$this->boolean > (int)$other->boolean;
-        }
-
-        return false;
-    }
-
-    public function lesserThan(Atom $other): bool
-    {
-        if ($other instanceof static) {
-            return (int)$this->boolean < (int)$other->boolean;
-        }
-
-        return false;
     }
 }

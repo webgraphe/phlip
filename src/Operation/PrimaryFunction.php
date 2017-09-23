@@ -8,7 +8,7 @@ use Webgraphe\Phlip\Contracts\LanguageConstructContract;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation;
 
-abstract class LanguageConstruct extends Operation implements LanguageConstructContract
+abstract class PrimaryFunction extends Operation implements LanguageConstructContract
 {
     /**
      * @param ContextContract $context

@@ -8,8 +8,8 @@ use Webgraphe\Phlip\Atom\NullAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Exception\LexerException;
-use Webgraphe\Phlip\Symbol\CloseDelimiterSymbol;
-use Webgraphe\Phlip\Symbol\OpenDelimiterSymbol;
+use Webgraphe\Phlip\Symbol\CloseListSymbol;
+use Webgraphe\Phlip\Symbol\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\QuoteSymbol;
 
 class Lexer
@@ -33,11 +33,11 @@ class Lexer
                 case QuoteSymbol::CHARACTER:
                     $lexemes[] = QuoteSymbol::instance();
                     break;
-                case OpenDelimiterSymbol::CHARACTER:
-                    $lexemes[] = OpenDelimiterSymbol::instance();
+                case OpenListSymbol::CHARACTER:
+                    $lexemes[] = OpenListSymbol::instance();
                     break;
-                case CloseDelimiterSymbol::CHARACTER:
-                    $lexemes[] = CloseDelimiterSymbol::instance();
+                case CloseListSymbol::CHARACTER:
+                    $lexemes[] = CloseListSymbol::instance();
                     break;
                 case ';':
                     $lexemes[] = $this->parseComment($stream);
@@ -47,7 +47,7 @@ class Lexer
                     break;
                 default:
                     $lexeme = $this->parseWord($stream);
-                    switch ($lexeme) {
+                    switch (true) {
                         case NullAtom::isNull($lexeme):
                             $lexemes[] = NullAtom::instance();
                             break;

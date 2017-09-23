@@ -7,30 +7,16 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 
 class NullAtom extends Atom
 {
-    public static function instance()
+    public static function instance(): NullAtom
     {
         static $instance;
 
-        if (!$instance) {
-            $instance = new self('null');
-        }
-
-        return $instance;
+        return $instance ?? ($instance = new self('null'));
     }
 
     public static function isNull($lexeme)
     {
-        return 'null' === $lexeme;
-    }
-
-    public function greaterThan(Atom $other): bool
-    {
-        return true;
-    }
-
-    public function lesserThan(Atom $other): bool
-    {
-        return false;
+        return null === $lexeme || 'null' === $lexeme;
     }
 
     /**

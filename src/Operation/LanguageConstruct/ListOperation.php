@@ -1,6 +1,6 @@
 <?php
 
-namespace Webgraphe\Phlip\Operation\Structures;
+namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\FunctionContract;
 use Webgraphe\Phlip\Operation;

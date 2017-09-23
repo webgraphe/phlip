@@ -3,22 +3,23 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FunctionContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\LanguageConstruct;
+use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\PrimaryFunction;
 
-class CarOperation extends LanguageConstruct
+class CarOperation extends Operation implements FunctionContract
 {
     const IDENTIFIER = 'car';
     const IDENTIFIER_ALTERNATIVE = 'head';
 
     /**
-     * @param ContextContract $context
-     * @param ExpressionList $expressions
+     * @param array ...$arguments
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ExpressionList $expressions)
+    public function __invoke(...$arguments)
     {
-        return $expressions->getHeadExpression();
+        return array_shift($arguments);
     }
 
     /**

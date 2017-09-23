@@ -1,12 +1,12 @@
 <?php
 
-namespace Webgraphe\Phlip\Operation\LanguageConstruct\Logic;
+namespace Webgraphe\Phlip\Operation\Logic;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\LanguageConstruct;
+use Webgraphe\Phlip\Operation\PrimaryFunction;
 
-class OrOperation extends LanguageConstruct
+class OrOperation extends PrimaryFunction
 {
     const IDENTIFIER = 'or';
     const IDENTIFIER_ALTERNATIVE = '||';

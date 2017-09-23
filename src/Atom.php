@@ -27,8 +27,4 @@ abstract class Atom implements LexemeContract, ExpressionContract
     {
         return $against instanceof static && $against->getValue() === $this->getValue();
     }
-
-    abstract public function greaterThan(Atom $other): bool;
-
-    abstract public function lesserThan(Atom $other): bool;
 }

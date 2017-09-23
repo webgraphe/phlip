@@ -18,9 +18,12 @@ class MultiplicationOperation extends Operation implements FunctionContract
     public static function product(...$arguments)
     {
         $product = 1;
-        array_walk($arguments, function ($argument) use (&$product) {
-            $product *= $argument;
-        });
+        array_map(
+            function ($argument) use (&$product) {
+                $product *= $argument;
+            },
+            $arguments
+        );
 
         return $product;
     }

@@ -26,22 +26,4 @@ class StringAtom extends Atom
     {
         return '"' . str_replace('"', '\\"', $this->getOriginalValue()) . '"';
     }
-
-    public function greaterThan(Atom $other): bool
-    {
-        if ($other instanceof static) {
-            return strcmp($this->getOriginalValue(), $other->getOriginalValue()) > 0;
-        }
-
-        return false;
-    }
-
-    public function lesserThan(Atom $other): bool
-    {
-        if ($other instanceof static) {
-            return strcmp($this->getOriginalValue(), $other->getOriginalValue()) < 0;
-        }
-
-        return false;
-    }
 }

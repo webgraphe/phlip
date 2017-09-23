@@ -14,13 +14,4 @@ trait AssertsTypes
 
         return $thing;
     }
-
-    public static function assertNotType($expected, $thing)
-    {
-        if (null === $thing && is_a($thing, $expected)) {
-            throw new \RuntimeException("Assertion failed; was not expecting a '$expected'");
-        }
-
-        return $thing;
-    }
 }

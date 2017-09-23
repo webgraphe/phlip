@@ -1,12 +1,12 @@
 <?php
 
-namespace Webgraphe\Phlip\Operation\LanguageConstruct\Logic;
+namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\LanguageConstruct;
+use Webgraphe\Phlip\Operation\PrimaryFunction;
 
-class IfOperation extends LanguageConstruct
+class IfOperation extends PrimaryFunction
 {
     const IDENTIFIER = 'if';
 

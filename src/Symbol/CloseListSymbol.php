@@ -4,9 +4,9 @@ namespace Webgraphe\Phlip\Symbol;
 
 use Webgraphe\Phlip\Symbol;
 
-class OpenDelimiterSymbol extends Symbol
+class CloseListSymbol extends Symbol
 {
-    const CHARACTER = "(";
+    const CHARACTER = ")";
 
     public function getValue(): string
     {

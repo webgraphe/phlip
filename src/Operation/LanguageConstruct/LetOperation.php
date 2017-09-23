@@ -6,9 +6,9 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\LanguageConstruct;
+use Webgraphe\Phlip\Operation\PrimaryFunction;
 
-class LetOperation extends LanguageConstruct
+class LetOperation extends PrimaryFunction
 {
     const IDENTIFIER = 'let';
 

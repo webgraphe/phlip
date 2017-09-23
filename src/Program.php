@@ -2,6 +2,8 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\Contracts\ContextContract;
+
 class Program
 {
     /** @var ExpressionList */
@@ -30,10 +32,10 @@ class Program
     }
 
     /**
-     * @param Context $context
+     * @param ContextContract $context
      * @return mixed
      */
-    public function execute(Context $context)
+    public function execute(ContextContract $context)
     {
         $result = null;
 
@@ -44,5 +46,13 @@ class Program
         }
 
         return $result;
+    }
+
+    /**
+     * @return ExpressionList
+     */
+    public function getStatements(): ExpressionList
+    {
+        return $this->statements;
     }
 }

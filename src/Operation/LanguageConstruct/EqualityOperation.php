@@ -1,16 +1,19 @@
 <?php
 
-namespace Webgraphe\Phlip\Operation\Comparison;
+namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ExpressionContract;
 use Webgraphe\Phlip\Contracts\FunctionContract;
 use Webgraphe\Phlip\Operation;
 
-class EqualOperation extends Operation implements FunctionContract
+class EqualityOperation extends Operation implements FunctionContract
 {
-    const IDENTIFIER = '=';
-    const IDENTIFIER_ALTERNATIVE = 'eq?';
+    const IDENTIFIER = 'equals?';
 
+    /**
+     * @param array ...$arguments
+     * @return mixed
+     */
     public function __invoke(...$arguments)
     {
         $left = array_shift($arguments);
@@ -20,7 +23,7 @@ class EqualOperation extends Operation implements FunctionContract
             return $left->equals($right);
         }
 
-        return $left === $right;
+        return false;
     }
 
     /**
@@ -28,6 +31,6 @@ class EqualOperation extends Operation implements FunctionContract
      */
     public function getIdentifiers(): array
     {
-        return [self::IDENTIFIER, self::IDENTIFIER_ALTERNATIVE];
+        return [self::IDENTIFIER];
     }
 }

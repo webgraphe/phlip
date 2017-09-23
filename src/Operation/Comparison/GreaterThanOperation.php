@@ -3,10 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Comparison;
 
 use Webgraphe\Phlip\Atom;
-use Webgraphe\Phlip\Contracts\FunctionContract;
 use Webgraphe\Phlip\Operation;
 
-class GreaterThanOperation extends Operation implements FunctionContract
+class GreaterThanOperation extends Operation\Comparison
 {
     const IDENTIFIER = '>';
     const IDENTIFIER_ALTERNATIVE= 'gt?';
@@ -17,14 +16,10 @@ class GreaterThanOperation extends Operation implements FunctionContract
      */
     public function __invoke(...$arguments)
     {
-        $left = array_shift($arguments);
-        $right = array_shift($arguments);
+        $left = self::assertValue(array_shift($arguments));
+        $right = self::assertValue(array_shift($arguments));
 
-        if ($left instanceof Atom && $right instanceof Atom) {
-            return $left->greaterThan($right);
-        }
-
-        return false;
+        return $left > $right;
     }
 
     /**

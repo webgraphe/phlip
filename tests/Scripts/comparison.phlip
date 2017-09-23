@@ -1,0 +1,22 @@
+(test "= operator tests"
+    (assert (= "hello" "hello"))
+    (assert (= 42 42))
+    (assert (= 3.14 3.14))
+    (assert (= true true))
+    (assert (= false false))
+    (assert (= null null))
+)
+
+(test "Comparison operator tests"
+    (assert (> 3 2))
+    (assert (< 2 3))
+    (assert (<= 2 3))
+    (assert (<= 3 3))
+    (assert (>= 3 3))
+    (assert (>= 3 2))
+    (assert (!= 3 2))
+
+    (assert (> 0 (<=> 2 3)))
+    (assert (= 0 (<=> 3 3)))
+    (assert (< 0 (<=> 3 2)))
+)

@@ -33,14 +33,4 @@ class IdentifierAtom extends Atom
     {
         return $this->getValue();
     }
-
-    public function greaterThan(Atom $other): bool
-    {
-        return false;
-    }
-
-    public function lesserThan(Atom $other): bool
-    {
-        return false;
-    }
 }

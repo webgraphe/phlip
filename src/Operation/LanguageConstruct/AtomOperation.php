@@ -4,28 +4,29 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FunctionContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\LanguageConstruct;
+use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\PrimaryFunction;
 use Webgraphe\Phlip\QuotedExpression;
 
-class AtomOperation extends LanguageConstruct
+class AtomOperation extends Operation implements FunctionContract
 {
     const IDENTIFIER = 'atom?';
 
-    /**
-     * @param ContextContract $context
-     * @param ExpressionList $expressions
-     * @return mixed
-     */
-    protected function invoke(ContextContract $context, ExpressionList $expressions)
+    public function __invoke(...$arguments): bool
     {
-        $variable = $expressions->assertHeadExpression();
+        $variable = array_shift($arguments);
 
         if ($variable instanceof QuotedExpression) {
             $variable = $variable->getExpression();
         }
 
-        return $variable instanceof Atom || $variable instanceof ExpressionList && 0 === count($variable);
+        return is_scalar($variable)
+            || null === $variable
+            || is_array($variable) && 0 === count($variable)
+            || $variable instanceof Atom
+            || $variable instanceof ExpressionList && 0 === count($variable);
     }
 
     /**

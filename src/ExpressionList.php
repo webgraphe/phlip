@@ -2,7 +2,6 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\ExpressionContract;
 use Webgraphe\Phlip\Contracts\LanguageConstructContract;
@@ -22,21 +21,9 @@ class ExpressionList implements ExpressionContract, \Countable
 
     public static function asList(ExpressionContract $expression): ExpressionList
     {
-        return $expression instanceof ExpressionList ? $expression : new ExpressionList($expression);
-    }
-
-    public static function fromArray(array $array)
-    {
-        $list = [];
-        foreach ($array as $element) {
-            switch (true) {
-                case $element instanceof ExpressionContract:
-                    $list[] = $element;
-                    break;
-                case is_bool($element):
-                    $list[] = new IdentifierAtom($element ? 'true' : 'false');
-            }
-        }
+        return $expression instanceof ExpressionList
+            ? $expression
+            : new ExpressionList($expression);
     }
 
     public function getHeadExpression(): ?ExpressionContract
@@ -92,7 +79,11 @@ class ExpressionList implements ExpressionContract, \Countable
      */
     public function evaluate(ContextContract $context)
     {
-        $callable = self::assertCallable($this->getHeadExpression()->evaluate($context));
+        if (!$this->getHeadExpression()) {
+            return null;
+        }
+
+        $callable = self::assertCallable($this->assertHeadExpression()->evaluate($context));
         $arguments = $callable instanceof LanguageConstructContract
             ? array_merge([$context], $this->getTailExpressions()->all())
             : array_map(
@@ -129,12 +120,14 @@ class ExpressionList implements ExpressionContract, \Countable
         return $against instanceof static
             && count($this->expressions) === count($against->expressions)
             && count($this->expressions) === count(
-                array_map(
-                    function (ExpressionContract $left, $right) {
-                        return $left->equals($right);
-                    },
-                    $this->expressions,
-                    $against->expressions
+                array_filter(
+                    array_map(
+                        function (ExpressionContract $left, $right) {
+                            return $left->equals($right);
+                        },
+                        $this->expressions,
+                        $against->expressions
+                    )
                 )
             );
     }

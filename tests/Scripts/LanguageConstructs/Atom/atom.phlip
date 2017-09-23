@@ -1,0 +1,11 @@
+(test "Atom tests"
+    (assert (atom? 0))
+    (assert (atom? 1))
+    (assert (atom? -1))
+    (assert (atom? true))
+    (assert (atom? false))
+    (assert (atom? null))
+    (assert (atom? '()))
+    (assert (atom? ())) ; returns null
+    (assert (not (atom? '(a b c))))
+)

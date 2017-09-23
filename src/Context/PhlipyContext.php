@@ -2,69 +2,87 @@
 
 namespace Webgraphe\Phlip\Context;
 
+use Webgraphe\Phlip\Atom\BooleanAtom;
+use Webgraphe\Phlip\Atom\NullAtom;
 use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Operation;
 
 class PhlipyContext extends Context
 {
-    public function __construct(Context $parent = null)
+    public function __construct(ContextContract $parent = null)
     {
         parent::__construct($parent);
 
-        $this->defineOperation(new Operation\LanguageConstruct\DefineOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\DefinedOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\LetOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\SetOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\GetOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\LambdaOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\AtomOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\CarOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\CdrOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\ConsOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\Logic\AndOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\Logic\OrOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\Logic\IfOperation);
-        $this->defineOperation(new Operation\LanguageConstruct\Structures\DictionaryOperation);
-
-        $this->defineOperation(new Operation\Arithmetic\AdditionOperation);
-        $this->defineOperation(new Operation\Arithmetic\SubtractionOperation);
-        $this->defineOperation(new Operation\Arithmetic\MultiplicationOperation);
-        $this->defineOperation(new Operation\Arithmetic\DivisionOperation);
-        $this->defineOperation(new Operation\Arithmetic\ModuloOperation);
-        $this->defineOperation(new Operation\Arithmetic\RemainderOperation);
-
-        $this->defineOperation(new Operation\Comparison\EqualOperation);
-        $this->defineOperation(new Operation\Comparison\NotEqualOperation);
-        $this->defineOperation(new Operation\Comparison\GreaterThanOperation);
-        $this->defineOperation(new Operation\Comparison\GreaterThanOrEqualToOperation);
-        $this->defineOperation(new Operation\Comparison\LesserThanOperation);
-        $this->defineOperation(new Operation\Comparison\LesserThanOrEqualToOperation);
-        $this->defineOperation(new Operation\Comparison\SpaceshipOperation);
-
-        $this->defineOperation(new Operation\Logic\NotOperation);
-        $this->defineOperation(new Operation\Logic\XorOperation);
-
-        $this->defineOperation(new Operation\Structures\ListOperation);
-
-        $this->define('null', null);
-        $this->define('true', true);
-        $this->define('false', false);
+        self::withFinalAtoms($this);
+        self::withLanguageConstructs($this);
+        self::withArithmeticOperators($this);
+        self::withComparisonOperators($this);
+        self::withLogicOperators($this);
     }
 
-    private function defineOperation(Operation $operation)
+    private static function withFinalAtoms(ContextContract $context)
+    {
+        $context->define((string)NullAtom::instance(), NullAtom::instance()->getValue());
+        $context->define((string)BooleanAtom::true(), BooleanAtom::true()->getValue());
+        $context->define((string)BooleanAtom::false(), BooleanAtom::false()->getValue());
+    }
+
+    public static function withLanguageConstructs(ContextContract $context)
+    {
+        self::defineOperation($context, new Operation\LanguageConstruct\DefineOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\DefinedOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\LetOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\SetOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\LambdaOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\IfOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\ListOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\AtomOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\CarOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\CdrOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\ConsOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\EqualityOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\QuoteOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\Structures\DictionaryOperation);
+    }
+
+    private static function withArithmeticOperators(ContextContract $context)
+    {
+        self::defineOperation($context, new Operation\Arithmetic\AdditionOperation);
+        self::defineOperation($context, new Operation\Arithmetic\SubtractionOperation);
+        self::defineOperation($context, new Operation\Arithmetic\MultiplicationOperation);
+        self::defineOperation($context, new Operation\Arithmetic\DivisionOperation);
+        self::defineOperation($context, new Operation\Arithmetic\ModuloOperation);
+        self::defineOperation($context, new Operation\Arithmetic\RemainderOperation);
+        self::defineOperation($context, new Operation\Arithmetic\ExponentiationOperation);
+    }
+
+    private static function withComparisonOperators(ContextContract $context)
+    {
+        self::defineOperation($context, new Operation\Comparison\EqualityOperation);
+        self::defineOperation($context, new Operation\Comparison\NotEqualOperation);
+        self::defineOperation($context, new Operation\Comparison\GreaterThanOperation);
+        self::defineOperation($context, new Operation\Comparison\GreaterThanOrEqualToOperation);
+        self::defineOperation($context, new Operation\Comparison\LesserThanOperation);
+        self::defineOperation($context, new Operation\Comparison\LesserThanOrEqualToOperation);
+        self::defineOperation($context, new Operation\Comparison\SpaceshipOperation);
+    }
+
+    private static function withLogicOperators(ContextContract $context)
+    {
+        self::defineOperation($context, new Operation\Logic\AndOperation);
+        self::defineOperation($context, new Operation\Logic\OrOperation);
+        self::defineOperation($context, new Operation\Logic\NotOperation);
+        self::defineOperation($context, new Operation\Logic\XorOperation);
+    }
+
+    private static function defineOperation(ContextContract $context, Operation $operation)
     {
         array_map(
-            function (string $identifier) use ($operation) {
-                $this->define($identifier, $operation);
+            function (string $identifier) use ($context, $operation) {
+                $context->define($identifier, $operation);
             },
             $operation->getIdentifiers()
         );
-    }
-
-    public function withAssert(): PhlipyContext
-    {
-        $this->defineOperation(new Operation\LanguageConstruct\AssertOperation);
-
-        return $this;
     }
 }

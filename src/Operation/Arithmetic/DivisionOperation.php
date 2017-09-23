@@ -14,9 +14,14 @@ class DivisionOperation extends Operation implements FunctionContract
     {
         $first = array_shift($arguments);
 
-        return $arguments
-            ? $first / MultiplicationOperation::product($arguments)
-            : ($first ? 1 / $first : INF);
+        $numerator = $arguments ? $first : 1;
+        $divisor = $arguments ? MultiplicationOperation::product(...$arguments) : $first;
+
+        if (!$divisor) {
+            throw new \RuntimeException('Division by zero');
+        }
+
+        return $numerator / $divisor;
     }
 
     /**

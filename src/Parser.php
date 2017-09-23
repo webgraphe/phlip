@@ -4,8 +4,8 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ExpressionContract;
 use Webgraphe\Phlip\Exception\ParserException;
-use Webgraphe\Phlip\Symbol\CloseDelimiterSymbol;
-use Webgraphe\Phlip\Symbol\OpenDelimiterSymbol;
+use Webgraphe\Phlip\Symbol\CloseListSymbol;
+use Webgraphe\Phlip\Symbol\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\QuoteSymbol;
 
 class Parser
@@ -37,10 +37,12 @@ class Parser
             return new QuotedExpression($this->extractNextStatement($stream));
         }
 
-        if ($lexeme instanceof OpenDelimiterSymbol) {
+        if ($lexeme instanceof OpenListSymbol) {
             $list = [];
-            while (!($stream->current() instanceof CloseDelimiterSymbol)) {
-                $list[] = $this->extractNextStatement($stream);
+            while (!($stream->current() instanceof CloseListSymbol)) {
+                if ($statement = $this->extractNextStatement($stream)) {
+                    $list[] = $statement;
+                }
             }
             $stream->next();
 

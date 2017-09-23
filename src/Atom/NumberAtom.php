@@ -10,13 +10,16 @@ class NumberAtom extends Atom
     /** @var number */
     private $number;
 
+    /**
+     * @param string|number $value
+     */
     public function __construct(string $value)
     {
         parent::__construct($value);
         $this->number = 0 + $value;
     }
 
-    public static function isNumber($lexeme)
+    public static function isNumber($lexeme): bool
     {
         return is_numeric($lexeme);
     }
@@ -41,23 +44,5 @@ class NumberAtom extends Atom
     public function evaluate(ContextContract $context)
     {
         return $this->getValue();
-    }
-
-    public function greaterThan(Atom $other): bool
-    {
-        if ($other instanceof static) {
-            return $this->number > $other->number;
-        }
-
-        return null;
-    }
-
-    public function lesserThan(Atom $other): bool
-    {
-        if ($other instanceof static) {
-            return $this->number < $other->number;
-        }
-
-        return null;
     }
 }

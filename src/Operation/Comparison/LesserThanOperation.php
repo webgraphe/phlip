@@ -6,7 +6,7 @@ use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\FunctionContract;
 use Webgraphe\Phlip\Operation;
 
-class LesserThanOperation extends Operation implements FunctionContract
+class LesserThanOperation extends Operation\Comparison
 {
     const IDENTIFIER = '<';
     const IDENTIFIER_ALTERNATIVE= 'lt?';
@@ -17,14 +17,10 @@ class LesserThanOperation extends Operation implements FunctionContract
      */
     public function __invoke(...$arguments)
     {
-        $left = array_shift($arguments);
-        $right = array_shift($arguments);
+        $left = self::assertValue(array_shift($arguments));
+        $right = self::assertValue(array_shift($arguments));
 
-        if ($left instanceof Atom && $right instanceof Atom) {
-            return $left->getValue() < $right->getValue();
-        }
-
-        return null;
+        return $left < $right;
     }
 
     /**

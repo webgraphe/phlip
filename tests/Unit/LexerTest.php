@@ -5,6 +5,7 @@ namespace Tests\Webgraphe\Phlip\Unit;
 use Tests\Webgraphe\Phlip\TestCase;
 use Webgraphe\Phlip\Atom\BooleanAtom;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
+use Webgraphe\Phlip\Atom\NullAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Comment;
@@ -18,17 +19,17 @@ class LexerTest extends TestCase
         $lexer = new Lexer;
         $source = <<<SOURCE
 ; A comment
-(identifier1 "string" (identifier2 'x 42 3.14 true false))
+(identifier1 "string" (identifier2 'x 42 3.14 true false null))
 SOURCE;
         $lexemeStream = $lexer->parseSource($source);
         $this->assertNotNull($lexemeStream);
 
         $expectedTokens = [
             new Comment('A comment'),
-            Symbol\OpenDelimiterSymbol::instance(),
+            Symbol\OpenListSymbol::instance(),
             new IdentifierAtom('identifier1'),
             new StringAtom('string'),
-            Symbol\OpenDelimiterSymbol::instance(),
+            Symbol\OpenListSymbol::instance(),
             new IdentifierAtom('identifier2'),
             Symbol\QuoteSymbol::instance(),
             new IdentifierAtom('x'),
@@ -36,8 +37,9 @@ SOURCE;
             new NumberAtom('3.14'),
             BooleanAtom::true(),
             BooleanAtom::false(),
-            Symbol\CloseDelimiterSymbol::instance(),
-            Symbol\CloseDelimiterSymbol::instance(),
+            NullAtom::instance(),
+            Symbol\CloseListSymbol::instance(),
+            Symbol\CloseListSymbol::instance(),
         ];
 
         $this->assertCount(count($expectedTokens), $lexemeStream);

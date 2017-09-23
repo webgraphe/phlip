@@ -10,7 +10,7 @@ class Context implements ContextContract
     /** @var Context */
     private $parent;
 
-    public function __construct(Context $parent = null)
+    public function __construct(ContextContract $parent = null)
     {
         $this->parent = $parent;
     }

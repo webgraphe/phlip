@@ -1,6 +1,6 @@
 <?php
 
-namespace Webgraphe\Phlip\Tests\Unit\Atom;
+namespace Webgraphe\Phlip\Tests\Unit;
 
 use Tests\Webgraphe\Phlip\TestCase;
 use Webgraphe\Phlip\Atom\BooleanAtom;

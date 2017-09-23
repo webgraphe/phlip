@@ -1,12 +1,12 @@
 <?php
 
-namespace Webgraphe\Phlip\Operation\LanguageConstruct\Logic;
+namespace Webgraphe\Phlip\Operation\Logic;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\LanguageConstruct;
+use Webgraphe\Phlip\Operation\PrimaryFunction;
 
-class AndOperation extends LanguageConstruct
+class AndOperation extends PrimaryFunction
 {
     const IDENTIFIER = 'and';
     const IDENTIFIER_ALTERNATIVE = '&&';

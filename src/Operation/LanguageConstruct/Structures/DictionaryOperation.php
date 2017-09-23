@@ -5,9 +5,9 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct\Structures;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\LanguageConstruct;
+use Webgraphe\Phlip\Operation\PrimaryFunction;
 
-class DictionaryOperation extends LanguageConstruct
+class DictionaryOperation extends PrimaryFunction
 {
     const IDENTIFIER = 'dictionary';
 
@@ -18,19 +18,19 @@ class DictionaryOperation extends LanguageConstruct
      */
     protected function invoke(ContextContract $context, ExpressionList $expressions)
     {
-        $dictionary = [];
+        $dictionary = (object)[];
 
         while ($head = $expressions->getHeadExpression()) {
             $expressions = $expressions->getTailExpressions();
             $head = ExpressionList::assertStaticType($head);
-            $name = $head->getHeadExpression();
+            $name = $head->assertHeadExpression()->evaluate($context);
             $value = $head->getTailExpressions()->assertHeadExpression()->evaluate($context);
             switch (true) {
                 case $name instanceof IdentifierAtom:
-                    $dictionary[$name->getValue()] = $value;
+                    $dictionary->{$name->getValue()} = $value;
                     break;
-                case $name instanceof ExpressionList:
-                    $dictionary[$name->evaluate($context)] = $value;
+                case is_scalar($name):
+                    $dictionary->{$name} = $value;
                     break;
                 default:
                     throw new \RuntimeException("Malformed dictionary");
