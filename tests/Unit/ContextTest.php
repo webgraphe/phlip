@@ -4,6 +4,7 @@ namespace Webgraphe\Phlip\Tests\Unit;
 
 use Tests\Webgraphe\Phlip\TestCase;
 use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Exception\ContextException;
 
 class ContextTest extends TestCase
 {
@@ -12,7 +13,7 @@ class ContextTest extends TestCase
         $context = new Context;
         $context->define('x', 2);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(ContextException::class);
         $context->define('x', 3);
     }
 
@@ -20,7 +21,7 @@ class ContextTest extends TestCase
     {
         $context = new Context;
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(ContextException::class);
         $context->set('x', 2);
     }
 
@@ -29,7 +30,7 @@ class ContextTest extends TestCase
         $child = new Context(new Context());
         $child->let('x', 2);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(ContextException::class);
         $child->let('x', 3);
     }
 
@@ -37,7 +38,7 @@ class ContextTest extends TestCase
     {
         $context = new Context();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(ContextException::class);
         $context->get('x');
     }
 

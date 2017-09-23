@@ -1,6 +1,0 @@
-(test "Cons tests"
-    (assert-equals
-        '("foo" bar 4 true false null)
-        (cons "foo" (cons 'bar (cons (+ 2 2) (cons true (cons false null)))))
-    )
-)

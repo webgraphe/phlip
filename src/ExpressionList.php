@@ -5,6 +5,8 @@ namespace Webgraphe\Phlip;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\ExpressionContract;
 use Webgraphe\Phlip\Contracts\LanguageConstructContract;
+use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
 
 class ExpressionList implements ExpressionContract, \Countable
@@ -33,13 +35,13 @@ class ExpressionList implements ExpressionContract, \Countable
 
     /**
      * @return ExpressionContract
-     * @throws \RuntimeException
+     * @throws AssertionException
      */
     public function assertHeadExpression(): ExpressionContract
     {
         $head = $this->getHeadExpression();
         if (!$head) {
-            throw new \RuntimeException("Empty");
+            throw new AssertionException("List is empty");
         }
 
         return $head;
@@ -83,7 +85,7 @@ class ExpressionList implements ExpressionContract, \Countable
             return null;
         }
 
-        $callable = self::assertCallable($this->assertHeadExpression()->evaluate($context));
+        $callable = self::assertCallable($context, $this->assertHeadExpression());
         $arguments = $callable instanceof LanguageConstructContract
             ? array_merge([$context], $this->getTailExpressions()->all())
             : array_map(
@@ -97,14 +99,16 @@ class ExpressionList implements ExpressionContract, \Countable
     }
 
     /**
-     * @param mixed $thing
+     * @param ContextContract $context
+     * @param ExpressionContract $expression
      * @return callable
+     * @throws AssertionException
      */
-    protected static function assertCallable($thing): callable
+    protected static function assertCallable(ContextContract $context, ExpressionContract $expression): callable
     {
-        if (!is_callable($thing)) {
+        if (!is_callable($thing = $expression->evaluate($context))) {
             $type = is_object($thing) ? get_class($thing) : gettype($thing);
-            throw new \RuntimeException("Assertion failed; expected a callable, got '$type'");
+            throw new AssertionException("Not a callable; got '$type' from $expression");
         }
 
         return $thing;

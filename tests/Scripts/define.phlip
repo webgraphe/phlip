@@ -1,3 +1,0 @@
-(test "Define tests"
-    (assert-exception "RuntimeException" (define 'wtf true))
-)

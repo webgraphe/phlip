@@ -44,7 +44,7 @@ SOURCE;
 
         $this->assertCount(count($expectedTokens), $lexemeStream);
         $i = 0;
-        while ($lexemeStream->isValid()) {
+        while ($lexemeStream->valid()) {
             $lexeme = $lexemeStream->current();
             $this->assertInstanceOf(get_class($expectedTokens[$i]), $lexeme);
             $this->assertEquals((string)$expectedTokens[$i], (string)$lexeme);

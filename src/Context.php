@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Exception\ContextException;
 
 class Context implements ContextContract
 {
@@ -16,9 +17,10 @@ class Context implements ContextContract
     }
 
     /**
-     * @param $key $offset
+     * @param string $key $offset
      * @param mixed $value
      * @return mixed
+     * @throws ContextException
      */
     public function define($key, $value)
     {
@@ -27,7 +29,7 @@ class Context implements ContextContract
         }
 
         if (array_key_exists($key, $this->data)) {
-            throw new \RuntimeException("Can't redefine global '$key'");
+            throw new ContextException("Can't redefine global '$key'");
         }
 
         return $this->data[$key] = $value;
@@ -37,6 +39,7 @@ class Context implements ContextContract
      * @param mixed $offset
      * @param mixed $value
      * @return mixed
+     * @throws ContextException
      */
     public function set($offset, $value)
     {
@@ -51,18 +54,19 @@ class Context implements ContextContract
             return $this->parent->set($offset, $value);
         }
 
-        throw new \RuntimeException("Undefined '$offset'");
+        throw new ContextException("Undefined '$offset'");
     }
 
     /**
      * @param string $key
      * @param mixed $value
      * @return mixed
+     * @throws ContextException
      */
     public function let($key, $value)
     {
         if (array_key_exists($key, $this->data)) {
-            throw new \RuntimeException("Can't redefine local '$key'");
+            throw new ContextException("Can't redefine local '$key'");
         }
 
         return $this->data[$key] = $value;
@@ -71,6 +75,7 @@ class Context implements ContextContract
     /**
      * @param $offset
      * @return mixed|null
+     * @throws ContextException
      */
     public function get($offset)
     {
@@ -82,7 +87,7 @@ class Context implements ContextContract
             return $this->parent->get(...func_get_args());
         }
 
-        throw new \RuntimeException("Undefined '$offset'");
+        throw new ContextException("Undefined '$offset'");
     }
 
     public function has(string $key): bool

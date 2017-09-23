@@ -12,8 +12,8 @@ class EqualityOperation extends Operation\Comparison
 
     public function __invoke(...$arguments)
     {
-        $left = self::assertValue(array_shift($arguments));
-        $right = self::assertValue(array_shift($arguments));
+        $left = self::assertNativeValue(array_shift($arguments));
+        $right = self::assertNativeValue(array_shift($arguments));
 
         return $left === $right;
     }

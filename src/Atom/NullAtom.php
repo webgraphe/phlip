@@ -10,8 +10,11 @@ class NullAtom extends Atom
     public static function instance(): NullAtom
     {
         static $instance;
+        if (!$instance) {
+            $instance = new static('null');
+        }
 
-        return $instance ?? ($instance = new self('null'));
+        return $instance;
     }
 
     public static function isNull($lexeme)

@@ -46,7 +46,7 @@ class PhlipyContext extends Context
         self::defineOperation($context, new Operation\LanguageConstruct\Structures\DictionaryOperation);
     }
 
-    private static function withArithmeticOperators(ContextContract $context)
+    public static function withArithmeticOperators(ContextContract $context)
     {
         self::defineOperation($context, new Operation\Arithmetic\AdditionOperation);
         self::defineOperation($context, new Operation\Arithmetic\SubtractionOperation);
@@ -57,7 +57,7 @@ class PhlipyContext extends Context
         self::defineOperation($context, new Operation\Arithmetic\ExponentiationOperation);
     }
 
-    private static function withComparisonOperators(ContextContract $context)
+    public static function withComparisonOperators(ContextContract $context)
     {
         self::defineOperation($context, new Operation\Comparison\EqualityOperation);
         self::defineOperation($context, new Operation\Comparison\NotEqualOperation);
@@ -68,7 +68,7 @@ class PhlipyContext extends Context
         self::defineOperation($context, new Operation\Comparison\SpaceshipOperation);
     }
 
-    private static function withLogicOperators(ContextContract $context)
+    public static function withLogicOperators(ContextContract $context)
     {
         self::defineOperation($context, new Operation\Logic\AndOperation);
         self::defineOperation($context, new Operation\Logic\OrOperation);
@@ -76,7 +76,7 @@ class PhlipyContext extends Context
         self::defineOperation($context, new Operation\Logic\XorOperation);
     }
 
-    private static function defineOperation(ContextContract $context, Operation $operation)
+    public static function defineOperation(ContextContract $context, Operation $operation)
     {
         array_map(
             function (string $identifier) use ($context, $operation) {

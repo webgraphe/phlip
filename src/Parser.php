@@ -4,6 +4,7 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ExpressionContract;
 use Webgraphe\Phlip\Exception\ParserException;
+use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\CloseListSymbol;
 use Webgraphe\Phlip\Symbol\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\QuoteSymbol;
@@ -14,7 +15,7 @@ class Parser
     {
         /** @var ExpressionList[] $statements */
         $statements = [];
-        while($stream->isValid()) {
+        while($stream->valid()) {
             if ($statement = $this->extractNextStatement($stream)) {
                 $statements[] = $statement;
             }

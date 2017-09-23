@@ -6,6 +6,9 @@ use Tests\Webgraphe\Phlip\TestCase;
 use Webgraphe\Phlip\Context\PhlipyContext;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\ExpressionContract;
+use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation\LanguageConstruct\CallablePrimaryFunctionOperation;
 use Webgraphe\Phlip\Program;
@@ -13,16 +16,13 @@ use Webgraphe\Phlip\Program;
 class ScriptTest extends TestCase
 {
     /**
-     * @dataProvider scripts
-     * @param ContextContract $context
-     * @param ExpressionContract[] $expressions
+     * @dataProvider scriptFiles
+     * @param string $file
      */
-    public function testScripts(ContextContract $context, ExpressionContract ...$expressions)
+    public function testScripts($file)
     {
-        $context->define('__testCase', $this);
-        foreach ($expressions as $expression) {
-            $expression->evaluate($context);
-        }
+        $context = $this->contextWithAsserts();
+        Program::parseFile($file)->execute($context);
     }
 
     /**
@@ -34,67 +34,28 @@ class ScriptTest extends TestCase
      *
      * @return array
      */
-    public function scripts()
+    public function scriptFiles()
     {
-        $tests = [];
-        $failingScripts = [];
-
-        $filter = function (\DirectoryIterator $iterator) {
-            return $iterator->isFile() && 'phlip' === strtolower($iterator->getExtension());
-        };
-        foreach ($this->globRecursive($this->relativeProjectPath('tests/scripts'), $filter) as $file) {
-            $context = new PhlipyContext;
-            $this->contextWithTest($context, $tests);
-            try {
-                Program::parseFile($file)->execute($context);
-            } catch (\Throwable $t) {
-                $failingScripts[$file] = $t;
+        $files = $this->globRecursive(
+            $this->relativeProjectPath('tests/scripts'),
+            function (\DirectoryIterator $iterator) {
+                return $iterator->isFile() && preg_match('/Test.phlip$/', $iterator->getFilename());
             }
-        }
-
-        if ($failingScripts) {
-            $this->fail(
-                "Script failures:" . PHP_EOL
-                . implode(
-                    PHP_EOL,
-                    array_map(
-                        function ($file, \Throwable $t) {
-                            $type = get_class($t);
-                            return "  $file: ($type) {$t->getMessage()}";
-                        },
-                        array_keys($failingScripts),
-                        array_values($failingScripts)
-                    )
-                )
-            );
-        }
-
-        return $tests;
-    }
-
-    protected function contextWithTest(ContextContract $context = null, array &$tests = [])
-    {
-        $context = $context ?? new PhlipyContext;
-        $context->define(
-            'test',
-            new CallablePrimaryFunctionOperation(
-                function (ContextContract $context, ExpressionList $expressions) use (&$tests) {
-                    $name = $expressions->assertHeadExpression()->evaluate($context);
-
-                    return $tests[$name] = array_merge(
-                        [$this->contextWithAsserts()],
-                        $expressions->getTailExpressions()->all()
-                    );
-                }
-            )
         );
-
-        return $context;
+        return array_map(
+            function (string $file) {
+                return ['file' => $file];
+            },
+            array_combine($files, $files)
+        );
     }
 
     protected function contextWithAsserts(ContextContract $context = null): ContextContract
     {
         $context = $context ?? new PhlipyContext;
+        $context->define('AssertionException', AssertionException::class);
+        $context->define('ContextException', ContextException::class);
+        $context->define('EvaluationException', EvaluationException::class);
         $context->define(
             'assert',
             new CallablePrimaryFunctionOperation(
@@ -123,9 +84,8 @@ class ScriptTest extends TestCase
             new CallablePrimaryFunctionOperation(
                 function (ContextContract $context, ExpressionList $expressions) {
                     /** @var self $test */
-                    $test = $context->get('__testCase');
                     $name = $expressions->assertHeadExpression()->evaluate($context);
-                    $test->expectException($name);
+                    $this->expectException($name);
                     $expressions->getTailExpressions()->assertHeadExpression()->evaluate($context);
                 }
             )

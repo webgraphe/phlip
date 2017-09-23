@@ -5,6 +5,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation\PrimaryFunction;
 
@@ -41,7 +42,7 @@ class LetOperation extends PrimaryFunction
                     break;
 
                 default:
-                    throw new \RuntimeException("Malformed let");
+                    throw EvaluationException::fromExpression($name, 'Malformed let');
             }
         }
 

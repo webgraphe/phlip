@@ -1,0 +1,14 @@
+(let
+    (
+        (x 0)
+        ((plus-1 x) (+ x 1))
+    )
+    (define (ticker) (set x (plus-1 x)) x)
+)
+
+(assert (! (defined? x)))
+(assert (= (ticker) 1))
+(define x 0)
+(assert (defined? x))
+(assert (= (ticker) 2))
+(assert (= x 0))

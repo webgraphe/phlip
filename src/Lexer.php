@@ -8,6 +8,8 @@ use Webgraphe\Phlip\Atom\NullAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Exception\LexerException;
+use Webgraphe\Phlip\Stream\CharacterStream;
+use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\CloseListSymbol;
 use Webgraphe\Phlip\Symbol\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\QuoteSymbol;
@@ -21,10 +23,10 @@ class Lexer
      */
     public function parseSource(string $source): LexemeStream
     {
-        $stream = new CharacterStream($source);
+        $stream = CharacterStream::fromString($source);
 
         $lexemes = [];
-        while ($stream->isValid()) {
+        while ($stream->valid()) {
             switch ($stream->current()) {
                 case ' ':
                 case "\n":
@@ -65,20 +67,21 @@ class Lexer
             $stream->next();
         }
 
-        return new LexemeStream(...$lexemes);
+        return LexemeStream::fromLexemes(...$lexemes);
     }
 
-    private function parseString(CharacterStream $stream): StringAtom
+    private function parseString(Stream $stream): StringAtom
     {
         $string = '';
         while (true) {
-            $character = $stream->next()->current();
+            $stream->next();
+            $character = $stream->current();
             if ('"' === $character) {
                 break;
             }
             if ("\\" === $character) {
-                $character = $stream->next()->current();
-                switch ($character) {
+                $stream->next();
+                switch ($character = $stream->current()) {
                     case 'n':
                         $character = "\n";
                         break;
@@ -96,20 +99,21 @@ class Lexer
         return new StringAtom($string);
     }
 
-    private function parseComment(CharacterStream $stream): Comment
+    private function parseComment(Stream $stream): Comment
     {
         $comment = '';
-        while ($stream->isValid() && "\n" !== $stream->current()) {
-            $comment .= $stream->next()->current();
+        while ($stream->valid() && "\n" !== $stream->current()) {
+            $stream->next();
+            $comment .= $stream->current();
         }
 
         return new Comment($comment);
     }
 
-    private function parseWord(CharacterStream $stream): string
+    private function parseWord(Stream $stream): string
     {
         $word = '';
-        while ($stream->isValid()) {
+        while ($stream->valid()) {
             $character = $stream->current();
             if (in_array($character, [' ', "\n", "\t", ")", "("])) {
                 $stream->previous();

@@ -5,6 +5,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation\PrimaryFunction;
 
@@ -33,7 +34,7 @@ class LambdaOperation extends PrimaryFunction
             $argumentCount = count($arguments);
             $parameterCount = count($parameters);
             if ($parameterCount !== $argumentCount) {
-                throw new \RuntimeException("Argument count mismatches definition '$parameters'");
+                throw new EvaluationException("Arguments mismatch parameter definition");
             }
 
             while ($arguments) {

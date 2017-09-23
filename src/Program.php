@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Exception\ProgramException;
 
 class Program
 {
@@ -25,7 +26,7 @@ class Program
     public static function parseFile(string $path, Lexer $lexer = null, Parser $parser = null): Program
     {
         if (!file_exists($path) || !is_readable($path)) {
-            throw new \RuntimeException("'$path' is not a file or is not readable");
+            throw new ProgramException("'$path' is not a file or is not readable");
         }
 
         return static::parse(file_get_contents($path), $lexer, $parser);

@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip\Operation\Arithmetic;
 
 use Webgraphe\Phlip\Contracts\FunctionContract;
+use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\Operation;
 
 class DivisionOperation extends Operation implements FunctionContract
@@ -18,7 +19,7 @@ class DivisionOperation extends Operation implements FunctionContract
         $divisor = $arguments ? MultiplicationOperation::product(...$arguments) : $first;
 
         if (!$divisor) {
-            throw new \RuntimeException('Division by zero');
+            throw new EvaluationException('Division by zero');
         }
 
         return $numerator / $divisor;

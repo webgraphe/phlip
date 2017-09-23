@@ -1,0 +1,6 @@
+(assert (= "hello" "hello"))
+(assert (= 42 42))
+(assert (= 3.14 3.14))
+(assert (= true true))
+(assert (= false false))
+(assert (= null null))

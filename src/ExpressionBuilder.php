@@ -7,15 +7,14 @@ use Webgraphe\Phlip\Atom\NullAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Contracts\ExpressionContract;
-use Webgraphe\Phlip\Contracts\FunctionContract;
-use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Exception\EvaluationException;
 
 class ExpressionBuilder
 {
     /**
      * @param mixed $thing
      * @return ExpressionContract
+     * @throws EvaluationException
      */
     public function asExpression($thing): ExpressionContract
     {
@@ -42,7 +41,7 @@ class ExpressionBuilder
                 break;
             default:
                 $type = is_object($thing) ? get_class($thing) : gettype($thing);
-                throw new \RuntimeException("Unhandled '$type'");
+                throw new EvaluationException("Unhandled '$type'");
         }
     }
 }

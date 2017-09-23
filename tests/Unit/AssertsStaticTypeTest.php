@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip\Tests\Unit;
 
 use Tests\Webgraphe\Phlip\TestCase;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
 
 class AssertsStaticTypeTest extends TestCase
@@ -16,7 +17,7 @@ class AssertsStaticTypeTest extends TestCase
 
     public function testAssertStaticTypeOnSomethingElse()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(AssertionException::class);
         $this->assertStaticType("Something else");
     }
 }
