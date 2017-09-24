@@ -10,7 +10,10 @@ abstract class Symbol implements LexemeContract
     {
     }
 
-    public static function instance(): Symbol
+    /**
+     * @return static
+     */
+    public final static function instance(): Symbol
     {
         static $instance;
         if (!$instance) {

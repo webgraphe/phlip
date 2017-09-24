@@ -11,7 +11,7 @@ class NullAtom extends Atom
     {
         static $instance;
         if (!$instance) {
-            $instance = new static('null');
+            $instance = new static(null);
         }
 
         return $instance;
@@ -27,14 +27,6 @@ class NullAtom extends Atom
      * @return mixed
      */
     public function evaluate(ContextContract $context)
-    {
-        return null;
-    }
-
-    /**
-     * @return string|number|bool|null
-     */
-    public function getValue()
     {
         return null;
     }

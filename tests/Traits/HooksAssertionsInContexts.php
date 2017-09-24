@@ -42,11 +42,28 @@ trait HooksAssertionsInContexts
                     $toeExpression = $expressions->getTailExpressions()->assertHeadExpression();
                     $toe = $toeExpression->evaluate($context);
                     if ($head instanceof ExpressionContract && $toe instanceof ExpressionContract) {
-                        $this->assertTrue($head->equals($toe), "Expected $head; got $toe");
+                        $this->assertTrue($head->equals($toe), "Expected $head out of got $toeExpression; got $toe");
                     } else {
                         $headType = is_object($head) ? get_class($head) : gettype($head);
                         $toeType = is_object($toe) ? get_class($toe) : gettype($toe);
                         $this->assertEquals($head, $toe, "Expected $headType out of $toeExpression; got $toeType");
+                    }
+                }
+            )
+        );
+        $context->define(
+            'assert-not-equals',
+            new CallablePrimaryFunctionOperation(
+                function (ContextContract $context, ExpressionList $expressions) {
+                    $head = $expressions->assertHeadExpression()->evaluate($context);
+                    $toeExpression = $expressions->getTailExpressions()->assertHeadExpression();
+                    $toe = $toeExpression->evaluate($context);
+                    if ($head instanceof ExpressionContract && $toe instanceof ExpressionContract) {
+                        $this->assertTrue(!$head->equals($toe), "Didn't expect $head out of $toeExpression");
+                    } else {
+                        $headType = is_object($head) ? get_class($head) : gettype($head);
+                        $toeType = is_object($toe) ? get_class($toe) : gettype($toe);
+                        $this->assertNotEquals($head, $toe, "Expected $headType out of $toeExpression; got $toeType");
                     }
                 }
             )

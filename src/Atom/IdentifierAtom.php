@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 
 class IdentifierAtom extends Atom
 {
-    public function __construct($value)
+    public function __construct(string $value)
     {
         parent::__construct($value);
     }
@@ -19,14 +19,6 @@ class IdentifierAtom extends Atom
     public function evaluate(ContextContract $context)
     {
         return $context->get($this->getValue());
-    }
-
-    /**
-     * @return string|number|bool|null
-     */
-    public function getValue()
-    {
-        return $this->getOriginalValue();
     }
 
     public function __toString(): string

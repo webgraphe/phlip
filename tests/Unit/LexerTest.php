@@ -19,17 +19,17 @@ class LexerTest extends TestCase
         $lexer = new Lexer;
         $source = <<<SOURCE
 ; A comment
-(identifier1 "string" (identifier2 'x 42 3.14 true false null))
+(identifier1 "string" (identifier2 'x 42 3.14 true false null [1 2 3]))
 SOURCE;
         $lexemeStream = $lexer->parseSource($source);
         $this->assertNotNull($lexemeStream);
 
         $expectedTokens = [
             new Comment('A comment'),
-            Symbol\OpenListSymbol::instance(),
+            Symbol\Opening\OpenListSymbol::instance(),
             new IdentifierAtom('identifier1'),
             new StringAtom('string'),
-            Symbol\OpenListSymbol::instance(),
+            Symbol\Opening\OpenListSymbol::instance(),
             new IdentifierAtom('identifier2'),
             Symbol\QuoteSymbol::instance(),
             new IdentifierAtom('x'),
@@ -38,8 +38,13 @@ SOURCE;
             BooleanAtom::true(),
             BooleanAtom::false(),
             NullAtom::instance(),
-            Symbol\CloseListSymbol::instance(),
-            Symbol\CloseListSymbol::instance(),
+            Symbol\Opening\OpenArraySymbol::instance(),
+            new NumberAtom('1'),
+            new NumberAtom('2'),
+            new NumberAtom('3'),
+            Symbol\Closing\CloseArraySymbol::instance(),
+            Symbol\Closing\CloseListSymbol::instance(),
+            Symbol\Closing\CloseListSymbol::instance(),
         ];
 
         $this->assertCount(count($expectedTokens), $lexemeStream);

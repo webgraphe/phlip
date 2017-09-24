@@ -39,15 +39,18 @@ $context->define(
     }
 );
 
+$expressionBuilder = new \Webgraphe\Phlip\ExpressionBuilder;
 $context->define(
     'print',
-    function ($result) {
+    function ($result) use ($expressionBuilder) {
         $color = null;
         $type = gettype($result);
+        $extra = null;
         switch (true) {
             case $result instanceof \Throwable:
                 $type = 'PHP Throwable ' . get_class($result);
                 $output = $result->getMessage();
+                $extra = $result->getTraceAsString();
                 $color = '0;31';
                 break;
             case is_object($result):
@@ -55,32 +58,35 @@ $context->define(
                 $color = '1;32';
                 $output = method_exists($result, '__toString') ? (string)$result : gettype($result);
                 break;
-            case is_numeric($result);
-                $output = (string)$result;
-                $color = '1;36';
-                break;
-            case is_bool($result);
-                $output = $result ? 'true' : 'false';
-                $color = '0;33';
-                break;
-            case null === $result;
-                $output = 'null';
-                $color = '0;33';
-                break;
-            case is_string($result):
-                $output = '"' . str_replace('"', '\\"', $result) . '"';
-                $color = '1;35';
-                break;
             default:
-                $output = $result;
-                if (false === settype($output, 'string')) {
-                    $output = gettype($result);
+                $expression = $expressionBuilder->asExpression($result);
+                $output = (string)$expression;
+                switch (true) {
+                    case is_numeric($result);
+                        $color = '1;36';
+                        break;
+                    case is_bool($result);
+                        $color = '0;33';
+                        break;
+                    case null === $result;
+                        $color = '0;33';
+                        break;
+                    case is_string($result):
+                        $color = '1;35';
+                        break;
                 }
-                $color = '1;37';
-                break;
+
         }
 
-        echo "\033[1;30m$type\033[0m" . PHP_EOL . "\033[{$color}m" . trim($output) . "\033[0m" . PHP_EOL;
+        if ($type) {
+            echo "\033[1;30m$type\033[0m" . PHP_EOL;
+        }
+        if (strlen($output = trim($output))) {
+            echo "\033[{$color}m$output\033[0m" . PHP_EOL;
+        }
+        if ($extra) {
+            echo trim($extra) . PHP_EOL;
+        }
 
         return true;
     }

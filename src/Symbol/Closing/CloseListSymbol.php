@@ -1,10 +1,10 @@
 <?php
 
-namespace Webgraphe\Phlip\Symbol;
+namespace Webgraphe\Phlip\Symbol\Closing;
 
-use Webgraphe\Phlip\Symbol;
+use Webgraphe\Phlip\Symbol\Closing;
 
-class CloseListSymbol extends Symbol
+class CloseListSymbol extends Closing
 {
     const CHARACTER = ")";
 

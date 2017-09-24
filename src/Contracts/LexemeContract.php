@@ -8,7 +8,7 @@ namespace Webgraphe\Phlip\Contracts;
 interface LexemeContract extends StringConvertibleContract
 {
     /**
-     * @return string|number|bool|null
+     * @return \stdClass|array|string|number|bool|null
      */
     public function getValue();
 }

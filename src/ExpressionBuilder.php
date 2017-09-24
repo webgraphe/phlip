@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\Atom\ArrayAtom;
 use Webgraphe\Phlip\Atom\BooleanAtom;
 use Webgraphe\Phlip\Atom\NullAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
@@ -28,7 +29,9 @@ class ExpressionBuilder
             case is_string($thing):
                 return new StringAtom($thing);
             case is_numeric($thing):
-                return new NumberAtom((string)$thing);
+                return new NumberAtom($thing);
+            case is_array($thing):
+                return new ArrayAtom(...$thing);
             default:
                 $type = is_object($thing) ? get_class($thing) : gettype($thing);
                 throw new AssertionException("Unhandled '$type'");

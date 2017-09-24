@@ -14,16 +14,11 @@ class StringAtom extends Atom
 
     public function evaluate(ContextContract $context): string
     {
-        return $this->getOriginalValue();
-    }
-
-    public function getValue(): string
-    {
-        return $this->getOriginalValue();
+        return $this->getValue();
     }
 
     public function __toString(): string
     {
-        return '"' . str_replace('"', '\\"', $this->getOriginalValue()) . '"';
+        return '"' . str_replace('"', '\\"', $this->getValue()) . '"';
     }
 }

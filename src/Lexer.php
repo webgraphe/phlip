@@ -10,12 +10,24 @@ use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Stream\CharacterStream;
 use Webgraphe\Phlip\Stream\LexemeStream;
-use Webgraphe\Phlip\Symbol\CloseListSymbol;
-use Webgraphe\Phlip\Symbol\OpenListSymbol;
+use Webgraphe\Phlip\Symbol\Closing\CloseArraySymbol;
+use Webgraphe\Phlip\Symbol\Closing\CloseListSymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenArraySymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\QuoteSymbol;
 
 class Lexer
 {
+    const SPECIAL_CHARACTERS = [
+        ' ',
+        "\n",
+        "\t",
+        OpenListSymbol::CHARACTER,
+        CloseListSymbol::CHARACTER,
+        OpenArraySymbol::CHARACTER,
+        CloseArraySymbol::CHARACTER,
+    ];
+
     /**
      * @param string $source
      * @return LexemeStream
@@ -40,6 +52,12 @@ class Lexer
                     break;
                 case CloseListSymbol::CHARACTER:
                     $lexemes[] = CloseListSymbol::instance();
+                    break;
+                case OpenArraySymbol::CHARACTER:
+                    $lexemes[] = OpenArraySymbol::instance();
+                    break;
+                case CloseArraySymbol::CHARACTER:
+                    $lexemes[] = CloseArraySymbol::instance();
                     break;
                 case ';':
                     $lexemes[] = $this->parseComment($stream);
@@ -115,7 +133,7 @@ class Lexer
         $word = '';
         while ($stream->valid()) {
             $character = $stream->current();
-            if (in_array($character, [' ', "\n", "\t", ")", "("])) {
+            if (in_array($character, self::SPECIAL_CHARACTERS)) {
                 $stream->previous();
                 break;
             }

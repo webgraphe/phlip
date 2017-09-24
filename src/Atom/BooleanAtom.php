@@ -7,9 +7,6 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 
 class BooleanAtom extends Atom
 {
-    /** @var bool */
-    private $boolean;
-
     public static function isBoolean(string $lexeme): bool
     {
         return true === $lexeme || 'true' === $lexeme || false === $lexeme || 'false' === $lexeme;
@@ -20,8 +17,7 @@ class BooleanAtom extends Atom
         static $true;
 
         if (!$true) {
-            $true = new static('true');
-            $true->boolean = true;
+            $true = new static(true);
         }
 
         return $true;
@@ -32,8 +28,7 @@ class BooleanAtom extends Atom
         static $false;
 
         if (!$false) {
-            $false = new static('false');
-            $false->boolean = false;
+            $false = new static(false);
         }
 
         return $false;
@@ -45,19 +40,11 @@ class BooleanAtom extends Atom
      */
     public function evaluate(ContextContract $context)
     {
-        return $this->boolean;
-    }
-
-    /**
-     * @return string|number|bool|null
-     */
-    public function getValue()
-    {
-        return $this->boolean;
+        return $this->getValue();
     }
 
     public function __toString(): string
     {
-        return $this->boolean ? 'true' : 'false';
+        return $this->getValue() ? 'true' : 'false';
     }
 }

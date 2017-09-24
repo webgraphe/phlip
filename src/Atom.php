@@ -13,12 +13,12 @@ abstract class Atom implements LexemeContract, ExpressionContract
     /** @var string|number|bool|null */
     private $value;
 
-    protected function __construct(string $value)
+    protected function __construct($value)
     {
         $this->value = $value;
     }
 
-    protected function getOriginalValue(): string
+    public final function getValue()
     {
         return $this->value;
     }
