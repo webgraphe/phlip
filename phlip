@@ -1,0 +1,99 @@
+#!/usr/bin/env php
+<?php
+
+use Webgraphe\Phlip\Context\PhlipyContext;
+use Webgraphe\Phlip\Program;
+
+require_once 'vendor/autoload.php';
+
+echo 'Go crazy, you may just "phlip" ;p' . PHP_EOL;
+echo "Type \033[1;32m(exit)\033[0m to quit." . PHP_EOL . PHP_EOL;
+
+$context = new PhlipyContext;
+
+$context->define(
+    'read',
+    function () {
+        $lines = [];
+        while (true) {
+            $line = rtrim(readline($lines ? '' : '> '));
+            $break = !$line || '\\' !== $line[strlen($line) - 1];
+            $lines[] = rtrim($line, '\\');
+            if ($break) {
+                break;
+            }
+        }
+
+        return implode(PHP_EOL, $lines);
+    }
+);
+
+$context->define(
+    'eval',
+    function ($source) use ($context) {
+        try {
+            return Program::parse($source)->execute($context);
+        } catch (\Throwable $t) {
+            return $t;
+        }
+    }
+);
+
+$context->define(
+    'print',
+    function ($result) {
+        $color = null;
+        $type = gettype($result);
+        switch (true) {
+            case $result instanceof \Throwable:
+                $type = 'PHP Throwable ' . get_class($result);
+                $output = $result->getMessage();
+                $color = '0;31';
+                break;
+            case is_object($result):
+                $type = 'PHP Class ' . get_class($result);
+                $color = '1;32';
+                $output = method_exists($result, '__toString') ? (string)$result : gettype($result);
+                break;
+            case is_numeric($result);
+                $output = (string)$result;
+                $color = '1;36';
+                break;
+            case is_bool($result);
+                $output = $result ? 'true' : 'false';
+                $color = '0;33';
+                break;
+            case null === $result;
+                $output = 'null';
+                $color = '0;33';
+                break;
+            case is_string($result):
+                $output = '"' . str_replace('"', '\\"', $result) . '"';
+                $color = '1;35';
+                break;
+            default:
+                $output = $result;
+                if (false === settype($output, 'string')) {
+                    $output = gettype($result);
+                }
+                $color = '1;37';
+                break;
+        }
+
+        echo "\033[1;30m$type\033[0m" . PHP_EOL . "\033[{$color}m" . trim($output) . "\033[0m" . PHP_EOL;
+
+        return true;
+    }
+);
+
+$context->define(
+    'exit',
+    function ($code = 0) {
+        echo "Good bye!" . PHP_EOL . PHP_EOL;
+        exit($code);
+    }
+);
+
+$context->define('loop', $context->get('while'));
+
+Program::parse('(loop (print (eval (read))))')->execute($context);
