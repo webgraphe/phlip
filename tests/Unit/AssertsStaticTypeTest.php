@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Tests\Unit;
 
-use Tests\Webgraphe\Phlip\TestCase;
+use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
 

@@ -2,7 +2,7 @@
 
 namespace Tests\Webgraphe\Phlip\Unit;
 
-use Tests\Webgraphe\Phlip\TestCase;
+use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Atom\BooleanAtom;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\NullAtom;

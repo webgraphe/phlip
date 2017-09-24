@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Tests\Integration;
 
-use Tests\Webgraphe\Phlip\TestCase;
+use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Program;
 

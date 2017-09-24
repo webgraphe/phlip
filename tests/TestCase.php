@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Webgraphe\Phlip;
+namespace Webgraphe\Phlip\Tests;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
