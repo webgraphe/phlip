@@ -27,7 +27,7 @@
         "phpunit/phpunit": "6.3.*"
     },
     "bin": [
-        "phlip"
+        "phlipunit"
     ],
     "autoload": {
         "psr-4": {
