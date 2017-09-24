@@ -1,0 +1,1 @@
+(assert-exception EvaluationException (set 42 43))

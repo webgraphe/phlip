@@ -36,7 +36,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Webgraphe\\Phlip\\": "tests/"
+            "Webgraphe\\Phlip\\": "tests/"
         }
     },
     "scripts": {

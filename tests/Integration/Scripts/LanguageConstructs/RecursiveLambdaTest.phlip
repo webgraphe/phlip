@@ -1,0 +1,16 @@
+(define fibonacci
+    (lambda (x)
+        (let ((even 0) (odd 1))
+            (while (> x 1)
+                (set even
+                    (+ even odd))
+                (set odd
+                    (+ odd even))
+                (set x
+                    (- x 2)))
+            (if (% x 2)
+                odd
+                even)))
+)
+
+(assert-equals 7540113804746346429 (fibonacci 92))

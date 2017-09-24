@@ -1,6 +1,6 @@
 <?php
 
-namespace Webgraphe\Phlip\Tests\Unit;
+namespace Webgraphe\Phlip\Tests\Integration;
 
 use Tests\Webgraphe\Phlip\TestCase;
 use Webgraphe\Phlip\Context\PhlipyContext;
@@ -13,7 +13,7 @@ use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation\LanguageConstruct\CallablePrimaryFunctionOperation;
 use Webgraphe\Phlip\Program;
 
-class ScriptTest extends TestCase
+class ScriptsTest extends TestCase
 {
     /**
      * @dataProvider scriptFiles
@@ -37,9 +37,9 @@ class ScriptTest extends TestCase
     public function scriptFiles()
     {
         $files = $this->globRecursive(
-            $this->relativeProjectPath('tests/scripts'),
+            $this->relativeProjectPath('tests/Integration/Scripts'),
             function (\DirectoryIterator $iterator) {
-                return $iterator->isFile() && preg_match('/Test.phlip$/', $iterator->getFilename());
+                return $iterator->isFile() && preg_match('/Test\\.phlip$/', $iterator->getFilename());
             }
         );
         return array_map(
@@ -70,11 +70,14 @@ class ScriptTest extends TestCase
             new CallablePrimaryFunctionOperation(
                 function (ContextContract $context, ExpressionList $expressions) {
                     $head = $expressions->assertHeadExpression()->evaluate($context);
-                    $toe = $expressions->getTailExpressions()->assertHeadExpression()->evaluate($context);
+                    $toeExpression = $expressions->getTailExpressions()->assertHeadExpression();
+                    $toe = $toeExpression->evaluate($context);
                     if ($head instanceof ExpressionContract && $toe instanceof ExpressionContract) {
                         $this->assertTrue($head->equals($toe), "Expected $head; got $toe");
                     } else {
-                        $this->assertEquals($head, $toe);
+                        $headType = is_object($head) ? get_class($head) : gettype($head);
+                        $toeType = is_object($toe) ? get_class($toe) : gettype($toe);
+                        $this->assertEquals($head, $toe, "Expected $headType out of $toeExpression; got $toeType");
                     }
                 }
             )

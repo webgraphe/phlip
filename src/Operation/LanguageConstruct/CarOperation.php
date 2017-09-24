@@ -8,19 +8,10 @@ use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation;
 use Webgraphe\Phlip\Operation\PrimaryFunction;
 
-class CarOperation extends Operation implements FunctionContract
+class CarOperation extends PrimaryFunction
 {
     const IDENTIFIER = 'car';
     const IDENTIFIER_ALTERNATIVE = 'head';
-
-    /**
-     * @param array ...$arguments
-     * @return mixed
-     */
-    public function __invoke(...$arguments)
-    {
-        return array_shift($arguments);
-    }
 
     /**
      * @return string[]
@@ -28,5 +19,15 @@ class CarOperation extends Operation implements FunctionContract
     public function getIdentifiers(): array
     {
         return [self::IDENTIFIER, self::IDENTIFIER_ALTERNATIVE];
+    }
+
+    /**
+     * @param ContextContract $context
+     * @param ExpressionList $expressions
+     * @return mixed
+     */
+    protected function invoke(ContextContract $context, ExpressionList $expressions)
+    {
+        return ExpressionList::assertStaticType($expressions->assertHeadExpression()->evaluate($context))->getHeadExpression();
     }
 }

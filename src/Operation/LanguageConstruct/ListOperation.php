@@ -3,11 +3,21 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\FunctionContract;
+use Webgraphe\Phlip\ExpressionBuilder;
+use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation;
 
 class ListOperation extends Operation implements FunctionContract
 {
     const IDENTIFIER = 'list';
+
+    /** @var ExpressionBuilder */
+    private $expressionBuilder;
+
+    public function __construct(ExpressionBuilder $expressionBuilder = null)
+    {
+        $this->expressionBuilder = $expressionBuilder ?? new ExpressionBuilder;
+    }
 
     /**
      * @param array ...$arguments
@@ -15,7 +25,14 @@ class ListOperation extends Operation implements FunctionContract
      */
     public function __invoke(...$arguments)
     {
-        return $arguments;
+        return new ExpressionList(
+            ...array_map(
+                function ($argument) {
+                    return $this->expressionBuilder->asExpression($argument);
+                },
+                $arguments
+            )
+        );
     }
 
     /**

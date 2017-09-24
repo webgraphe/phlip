@@ -1,0 +1,3 @@
+(assert
+    "This is a string with tabulations\t, new lines\r\n and black-slashes\\"
+)

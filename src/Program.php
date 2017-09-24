@@ -25,8 +25,11 @@ class Program
 
     public static function parseFile(string $path, Lexer $lexer = null, Parser $parser = null): Program
     {
-        if (!file_exists($path) || !is_readable($path)) {
-            throw new ProgramException("'$path' is not a file or is not readable");
+        if (!file_exists($path)) {
+            throw new ProgramException("Not a file");
+        }
+        if (!is_readable($path)) {
+            throw new ProgramException("File not readable");
         }
 
         return static::parse(file_get_contents($path), $lexer, $parser);
@@ -47,13 +50,5 @@ class Program
         }
 
         return $result;
-    }
-
-    /**
-     * @return ExpressionList
-     */
-    public function getStatements(): ExpressionList
-    {
-        return $this->statements;
     }
 }

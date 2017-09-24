@@ -18,7 +18,7 @@ class QuoteOperation extends PrimaryFunction
      */
     protected function invoke(ContextContract $context, ExpressionList $expressions)
     {
-        return new QuotedExpression($expressions->assertHeadExpression());
+        return $expressions->assertHeadExpression();
     }
 
     /**
