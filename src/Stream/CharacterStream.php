@@ -13,7 +13,7 @@ class CharacterStream extends Stream
         return new static($stream, strlen($stream));
     }
 
-    public function current(): ?string
+    public function current(): string
     {
         return parent::current();
     }

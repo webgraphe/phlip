@@ -34,16 +34,26 @@ abstract class Stream implements \Iterator
         return $this->current;
     }
 
-    public function next()
+    /**
+     * @return static
+     */
+    public function next(): Stream
     {
         ++$this->cursor;
         $this->updateCurrent();
+
+        return $this;
     }
 
-    public function previous()
+    /**
+     * @return static
+     */
+    public function previous(): Stream
     {
         --$this->cursor;
         $this->updateCurrent();
+
+        return $this;
     }
 
     public function valid(): bool
@@ -51,10 +61,15 @@ abstract class Stream implements \Iterator
         return $this->cursor >= 0 && $this->cursor < $this->length;
     }
 
-    public function rewind()
+    /**
+     * @return static
+     */
+    public function rewind(): Stream
     {
         $this->cursor = 0;
         $this->updateCurrent();
+
+        return $this;
     }
 
     private function updateCurrent()

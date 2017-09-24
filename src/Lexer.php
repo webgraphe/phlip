@@ -92,14 +92,12 @@ class Lexer
     {
         $string = '';
         while (true) {
-            $stream->next();
-            $character = $stream->current();
+            $character = $stream->next()->current();
             if ('"' === $character) {
                 break;
             }
             if ("\\" === $character) {
-                $stream->next();
-                switch ($character = $stream->current()) {
+                switch ($character = $stream->next()->current()) {
                     case 'n':
                         $character = "\n";
                         break;
@@ -121,8 +119,7 @@ class Lexer
     {
         $comment = '';
         while ($stream->valid() && "\n" !== $stream->current()) {
-            $stream->next();
-            $comment .= $stream->current();
+            $comment .= $stream->next()->current();
         }
 
         return new Comment($comment);
