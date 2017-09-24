@@ -11,11 +11,6 @@ class Context implements ContextContract
     /** @var Context */
     private $parent;
 
-    public function __construct(ContextContract $parent = null)
-    {
-        $this->parent = $parent;
-    }
-
     /**
      * @param string $key $offset
      * @param mixed $value
@@ -101,5 +96,13 @@ class Context implements ContextContract
         }
 
         return false;
+    }
+
+    public function stack(): ContextContract
+    {
+        $self = new self();
+        $self->parent = $this;
+
+        return $self;
     }
 }

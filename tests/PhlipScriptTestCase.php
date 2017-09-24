@@ -11,9 +11,16 @@ use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation\LanguageConstruct\CallablePrimaryFunctionOperation;
 use Webgraphe\Phlip\Program;
+use Webgraphe\Phlip\Tests\Traits\HooksAssertionsInContexts;
 
+/**
+ * Used by phlipunit.
+ * @see \Webgraphe\Phlip\Tests\TestCase is to be used for regular PHP test cases.
+ */
 class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
 {
+    use HooksAssertionsInContexts;
+
     /** @var string */
     private $file;
 
@@ -45,50 +52,5 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
     public function toString()
     {
         return $this->file;
-    }
-
-    protected function contextWithAsserts(ContextContract $context = null): ContextContract
-    {
-        $context = $context ?? new PhlipyContext;
-        $context->define('AssertionException', AssertionException::class);
-        $context->define('ContextException', ContextException::class);
-        $context->define('EvaluationException', EvaluationException::class);
-        $context->define(
-            'assert',
-            new CallablePrimaryFunctionOperation(
-                function (ContextContract $context, ExpressionList $expressions) {
-                    $head = $expressions->assertHeadExpression();
-                    $this->assertTrue((bool)$head->evaluate($context), "Expected $head to be true");
-                }
-            )
-        );
-        $context->define(
-            'assert-equals',
-            new CallablePrimaryFunctionOperation(
-                function (ContextContract $context, ExpressionList $expressions) {
-                    $head = $expressions->assertHeadExpression()->evaluate($context);
-                    $toeExpression = $expressions->getTailExpressions()->assertHeadExpression();
-                    $toe = $toeExpression->evaluate($context);
-                    if ($head instanceof ExpressionContract && $toe instanceof ExpressionContract) {
-                        $this->assertTrue($head->equals($toe), "Expected $head; got $toe");
-                    } else {
-                        $this->assertEquals($head, $toe, "Expected $head out of $toeExpression; got $toe");
-                    }
-                }
-            )
-        );
-        $context->define(
-            'assert-exception',
-            new CallablePrimaryFunctionOperation(
-                function (ContextContract $context, ExpressionList $expressions) {
-                    /** @var self $test */
-                    $name = $expressions->assertHeadExpression()->evaluate($context);
-                    $this->expectException($name);
-                    $expressions->getTailExpressions()->assertHeadExpression()->evaluate($context);
-                }
-            )
-        );
-
-        return $context;
     }
 }

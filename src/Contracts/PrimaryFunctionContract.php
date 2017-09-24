@@ -3,10 +3,10 @@
 namespace Webgraphe\Phlip\Contracts;
 
 /**
- * Mandatory for operations that require its forms not to be evaluated automatically.
+ * Mandatory for operations that require non-evaluated forms.
  * @see FunctionContract A mutually exclusive contract for operations that expect evaluated forms.
  */
-interface LanguageConstructContract
+interface PrimaryFunctionContract
 {
     /**
      * @param ContextContract $context

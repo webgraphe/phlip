@@ -5,6 +5,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation\PrimaryFunction;
@@ -28,14 +29,9 @@ class LambdaOperation extends PrimaryFunction
         $statements = $expressions->getTailExpressions();
 
         return function () use ($context, $parameters, $statements) {
-            $context = new Context($context);
+            $context = $context->stack();
 
-            $arguments = func_get_args();
-            $argumentCount = count($arguments);
-            $parameterCount = count($parameters);
-            if ($parameterCount !== $argumentCount) {
-                throw new EvaluationException("Arguments mismatch parameter definition");
-            }
+            $arguments = self::assertArgumentsMatchingParameters($parameters, func_get_args());
 
             while ($arguments) {
                 $argument = array_shift($arguments);
@@ -52,6 +48,17 @@ class LambdaOperation extends PrimaryFunction
 
             return $result;
         };
+    }
+
+    private static function assertArgumentsMatchingParameters(ExpressionList $parameters, array $arguments): array
+    {
+        $argumentCount = count($arguments);
+        $parameterCount = count($parameters);
+        if ($parameterCount !== $argumentCount) {
+            throw new AssertionException("Arguments mismatch parameter definition");
+        }
+
+        return $arguments;
     }
 
     /**

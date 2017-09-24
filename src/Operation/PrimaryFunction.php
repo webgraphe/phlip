@@ -4,11 +4,11 @@ namespace Webgraphe\Phlip\Operation;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\ExpressionContract;
-use Webgraphe\Phlip\Contracts\LanguageConstructContract;
+use Webgraphe\Phlip\Contracts\PrimaryFunctionContract;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation;
 
-abstract class PrimaryFunction extends Operation implements LanguageConstructContract
+abstract class PrimaryFunction extends Operation implements PrimaryFunctionContract
 {
     /**
      * @param ContextContract $context

@@ -1,0 +1,11 @@
+(assert-equals null (if false 1))
+(assert-equals 0 (if false 1 0))
+(assert-equals 1 (if true 1 0))
+(assert-equals 1 (if true 1 0))
+(assert-equals 3
+    (if true
+        (begin
+            1
+            2
+            3)
+        0))

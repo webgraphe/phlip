@@ -1,0 +1,1 @@
+(assert-exception EvaluationException (/ 4 0))

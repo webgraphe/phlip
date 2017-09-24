@@ -18,10 +18,6 @@ class AtomOperation extends Operation implements FunctionContract
     {
         $variable = array_shift($arguments);
 
-        if ($variable instanceof QuotedExpression) {
-            $variable = $variable->getExpression();
-        }
-
         return is_scalar($variable)
             || null === $variable
             || is_array($variable) && 0 === count($variable)

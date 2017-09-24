@@ -15,7 +15,7 @@ class LetOperation extends PrimaryFunction
 
     protected function invoke(ContextContract $context, ExpressionList $expressions)
     {
-        $context = new Context($context);
+        $context = $context->stack();
 
         $variables = ExpressionList::assertStaticType($expressions->getHeadExpression());
         while ($variables && $variable = ExpressionList::assertStaticType($variables->getHeadExpression())) {

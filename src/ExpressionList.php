@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\ExpressionContract;
-use Webgraphe\Phlip\Contracts\LanguageConstructContract;
+use Webgraphe\Phlip\Contracts\PrimaryFunctionContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
@@ -78,6 +78,7 @@ class ExpressionList implements ExpressionContract, \Countable
     /**
      * @param ContextContract $context
      * @return mixed
+     * @throws EvaluationException
      */
     public function evaluate(ContextContract $context)
     {
@@ -86,7 +87,7 @@ class ExpressionList implements ExpressionContract, \Countable
         }
 
         $callable = self::assertCallable($context, $this->assertHeadExpression());
-        $arguments = $callable instanceof LanguageConstructContract
+        $arguments = $callable instanceof PrimaryFunctionContract
             ? array_merge([$context], $this->getTailExpressions()->all())
             : array_map(
                 function (ExpressionContract $expression) use ($context) {
@@ -95,7 +96,11 @@ class ExpressionList implements ExpressionContract, \Countable
                 $this->getTailExpressions()->expressions
             );
 
-        return call_user_func($callable, ...$arguments);
+        try {
+            return call_user_func($callable, ...$arguments);
+        } catch (AssertionException $assertion) {
+            throw EvaluationException::fromExpression($this, 'Evaluation failed', 0, $assertion);
+        }
     }
 
     /**

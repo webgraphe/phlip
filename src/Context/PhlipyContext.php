@@ -10,10 +10,8 @@ use Webgraphe\Phlip\Operation;
 
 class PhlipyContext extends Context
 {
-    public function __construct(ContextContract $parent = null)
+    public function __construct()
     {
-        parent::__construct($parent);
-
         self::withFinalAtoms($this);
         self::withLispPrimitives($this);
         self::withExtraLanguageConstructs($this);
@@ -55,6 +53,7 @@ class PhlipyContext extends Context
         self::defineOperation($context, new Operation\LanguageConstruct\ListOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\Structures\DictionaryOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\WhileOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\BeginOperation);
 
         return $context;
     }

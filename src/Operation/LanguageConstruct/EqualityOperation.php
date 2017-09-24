@@ -23,7 +23,7 @@ class EqualityOperation extends Operation implements FunctionContract
             return $left->equals($right);
         }
 
-        return false;
+        return $left === $right;
     }
 
     /**

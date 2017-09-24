@@ -1,0 +1,8 @@
+(define (factorial x)
+    (if (< x 2)
+        x
+        (* x (factorial (- x 1)))
+    )
+)
+
+(assert-equals 2432902008176640000 (factorial 20))

@@ -49,4 +49,10 @@ interface ContextContract
      * @return bool
      */
     public function has(string $key): bool;
+
+    /**
+     * Stacks the current context and return a new instance pushed on top of it.
+     * @return ContextContract
+     */
+    public function stack(): ContextContract;
 }

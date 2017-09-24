@@ -1,46 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-use Tests\Webgraphe\Phlip\PhlipScriptTestCase;
+use Webgraphe\Phlip\Tests\PhlipScriptTestSuite;
 
 require_once 'vendor/autoload.php';
-
-class PhlipScriptTestSuite extends \PHPUnit\Framework\TestSuite
-{
-    /** @var string[] */
-    private $files = [];
-
-    public function __construct(array $files)
-    {
-        parent::__construct();
-
-        $this->files = $files;
-        foreach ($files as $file) {
-            $this->addTest(new PhlipScriptTestCase($file));
-        }
-    }
-}
-
-function globRecursive($path, callable $filter = null): array
-{
-    $glob = [];
-    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
-    while ($iterator->valid()) {
-        /** @var RecursiveDirectoryIterator $dirIterator */
-        $dirIterator = $iterator->getInnerIterator();
-        if (!$dirIterator->isDot() && (!$filter || call_user_func($filter, $dirIterator))) {
-            $glob[] = $dirIterator->getRealPath();
-        }
-
-        $iterator->next();
-    }
-
-    return $glob;
-}
-
-$phlipTestFileFilter = function (\DirectoryIterator $iterator) {
-    return $iterator->isFile() && preg_match('/Test\\.phlip$/', $iterator->getFilename());
-};
 
 function fatalError($message)
 {
@@ -48,28 +11,19 @@ function fatalError($message)
     exit(1);
 }
 
-$files = [];
+$paths = [];
 $arguments = $_SERVER['argv'];
 array_shift($arguments);
 foreach ($arguments as $argument) {
-    $fileInfo = new \SplFileInfo($argument);
-    if (!$fileInfo->isReadable()) {
-        fatalError("Cannot open file/directory {$fileInfo->getPathname()}");
-    }
-    if ($fileInfo->isFile()) {
-        if (!preg_match('/Test\\.phlip$/', $fileInfo->getFilename())) {
-            fatalError("{$fileInfo->getPathname()} is not a test file; must end with Test.phlip");
-        }
-        $realPath = $fileInfo->getRealPath();
-        $files[$realPath] = $realPath;
-    } elseif ($fileInfo->isDir()) {
-        $directoryFiles = globRecursive($fileInfo->getRealPath(), $phlipTestFileFilter);
-        $files = array_merge($files, array_combine($directoryFiles, $directoryFiles));
+    if (0 === strpos($argument, '--')) {
+        // TODO Implement options support
+    } else {
+        $paths[] = $argument;
     }
 }
 
-if (empty($files)) {
+if (empty($paths)) {
     fatalError("No Test.phlip files to run");
 }
 
-\PHPUnit\TextUI\TestRunner::run(new PhlipScriptTestSuite($files), ['colors' => 'always']);
+\PHPUnit\TextUI\TestRunner::run(new PhlipScriptTestSuite($paths), ['colors' => 'always']);

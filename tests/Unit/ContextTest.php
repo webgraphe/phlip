@@ -44,7 +44,7 @@ class ContextTest extends TestCase
 
     public function testParentHas()
     {
-        $child = new Context($parent = new Context());
+        $child = ($parent = new Context())->stack();
         $parent->define('x', 2);
         $this->assertTrue($child->has('x'));
         $this->assertFalse($child->has('y'));

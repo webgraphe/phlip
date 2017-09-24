@@ -12,3 +12,5 @@
 (assert (xor false true))
 (assert (not (xor true true)))
 (assert (not (xor false false)))
+(assert-equals null (or))
+(assert-equals null (or null 0 false))
