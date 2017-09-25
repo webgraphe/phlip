@@ -20,6 +20,11 @@ class StringAtom extends Atom
         parent::__construct($value);
     }
 
+    public function getValue(): string
+    {
+        return parent::getValue();
+    }
+
     public function evaluate(ContextContract $context): string
     {
         return $this->getValue();

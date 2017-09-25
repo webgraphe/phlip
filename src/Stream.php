@@ -2,6 +2,8 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\Exception\StreamException;
+
 abstract class Stream implements \Iterator
 {
     /** @var string */
@@ -28,7 +30,7 @@ abstract class Stream implements \Iterator
     public function current()
     {
         if (null === $this->current) {
-            throw new \OutOfBoundsException;
+            throw new StreamException('Out of bounds');
         }
 
         return $this->current;

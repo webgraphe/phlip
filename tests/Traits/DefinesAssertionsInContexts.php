@@ -18,7 +18,7 @@ use Webgraphe\Phlip\Tests\CallablePrimaryFunctionOperation;
  * @see \PHPUnit\Framework\Assert::assertEquals()
  * @see \PHPUnit\Framework\TestCase::expectException()
  */
-trait HooksAssertionsInContexts
+trait DefinesAssertionsInContexts
 {
     protected function contextWithAsserts(ContextContract $context = null): ContextContract
     {
@@ -41,12 +41,17 @@ trait HooksAssertionsInContexts
                     $head = $expressions->assertHeadExpression()->evaluate($context);
                     $toeExpression = $expressions->getTailExpressions()->assertHeadExpression();
                     $toe = $toeExpression->evaluate($context);
-                    if ($head instanceof ExpressionContract && $toe instanceof ExpressionContract) {
-                        $this->assertTrue($head->equals($toe), "Expected $head out of got $toeExpression; got $toe");
-                    } else {
-                        $headType = is_object($head) ? get_class($head) : gettype($head);
-                        $toeType = is_object($toe) ? get_class($toe) : gettype($toe);
-                        $this->assertEquals($head, $toe, "Expected $headType out of $toeExpression; got $toeType");
+                    try {
+                        if ($head instanceof ExpressionContract && $toe instanceof ExpressionContract) {
+                            $this->assertTrue($head->equals($toe),
+                                "Expected $head out of got $toeExpression; got $toe");
+                        } else {
+                            $headType = is_object($head) ? get_class($head) : gettype($head);
+                            $toeType = is_object($toe) ? get_class($toe) : gettype($toe);
+                            $this->assertEquals($head, $toe, "Expected $headType out of $toeExpression; got $toeType");
+                        }
+                    } catch (\Throwable $t) {
+                        throw $t;
                     }
                 }
             )
@@ -54,7 +59,8 @@ trait HooksAssertionsInContexts
         $context->define(
             'assert-not-equals',
             new CallablePrimaryFunctionOperation(
-                function (ContextContract $context, ExpressionList $expressions) {
+                function (ContextContract $context, ExpressionList $expressions)
+                {
                     $head = $expressions->assertHeadExpression()->evaluate($context);
                     $toeExpression = $expressions->getTailExpressions()->assertHeadExpression();
                     $toe = $toeExpression->evaluate($context);
@@ -71,7 +77,8 @@ trait HooksAssertionsInContexts
         $context->define(
             'assert-exception',
             new CallablePrimaryFunctionOperation(
-                function (ContextContract $context, ExpressionList $expressions) {
+                function (ContextContract $context, ExpressionList $expressions)
+                {
                     /** @var self $test */
                     $name = $expressions->assertHeadExpression()->evaluate($context);
                     $this->expectException($name);

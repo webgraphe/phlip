@@ -11,7 +11,7 @@ use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation\LanguageConstruct\CallablePrimaryFunctionOperation;
 use Webgraphe\Phlip\Program;
-use Webgraphe\Phlip\Tests\Traits\HooksAssertionsInContexts;
+use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInContexts;
 
 /**
  * Used by phlipunit.
@@ -19,7 +19,7 @@ use Webgraphe\Phlip\Tests\Traits\HooksAssertionsInContexts;
  */
 class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
 {
-    use HooksAssertionsInContexts;
+    use DefinesAssertionsInContexts;
 
     /** @var string */
     private $file;

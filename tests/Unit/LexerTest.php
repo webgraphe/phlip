@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Comment;
+use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Symbol;
 use Webgraphe\Phlip\Tests\TestCase;
@@ -25,12 +26,12 @@ SOURCE;
         $expectedTokens = [
             new Comment('A comment'),
             Symbol\Opening\OpenListSymbol::instance(),
-            new IdentifierAtom('identifier1'),
+            IdentifierAtom::fromString('identifier1'),
             new StringAtom('string'),
             Symbol\Opening\OpenListSymbol::instance(),
-            new IdentifierAtom('identifier2'),
+            IdentifierAtom::fromString('identifier2'),
             Symbol\QuoteSymbol::instance(),
-            new IdentifierAtom('x'),
+            IdentifierAtom::fromString('x'),
             new NumberAtom('42'),
             new NumberAtom('3.14'),
             Symbol\Opening\OpenArraySymbol::instance(),
@@ -57,7 +58,7 @@ SOURCE;
     {
         $lexer = new Lexer;
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(LexerException::class);
         $lexer->parseSource('"non-terminated string');
     }
 
@@ -65,7 +66,7 @@ SOURCE;
     {
         $lexer = new Lexer;
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(LexerException::class);
         $lexer->parseSource('"non-terminated escaped string\\');
     }
 }

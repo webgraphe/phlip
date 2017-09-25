@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Tests\Traits;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-trait GlobsRecursively
+trait GlobsPathsRecursively
 {
     protected static function globRecursive($path, callable $filter = null): array
     {

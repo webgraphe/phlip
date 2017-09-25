@@ -18,7 +18,7 @@ abstract class Atom implements LexemeContract, ExpressionContract
         $this->value = $value;
     }
 
-    public final function getValue()
+    public function getValue()
     {
         return $this->value;
     }

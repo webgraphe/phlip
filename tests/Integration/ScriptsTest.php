@@ -4,11 +4,11 @@ namespace Webgraphe\Phlip\Tests\Integration;
 
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
-use Webgraphe\Phlip\Tests\Traits\HooksAssertionsInContexts;
+use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInContexts;
 
 class ScriptsTest extends TestCase
 {
-    use HooksAssertionsInContexts;
+    use DefinesAssertionsInContexts;
 
     /**
      * @dataProvider scriptFiles

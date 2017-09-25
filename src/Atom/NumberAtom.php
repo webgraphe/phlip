@@ -15,6 +15,14 @@ class NumberAtom extends Atom
         parent::__construct(0 + $value);
     }
 
+    /**
+     * @return number
+     */
+    public function getValue()
+    {
+        return parent::getValue();
+    }
+
     public static function isNumber($lexeme): bool
     {
         return is_numeric($lexeme);

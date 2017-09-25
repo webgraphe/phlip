@@ -4,11 +4,11 @@ namespace Webgraphe\Phlip\Tests;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Webgraphe\Phlip\Tests\Traits\GlobsRecursively;
+use Webgraphe\Phlip\Tests\Traits\GlobsPathsRecursively;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-    use GlobsRecursively;
+    use GlobsPathsRecursively;
 
     protected function relativeProjectPath($relativePath): ?string
     {

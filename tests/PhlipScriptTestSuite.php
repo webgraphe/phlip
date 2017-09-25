@@ -3,14 +3,14 @@
 namespace Webgraphe\Phlip\Tests;
 
 use PHPUnit\Framework\TestSuite;
-use Webgraphe\Phlip\Tests\Traits\GlobsRecursively;
+use Webgraphe\Phlip\Tests\Traits\GlobsPathsRecursively;
 
 /**
  * Used by phlipunit.
  */
 class PhlipScriptTestSuite extends TestSuite
 {
-    use GlobsRecursively;
+    use GlobsPathsRecursively;
 
     public function __construct(array $paths)
     {

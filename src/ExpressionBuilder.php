@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Atom\ArrayAtom;
-use Webgraphe\Phlip\Atom\IdentifierAtom;
+use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Contracts\ExpressionContract;
@@ -30,7 +30,7 @@ class ExpressionBuilder
             case null === $thing:
                 return $null ?? ($null = new ExpressionList);
             case true === $thing:
-                return $true ?? ($true = new QuotedExpression(new IdentifierAtom('true')));
+                return $true ?? ($true = KeywordAtom::fromString('true'));
             case false === $thing:
                 return $false ?? ($false = new ExpressionList);
             case is_string($thing):

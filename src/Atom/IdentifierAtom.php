@@ -4,12 +4,24 @@ namespace Webgraphe\Phlip\Atom;
 
 use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 
 class IdentifierAtom extends Atom
 {
-    public function __construct(string $value)
+    const IDENTIFIER_REGEX = '/^[^:\s\'\(\)\[\]\{\}]+$/';
+
+    /**
+     * @param string $value
+     * @return IdentifierAtom
+     * @throws AssertionException
+     */
+    public static function fromString(string $value): IdentifierAtom
     {
-        parent::__construct($value);
+        if (!preg_match(self::IDENTIFIER_REGEX, $value)) {
+            throw new AssertionException('Invalid identifier');
+        }
+
+        return new static($value);
     }
 
     /**

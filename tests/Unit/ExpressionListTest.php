@@ -20,7 +20,7 @@ class ExpressionListTest extends TestCase
 
     public function testNotCallable()
     {
-        $list = new ExpressionList(new IdentifierAtom('not-callable'));
+        $list = new ExpressionList(IdentifierAtom::fromString('not-callable'));
         $context = new Context;
         $context->define('not-callable', "This is a callable");
 

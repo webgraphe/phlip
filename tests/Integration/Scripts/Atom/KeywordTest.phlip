@@ -1,0 +1,2 @@
+(define true :true)
+(assert-equals true :true)
