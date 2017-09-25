@@ -1,3 +1,7 @@
+(define null ())
+(define true (= 1 1))
+(define false (not true))
+
 (assert-equals null (if false 1))
 (assert-equals 0 (if false 1 0))
 (assert-equals 1 (if true 1 0))

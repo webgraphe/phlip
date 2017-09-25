@@ -1,3 +1,4 @@
+(define null ())
 (define identity null)
 (assert-equals null identity)
 (set (identity x) x)

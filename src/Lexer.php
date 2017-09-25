@@ -2,9 +2,7 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Atom\BooleanAtom;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Atom\NullAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Exception\LexerException;
@@ -68,12 +66,6 @@ class Lexer
                 default:
                     $lexeme = $this->parseWord($stream);
                     switch (true) {
-                        case NullAtom::isNull($lexeme):
-                            $lexemes[] = NullAtom::instance();
-                            break;
-                        case BooleanAtom::isBoolean($lexeme):
-                            $lexemes[] = 'true' === $lexeme ? BooleanAtom::true() : BooleanAtom::false();
-                            break;
                         case NumberAtom::isNumber($lexeme):
                             $lexemes[] = new NumberAtom($lexeme);
                             break;

@@ -1,4 +1,7 @@
+(define null ())
+(define true (= 1 1))
+(define false (not true))
 (assert-equals
-    '("foo" bar 4 true false null)
-    (cons "foo" (cons 'bar (cons (+ 2 2) (cons true (cons false null)))))
+    '("foo" bar 4 'true () ())
+    (cons "foo" (cons 'bar (cons (+ 2 2) (cons true (cons false (cons null null))))))
 )

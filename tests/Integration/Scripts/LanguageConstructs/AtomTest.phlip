@@ -1,3 +1,6 @@
+(define null ())
+(define true (= 1 1))
+(define false (not true))
 (assert (atom? 0))
 (assert (atom? 1))
 (assert (atom? -1))

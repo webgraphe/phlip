@@ -1,3 +1,7 @@
+(define null ())
+(define true (= 1 1))
+(define false (not true))
+
 (assert (= 4 (and 1 2 3 4)))
 (assert (= 0 (and 1 2 3 -1 0)))
 (assert (= 123 (or null 0 "" 123)))

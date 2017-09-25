@@ -2,11 +2,9 @@
 
 namespace Webgraphe\Phlip\Tests\Unit;
 
-use Webgraphe\Phlip\Tests\TestCase;
-use Webgraphe\Phlip\Atom\BooleanAtom;
-use Webgraphe\Phlip\Atom\NullAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
+use Webgraphe\Phlip\Tests\TestCase;
 
 class AtomTest extends TestCase
 {
@@ -22,17 +20,5 @@ class AtomTest extends TestCase
         $this->assertEquals(42, $integer->getValue());
         $float = new NumberAtom('3.14');
         $this->assertEquals(3.14, $float->getValue());
-    }
-
-    public function testBooleanAtom()
-    {
-        $this->assertTrue(BooleanAtom::true()->getValue());
-        $this->assertFalse(BooleanAtom::false()->getValue());
-    }
-
-    public function testNull()
-    {
-        $null = NullAtom::instance();
-        $this->assertNull($null->getValue());
     }
 }

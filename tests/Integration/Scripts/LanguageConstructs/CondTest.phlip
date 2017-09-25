@@ -15,6 +15,7 @@
     )
 )
 
+(define null ())
 (assert-equals null (month 0))
 (assert-equals "January" (month 1))
 (assert-equals "February" (month 2))

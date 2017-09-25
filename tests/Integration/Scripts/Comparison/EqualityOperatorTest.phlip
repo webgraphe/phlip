@@ -1,3 +1,6 @@
+(define null ())
+(define true (= 1 1))
+(define false (not true))
 (assert (= "hello" "hello"))
 (assert (= 42 42))
 (assert (= 3.14 3.14))

@@ -2,8 +2,6 @@
 
 namespace Webgraphe\Phlip\Context;
 
-use Webgraphe\Phlip\Atom\BooleanAtom;
-use Webgraphe\Phlip\Atom\NullAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Operation;
@@ -12,21 +10,11 @@ class PhlipyContext extends Context
 {
     public function __construct()
     {
-        self::withFinalAtoms($this);
         self::withLispPrimitives($this);
         self::withExtraLanguageConstructs($this);
         self::withArithmeticOperators($this);
         self::withComparisonOperators($this);
         self::withLogicOperators($this);
-    }
-
-    private static function withFinalAtoms(ContextContract $context): ContextContract
-    {
-        $context->define((string)NullAtom::instance(), NullAtom::instance()->getValue());
-        $context->define((string)BooleanAtom::true(), BooleanAtom::true()->getValue());
-        $context->define((string)BooleanAtom::false(), BooleanAtom::false()->getValue());
-
-        return $context;
     }
 
     public static function withLispPrimitives(ContextContract $context): ContextContract
