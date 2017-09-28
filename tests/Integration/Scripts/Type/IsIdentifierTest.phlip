@@ -1,0 +1,2 @@
+(assert-true (identifier? 'identifier))
+(assert-false (identifier? define))

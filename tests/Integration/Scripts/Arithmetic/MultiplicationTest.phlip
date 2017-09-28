@@ -1,2 +1,2 @@
-(assert (= 1 (*)))
-(assert (= 24 (* 1 2 3 4)))
+(assert-true(= 1 (*)))
+(assert-true(= 24 (* 1 2 3 4)))

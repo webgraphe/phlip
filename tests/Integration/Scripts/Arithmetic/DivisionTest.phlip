@@ -1,2 +1,2 @@
-(assert (= 0.5 (/ 2)))
-(assert (= 4 (/ 24 6)))
+(assert-true(= 0.5 (/ 2)))
+(assert-true(= 4 (/ 24 6)))

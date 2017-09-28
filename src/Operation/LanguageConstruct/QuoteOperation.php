@@ -4,10 +4,10 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\PrimaryFunction;
+use Webgraphe\Phlip\Operation\PrimaryOperation;
 use Webgraphe\Phlip\QuotedExpression;
 
-class QuoteOperation extends PrimaryFunction
+class QuoteOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'quote';
 

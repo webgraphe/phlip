@@ -7,9 +7,9 @@ use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\PrimaryFunction;
+use Webgraphe\Phlip\Operation\PrimaryOperation;
 
-class LetOperation extends PrimaryFunction
+class LetOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'let';
 

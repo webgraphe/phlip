@@ -6,9 +6,9 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\PrimaryFunction;
+use Webgraphe\Phlip\Operation\PrimaryOperation;
 
-class DefineOperation extends PrimaryFunction
+class DefineOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'define';
 

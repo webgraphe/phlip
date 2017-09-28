@@ -2,12 +2,12 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Contracts\FunctionContract;
+use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\ExpressionBuilder;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation;
 
-class ListOperation extends Operation implements FunctionContract
+class ListOperation extends Operation implements StandardOperationContract
 {
     const IDENTIFIER = 'list';
 

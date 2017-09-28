@@ -1,4 +1,4 @@
-(assert (equals? 'x 'x))
-(assert (not (equals? 'x 'y)))
-(assert (equals? 2 2))
-(assert (not (equals? 2 3)))
+(assert-true(equals? 'x 'x))
+(assert-true(not (equals? 'x 'y)))
+(assert-true(equals? 2 2))
+(assert-true(not (equals? 2 3)))

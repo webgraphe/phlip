@@ -5,9 +5,9 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\PrimaryFunction;
+use Webgraphe\Phlip\Operation\PrimaryOperation;
 
-class DefinedOperation extends PrimaryFunction
+class DefinedOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'defined?';
 

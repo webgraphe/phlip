@@ -1,0 +1,3 @@
+(assert-true (callable? callable?))
+(assert-true (callable? assert-true))
+(assert-true (callable? (lambda (x) x)))

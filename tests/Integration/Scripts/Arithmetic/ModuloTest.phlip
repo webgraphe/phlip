@@ -1,4 +1,4 @@
-(assert (= 2 (% 5 3)))
-(assert (= 2 (% 5 -3)))
-(assert (= -2 (% -5 3)))
-(assert (= -2 (% -5 -3)))
+(assert-true(= 2 (% 5 3)))
+(assert-true(= 2 (% 5 -3)))
+(assert-true(= -2 (% -5 3)))
+(assert-true(= -2 (% -5 -3)))

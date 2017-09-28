@@ -1,0 +1,3 @@
+(assert-true (string? "I am a string"))
+(assert-true (string? '"I am a string expression"))
+(assert-false (string? '(I am a list)))

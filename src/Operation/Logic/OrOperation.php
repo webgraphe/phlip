@@ -4,9 +4,9 @@ namespace Webgraphe\Phlip\Operation\Logic;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\PrimaryFunction;
+use Webgraphe\Phlip\Operation\PrimaryOperation;
 
-class OrOperation extends PrimaryFunction
+class OrOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'or';
     const IDENTIFIER_ALTERNATIVE = '||';

@@ -3,12 +3,12 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Contracts\FunctionContract;
+use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation;
-use Webgraphe\Phlip\Operation\PrimaryFunction;
+use Webgraphe\Phlip\Operation\PrimaryOperation;
 
-class CdrOperation extends PrimaryFunction
+class CdrOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'cdr';
     const IDENTIFIER_ALTERNATIVE = 'tail';

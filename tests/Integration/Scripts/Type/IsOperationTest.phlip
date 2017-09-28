@@ -1,0 +1,3 @@
+(assert-true (operation? operation?))
+(assert-true (operation? assert-true))
+(assert-false (operation? (lambda (x) x)))

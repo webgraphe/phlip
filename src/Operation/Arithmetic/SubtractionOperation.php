@@ -2,10 +2,10 @@
 
 namespace Webgraphe\Phlip\Operation\Arithmetic;
 
-use Webgraphe\Phlip\Contracts\FunctionContract;
+use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\Operation;
 
-class SubtractionOperation extends Operation implements FunctionContract
+class SubtractionOperation extends Operation implements StandardOperationContract
 {
     const IDENTIFIER = '-';
     const IDENTIFIER_ALTERNATIVE = 'sub';

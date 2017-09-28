@@ -12,6 +12,7 @@ class PhlipyContext extends Context
     {
         self::withLispPrimitives($this);
         self::withExtraLanguageConstructs($this);
+        self::withTypeOperators($this);
         self::withArithmeticOperators($this);
         self::withComparisonOperators($this);
         self::withLogicOperators($this);
@@ -42,6 +43,22 @@ class PhlipyContext extends Context
         self::defineOperation($context, new Operation\LanguageConstruct\Structures\DictionaryOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\WhileOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\BeginOperation);
+
+        return $context;
+    }
+
+    public static function withTypeOperators(ContextContract $context): ContextContract
+    {
+        self::defineOperation($context, new Operation\Type\IsArrayOperation);
+        self::defineOperation($context, new Operation\Type\IsCallableOperation);
+        self::defineOperation($context, new Operation\Type\IsExpressionOperation);
+        self::defineOperation($context, new Operation\Type\IsIdentifierOperation);
+        self::defineOperation($context, new Operation\Type\IsKeywordOperation);
+        self::defineOperation($context, new Operation\Type\IsLambdaOperation);
+        self::defineOperation($context, new Operation\Type\IsListOperation);
+        self::defineOperation($context, new Operation\Type\IsOperationOperation);
+        self::defineOperation($context, new Operation\Type\IsNumberOperation);
+        self::defineOperation($context, new Operation\Type\IsStringOperation);
 
         return $context;
     }

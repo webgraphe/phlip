@@ -3,13 +3,13 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ExpressionContract;
-use Webgraphe\Phlip\Contracts\FunctionContract;
+use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\ExpressionBuilder;
 use Webgraphe\Phlip\ExpressionList;
 use Webgraphe\Phlip\Operation;
 use Webgraphe\Phlip\Traits\AssertsTypes;
 
-class ConsOperation extends Operation implements FunctionContract
+class ConsOperation extends Operation implements StandardOperationContract
 {
     use AssertsTypes;
 

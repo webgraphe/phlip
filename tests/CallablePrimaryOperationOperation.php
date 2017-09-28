@@ -4,10 +4,10 @@ namespace Webgraphe\Phlip\Tests;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\ExpressionContract;
-use Webgraphe\Phlip\Contracts\PrimaryFunctionContract;
+use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
 use Webgraphe\Phlip\ExpressionList;
 
-class CallablePrimaryFunctionOperation implements PrimaryFunctionContract
+class CallablePrimaryOperationOperation implements PrimaryOperationContract
 {
     /** @var callable */
     private $callback;

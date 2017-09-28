@@ -1,0 +1,11 @@
+(assert-true (expression? '1))
+(assert-true (expression? 'identifier))
+(assert-true (expression? '"Hello world"))
+(assert-true (expression? '(hello world)))
+(assert-true (expression? '[1 2 3]))
+(assert-true (expression? :keyword))
+
+(assert-false (expression? 1))
+(assert-false (expression? define))
+(assert-false (expression? "Hello world"))
+(assert-false (expression? [1 2 3]))

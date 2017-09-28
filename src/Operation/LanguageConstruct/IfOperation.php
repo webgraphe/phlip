@@ -4,9 +4,9 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\PrimaryFunction;
+use Webgraphe\Phlip\Operation\PrimaryOperation;
 
-class IfOperation extends PrimaryFunction
+class IfOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'if';
 

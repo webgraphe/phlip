@@ -8,7 +8,7 @@ use Webgraphe\Phlip\Contracts\ExpressionContract;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Tests\CallablePrimaryFunctionOperation;
+use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
 
 /**
  * @method void assertTrue($condition, $message = '')
@@ -26,8 +26,8 @@ trait DefinesAssertionsInContexts
         $context->define('ContextException', ContextException::class);
         $context->define('EvaluationException', EvaluationException::class);
         $context->define(
-            'assert',
-            new CallablePrimaryFunctionOperation(
+            'assert-true',
+            new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ExpressionList $expressions) {
                     $head = $expressions->assertHeadExpression();
                     $this->assertTrue((bool)$head->evaluate($context), "Expected $head to be true");
@@ -35,8 +35,17 @@ trait DefinesAssertionsInContexts
             )
         );
         $context->define(
+            'assert-false',
+            new CallablePrimaryOperationOperation(
+                function (ContextContract $context, ExpressionList $expressions) {
+                    $head = $expressions->assertHeadExpression();
+                    $this->assertFalse((bool)$head->evaluate($context), "Expected $head to be false");
+                }
+            )
+        );
+        $context->define(
             'assert-equals',
-            new CallablePrimaryFunctionOperation(
+            new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ExpressionList $expressions) {
                     $head = $expressions->assertHeadExpression()->evaluate($context);
                     $toeExpression = $expressions->getTailExpressions()->assertHeadExpression();
@@ -58,7 +67,7 @@ trait DefinesAssertionsInContexts
         );
         $context->define(
             'assert-not-equals',
-            new CallablePrimaryFunctionOperation(
+            new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ExpressionList $expressions)
                 {
                     $head = $expressions->assertHeadExpression()->evaluate($context);
@@ -76,7 +85,7 @@ trait DefinesAssertionsInContexts
         );
         $context->define(
             'assert-exception',
-            new CallablePrimaryFunctionOperation(
+            new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ExpressionList $expressions)
                 {
                     /** @var self $test */

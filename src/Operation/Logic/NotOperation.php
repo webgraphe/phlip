@@ -2,10 +2,10 @@
 
 namespace Webgraphe\Phlip\Operation\Logic;
 
-use Webgraphe\Phlip\Contracts\FunctionContract;
+use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\Operation;
 
-class NotOperation extends Operation implements FunctionContract
+class NotOperation extends Operation implements StandardOperationContract
 {
     const IDENTIFIER = '!';
     const IDENTIFIER_ALTERNATIVE = 'not';

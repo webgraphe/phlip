@@ -1,0 +1,6 @@
+(assert-true (number? 1))
+(assert-true (number? 3.14))
+(assert-true (number? '1))
+(assert-true (number? '3.14))
+(assert-true (number? "123"))
+(assert-false (number? "one two three"))
