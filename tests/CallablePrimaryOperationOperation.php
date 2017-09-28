@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Tests;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Contracts\ExpressionContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
-use Webgraphe\Phlip\ExpressionList;
+use Webgraphe\Phlip\FormList;
 
 class CallablePrimaryOperationOperation implements PrimaryOperationContract
 {
@@ -19,11 +19,11 @@ class CallablePrimaryOperationOperation implements PrimaryOperationContract
 
     /**
      * @param ContextContract $context
-     * @param ExpressionContract[] $expressions
+     * @param FormContract[] $expressions
      * @return mixed
      */
-    public function __invoke(ContextContract $context, ExpressionContract ...$expressions)
+    public function __invoke(ContextContract $context, FormContract ...$expressions)
     {
-        return call_user_func($this->callback, $context, new ExpressionList(...$expressions));
+        return call_user_func($this->callback, $context, new FormList(...$expressions));
     }
 }

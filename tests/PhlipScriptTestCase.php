@@ -2,14 +2,6 @@
 
 namespace Webgraphe\Phlip\Tests;
 
-use Webgraphe\Phlip\Context\PhlipyContext;
-use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Contracts\ExpressionContract;
-use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
-use Webgraphe\Phlip\Exception\EvaluationException;
-use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation\LanguageConstruct\CallablePrimaryFunctionOperation;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInContexts;
 

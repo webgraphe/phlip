@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\ExpressionList;
+use Webgraphe\Phlip\FormList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class IfOperation extends PrimaryOperation
@@ -12,20 +12,20 @@ class IfOperation extends PrimaryOperation
 
     /**
      * @param ContextContract $context
-     * @param ExpressionList $expressions
+     * @param FormList $expressions
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ExpressionList $expressions)
+    protected function invoke(ContextContract $context, FormList $expressions)
     {
-        $tail = $expressions->getTailExpressions();
+        $tail = $expressions->getTail();
 
-        if ($expressions->assertHeadExpression()->evaluate($context)) {
-            $then = $tail->assertHeadExpression();
+        if ($expressions->assertHead()->evaluate($context)) {
+            $then = $tail->assertHead();
 
             return $then->evaluate($context);
         }
 
-        if ($else = $tail->getTailExpressions()->getHeadExpression()) {
+        if ($else = $tail->getTail()->getHead()) {
             return $else->evaluate($context);
         }
 

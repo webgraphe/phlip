@@ -6,19 +6,19 @@ use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Parser;
-use Webgraphe\Phlip\QuotedExpression;
+use Webgraphe\Phlip\QuotedForm;
 
-class QuotedExpressionTest extends TestCase
+class QuotedFormTest extends TestCase
 {
     public function testQuotedNumberAtom()
     {
         $source = "'123";
-        /** @var QuotedExpression $quotedExpression */
-        $quotedExpression = (new Parser)->parseLexemeStream((new Lexer)->parseSource($source))->getHeadExpression();
-        $this->assertInstanceOf(QuotedExpression::class, $quotedExpression);
+        /** @var QuotedForm $quotedExpression */
+        $quotedExpression = (new Parser)->parseLexemeStream((new Lexer)->parseSource($source))->getHead();
+        $this->assertInstanceOf(QuotedForm::class, $quotedExpression);
         $this->assertEquals($source, (string)$quotedExpression);
         /** @var NumberAtom $expression */
-        $expression = $quotedExpression->getExpression();
+        $expression = $quotedExpression->getForm();
         $this->assertInstanceOf(NumberAtom::class, $expression);
         $this->assertEquals(123, $expression->getValue());
     }

@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\ExpressionList;
+use Webgraphe\Phlip\FormList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class CondOperation extends PrimaryOperation
@@ -12,16 +12,16 @@ class CondOperation extends PrimaryOperation
 
     /**
      * @param ContextContract $context
-     * @param ExpressionList $expressions
+     * @param FormList $expressions
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ExpressionList $expressions)
+    protected function invoke(ContextContract $context, FormList $expressions)
     {
-        while ($condition = $expressions->getHeadExpression()) {
-            $expressions = $expressions->getTailExpressions();
-            $condition = ExpressionList::assertStaticType($condition);
-            if ($condition->assertHeadExpression()->evaluate($context)) {
-                return $condition->getTailExpressions()->assertHeadExpression()->evaluate($context);
+        while ($condition = $expressions->getHead()) {
+            $expressions = $expressions->getTail();
+            $condition = FormList::assertStaticType($condition);
+            if ($condition->assertHead()->evaluate($context)) {
+                return $condition->getTail()->assertHead()->evaluate($context);
             }
         }
 

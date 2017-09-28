@@ -5,38 +5,38 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\EvaluationException;
-use Webgraphe\Phlip\ExpressionList;
+use Webgraphe\Phlip\FormList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class DefineOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'define';
 
-    protected function invoke(ContextContract $context, ExpressionList $expressions)
+    protected function invoke(ContextContract $context, FormList $expressions)
     {
-        $variable = $expressions->assertHeadExpression();
+        $variable = $expressions->assertHead();
 
         switch (true) {
-            case $variable instanceof ExpressionList:
-                $name = IdentifierAtom::assertStaticType($variable->assertHeadExpression());
+            case $variable instanceof FormList:
+                $name = IdentifierAtom::assertStaticType($variable->assertHead());
 
                 return $context->define(
                     $name->getValue(),
                     LambdaOperation::invokeStatically(
                         $context,
-                        $variable->getTailExpressions(),
-                        $expressions->getTailExpressions()
+                        $variable->getTail(),
+                        $expressions->getTail()
                     )
                 );
 
             case $variable instanceof IdentifierAtom:
                 return $context->define(
                     $variable->getValue(),
-                    $expressions->getTailExpressions()->assertHeadExpression()->evaluate($context)
+                    $expressions->getTail()->assertHead()->evaluate($context)
                 );
         }
 
-        throw EvaluationException::fromExpression($variable, "Malformed define");
+        throw EvaluationException::fromForm($variable, "Malformed define");
     }
 
     /**

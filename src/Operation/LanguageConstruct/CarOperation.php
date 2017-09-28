@@ -3,9 +3,7 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
-use Webgraphe\Phlip\ExpressionList;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\FormList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class CarOperation extends PrimaryOperation
@@ -23,11 +21,11 @@ class CarOperation extends PrimaryOperation
 
     /**
      * @param ContextContract $context
-     * @param ExpressionList $expressions
+     * @param FormList $expressions
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ExpressionList $expressions)
+    protected function invoke(ContextContract $context, FormList $expressions)
     {
-        return ExpressionList::assertStaticType($expressions->assertHeadExpression()->evaluate($context))->getHeadExpression();
+        return FormList::assertStaticType($expressions->assertHead()->evaluate($context))->getHead();
     }
 }

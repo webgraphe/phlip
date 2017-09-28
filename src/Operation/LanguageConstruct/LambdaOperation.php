@@ -3,11 +3,9 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\EvaluationException;
-use Webgraphe\Phlip\ExpressionList;
+use Webgraphe\Phlip\FormList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class LambdaOperation extends PrimaryOperation
@@ -16,17 +14,17 @@ class LambdaOperation extends PrimaryOperation
 
     public static function invokeStatically(
         ContextContract $context,
-        ExpressionList $parameters,
-        ExpressionList $statements
+        FormList $parameters,
+        FormList $statements
     )
     {
-        return (new self)->invoke($context, new ExpressionList($parameters, ...$statements->all()));
+        return (new self)->invoke($context, new FormList($parameters, ...$statements->all()));
     }
 
-    protected function invoke(ContextContract $context, ExpressionList $expressions)
+    protected function invoke(ContextContract $context, FormList $expressions)
     {
-        $parameters = ExpressionList::assertStaticType($expressions->getHeadExpression());
-        $statements = $expressions->getTailExpressions();
+        $parameters = FormList::assertStaticType($expressions->getHead());
+        $statements = $expressions->getTail();
 
         return function () use ($context, $parameters, $statements) {
             $context = $context->stack();
@@ -35,22 +33,22 @@ class LambdaOperation extends PrimaryOperation
 
             while ($arguments) {
                 $argument = array_shift($arguments);
-                $parameter = IdentifierAtom::assertStaticType($parameters->getHeadExpression());
-                $parameters = $parameters->getTailExpressions();
+                $parameter = IdentifierAtom::assertStaticType($parameters->getHead());
+                $parameters = $parameters->getTail();
                 $context->let($parameter->getValue(), $argument);
             }
 
             $result = null;
-            while ($statement = $statements->getHeadExpression()) {
+            while ($statement = $statements->getHead()) {
                 $result = $statement->evaluate($context);
-                $statements = $statements->getTailExpressions();
+                $statements = $statements->getTail();
             }
 
             return $result;
         };
     }
 
-    private static function assertArgumentsMatchingParameters(ExpressionList $parameters, array $arguments): array
+    private static function assertArgumentsMatchingParameters(FormList $parameters, array $arguments): array
     {
         $argumentCount = count($arguments);
         $parameterCount = count($parameters);

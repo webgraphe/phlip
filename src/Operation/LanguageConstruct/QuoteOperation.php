@@ -3,9 +3,8 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\ExpressionList;
+use Webgraphe\Phlip\FormList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
-use Webgraphe\Phlip\QuotedExpression;
 
 class QuoteOperation extends PrimaryOperation
 {
@@ -13,12 +12,12 @@ class QuoteOperation extends PrimaryOperation
 
     /**
      * @param ContextContract $context
-     * @param ExpressionList $expressions
+     * @param FormList $expressions
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ExpressionList $expressions)
+    protected function invoke(ContextContract $context, FormList $expressions)
     {
-        return $expressions->assertHeadExpression();
+        return $expressions->assertHead();
     }
 
     /**

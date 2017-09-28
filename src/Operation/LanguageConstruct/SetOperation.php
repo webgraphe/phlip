@@ -5,38 +5,38 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\EvaluationException;
-use Webgraphe\Phlip\ExpressionList;
+use Webgraphe\Phlip\FormList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class SetOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'set';
 
-    protected function invoke(ContextContract $context, ExpressionList $expressions)
+    protected function invoke(ContextContract $context, FormList $expressions)
     {
-        $variable = $expressions->getHeadExpression();
+        $variable = $expressions->getHead();
 
         switch (true) {
-            case $variable instanceof ExpressionList:
-                $name = IdentifierAtom::assertStaticType($variable->getHeadExpression());
+            case $variable instanceof FormList:
+                $name = IdentifierAtom::assertStaticType($variable->getHead());
 
                 return $context->set(
                     $name->getValue(),
                     LambdaOperation::invokeStatically(
                         $context,
-                        $variable->getTailExpressions(),
-                        $expressions->getTailExpressions()
+                        $variable->getTail(),
+                        $expressions->getTail()
                     )
                 );
 
             case $variable instanceof IdentifierAtom:
                 return $context->set(
                     $variable->getValue(),
-                    $expressions->getTailExpressions()->assertHeadExpression()->evaluate($context)
+                    $expressions->getTail()->assertHead()->evaluate($context)
                 );
         }
 
-        throw EvaluationException::fromExpression($variable, "Malformed set");
+        throw EvaluationException::fromForm($variable, "Malformed set");
     }
 
     /**

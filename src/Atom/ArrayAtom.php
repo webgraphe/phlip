@@ -4,17 +4,17 @@ namespace Webgraphe\Phlip\Atom;
 
 use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Contracts\ExpressionContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 
 class ArrayAtom extends Atom implements \Countable
 {
-    public function __construct(ExpressionContract ...$elements)
+    public function __construct(FormContract ...$elements)
     {
         parent::__construct($elements);
     }
 
     /**
-     * @return ExpressionContract[]
+     * @return FormContract[]
      */
     public function getValue(): array
     {
@@ -28,7 +28,7 @@ class ArrayAtom extends Atom implements \Countable
     public function evaluate(ContextContract $context)
     {
         return array_map(
-            function (ExpressionContract $expression) use ($context) {
+            function (FormContract $expression) use ($context) {
                 return $expression->evaluate($context);
             },
             $this->getValue()
@@ -50,7 +50,7 @@ class ArrayAtom extends Atom implements \Countable
             . ']';
     }
 
-    public function equals(ExpressionContract $against): bool
+    public function equals(FormContract $against): bool
     {
         $expressionCount = count($this);
         if (!($against instanceof static) || count($against) !== $expressionCount) {
@@ -60,7 +60,7 @@ class ArrayAtom extends Atom implements \Countable
         return $expressionCount === count(
             array_filter(
                 array_map(
-                    function(ExpressionContract $left, ExpressionContract $right) {
+                    function(FormContract $left, FormContract $right) {
                         return $left->equals($right);
                     },
                     $this->getValue(),

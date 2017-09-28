@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip;
 use Webgraphe\Phlip\Atom\ArrayAtom;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
-use Webgraphe\Phlip\Contracts\ExpressionContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing;
@@ -18,13 +18,13 @@ class Parser
 {
     /**
      * @param LexemeStream $stream
-     * @return ExpressionList
+     * @return FormList
      * @throws Exception
      * @throws ParserException
      */
-    public function parseLexemeStream(LexemeStream $stream): ExpressionList
+    public function parseLexemeStream(LexemeStream $stream): FormList
     {
-        /** @var ExpressionList[] $statements */
+        /** @var FormList[] $statements */
         $statements = [];
         try {
             while ($stream->valid()) {
@@ -40,21 +40,21 @@ class Parser
             throw new ParserException('Failed parsing lexeme stream', 0, $exception);
         }
 
-        return new ExpressionList(...$statements);
+        return new FormList(...$statements);
     }
 
     /**
      * @param LexemeStream $stream
-     * @return ExpressionContract
+     * @return FormContract
      * @throws \Exception
      */
-    private function extractNextStatement(LexemeStream $stream): ?ExpressionContract
+    private function extractNextStatement(LexemeStream $stream): ?FormContract
     {
         $lexeme = $stream->current();
         $stream->next();
 
         if ($lexeme instanceof QuoteSymbol) {
-            return new QuotedExpression($this->extractNextStatement($stream));
+            return new QuotedForm($this->extractNextStatement($stream));
         }
 
         if ($lexeme instanceof KeywordSymbol) {
@@ -64,7 +64,7 @@ class Parser
         }
 
         if ($lexeme instanceof OpenListSymbol) {
-            return $this->extractExpressionList($stream);
+            return $this->extractFormList($stream);
         }
 
         if ($lexeme instanceof OpenArraySymbol) {
@@ -82,9 +82,9 @@ class Parser
         throw new ParserException("Unexpected lexeme '$lexeme'");
     }
 
-    private function extractExpressionList(LexemeStream $stream): ExpressionList
+    private function extractFormList(LexemeStream $stream): FormList
     {
-        return new ExpressionList(
+        return new FormList(
             ...$this->extractNextStatementsUntilClosingSymbol(
                 $stream,
                 OpenListSymbol::instance()->getRelatedClosingSymbol()
@@ -105,7 +105,7 @@ class Parser
     /**
      * @param LexemeStream $stream
      * @param Closing $symbol
-     * @return ExpressionContract[]
+     * @return FormContract[]
      */
     private function extractNextStatementsUntilClosingSymbol(LexemeStream $stream, Closing $symbol): array
     {

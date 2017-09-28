@@ -2,13 +2,13 @@
 
 namespace Webgraphe\Phlip\Exception;
 
-use Webgraphe\Phlip\Contracts\ExpressionContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception;
 
 class EvaluationException extends Exception
 {
-    public static function fromExpression(
-        ExpressionContract $expression = null,
+    public static function fromForm(
+        FormContract $expression = null,
         string $message = '',
         int $code = 0,
         \Throwable $previous = null

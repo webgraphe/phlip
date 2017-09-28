@@ -2,10 +2,10 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Contracts\ExpressionContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\StandardOperationContract;
-use Webgraphe\Phlip\ExpressionBuilder;
-use Webgraphe\Phlip\ExpressionList;
+use Webgraphe\Phlip\FormBuilder;
+use Webgraphe\Phlip\FormList;
 use Webgraphe\Phlip\Operation;
 use Webgraphe\Phlip\Traits\AssertsTypes;
 
@@ -15,24 +15,24 @@ class ConsOperation extends Operation implements StandardOperationContract
 
     const IDENTIFIER = 'cons';
 
-    /** @var ExpressionBuilder */
-    private $expressionBuilder;
+    /** @var FormBuilder */
+    private $formBuilder;
 
-    public function __construct(ExpressionBuilder $builder = null)
+    public function __construct(FormBuilder $formBuilder = null)
     {
-        $this->expressionBuilder = $builder ?? new ExpressionBuilder;
+        $this->formBuilder = $formBuilder ?? new FormBuilder;
     }
 
     /**
-     * @param ExpressionContract[] ...$arguments
-     * @return ExpressionList
+     * @param FormContract[] ...$arguments
+     * @return FormList
      */
-    public function __invoke(...$arguments): ExpressionList
+    public function __invoke(...$arguments): FormList
     {
-        $head = $this->expressionBuilder->asExpression(array_shift($arguments));
-        $tail = $this->expressionBuilder->asExpression(array_shift($arguments));
+        $head = $this->formBuilder->asForm(array_shift($arguments));
+        $tail = $this->formBuilder->asForm(array_shift($arguments));
 
-        return new ExpressionList($head, ...ExpressionList::asList($tail)->all());
+        return new FormList($head, ...FormList::asList($tail)->all());
     }
 
     /**

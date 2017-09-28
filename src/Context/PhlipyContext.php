@@ -51,7 +51,7 @@ class PhlipyContext extends Context
     {
         self::defineOperation($context, new Operation\Type\IsArrayOperation);
         self::defineOperation($context, new Operation\Type\IsCallableOperation);
-        self::defineOperation($context, new Operation\Type\IsExpressionOperation);
+        self::defineOperation($context, new Operation\Type\IsFormOperation);
         self::defineOperation($context, new Operation\Type\IsIdentifierOperation);
         self::defineOperation($context, new Operation\Type\IsKeywordOperation);
         self::defineOperation($context, new Operation\Type\IsLambdaOperation);

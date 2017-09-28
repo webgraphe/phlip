@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Contracts\ExpressionContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\Operation;
 
@@ -19,7 +19,7 @@ class EqualityOperation extends Operation implements StandardOperationContract
         $left = array_shift($arguments);
         $right = array_shift($arguments);
 
-        if ($left instanceof ExpressionContract && $right instanceof ExpressionContract) {
+        if ($left instanceof FormContract && $right instanceof FormContract) {
             return $left->equals($right);
         }
 

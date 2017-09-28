@@ -6,10 +6,10 @@ use Webgraphe\Phlip\Atom\ArrayAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
-use Webgraphe\Phlip\Contracts\ExpressionContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 
-class ExpressionBuilder
+class FormBuilder
 {
     /**
      * Normalizes something into an expression.
@@ -17,22 +17,22 @@ class ExpressionBuilder
      * - If it's already an expression, returns the expression itself.
      *
      * @param mixed $thing
-     * @return ExpressionContract
+     * @return FormContract
      * @throws AssertionException If the type of the input data could not be handled.
      */
-    public function asExpression($thing): ExpressionContract
+    public function asForm($thing): FormContract
     {
         static $true, $false, $null;
 
         switch (true) {
-            case $thing instanceof ExpressionContract:
+            case $thing instanceof FormContract:
                 return $thing;
             case null === $thing:
-                return $null ?? ($null = new ExpressionList);
+                return $null ?? ($null = new FormList);
             case true === $thing:
                 return $true ?? ($true = KeywordAtom::fromString('true'));
             case false === $thing:
-                return $false ?? ($false = new ExpressionList);
+                return $false ?? ($false = new FormList);
             case is_string($thing):
                 return new StringAtom($thing);
             case is_numeric($thing):
@@ -41,7 +41,7 @@ class ExpressionBuilder
                 return new ArrayAtom(
                     ...array_map(
                         function ($element) {
-                            return $this->asExpression($element);
+                            return $this->asForm($element);
                         },
                         $thing
                     )

@@ -39,10 +39,10 @@ $context->define(
     }
 );
 
-$expressionBuilder = new \Webgraphe\Phlip\ExpressionBuilder;
+$formBuilder = new \Webgraphe\Phlip\FormBuilder;
 $context->define(
     'print',
-    function ($result) use ($expressionBuilder) {
+    function ($result) use ($formBuilder) {
         $color = null;
         $type = gettype($result);
         $extra = null;
@@ -59,8 +59,8 @@ $context->define(
                 $output = method_exists($result, '__toString') ? (string)$result : gettype($result);
                 break;
             default:
-                $expression = $expressionBuilder->asExpression($result);
-                $output = (string)$expression;
+                $form = $formBuilder->asForm($result);
+                $output = (string)$form;
                 switch (true) {
                     case is_numeric($result);
                         $color = '1;36';

@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Contracts;
 /**
  * A token extracted by a parser.
  */
-interface ExpressionContract extends StringConvertibleContract
+interface FormContract extends StringConvertibleContract
 {
     /**
      * @param ContextContract $context
@@ -13,5 +13,5 @@ interface ExpressionContract extends StringConvertibleContract
      */
     public function evaluate(ContextContract $context);
 
-    public function equals(ExpressionContract $against): bool;
+    public function equals(FormContract $against): bool;
 }

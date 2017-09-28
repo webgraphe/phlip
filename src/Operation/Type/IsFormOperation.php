@@ -2,12 +2,12 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
-use Webgraphe\Phlip\Contracts\ExpressionContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Operation\Type;
 
-class IsExpressionOperation extends Type
+class IsFormOperation extends Type
 {
-    const IDENTIFIER = 'expression?';
+    const IDENTIFIER = 'form?';
     /**
      * @param array ...$arguments
      * @return bool
@@ -16,7 +16,7 @@ class IsExpressionOperation extends Type
     {
         $argument = array_shift($arguments);
 
-        return $argument instanceof ExpressionContract;
+        return $argument instanceof FormContract;
     }
 
     /**

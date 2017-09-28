@@ -3,20 +3,20 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\StandardOperationContract;
-use Webgraphe\Phlip\ExpressionBuilder;
-use Webgraphe\Phlip\ExpressionList;
+use Webgraphe\Phlip\FormBuilder;
+use Webgraphe\Phlip\FormList;
 use Webgraphe\Phlip\Operation;
 
 class ListOperation extends Operation implements StandardOperationContract
 {
     const IDENTIFIER = 'list';
 
-    /** @var ExpressionBuilder */
-    private $expressionBuilder;
+    /** @var FormBuilder */
+    private $formBuilder;
 
-    public function __construct(ExpressionBuilder $expressionBuilder = null)
+    public function __construct(FormBuilder $formBuilder = null)
     {
-        $this->expressionBuilder = $expressionBuilder ?? new ExpressionBuilder;
+        $this->formBuilder = $formBuilder ?? new FormBuilder;
     }
 
     /**
@@ -25,10 +25,10 @@ class ListOperation extends Operation implements StandardOperationContract
      */
     public function __invoke(...$arguments)
     {
-        return new ExpressionList(
+        return new FormList(
             ...array_map(
                 function ($argument) {
-                    return $this->expressionBuilder->asExpression($argument);
+                    return $this->formBuilder->asForm($argument);
                 },
                 $arguments
             )

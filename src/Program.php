@@ -7,10 +7,10 @@ use Webgraphe\Phlip\Exception\ProgramException;
 
 class Program
 {
-    /** @var ExpressionList */
+    /** @var FormList */
     private $statements;
 
-    public function __construct(ExpressionList $statements)
+    public function __construct(FormList $statements)
     {
         $this->statements = $statements;
     }
@@ -44,9 +44,9 @@ class Program
         $result = null;
 
         $statements = $this->statements;
-        while ($statement = $statements->getHeadExpression()) {
+        while ($statement = $statements->getHead()) {
             $result = $statement->evaluate($context);
-            $statements = $statements->getTailExpressions();
+            $statements = $statements->getTail();
         }
 
         return $result;
