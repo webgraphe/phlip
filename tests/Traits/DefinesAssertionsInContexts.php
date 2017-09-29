@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\EvaluationException;
-use Webgraphe\Phlip\FormList;
+use Webgraphe\Phlip\ProperList;
 use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
 
 /**
@@ -28,7 +28,7 @@ trait DefinesAssertionsInContexts
         $context->define(
             'assert-true',
             new CallablePrimaryOperationOperation(
-                function (ContextContract $context, FormList $expressions) {
+                function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead();
                     $this->assertTrue((bool)$head->evaluate($context), "Expected $head to be true");
                 }
@@ -37,7 +37,7 @@ trait DefinesAssertionsInContexts
         $context->define(
             'assert-false',
             new CallablePrimaryOperationOperation(
-                function (ContextContract $context, FormList $expressions) {
+                function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead();
                     $this->assertFalse((bool)$head->evaluate($context), "Expected $head to be false");
                 }
@@ -46,7 +46,7 @@ trait DefinesAssertionsInContexts
         $context->define(
             'assert-equals',
             new CallablePrimaryOperationOperation(
-                function (ContextContract $context, FormList $expressions) {
+                function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead()->evaluate($context);
                     $toeExpression = $expressions->getTail()->assertHead();
                     $toe = $toeExpression->evaluate($context);
@@ -68,7 +68,7 @@ trait DefinesAssertionsInContexts
         $context->define(
             'assert-not-equals',
             new CallablePrimaryOperationOperation(
-                function (ContextContract $context, FormList $expressions)
+                function (ContextContract $context, ProperList $expressions)
                 {
                     $head = $expressions->assertHead()->evaluate($context);
                     $toeExpression = $expressions->getTail()->assertHead();
@@ -86,7 +86,7 @@ trait DefinesAssertionsInContexts
         $context->define(
             'assert-exception',
             new CallablePrimaryOperationOperation(
-                function (ContextContract $context, FormList $expressions)
+                function (ContextContract $context, ProperList $expressions)
                 {
                     /** @var self $test */
                     $name = $expressions->assertHead()->evaluate($context);

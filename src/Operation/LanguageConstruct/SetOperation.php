@@ -5,19 +5,19 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\EvaluationException;
-use Webgraphe\Phlip\FormList;
+use Webgraphe\Phlip\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class SetOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'set';
 
-    protected function invoke(ContextContract $context, FormList $expressions)
+    protected function invoke(ContextContract $context, ProperList $expressions)
     {
         $variable = $expressions->getHead();
 
         switch (true) {
-            case $variable instanceof FormList:
+            case $variable instanceof ProperList:
                 $name = IdentifierAtom::assertStaticType($variable->getHead());
 
                 return $context->set(

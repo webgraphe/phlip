@@ -5,23 +5,23 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\EvaluationException;
-use Webgraphe\Phlip\FormList;
+use Webgraphe\Phlip\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class LetOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'let';
 
-    protected function invoke(ContextContract $context, FormList $expressions)
+    protected function invoke(ContextContract $context, ProperList $expressions)
     {
         $context = $context->stack();
 
-        $variables = FormList::assertStaticType($expressions->getHead());
-        while ($variables && $variable = FormList::assertStaticType($variables->getHead())) {
+        $variables = ProperList::assertStaticType($expressions->getHead());
+        while ($variables && $variable = ProperList::assertStaticType($variables->getHead())) {
             $variables = $variables->getTail();
             $name = $variable->getHead();
             switch (true) {
-                case $name instanceof FormList:
+                case $name instanceof ProperList:
                     $lambdaName = IdentifierAtom::assertStaticType($name->getHead());
                     $context->let(
                         $lambdaName->getValue(),

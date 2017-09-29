@@ -28,11 +28,11 @@ class FormBuilder
             case $thing instanceof FormContract:
                 return $thing;
             case null === $thing:
-                return $null ?? ($null = new FormList);
+                return $null ?? ($null = new ProperList);
             case true === $thing:
                 return $true ?? ($true = KeywordAtom::fromString('true'));
             case false === $thing:
-                return $false ?? ($false = new FormList);
+                return $false ?? ($false = new ProperList);
             case is_string($thing):
                 return new StringAtom($thing);
             case is_numeric($thing):

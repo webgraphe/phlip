@@ -9,7 +9,7 @@ use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
 
-class FormList implements FormContract, \Countable
+class ProperList implements FormContract, \Countable
 {
     use AssertsStaticType;
 
@@ -21,11 +21,11 @@ class FormList implements FormContract, \Countable
         $this->forms = $forms;
     }
 
-    public static function asList(FormContract $form): FormList
+    public static function asList(FormContract $form): ProperList
     {
-        return $form instanceof FormList
+        return $form instanceof ProperList
             ? $form
-            : new FormList($form);
+            : new ProperList($form);
     }
 
     public function getHead(): ?FormContract
@@ -47,9 +47,9 @@ class FormList implements FormContract, \Countable
         return $head;
     }
 
-    public function getTail(): FormList
+    public function getTail(): ProperList
     {
-        return new FormList(...array_slice($this->forms, 1, null, false));
+        return new ProperList(...array_slice($this->forms, 1, null, false));
     }
 
     /**

@@ -18,13 +18,13 @@ class Parser
 {
     /**
      * @param LexemeStream $stream
-     * @return FormList
+     * @return ProperList
      * @throws Exception
      * @throws ParserException
      */
-    public function parseLexemeStream(LexemeStream $stream): FormList
+    public function parseLexemeStream(LexemeStream $stream): ProperList
     {
-        /** @var FormList[] $statements */
+        /** @var ProperList[] $statements */
         $statements = [];
         try {
             while ($stream->valid()) {
@@ -40,7 +40,7 @@ class Parser
             throw new ParserException('Failed parsing lexeme stream', 0, $exception);
         }
 
-        return new FormList(...$statements);
+        return new ProperList(...$statements);
     }
 
     /**
@@ -82,10 +82,10 @@ class Parser
         throw new ParserException("Unexpected lexeme '$lexeme'");
     }
 
-    private function extractFormList(LexemeStream $stream): FormList
+    private function extractFormList(LexemeStream $stream): ProperList
     {
-        return new FormList(
-            ...$this->extractNextStatementsUntilClosingSymbol(
+        return new ProperList(
+            ...$this->extractNextFormsUntilClosingSymbol(
                 $stream,
                 OpenListSymbol::instance()->getRelatedClosingSymbol()
             )
@@ -95,7 +95,7 @@ class Parser
     private function extractArrayAtom(LexemeStream $stream): ArrayAtom
     {
         return new ArrayAtom(
-            ...$this->extractNextStatementsUntilClosingSymbol(
+            ...$this->extractNextFormsUntilClosingSymbol(
                 $stream,
                 OpenArraySymbol::instance()->getRelatedClosingSymbol()
             )
@@ -107,7 +107,7 @@ class Parser
      * @param Closing $symbol
      * @return FormContract[]
      */
-    private function extractNextStatementsUntilClosingSymbol(LexemeStream $stream, Closing $symbol): array
+    private function extractNextFormsUntilClosingSymbol(LexemeStream $stream, Closing $symbol): array
     {
         $list = [];
         while ($stream->current() !== $symbol) {

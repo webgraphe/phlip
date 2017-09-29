@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\FormBuilder;
-use Webgraphe\Phlip\FormList;
+use Webgraphe\Phlip\ProperList;
 use Webgraphe\Phlip\Operation;
 
 class ListOperation extends Operation implements StandardOperationContract
@@ -25,7 +25,7 @@ class ListOperation extends Operation implements StandardOperationContract
      */
     public function __invoke(...$arguments)
     {
-        return new FormList(
+        return new ProperList(
             ...array_map(
                 function ($argument) {
                     return $this->formBuilder->asForm($argument);

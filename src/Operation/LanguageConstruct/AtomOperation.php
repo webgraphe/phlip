@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\StandardOperationContract;
-use Webgraphe\Phlip\FormList;
+use Webgraphe\Phlip\ProperList;
 use Webgraphe\Phlip\Operation;
 
 class AtomOperation extends Operation implements StandardOperationContract
@@ -19,7 +19,7 @@ class AtomOperation extends Operation implements StandardOperationContract
             || null === $variable
             || is_array($variable) && 0 === count($variable)
             || $variable instanceof Atom
-            || $variable instanceof FormList && 0 === count($variable);
+            || $variable instanceof ProperList && 0 === count($variable);
     }
 
     /**

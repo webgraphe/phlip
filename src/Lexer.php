@@ -3,16 +3,17 @@
 namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Stream\CharacterStream;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing\CloseArraySymbol;
+use Webgraphe\Phlip\Symbol\Closing\CloseDictionarySymbol;
 use Webgraphe\Phlip\Symbol\Closing\CloseListSymbol;
 use Webgraphe\Phlip\Symbol\KeywordSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenArraySymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenDictionarySymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\QuoteSymbol;
 
@@ -62,6 +63,12 @@ class Lexer
                         break;
                     case CloseArraySymbol::instance()->getValue():
                         $lexemes[] = CloseArraySymbol::instance();
+                        break;
+                    case OpenDictionarySymbol::instance()->getValue():
+                        $lexemes[] = OpenDictionarySymbol::instance();
+                        break;
+                    case CloseDictionarySymbol::instance()->getValue():
+                        $lexemes[] = CloseDictionarySymbol::instance();
                         break;
                     case ';':
                         $lexemes[] = $this->parseComment($stream);

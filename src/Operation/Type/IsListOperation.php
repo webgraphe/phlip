@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
-use Webgraphe\Phlip\FormList;
+use Webgraphe\Phlip\ProperList;
 use Webgraphe\Phlip\Operation\Type;
 
 class IsListOperation extends Type
@@ -16,7 +16,7 @@ class IsListOperation extends Type
     {
         $argument = array_shift($arguments);
 
-        return $argument instanceof FormList;
+        return $argument instanceof ProperList;
     }
 
     /**

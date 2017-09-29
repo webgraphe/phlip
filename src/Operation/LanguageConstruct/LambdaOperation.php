@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\FormList;
+use Webgraphe\Phlip\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class LambdaOperation extends PrimaryOperation
@@ -14,16 +14,16 @@ class LambdaOperation extends PrimaryOperation
 
     public static function invokeStatically(
         ContextContract $context,
-        FormList $parameters,
-        FormList $statements
+        ProperList $parameters,
+        ProperList $statements
     )
     {
-        return (new self)->invoke($context, new FormList($parameters, ...$statements->all()));
+        return (new self)->invoke($context, new ProperList($parameters, ...$statements->all()));
     }
 
-    protected function invoke(ContextContract $context, FormList $expressions)
+    protected function invoke(ContextContract $context, ProperList $expressions)
     {
-        $parameters = FormList::assertStaticType($expressions->getHead());
+        $parameters = ProperList::assertStaticType($expressions->getHead());
         $statements = $expressions->getTail();
 
         return function () use ($context, $parameters, $statements) {
@@ -48,7 +48,7 @@ class LambdaOperation extends PrimaryOperation
         };
     }
 
-    private static function assertArgumentsMatchingParameters(FormList $parameters, array $arguments): array
+    private static function assertArgumentsMatchingParameters(ProperList $parameters, array $arguments): array
     {
         $argumentCount = count($arguments);
         $parameterCount = count($parameters);

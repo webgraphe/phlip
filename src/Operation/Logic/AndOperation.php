@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip\Operation\Logic;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\FormList;
+use Webgraphe\Phlip\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class AndOperation extends PrimaryOperation
@@ -11,7 +11,7 @@ class AndOperation extends PrimaryOperation
     const IDENTIFIER = 'and';
     const IDENTIFIER_ALTERNATIVE = '&&';
 
-    protected function invoke(ContextContract $context, FormList $expressions)
+    protected function invoke(ContextContract $context, ProperList $expressions)
     {
         $result = null;
         while ($expression = $expressions->getHead()) {

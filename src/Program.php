@@ -7,10 +7,10 @@ use Webgraphe\Phlip\Exception\ProgramException;
 
 class Program
 {
-    /** @var FormList */
+    /** @var ProperList */
     private $statements;
 
-    public function __construct(FormList $statements)
+    public function __construct(ProperList $statements)
     {
         $this->statements = $statements;
     }

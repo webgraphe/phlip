@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Tests;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
-use Webgraphe\Phlip\FormList;
+use Webgraphe\Phlip\ProperList;
 
 class CallablePrimaryOperationOperation implements PrimaryOperationContract
 {
@@ -24,6 +24,6 @@ class CallablePrimaryOperationOperation implements PrimaryOperationContract
      */
     public function __invoke(ContextContract $context, FormContract ...$expressions)
     {
-        return call_user_func($this->callback, $context, new FormList(...$expressions));
+        return call_user_func($this->callback, $context, new ProperList(...$expressions));
     }
 }

@@ -4,14 +4,14 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\FormList;
+use Webgraphe\Phlip\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class DefinedOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'defined?';
 
-    protected function invoke(ContextContract $context, FormList $expressions)
+    protected function invoke(ContextContract $context, ProperList $expressions)
     {
         $variable = IdentifierAtom::assertStaticType($expressions->getHead());
 
