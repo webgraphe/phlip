@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\Collection\ProperList;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\ProgramException;
 

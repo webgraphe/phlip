@@ -2,15 +2,16 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Atom\ArrayAtom;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
+use Webgraphe\Phlip\Collection\ProperList;
+use Webgraphe\Phlip\Collection\Vector;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\KeywordSymbol;
-use Webgraphe\Phlip\Symbol\Opening\OpenArraySymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\QuoteSymbol;
 
@@ -64,11 +65,11 @@ class Parser
         }
 
         if ($lexeme instanceof OpenListSymbol) {
-            return $this->extractFormList($stream);
+            return $this->extractProperList($stream);
         }
 
-        if ($lexeme instanceof OpenArraySymbol) {
-            return $this->extractArrayAtom($stream);
+        if ($lexeme instanceof OpenVectorSymbol) {
+            return $this->extractVector($stream);
         }
 
         if ($lexeme instanceof Atom) {
@@ -82,7 +83,7 @@ class Parser
         throw new ParserException("Unexpected lexeme '$lexeme'");
     }
 
-    private function extractFormList(LexemeStream $stream): ProperList
+    private function extractProperList(LexemeStream $stream): ProperList
     {
         return new ProperList(
             ...$this->extractNextFormsUntilClosingSymbol(
@@ -92,12 +93,12 @@ class Parser
         );
     }
 
-    private function extractArrayAtom(LexemeStream $stream): ArrayAtom
+    private function extractVector(LexemeStream $stream): Vector
     {
-        return new ArrayAtom(
+        return new Vector(
             ...$this->extractNextFormsUntilClosingSymbol(
                 $stream,
-                OpenArraySymbol::instance()->getRelatedClosingSymbol()
+                OpenVectorSymbol::instance()->getRelatedClosingSymbol()
             )
         );
     }

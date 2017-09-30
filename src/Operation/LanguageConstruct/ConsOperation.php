@@ -6,9 +6,12 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\Operation;
-use Webgraphe\Phlip\ProperList;
+use Webgraphe\Phlip\Collection\ProperList;
 use Webgraphe\Phlip\Traits\AssertsTypes;
 
+/**
+ * Differs from the traditional cons. This operation un-shifts an element in a proper list.
+ */
 class ConsOperation extends Operation implements StandardOperationContract
 {
     use AssertsTypes;
@@ -25,9 +28,9 @@ class ConsOperation extends Operation implements StandardOperationContract
 
     /**
      * @param FormContract[] ...$arguments
-     * @return ProperList
+     * @return FormContract
      */
-    public function __invoke(...$arguments): ProperList
+    public function __invoke(...$arguments): FormContract
     {
         $head = $this->formBuilder->asForm(array_shift($arguments));
         $tail = $this->formBuilder->asForm(array_shift($arguments));

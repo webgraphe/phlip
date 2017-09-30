@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\ProperList;
+use Webgraphe\Phlip\Collection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class WhileOperation extends PrimaryOperation

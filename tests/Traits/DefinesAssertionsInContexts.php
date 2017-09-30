@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\EvaluationException;
-use Webgraphe\Phlip\ProperList;
+use Webgraphe\Phlip\Collection\ProperList;
 use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
 
 /**

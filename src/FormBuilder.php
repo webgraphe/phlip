@@ -2,7 +2,8 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Atom\ArrayAtom;
+use Webgraphe\Phlip\Collection\ProperList;
+use Webgraphe\Phlip\Collection\Vector;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
@@ -38,7 +39,7 @@ class FormBuilder
             case is_numeric($thing):
                 return new NumberAtom($thing);
             case is_array($thing):
-                return new ArrayAtom(
+                return new Vector(
                     ...array_map(
                         function ($element) {
                             return $this->asForm($element);

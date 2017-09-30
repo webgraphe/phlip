@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Operation;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
-use Webgraphe\Phlip\ProperList;
+use Webgraphe\Phlip\Collection\ProperList;
 use Webgraphe\Phlip\Operation;
 
 abstract class PrimaryOperation extends Operation implements PrimaryOperationContract

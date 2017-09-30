@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Symbol\Closing;
 
 use Webgraphe\Phlip\Symbol\Closing;
 
-class CloseArraySymbol extends Closing
+class CloseVectorSymbol extends Closing
 {
     const CHARACTER = "]";
 

@@ -1,15 +1,18 @@
 <?php
 
-namespace Webgraphe\Phlip;
+namespace Webgraphe\Phlip\Collection;
 
+use Webgraphe\Phlip\Collection;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\EvaluationException;
+use Webgraphe\Phlip\Symbol\Closing;
+use Webgraphe\Phlip\Symbol\Opening;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
 
-class ProperList implements FormContract, \Countable
+class ProperList extends Collection
 {
     use AssertsStaticType;
 
@@ -58,21 +61,6 @@ class ProperList implements FormContract, \Countable
     public function all(): array
     {
         return $this->forms;
-    }
-
-    public function __toString(): string
-    {
-        return '('
-            . implode(
-                ' ',
-                array_map(
-                    function (FormContract $form) {
-                        return (string)$form;
-                    },
-                    $this->forms
-                )
-            )
-            . ')';
     }
 
     /**
@@ -124,20 +112,13 @@ class ProperList implements FormContract, \Countable
         return count($this->forms);
     }
 
-    public function equals(FormContract $against): bool
+    public function getOpeningSymbol(): Opening
     {
-        return $against instanceof static
-            && count($this->forms) === count($against->forms)
-            && count($this->forms) === count(
-                array_filter(
-                    array_map(
-                        function (FormContract $left, $right) {
-                            return $left->equals($right);
-                        },
-                        $this->forms,
-                        $against->forms
-                    )
-                )
-            );
+        return Opening\OpenListSymbol::instance();
+    }
+
+    public function getClosingSymbol(): Closing
+    {
+        return Closing\CloseListSymbol::instance();
     }
 }

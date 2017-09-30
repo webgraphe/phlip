@@ -34,11 +34,11 @@ SOURCE;
             IdentifierAtom::fromString('x'),
             new NumberAtom('42'),
             new NumberAtom('3.14'),
-            Symbol\Opening\OpenArraySymbol::instance(),
+            Symbol\Opening\OpenVectorSymbol::instance(),
             new NumberAtom('1'),
             new NumberAtom('2'),
             new NumberAtom('3'),
-            Symbol\Closing\CloseArraySymbol::instance(),
+            Symbol\Closing\CloseVectorSymbol::instance(),
             Symbol\Closing\CloseListSymbol::instance(),
             Symbol\Closing\CloseListSymbol::instance(),
         ];

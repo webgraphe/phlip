@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
-use Webgraphe\Phlip\Atom\ArrayAtom;
+use Webgraphe\Phlip\Collection\Vector;
 use Webgraphe\Phlip\Operation\Type;
 
 class IsArrayOperation extends Type
@@ -16,7 +16,7 @@ class IsArrayOperation extends Type
     {
         $argument = array_shift($arguments);
 
-        return is_array($argument) || $argument instanceof ArrayAtom;
+        return is_array($argument) || $argument instanceof Vector;
     }
 
     /**

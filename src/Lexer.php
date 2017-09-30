@@ -8,12 +8,14 @@ use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Stream\CharacterStream;
 use Webgraphe\Phlip\Stream\LexemeStream;
-use Webgraphe\Phlip\Symbol\Closing\CloseArraySymbol;
-use Webgraphe\Phlip\Symbol\Closing\CloseDictionarySymbol;
+use Webgraphe\Phlip\Symbol\Closing\ClosePairSymbol;
+use Webgraphe\Phlip\Symbol\Closing\CloseVectorSymbol;
+use Webgraphe\Phlip\Symbol\Closing\CloseMapSymbol;
 use Webgraphe\Phlip\Symbol\Closing\CloseListSymbol;
 use Webgraphe\Phlip\Symbol\KeywordSymbol;
-use Webgraphe\Phlip\Symbol\Opening\OpenArraySymbol;
-use Webgraphe\Phlip\Symbol\Opening\OpenDictionarySymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenPairSymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\QuoteSymbol;
 
@@ -25,8 +27,8 @@ class Lexer
         "\t",
         OpenListSymbol::CHARACTER,
         CloseListSymbol::CHARACTER,
-        OpenArraySymbol::CHARACTER,
-        CloseArraySymbol::CHARACTER,
+        OpenVectorSymbol::CHARACTER,
+        CloseVectorSymbol::CHARACTER,
     ];
 
     /**
@@ -58,17 +60,17 @@ class Lexer
                     case CloseListSymbol::instance()->getValue():
                         $lexemes[] = CloseListSymbol::instance();
                         break;
-                    case OpenArraySymbol::instance()->getValue():
-                        $lexemes[] = OpenArraySymbol::instance();
+                    case OpenVectorSymbol::instance()->getValue():
+                        $lexemes[] = OpenVectorSymbol::instance();
                         break;
-                    case CloseArraySymbol::instance()->getValue():
-                        $lexemes[] = CloseArraySymbol::instance();
+                    case CloseVectorSymbol::instance()->getValue():
+                        $lexemes[] = CloseVectorSymbol::instance();
                         break;
-                    case OpenDictionarySymbol::instance()->getValue():
-                        $lexemes[] = OpenDictionarySymbol::instance();
+                    case OpenMapSymbol::instance()->getValue():
+                        $lexemes[] = OpenMapSymbol::instance();
                         break;
-                    case CloseDictionarySymbol::instance()->getValue():
-                        $lexemes[] = CloseDictionarySymbol::instance();
+                    case CloseMapSymbol::instance()->getValue():
+                        $lexemes[] = CloseMapSymbol::instance();
                         break;
                     case ';':
                         $lexemes[] = $this->parseComment($stream);
