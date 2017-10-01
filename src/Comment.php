@@ -6,6 +6,9 @@ use Webgraphe\Phlip\Contracts\LexemeContract;
 
 class Comment implements LexemeContract
 {
+    const DELIMITER = ';';
+
+    /** @var string */
     private $value;
 
     public function __construct(string $value)

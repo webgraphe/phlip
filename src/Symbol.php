@@ -8,6 +8,7 @@ abstract class Symbol implements LexemeContract
 {
     private function __construct()
     {
+        // Symbols are immutable singletons
     }
 
     /**

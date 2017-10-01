@@ -35,7 +35,7 @@ abstract class Collection implements CollectionContract
     public function __toString(): string
     {
         $formsAsString = [];
-        foreach ($this as $form) {
+        foreach ($this as $key => $form) {
             $formsAsString[] = (string)$form;
         }
 

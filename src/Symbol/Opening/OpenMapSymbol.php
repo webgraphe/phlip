@@ -16,6 +16,6 @@ class OpenMapSymbol extends Opening
 
     public function getRelatedClosingSymbol(): Closing
     {
-        return Closing\CloseVectorSymbol::instance();
+        return Closing\CloseMapSymbol::instance();
     }
 }

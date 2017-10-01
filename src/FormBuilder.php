@@ -2,6 +2,8 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\Collection\Map;
+use Webgraphe\Phlip\Collection\Pair;
 use Webgraphe\Phlip\Collection\ProperList;
 use Webgraphe\Phlip\Collection\Vector;
 use Webgraphe\Phlip\Atom\KeywordAtom;
@@ -13,9 +15,9 @@ use Webgraphe\Phlip\Exception\AssertionException;
 class FormBuilder
 {
     /**
-     * Normalizes something into an expression.
-     * - Attempts to recreate expressions depending on the type.
-     * - If it's already an expression, returns the expression itself.
+     * Normalizes native constructions into forms.
+     * - Recreates forms from native value types.
+     * - Existing forms are returned as-is.
      *
      * @param mixed $thing
      * @return FormContract
@@ -45,6 +47,17 @@ class FormBuilder
                             return $this->asForm($element);
                         },
                         $thing
+                    )
+                );
+            case is_object($thing):
+                $properties = get_object_vars($thing);
+                return new Map(
+                    ...array_map(
+                        function ($key, $value) {
+                            return new Pair($this->asForm($key), $this->asForm($value));
+                        },
+                        array_keys($properties),
+                        array_values($properties)
                     )
                 );
             default:

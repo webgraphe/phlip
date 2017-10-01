@@ -15,6 +15,8 @@ class StringAtom extends Atom
         "\n" => '\\n'
     ];
 
+    const DELIMITER = '"';
+
     public function __construct(string $value)
     {
         parent::__construct($value);
@@ -32,12 +34,12 @@ class StringAtom extends Atom
 
     public function __toString(): string
     {
-        return '"'
+        return self::DELIMITER
             . str_replace(
                 array_keys(self::SEARCH_AND_REPLACE),
                 array_values(self::SEARCH_AND_REPLACE),
                 $this->getValue()
             )
-            . '"';
+            . self::DELIMITER;
     }
 }

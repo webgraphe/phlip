@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
+use Webgraphe\Phlip\Collection\Pair;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\FormBuilder;
@@ -28,14 +29,18 @@ class ConsOperation extends Operation implements StandardOperationContract
 
     /**
      * @param FormContract[] ...$arguments
-     * @return FormContract
+     * @return ProperList|Pair|FormContract
      */
     public function __invoke(...$arguments): FormContract
     {
         $head = $this->formBuilder->asForm(array_shift($arguments));
         $tail = $this->formBuilder->asForm(array_shift($arguments));
 
-        return new ProperList($head, ...ProperList::asList($tail)->all());
+        if ($tail instanceof ProperList) {
+            return new ProperList($head, ...$tail->all());
+        }
+
+        return new Pair($head, $tail);
     }
 
     /**

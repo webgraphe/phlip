@@ -4,15 +4,19 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
+use Webgraphe\Phlip\Collection\Map;
+use Webgraphe\Phlip\Collection\Pair;
 use Webgraphe\Phlip\Collection\ProperList;
 use Webgraphe\Phlip\Collection\Vector;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing;
+use Webgraphe\Phlip\Symbol\DotSymbol;
 use Webgraphe\Phlip\Symbol\KeywordSymbol;
-use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
 use Webgraphe\Phlip\Symbol\QuoteSymbol;
 
 class Parser
@@ -29,7 +33,7 @@ class Parser
         $statements = [];
         try {
             while ($stream->valid()) {
-                if ($statement = $this->extractNextStatement($stream)) {
+                if ($statement = $this->extractNextForm($stream)) {
                     $statements[] = $statement;
                 }
             }
@@ -49,58 +53,84 @@ class Parser
      * @return FormContract
      * @throws \Exception
      */
-    private function extractNextStatement(LexemeStream $stream): ?FormContract
+    protected function extractNextForm(LexemeStream $stream): FormContract
     {
         $lexeme = $stream->current();
         $stream->next();
 
-        if ($lexeme instanceof QuoteSymbol) {
-            return new QuotedForm($this->extractNextStatement($stream));
-        }
+        switch (true) {
+            case $lexeme instanceof QuoteSymbol:
+                return new QuotedForm($this->extractNextForm($stream));
 
-        if ($lexeme instanceof KeywordSymbol) {
-            return KeywordAtom::fromIdentifierAtom(
-                IdentifierAtom::assertStaticType($this->extractNextStatement($stream))
-            );
-        }
+            case $lexeme instanceof KeywordSymbol:
+                return KeywordAtom::fromIdentifierAtom(
+                    IdentifierAtom::assertStaticType($this->extractNextForm($stream))
+                );
 
-        if ($lexeme instanceof OpenListSymbol) {
-            return $this->extractProperList($stream);
-        }
+            case $lexeme instanceof OpenListSymbol:
+                return $this->extractList($stream);
 
-        if ($lexeme instanceof OpenVectorSymbol) {
-            return $this->extractVector($stream);
-        }
+            case $lexeme instanceof OpenVectorSymbol:
+                return $this->extractVector($stream);
 
-        if ($lexeme instanceof Atom) {
-            return $lexeme;
-        }
+            case $lexeme instanceof OpenMapSymbol:
+                return $this->extractMap($stream);
 
-        if ($lexeme instanceof Comment) {
-            return null;
-        }
+            case $lexeme instanceof FormContract:
+                return $lexeme;
 
-        throw new ParserException("Unexpected lexeme '$lexeme'");
+            default:
+                throw new ParserException("Unexpected lexeme '$lexeme'");
+        }
     }
 
-    private function extractProperList(LexemeStream $stream): ProperList
+    protected function extractList(LexemeStream $stream): FormContract
     {
-        return new ProperList(
-            ...$this->extractNextFormsUntilClosingSymbol(
-                $stream,
-                OpenListSymbol::instance()->getRelatedClosingSymbol()
-            )
-        );
+        $list = [];
+        $closingSymbol = OpenListSymbol::instance()->getRelatedClosingSymbol();
+        while ($stream->current() !== $closingSymbol) {
+            if ($stream->current() instanceof DotSymbol) {
+                if (!$list) {
+                    throw new ParserException("Malformed dot-notation pair; missing left-hand side");
+                }
+                if ($rest = $this->extractNextFormsUntilClosingSymbol($stream->next(), $closingSymbol)) {
+                    if (count($rest) > 1) {
+                        throw new ParserException("Malformed dot-notation pair; right-hand side has too many forms");
+                    }
+                    if ($rest[0] instanceof ProperList) {
+                        return new ProperList(...array_merge($list, $rest));
+                    }
+
+                    return Pair::fromForms(...array_merge($list, $rest));
+                }
+
+                throw new ParserException("Malformed dot-notation pair; missing right-hand side");
+            }
+            $list[] = $this->extractNextForm($stream);
+        }
+        $stream->next();
+
+        return new ProperList(...$list);
     }
 
-    private function extractVector(LexemeStream $stream): Vector
+    protected function extractVector(LexemeStream $stream): Vector
     {
-        return new Vector(
-            ...$this->extractNextFormsUntilClosingSymbol(
-                $stream,
-                OpenVectorSymbol::instance()->getRelatedClosingSymbol()
-            )
+        $elements = $this->extractNextFormsUntilClosingSymbol(
+            $stream,
+            OpenVectorSymbol::instance()->getRelatedClosingSymbol()
         );
+
+        return new Vector(...$elements);
+    }
+
+    protected function extractMap(LexemeStream $stream): Map
+    {
+        $pairs = $this->extractNextFormsUntilClosingSymbol(
+            $stream,
+            OpenMapSymbol::instance()->getRelatedClosingSymbol()
+        );
+
+        return new Map(...$pairs);
     }
 
     /**
@@ -108,13 +138,11 @@ class Parser
      * @param Closing $symbol
      * @return FormContract[]
      */
-    private function extractNextFormsUntilClosingSymbol(LexemeStream $stream, Closing $symbol): array
+    protected function extractNextFormsUntilClosingSymbol(LexemeStream $stream, Closing $symbol): array
     {
         $list = [];
         while ($stream->current() !== $symbol) {
-            if ($statement = $this->extractNextStatement($stream)) {
-                $list[] = $statement;
-            }
+            $list[] = $this->extractNextForm($stream);
         }
         $stream->next();
 

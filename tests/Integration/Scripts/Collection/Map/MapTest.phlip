@@ -1,0 +1,3 @@
+(define my-map {(key . "value")})
+(assert-equals my-map {(:key . "value")})
+(assert-equals (list {(key . "value")}) '({(key . "value")}))

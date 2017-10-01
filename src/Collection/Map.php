@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Collection;
 
+use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Collection;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Symbol\Closing;
@@ -14,7 +15,10 @@ class Map extends Collection
 
     public function __construct(Pair ...$pairs)
     {
-        $this->pairs = $pairs;
+        foreach ($pairs as $pair) {
+            $key = Atom::assertStaticType($pair->getFirst());
+            $this->pairs[$key->getValue()] = $pair;
+        }
     }
 
     /**
@@ -26,7 +30,7 @@ class Map extends Collection
         $map = (object)[];
         foreach ($this as $key => $value) {
             /** @var $value Pair */
-            $map->{$key} = $value->getSecond();
+            $map->{$key} = $value->getSecond()->evaluate($context);
         }
 
         return $map;

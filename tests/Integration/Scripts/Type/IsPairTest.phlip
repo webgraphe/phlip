@@ -1,0 +1,4 @@
+(assert-true (pair? (cons 1 2)))
+(assert-true (pair? '(1 . 2)))
+(assert-true (pair? '(1 2 . 3)))
+(assert-false (pair? (cons 1 (cons 2 '()))))

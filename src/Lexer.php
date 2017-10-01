@@ -5,35 +5,71 @@ namespace Webgraphe\Phlip;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
+use Webgraphe\Phlip\Contracts\LexemeContract;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Stream\CharacterStream;
 use Webgraphe\Phlip\Stream\LexemeStream;
-use Webgraphe\Phlip\Symbol\Closing\ClosePairSymbol;
-use Webgraphe\Phlip\Symbol\Closing\CloseVectorSymbol;
-use Webgraphe\Phlip\Symbol\Closing\CloseMapSymbol;
 use Webgraphe\Phlip\Symbol\Closing\CloseListSymbol;
+use Webgraphe\Phlip\Symbol\Closing\CloseMapSymbol;
+use Webgraphe\Phlip\Symbol\Closing\CloseVectorSymbol;
+use Webgraphe\Phlip\Symbol\DotSymbol;
 use Webgraphe\Phlip\Symbol\KeywordSymbol;
-use Webgraphe\Phlip\Symbol\Opening\OpenPairSymbol;
-use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
-use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
+use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
 use Webgraphe\Phlip\Symbol\QuoteSymbol;
 
 class Lexer
 {
-    const SPECIAL_CHARACTERS = [
-        ' ',
-        "\n",
-        "\t",
-        OpenListSymbol::CHARACTER,
-        CloseListSymbol::CHARACTER,
-        OpenVectorSymbol::CHARACTER,
-        CloseVectorSymbol::CHARACTER,
+    /** @var string[] */
+    const SYMBOL_CLASSES = [
+        OpenListSymbol::CHARACTER => OpenListSymbol::class,
+        CloseListSymbol::CHARACTER => CloseListSymbol::class,
+        OpenVectorSymbol::CHARACTER => OpenVectorSymbol::class,
+        CloseVectorSymbol::CHARACTER => CloseVectorSymbol::class,
+        OpenMapSymbol::CHARACTER => OpenMapSymbol::class,
+        CloseMapSymbol::CHARACTER => CloseMapSymbol::class,
+        QuoteSymbol::CHARACTER => QuoteSymbol::class,
+        KeywordSymbol::CHARACTER => KeywordSymbol::class,
     ];
+
+    /** @var string[] */
+    const ESCAPED_CHARACTERS = [
+        'n' => "\n",
+        'r' => "\r",
+        't' => "\t",
+    ];
+
+    /** @var callable|null */
+    private $lexemeFilter;
+
+    /**
+     * @param callable|null $lexemeFilter An array_filter() callback used to filter tokenized LexemeContract instances.
+     */
+    public function __construct(callable $lexemeFilter = null)
+    {
+        if (!func_num_args()) {
+            $lexemeFilter = $this->getDefaultLexemeFilter();
+        }
+        $this->lexemeFilter = $lexemeFilter;
+    }
+
+    /**
+     * Filters comments out.
+     *
+     * @return callable
+     */
+    protected function getDefaultLexemeFilter(): callable
+    {
+        return function (LexemeContract $lexeme) {
+            return !($lexeme instanceof Comment);
+        };
+    }
 
     /**
      * @param string $source
      * @return LexemeStream
+     * @throws Exception
      * @throws LexerException
      */
     public function parseSource(string $source): LexemeStream
@@ -43,82 +79,47 @@ class Lexer
         $lexemes = [];
         try {
             while ($stream->valid()) {
-                switch ($stream->current()) {
-                    case ' ':
-                    case "\n":
-                    case "\t":
-                        continue;
-                    case QuoteSymbol::instance()->getValue():
-                        $lexemes[] = QuoteSymbol::instance();
+                switch(true) {
+                    case ctype_space($stream->current()):
                         break;
-                    case KeywordSymbol::instance()->getValue():
-                        $lexemes[] = KeywordSymbol::instance();
+                    case array_key_exists($stream->current(), self::SYMBOL_CLASSES):
+                        $lexemes[] = call_user_func([self::SYMBOL_CLASSES[$stream->current()], 'instance']);
                         break;
-                    case OpenListSymbol::instance()->getValue():
-                        $lexemes[] = OpenListSymbol::instance();
-                        break;
-                    case CloseListSymbol::instance()->getValue():
-                        $lexemes[] = CloseListSymbol::instance();
-                        break;
-                    case OpenVectorSymbol::instance()->getValue():
-                        $lexemes[] = OpenVectorSymbol::instance();
-                        break;
-                    case CloseVectorSymbol::instance()->getValue():
-                        $lexemes[] = CloseVectorSymbol::instance();
-                        break;
-                    case OpenMapSymbol::instance()->getValue():
-                        $lexemes[] = OpenMapSymbol::instance();
-                        break;
-                    case CloseMapSymbol::instance()->getValue():
-                        $lexemes[] = CloseMapSymbol::instance();
-                        break;
-                    case ';':
+                    case Comment::DELIMITER === $stream->current():
                         $lexemes[] = $this->parseComment($stream);
                         break;
-                    case '"':
+                    case StringAtom::DELIMITER === $stream->current():
                         $lexemes[] = $this->parseString($stream);
                         break;
                     default:
-                        $lexeme = $this->parseWord($stream);
-                        switch (true) {
-                            case NumberAtom::isNumber($lexeme):
-                                $lexemes[] = new NumberAtom($lexeme);
-                                break;
-                            default:
-                                $lexemes[] = IdentifierAtom::fromString($lexeme);
-                                break;
-                        }
+                        $lexemes[] = $this->parseWord($stream);
                         break;
                 }
+
                 $stream->next();
             }
         } catch (Exception $e) {
             throw new LexerException("Failed parsing source", 0, $e);
         }
 
+        if ($this->lexemeFilter) {
+            $lexemes = array_filter($lexemes, $this->lexemeFilter);
+        }
+
         return LexemeStream::fromLexemes(...$lexemes);
     }
 
-    private function parseString(Stream $stream): StringAtom
+    protected function replaceEscapedCharacter($character): string
+    {
+        return self::ESCAPED_CHARACTERS[$character] ?? $character;
+    }
+
+    protected function parseString(Stream $stream): StringAtom
     {
         $string = '';
-        while (true) {
-            $character = $stream->next()->current();
-            if ('"' === $character) {
-                break;
-            }
+        while (StringAtom::DELIMITER !== ($character = $stream->next()->current())) {
             if ("\\" === $character) {
-                switch ($character = $stream->next()->current()) {
-                    case 'n':
-                        $character = "\n";
-                        break;
-                    case 'r':
-                        $character = "\r";
-                        break;
-                    case 't':
-                        $character = "\t";
-                        break;
-                }
+                $character = $this->replaceEscapedCharacter($character);
             }
             $string .= $character;
         }
@@ -126,7 +127,7 @@ class Lexer
         return new StringAtom($string);
     }
 
-    private function parseComment(Stream $stream): Comment
+    protected function parseComment(Stream $stream): Comment
     {
         $comment = '';
         while ($stream->valid() && "\n" !== $stream->current()) {
@@ -136,12 +137,12 @@ class Lexer
         return new Comment($comment);
     }
 
-    private function parseWord(Stream $stream): string
+    protected function parseWord(Stream $stream): LexemeContract
     {
         $word = '';
         while ($stream->valid()) {
             $character = $stream->current();
-            if (in_array($character, self::SPECIAL_CHARACTERS)) {
+            if (ctype_space($character) || array_key_exists($character, self::SYMBOL_CLASSES)) {
                 $stream->previous();
                 break;
             }
@@ -149,6 +150,13 @@ class Lexer
             $word .= $character;
         }
 
-        return $word;
+        switch (true) {
+            case DotSymbol::CHARACTER === $word:
+                return DotSymbol::instance();
+            case NumberAtom::isNumber($word):
+                return new NumberAtom($word);
+            default:
+                return IdentifierAtom::fromString($word);
+        }
     }
 }

@@ -28,4 +28,22 @@ class ParserTest extends TestCase
         $this->expectException(ParserException::class);
         (new Parser)->parseLexemeStream(LexemeStream::fromLexemes(OpenListSymbol::instance()));
     }
+
+    public function testMalformedPairMissingLeftHandSide()
+    {
+        $this->expectException(ParserException::class);
+        (new Parser)->parseLexemeStream((new Lexer)->parseSource("(. 2)"));
+    }
+
+    public function testMalformedPairMissingRightHandSide()
+    {
+        $this->expectException(ParserException::class);
+        (new Parser)->parseLexemeStream((new Lexer)->parseSource("(2 .)"));
+    }
+
+    public function testMalformedPairTooManyFormsOnRightHandSide()
+    {
+        $this->expectException(ParserException::class);
+        (new Parser)->parseLexemeStream((new Lexer)->parseSource("(1 . 2 3)"));
+    }
 }

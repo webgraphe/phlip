@@ -1,3 +1,5 @@
 (assert-true (list? '(1 2 3)))
+(assert-true (list? '(1 . (2))))
+(assert-true (list? (cons 1 (cons 2 '()))))
 (assert-false (list? '[1 2 3]))
 (assert-false (list? [1 2 3]))

@@ -18,13 +18,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer;
         $source = <<<SOURCE
 ; A comment
-(identifier1 "string" (identifier2 'x 42 3.14 [1 2 3]))
+(identifier1 "string" (identifier2 'x 42 3.14 . [1 2 3] {(key . value)}))
 SOURCE;
         $lexemeStream = $lexer->parseSource($source);
         $this->assertNotNull($lexemeStream);
 
         $expectedTokens = [
-            new Comment('A comment'),
             Symbol\Opening\OpenListSymbol::instance(),
             IdentifierAtom::fromString('identifier1'),
             new StringAtom('string'),
@@ -34,11 +33,19 @@ SOURCE;
             IdentifierAtom::fromString('x'),
             new NumberAtom('42'),
             new NumberAtom('3.14'),
+            Symbol\DotSymbol::instance(),
             Symbol\Opening\OpenVectorSymbol::instance(),
             new NumberAtom('1'),
             new NumberAtom('2'),
             new NumberAtom('3'),
             Symbol\Closing\CloseVectorSymbol::instance(),
+            Symbol\Opening\OpenMapSymbol::instance(),
+            Symbol\Opening\OpenListSymbol::instance(),
+            IdentifierAtom::fromString('key'),
+            Symbol\DotSymbol::instance(),
+            IdentifierAtom::fromString('value'),
+            Symbol\Closing\CloseListSymbol::instance(),
+            Symbol\Closing\CloseMapSymbol::instance(),
             Symbol\Closing\CloseListSymbol::instance(),
             Symbol\Closing\CloseListSymbol::instance(),
         ];
