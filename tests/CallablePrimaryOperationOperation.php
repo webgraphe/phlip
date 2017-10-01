@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Tests;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
-use Webgraphe\Phlip\Collection\ProperList;
+use Webgraphe\Phlip\FormCollection\ProperList;
 
 class CallablePrimaryOperationOperation implements PrimaryOperationContract
 {

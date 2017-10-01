@@ -1,8 +1,8 @@
 <?php
 
-namespace Webgraphe\Phlip\Collection;
+namespace Webgraphe\Phlip\FormCollection;
 
-use Webgraphe\Phlip\Collection;
+use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
@@ -12,7 +12,7 @@ use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
 
-class ProperList extends Collection
+class ProperList extends FormCollection
 {
     use AssertsStaticType;
 

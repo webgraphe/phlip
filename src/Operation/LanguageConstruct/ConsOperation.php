@@ -2,12 +2,12 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Collection\Pair;
+use Webgraphe\Phlip\FormCollection\Pair;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\Operation;
-use Webgraphe\Phlip\Collection\ProperList;
+use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Traits\AssertsTypes;
 
 /**

@@ -2,10 +2,10 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Collection\Map;
-use Webgraphe\Phlip\Collection\Pair;
-use Webgraphe\Phlip\Collection\ProperList;
-use Webgraphe\Phlip\Collection\Vector;
+use Webgraphe\Phlip\FormCollection\Map;
+use Webgraphe\Phlip\FormCollection\Pair;
+use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;

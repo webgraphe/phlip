@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
-use Webgraphe\Phlip\Collection\Pair;
+use Webgraphe\Phlip\FormCollection\Pair;
 use Webgraphe\Phlip\Operation\Type;
 
 class IsPairOperation extends Type

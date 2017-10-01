@@ -1,14 +1,14 @@
 <?php
 
-namespace Webgraphe\Phlip\Collection;
+namespace Webgraphe\Phlip\FormCollection;
 
 use Webgraphe\Phlip\Atom;
-use Webgraphe\Phlip\Collection;
+use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;
 
-class Map extends Collection
+class Map extends FormCollection
 {
     /** @var Pair[] */
     private $pairs = [];

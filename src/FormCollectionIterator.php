@@ -2,10 +2,11 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Contracts\CollectionContract;
+use Webgraphe\Phlip\Contracts\FormCollectionContract;
+use Webgraphe\Phlip\Contracts\FormCollectionIteratorContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 
-class CollectionIterator implements \Iterator
+class FormCollectionIterator implements FormCollectionIteratorContract
 {
     /** @var FormContract[] */
     private $elements = [];
@@ -14,7 +15,7 @@ class CollectionIterator implements \Iterator
     private $offset = 0;
     private $size = 0;
 
-    public function __construct(CollectionContract $collection)
+    public function __construct(FormCollectionContract $collection)
     {
         $this->elements = $collection->all();
         $this->keys = array_keys($this->elements);

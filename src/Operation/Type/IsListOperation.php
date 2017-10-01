@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
-use Webgraphe\Phlip\Collection\ProperList;
+use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\Type;
 
 class IsListOperation extends Type

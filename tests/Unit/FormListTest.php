@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Tests\Unit;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Collection\ProperList;
+use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Tests\TestCase;
 
 class FormListTest extends TestCase

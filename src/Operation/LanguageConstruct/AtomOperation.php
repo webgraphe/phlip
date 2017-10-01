@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\StandardOperationContract;
-use Webgraphe\Phlip\Collection\ProperList;
+use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation;
 
 class AtomOperation extends Operation implements StandardOperationContract

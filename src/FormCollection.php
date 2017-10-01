@@ -2,10 +2,11 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Contracts\CollectionContract;
+use Webgraphe\Phlip\Contracts\FormCollectionContract;
+use Webgraphe\Phlip\Contracts\FormCollectionIteratorContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 
-abstract class Collection implements CollectionContract
+abstract class FormCollection implements FormCollectionContract
 {
     public function equals(FormContract $against): bool
     {
@@ -17,7 +18,7 @@ abstract class Collection implements CollectionContract
         $iterator = $this->getIterator();
         return $expressionCount === iterator_apply(
             $iterator,
-            function (CollectionIterator $self, CollectionIterator $other) {
+            function (FormCollectionIterator $self, FormCollectionIterator $other) {
                 $result = $self->current()->equals($other->current());
                 $other->next();
 
@@ -27,9 +28,9 @@ abstract class Collection implements CollectionContract
         );
     }
 
-    public function getIterator(): CollectionIterator
+    public function getIterator(): FormCollectionIteratorContract
     {
-        return new CollectionIterator($this);
+        return new FormCollectionIterator($this);
     }
 
     public function __toString(): string
