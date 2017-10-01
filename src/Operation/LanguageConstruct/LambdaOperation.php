@@ -21,10 +21,10 @@ class LambdaOperation extends PrimaryOperation
         return (new self)->invoke($context, new ProperList($parameters, ...$statements->all()));
     }
 
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $parameters = ProperList::assertStaticType($expressions->getHead());
-        $statements = $expressions->getTail();
+        $parameters = ProperList::assertStaticType($forms->getHead());
+        $statements = $forms->getTail();
 
         return function () use ($context, $parameters, $statements) {
             $context = $context->stack();

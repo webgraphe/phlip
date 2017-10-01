@@ -12,12 +12,12 @@ class QuoteOperation extends PrimaryOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $expressions
+     * @param ProperList $forms
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
-        return $expressions->assertHead();
+        return $forms->assertHead();
     }
 
     /**

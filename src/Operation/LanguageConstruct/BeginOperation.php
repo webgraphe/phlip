@@ -20,15 +20,15 @@ class BeginOperation extends PrimaryOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $expressions
+     * @param ProperList $forms
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
         $result = null;
-        while ($expression = $expressions->getHead()) {
-            $expressions = $expressions->getTail();
-            $result = $expression->evaluate($context);
+        while ($form = $forms->getHead()) {
+            $forms = $forms->getTail();
+            $result = $form->evaluate($context);
         }
 
         return $result;

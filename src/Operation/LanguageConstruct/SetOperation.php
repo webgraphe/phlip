@@ -12,9 +12,9 @@ class SetOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'set';
 
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $variable = $expressions->getHead();
+        $variable = $forms->getHead();
 
         switch (true) {
             case $variable instanceof ProperList:
@@ -25,14 +25,14 @@ class SetOperation extends PrimaryOperation
                     LambdaOperation::invokeStatically(
                         $context,
                         $variable->getTail(),
-                        $expressions->getTail()
+                        $forms->getTail()
                     )
                 );
 
             case $variable instanceof IdentifierAtom:
                 return $context->set(
                     $variable->getValue(),
-                    $expressions->getTail()->assertHead()->evaluate($context)
+                    $forms->getTail()->assertHead()->evaluate($context)
                 );
         }
 

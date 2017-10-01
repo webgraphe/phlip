@@ -12,9 +12,9 @@ class DefineOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'define';
 
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $variable = $expressions->assertHead();
+        $variable = $forms->assertHead();
 
         switch (true) {
             case $variable instanceof ProperList:
@@ -25,14 +25,14 @@ class DefineOperation extends PrimaryOperation
                     LambdaOperation::invokeStatically(
                         $context,
                         $variable->getTail(),
-                        $expressions->getTail()
+                        $forms->getTail()
                     )
                 );
 
             case $variable instanceof IdentifierAtom:
                 return $context->define(
                     $variable->getValue(),
-                    $expressions->getTail()->assertHead()->evaluate($context)
+                    $forms->getTail()->assertHead()->evaluate($context)
                 );
         }
 

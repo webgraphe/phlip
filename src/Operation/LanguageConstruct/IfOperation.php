@@ -12,14 +12,14 @@ class IfOperation extends PrimaryOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $expressions
+     * @param ProperList $forms
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $tail = $expressions->getTail();
+        $tail = $forms->getTail();
 
-        if ($expressions->assertHead()->evaluate($context)) {
+        if ($forms->assertHead()->evaluate($context)) {
             $then = $tail->assertHead();
 
             return $then->evaluate($context);

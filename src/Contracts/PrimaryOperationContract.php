@@ -10,8 +10,8 @@ interface PrimaryOperationContract extends OperationContract
 {
     /**
      * @param ContextContract $context
-     * @param FormContract[] $expressions
+     * @param FormContract[] $forms
      * @return mixed
      */
-    public function __invoke(ContextContract $context, FormContract ...$expressions);
+    public function __invoke(ContextContract $context, FormContract ...$forms);
 }

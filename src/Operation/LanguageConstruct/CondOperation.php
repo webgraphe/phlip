@@ -12,13 +12,13 @@ class CondOperation extends PrimaryOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $expressions
+     * @param ProperList $forms
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
-        while ($condition = $expressions->getHead()) {
-            $expressions = $expressions->getTail();
+        while ($condition = $forms->getHead()) {
+            $forms = $forms->getTail();
             $condition = ProperList::assertStaticType($condition);
             if ($condition->assertHead()->evaluate($context)) {
                 return $condition->getTail()->assertHead()->evaluate($context);

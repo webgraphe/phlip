@@ -11,9 +11,9 @@ class DefinedOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'defined?';
 
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $variable = IdentifierAtom::assertStaticType($expressions->getHead());
+        $variable = IdentifierAtom::assertStaticType($forms->getHead());
 
         return $context->has($variable->getValue());
     }

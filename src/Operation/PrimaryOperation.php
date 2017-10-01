@@ -12,18 +12,18 @@ abstract class PrimaryOperation extends Operation implements PrimaryOperationCon
 {
     /**
      * @param ContextContract $context
-     * @param FormContract[] $expressions
+     * @param FormContract[] $forms
      * @return mixed
      */
-    public final function __invoke(ContextContract $context, FormContract ...$expressions)
+    public final function __invoke(ContextContract $context, FormContract ...$forms)
     {
-        return $this->invoke($context, new ProperList(...$expressions));
+        return $this->invoke($context, new ProperList(...$forms));
     }
 
     /**
      * @param ContextContract $context
-     * @param ProperList $expressions
+     * @param ProperList $forms
      * @return mixed
      */
-    abstract protected function invoke(ContextContract $context, ProperList $expressions);
+    abstract protected function invoke(ContextContract $context, ProperList $forms);
 }

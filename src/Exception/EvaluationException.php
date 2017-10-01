@@ -8,15 +8,15 @@ use Webgraphe\Phlip\Exception;
 class EvaluationException extends Exception
 {
     public static function fromForm(
-        FormContract $expression = null,
-        string $message = '',
+        FormContract $form,
+        string $message,
         int $code = 0,
-        \Throwable $previous = null
+        AssertionException $previous = null
     ) {
         if ($previous) {
             $message .= " (from failed assertion; {$previous->getMessage()})";
         }
-        $message = trim("$message; " . (string)$expression);
+        $message = trim("$message; " . (string)$form);
 
         return new static($message, $code, $previous);
     }

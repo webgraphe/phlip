@@ -19,11 +19,11 @@ class CallablePrimaryOperationOperation implements PrimaryOperationContract
 
     /**
      * @param ContextContract $context
-     * @param FormContract[] $expressions
+     * @param FormContract[] $forms
      * @return mixed
      */
-    public function __invoke(ContextContract $context, FormContract ...$expressions)
+    public function __invoke(ContextContract $context, FormContract ...$forms)
     {
-        return call_user_func($this->callback, $context, new ProperList(...$expressions));
+        return call_user_func($this->callback, $context, new ProperList(...$forms));
     }
 }

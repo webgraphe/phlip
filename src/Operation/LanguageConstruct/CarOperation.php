@@ -21,11 +21,11 @@ class CarOperation extends PrimaryOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $expressions
+     * @param ProperList $forms
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
-        return ProperList::assertStaticType($expressions->assertHead()->evaluate($context))->getHead();
+        return ProperList::assertStaticType($forms->assertHead()->evaluate($context))->getHead();
     }
 }

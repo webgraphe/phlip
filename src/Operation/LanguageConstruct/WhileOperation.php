@@ -20,14 +20,14 @@ class WhileOperation extends PrimaryOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $expressions
+     * @param ProperList $forms
      * @return mixed
      */
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $condition = $expressions->assertHead();
+        $condition = $forms->assertHead();
         while ($condition->evaluate($context)) {
-            $statements = $expressions->getTail();
+            $statements = $forms->getTail();
             while ($statement = $statements->getHead()) {
                 $statements = $statements->getTail();
                 $statement->evaluate($context);

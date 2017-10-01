@@ -12,11 +12,11 @@ class LetOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'let';
 
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
         $context = $context->stack();
 
-        $variables = ProperList::assertStaticType($expressions->getHead());
+        $variables = ProperList::assertStaticType($forms->getHead());
         while ($variables && $variable = ProperList::assertStaticType($variables->getHead())) {
             $variables = $variables->getTail();
             $name = $variable->getHead();
@@ -46,7 +46,7 @@ class LetOperation extends PrimaryOperation
         }
 
         $result = null;
-        $statements = $expressions->getTail();
+        $statements = $forms->getTail();
         while ($statement = $statements->getHead()) {
             $result = $statement->evaluate($context);
             $statements = $statements->getTail();

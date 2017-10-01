@@ -11,14 +11,14 @@ class OrOperation extends PrimaryOperation
     const IDENTIFIER = 'or';
     const IDENTIFIER_ALTERNATIVE = '||';
 
-    protected function invoke(ContextContract $context, ProperList $expressions)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
         $result = null;
-        while ($expression = $expressions->getHead()) {
-            if ($result = $expression->evaluate($context)) {
+        while ($form = $forms->getHead()) {
+            if ($result = $form->evaluate($context)) {
                 return $result;
             }
-            $expressions = $expressions->getTail();
+            $forms = $forms->getTail();
         }
 
         return $result;

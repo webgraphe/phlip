@@ -10,13 +10,13 @@ abstract class FormCollection implements FormCollectionContract
 {
     public function equals(FormContract $against): bool
     {
-        $expressionCount = count($this);
-        if (!($against instanceof static) || count($against) !== $expressionCount) {
+        $count = count($this);
+        if (!($against instanceof static) || count($against) !== $count) {
             return false;
         }
 
         $iterator = $this->getIterator();
-        return $expressionCount === iterator_apply(
+        return $count === iterator_apply(
             $iterator,
             function (FormCollectionIterator $self, FormCollectionIterator $other) {
                 $result = $self->current()->equals($other->current());
