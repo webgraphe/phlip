@@ -53,11 +53,6 @@ $context->define(
                 $extra = $result->getTraceAsString();
                 $color = '0;31';
                 break;
-            case is_object($result):
-                $type = 'PHP Class ' . get_class($result);
-                $color = '1;32';
-                $output = method_exists($result, '__toString') ? (string)$result : gettype($result);
-                break;
             default:
                 $form = $formBuilder->asForm($result);
                 $output = (string)$form;
