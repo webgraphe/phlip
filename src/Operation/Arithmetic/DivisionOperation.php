@@ -4,7 +4,6 @@ namespace Webgraphe\Phlip\Operation\Arithmetic;
 
 use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\Operation;
 
 class DivisionOperation extends Operation implements StandardOperationContract

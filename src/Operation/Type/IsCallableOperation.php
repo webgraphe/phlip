@@ -2,7 +2,6 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
-use Webgraphe\Phlip\Collection\Vector;
 use Webgraphe\Phlip\Operation\Type;
 
 class IsCallableOperation extends Type

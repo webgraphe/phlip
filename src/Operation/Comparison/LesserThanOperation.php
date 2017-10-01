@@ -2,8 +2,6 @@
 
 namespace Webgraphe\Phlip\Operation\Comparison;
 
-use Webgraphe\Phlip\Atom;
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\Operation;
 
 class LesserThanOperation extends Operation\Comparison
