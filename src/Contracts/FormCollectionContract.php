@@ -2,7 +2,6 @@
 
 namespace Webgraphe\Phlip\Contracts;
 
-use Webgraphe\Phlip\FormCollectionIterator;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;
 
