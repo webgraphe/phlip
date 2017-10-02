@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
+use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Contracts\LexemeContract;
@@ -22,7 +23,7 @@ use Webgraphe\Phlip\Symbol\QuoteSymbol;
 class Lexer
 {
     /** @var string[] */
-    const SYMBOL_CLASSES = [
+    const COLLECTION_DELIMITERS = [
         OpenListSymbol::CHARACTER => OpenListSymbol::class,
         CloseListSymbol::CHARACTER => CloseListSymbol::class,
         OpenVectorSymbol::CHARACTER => OpenVectorSymbol::class,
@@ -30,7 +31,6 @@ class Lexer
         OpenMapSymbol::CHARACTER => OpenMapSymbol::class,
         CloseMapSymbol::CHARACTER => CloseMapSymbol::class,
         QuoteSymbol::CHARACTER => QuoteSymbol::class,
-        KeywordSymbol::CHARACTER => KeywordSymbol::class,
     ];
 
     /** @var string[] */
@@ -82,8 +82,8 @@ class Lexer
                 switch(true) {
                     case ctype_space($stream->current()):
                         break;
-                    case array_key_exists($stream->current(), self::SYMBOL_CLASSES):
-                        $lexemes[] = call_user_func([self::SYMBOL_CLASSES[$stream->current()], 'instance']);
+                    case array_key_exists($stream->current(), self::COLLECTION_DELIMITERS):
+                        $lexemes[] = call_user_func([self::COLLECTION_DELIMITERS[$stream->current()], 'instance']);
                         break;
                     case Comment::DELIMITER === $stream->current():
                         $lexemes[] = $this->parseComment($stream);
@@ -142,7 +142,7 @@ class Lexer
         $word = '';
         while ($stream->valid()) {
             $character = $stream->current();
-            if (ctype_space($character) || array_key_exists($character, self::SYMBOL_CLASSES)) {
+            if (ctype_space($character) || array_key_exists($character, self::COLLECTION_DELIMITERS)) {
                 $stream->previous();
                 break;
             }
@@ -151,6 +151,8 @@ class Lexer
         }
 
         switch (true) {
+            case $word && KeywordSymbol::CHARACTER === $word[0]:
+                return KeywordAtom::fromString($word);
             case DotSymbol::CHARACTER === $word:
                 return DotSymbol::instance();
             case NumberAtom::isNumber($word):

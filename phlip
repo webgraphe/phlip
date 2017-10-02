@@ -1,13 +1,22 @@
 #!/usr/bin/env php
 <?php
 
+use Webgraphe\Phlip\Atom\IdentifierAtom;
+use Webgraphe\Phlip\Atom\KeywordAtom;
+use Webgraphe\Phlip\Atom\NumberAtom;
+use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Context\PhlipyContext;
+use Webgraphe\Phlip\Contracts\LexemeContract;
+use Webgraphe\Phlip\FormBuilder;
+use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Program;
+use Webgraphe\Phlip\Stylizer;
+use Webgraphe\Phlip\Symbol;
 
 require_once 'vendor/autoload.php';
 
 echo 'Go crazy, you may just "phlip" ;p' . PHP_EOL;
-echo "Type \033[1;32m(exit)\033[0m to quit." . PHP_EOL . PHP_EOL;
+echo "Type \033[1;37m(\033[0m\033[1;33mexit\033[0m\e[1;37m)\e[0m to quit." . PHP_EOL . PHP_EOL;
 
 $context = new PhlipyContext;
 
@@ -39,16 +48,35 @@ $context->define(
     }
 );
 
-$formBuilder = new \Webgraphe\Phlip\FormBuilder;
+$formBuilder = new FormBuilder;
+$stylizer = new Stylizer(
+    function (LexemeContract $lexeme):string {
+        switch (true) {
+            case $lexeme instanceof Symbol:
+                return "\033[1;37m{$lexeme}\033[0m";
+            case $lexeme instanceof NumberAtom:
+                return "\033[1;36m{$lexeme}\033[0m";
+            case $lexeme instanceof StringAtom:
+                return "\033[1;34m{$lexeme}\033[0m";
+            case $lexeme instanceof IdentifierAtom:
+                return "\033[1;33m{$lexeme}\033[0m";
+            case $lexeme instanceof KeywordAtom:
+                return "\033[1;32m{$lexeme}\033[0m";
+            default:
+                return (string)$lexeme;
+        }
+    }
+);
+
 $context->define(
     'print',
-    function ($result) use ($formBuilder) {
-        $color = null;
+    function ($result) use ($formBuilder, $stylizer) {
+        $color = '1;30';
         $type = gettype($result);
         $extra = null;
         switch (true) {
             case $result instanceof \Throwable:
-                $type = 'PHP Throwable ' . get_class($result);
+                $type = get_class($result);
                 $output = $result->getMessage();
                 $extra = $result->getTraceAsString();
                 $color = '0;31';
@@ -59,31 +87,16 @@ $context->define(
                 // Intentional fall-through
             default:
                 $form = $formBuilder->asForm($result);
-                $output = (string)$form;
-                switch (true) {
-                    case is_numeric($result);
-                        $color = '1;36';
-                        break;
-                    case is_bool($result);
-                        $color = '0;33';
-                        break;
-                    case null === $result;
-                        $color = '0;33';
-                        break;
-                    case is_string($result):
-                        $color = '1;35';
-                        break;
-                }
-
+                $output = $stylizer->stylizeLexemeStream((new Lexer)->parseSource((string)$form));
         }
 
         if ($type) {
-            echo "\033[1;30m$type\033[0m" . PHP_EOL;
+            echo "\033[{$color}m{$type}\033[0m" . PHP_EOL;
         }
         if (strlen($output = trim($output))) {
-            echo "\033[{$color}m$output\033[0m" . PHP_EOL;
+            echo $output . PHP_EOL;
         }
-        if ($extra) {
+        if (strlen($extra = trim($extra))) {
             echo trim($extra) . PHP_EOL;
         }
 

@@ -2,18 +2,15 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Atom\KeywordAtom;
+use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\FormCollection\Map;
 use Webgraphe\Phlip\FormCollection\Pair;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\FormCollection\Vector;
-use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\DotSymbol;
-use Webgraphe\Phlip\Symbol\KeywordSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
@@ -33,7 +30,7 @@ class Parser
         $statements = [];
         try {
             while ($stream->valid()) {
-                if ($statement = $this->extractNextForm($stream)) {
+                if ($statement = $this->parseNextForm($stream)) {
                     $statements[] = $statement;
                 }
             }
@@ -53,19 +50,14 @@ class Parser
      * @return FormContract
      * @throws \Exception
      */
-    protected function extractNextForm(LexemeStream $stream): FormContract
+    protected function parseNextForm(LexemeStream $stream): FormContract
     {
         $lexeme = $stream->current();
         $stream->next();
 
         switch (true) {
             case $lexeme instanceof QuoteSymbol:
-                return new QuotedForm($this->extractNextForm($stream));
-
-            case $lexeme instanceof KeywordSymbol:
-                return KeywordAtom::fromIdentifierAtom(
-                    IdentifierAtom::assertStaticType($this->extractNextForm($stream))
-                );
+                return new QuotedForm($this->parseNextForm($stream));
 
             case $lexeme instanceof OpenListSymbol:
                 return $this->extractList($stream);
@@ -106,7 +98,7 @@ class Parser
 
                 throw new ParserException("Malformed dot-notation pair; missing right-hand side");
             }
-            $list[] = $this->extractNextForm($stream);
+            $list[] = $this->parseNextForm($stream);
         }
         $stream->next();
 
@@ -142,7 +134,7 @@ class Parser
     {
         $list = [];
         while ($stream->current() !== $symbol) {
-            $list[] = $this->extractNextForm($stream);
+            $list[] = $this->parseNextForm($stream);
         }
         $stream->next();
 

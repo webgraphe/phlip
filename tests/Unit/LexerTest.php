@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Comment;
+use Webgraphe\Phlip\Contracts\LexemeContract;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Symbol;
@@ -59,6 +60,7 @@ SOURCE;
             $lexemeStream->next();
             ++$i;
         }
+
     }
 
     public function testUnexpectedEndOfString()

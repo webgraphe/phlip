@@ -5,6 +5,7 @@ namespace Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Symbol\KeywordSymbol;
 
 class KeywordAtom extends Atom
 {
@@ -12,6 +13,9 @@ class KeywordAtom extends Atom
 
     public static function fromString(string $value): KeywordAtom
     {
+        if (strlen($value) && KeywordSymbol::CHARACTER === $value[0]) {
+            $value = substr($value, 1);
+        }
         if (!strlen($value)) {
             throw new AssertionException('Keyword is empty');
         }

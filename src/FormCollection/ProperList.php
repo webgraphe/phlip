@@ -24,13 +24,6 @@ class ProperList extends FormCollection
         $this->forms = $forms;
     }
 
-    public static function asList(FormContract $form): ProperList
-    {
-        return $form instanceof ProperList
-            ? $form
-            : new ProperList($form);
-    }
-
     public function getHead(): ?FormContract
     {
         return $this->forms[0] ?? null;
