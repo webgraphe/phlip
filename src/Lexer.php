@@ -30,7 +30,6 @@ class Lexer
         CloseVectorSymbol::CHARACTER => CloseVectorSymbol::class,
         OpenMapSymbol::CHARACTER => OpenMapSymbol::class,
         CloseMapSymbol::CHARACTER => CloseMapSymbol::class,
-        QuoteSymbol::CHARACTER => QuoteSymbol::class,
     ];
 
     /** @var string[] */
@@ -79,16 +78,20 @@ class Lexer
         $lexemes = [];
         try {
             while ($stream->valid()) {
+                $current = $stream->current();
                 switch(true) {
-                    case ctype_space($stream->current()):
+                    case $this->isWhitespace($current):
                         break;
-                    case array_key_exists($stream->current(), self::COLLECTION_DELIMITERS):
-                        $lexemes[] = call_user_func([self::COLLECTION_DELIMITERS[$stream->current()], 'instance']);
+                    case $this->isCollectionDelimiter($current):
+                        $lexemes[] = call_user_func([self::COLLECTION_DELIMITERS[$current], 'instance']);
                         break;
-                    case Comment::DELIMITER === $stream->current():
+                    case QuoteSymbol::CHARACTER === $current:
+                        $lexemes[] = QuoteSymbol::instance();
+                        break;
+                    case Comment::DELIMITER === $current:
                         $lexemes[] = $this->parseComment($stream);
                         break;
-                    case StringAtom::DELIMITER === $stream->current():
+                    case StringAtom::DELIMITER === $current:
                         $lexemes[] = $this->parseString($stream);
                         break;
                     default:
@@ -107,6 +110,16 @@ class Lexer
         }
 
         return LexemeStream::fromLexemes(...$lexemes);
+    }
+
+    protected function isCollectionDelimiter($character): bool
+    {
+        return array_key_exists($character, self::COLLECTION_DELIMITERS);
+    }
+
+    protected function isWhiteSpace($character): bool
+    {
+        return ctype_space($character);
     }
 
     protected function replaceEscapedCharacter($character): string
@@ -142,7 +155,7 @@ class Lexer
         $word = '';
         while ($stream->valid()) {
             $character = $stream->current();
-            if (ctype_space($character) || array_key_exists($character, self::COLLECTION_DELIMITERS)) {
+            if ($this->isWhiteSpace($character) || $this->isCollectionDelimiter($character)) {
                 $stream->previous();
                 break;
             }
