@@ -16,6 +16,7 @@ class PhlipyContext extends Context
         self::withArithmeticOperators($this);
         self::withComparisonOperators($this);
         self::withLogicOperators($this);
+        self::withBitwiseOperators($this);
     }
 
     public static function withLispPrimitives(ContextContract $context): ContextContract
@@ -95,6 +96,18 @@ class PhlipyContext extends Context
         self::defineOperation($context, new Operation\Logic\OrOperation);
         self::defineOperation($context, new Operation\Logic\NotOperation);
         self::defineOperation($context, new Operation\Logic\XorOperation);
+
+        return $context;
+    }
+
+    public static function withBitwiseOperators(ContextContract $context): ContextContract
+    {
+        self::defineOperation($context, new Operation\Bitwise\AndOperation);
+        self::defineOperation($context, new Operation\Bitwise\OrOperation);
+        self::defineOperation($context, new Operation\Bitwise\NotOperation);
+        self::defineOperation($context, new Operation\Bitwise\XorOperation);
+        self::defineOperation($context, new Operation\Bitwise\ShiftLeftOperation);
+        self::defineOperation($context, new Operation\Bitwise\ShiftRightOperation);
 
         return $context;
     }
