@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip\Atom;
 
 use Webgraphe\Phlip\Atom;
+use Webgraphe\Phlip\Contracts\CodeAnchorContract;
 use Webgraphe\Phlip\Contracts\ContextContract;
 
 class StringAtom extends Atom
@@ -17,9 +18,9 @@ class StringAtom extends Atom
 
     const DELIMITER = '"';
 
-    public function __construct(string $value)
+    public static function fromString(string $value, CodeAnchorContract $codeAnchor = null): StringAtom
     {
-        parent::__construct($value);
+        return new static($value, $codeAnchor);
     }
 
     public function getValue(): string

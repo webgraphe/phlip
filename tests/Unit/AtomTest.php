@@ -13,15 +13,15 @@ class AtomTest extends TestCase
 {
     public function testStringAtom()
     {
-        $string = new StringAtom('string');
+        $string = StringAtom::fromString('string');
         $this->assertEquals('string', $string->getValue());
     }
 
     public function testNumberAtom()
     {
-        $integer = new NumberAtom('42');
+        $integer = NumberAtom::fromString('42');
         $this->assertEquals(42, $integer->getValue());
-        $float = new NumberAtom('3.14');
+        $float = NumberAtom::fromString('3.14');
         $this->assertEquals(3.14, $float->getValue());
     }
 

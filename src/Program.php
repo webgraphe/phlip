@@ -16,12 +16,12 @@ class Program
         $this->statements = $statements;
     }
 
-    public static function parse(string $code, Lexer $lexer = null, Parser $parser = null): Program
+    public static function parse(string $code, string $name = null, Lexer $lexer = null, Parser $parser = null): Program
     {
         $lexer = $lexer ?? new Lexer;
         $parser = $parser ?? new Parser;
 
-        return new self($parser->parseLexemeStream($lexer->parseSource($code)));
+        return new self($parser->parseLexemeStream($lexer->parseSource($code, $name)));
     }
 
     public static function parseFile(string $path, Lexer $lexer = null, Parser $parser = null): Program

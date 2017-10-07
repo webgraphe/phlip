@@ -3,16 +3,19 @@
 namespace Webgraphe\Phlip\Atom;
 
 use Webgraphe\Phlip\Atom;
+use Webgraphe\Phlip\Contracts\CodeAnchorContract;
 use Webgraphe\Phlip\Contracts\ContextContract;
 
 class NumberAtom extends Atom
 {
     /**
      * @param string|number $value
+     * @param CodeAnchorContract|null $codeAnchor
+     * @return NumberAtom
      */
-    public function __construct($value)
+    public static function fromString(string $value, CodeAnchorContract $codeAnchor = null): NumberAtom
     {
-        parent::__construct(0 + $value);
+        return new static($value + 0, $codeAnchor);
     }
 
     /**

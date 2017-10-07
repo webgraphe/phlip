@@ -37,9 +37,9 @@ class FormBuilder
             case false === $thing:
                 return $false ?? ($false = new ProperList);
             case is_string($thing):
-                return new StringAtom($thing);
+                return StringAtom::fromString($thing);
             case is_numeric($thing):
-                return new NumberAtom($thing);
+                return NumberAtom::fromString($thing);
             case is_array($thing):
                 return new Vector(
                     ...array_map(

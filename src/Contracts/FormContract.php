@@ -14,4 +14,6 @@ interface FormContract extends StringConvertibleContract
     public function evaluate(ContextContract $context);
 
     public function equals(FormContract $against): bool;
+
+    public function getCodeAnchor(): ?CodeAnchorContract;
 }

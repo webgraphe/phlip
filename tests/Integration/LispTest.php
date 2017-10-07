@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Tests\Integration;
 
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Program;
@@ -23,10 +24,13 @@ class LispTest extends TestCase
         $init = Program::parse(self::getScript());
         $init->execute($context);
 
-        $this->assertEquals(
-            Program::parse($script)->execute($context),
-            Program::parse("(eval (quote $script) (quote ()))")->execute($context)
-        );
+        /** @var FormContract $left */
+        $left = Program::parse($script)->execute($context);
+        $this->assertInstanceOf(FormContract::class, $left);
+        /** @var FormContract $right */
+        $right = Program::parse("(eval (quote $script) (quote ()))")->execute($context);
+        $this->assertInstanceOf(FormContract::class, $right);
+        $this->assertTrue($left->equals($right));
     }
 
     /**

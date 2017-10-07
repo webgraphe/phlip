@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\Contracts\CodeAnchorContract;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 
@@ -9,10 +10,13 @@ class QuotedForm implements FormContract
 {
     /** @var FormContract */
     private $form;
+    /** @var CodeAnchorContract */
+    private $codeAnchor;
 
-    public function __construct(FormContract $form)
+    public function __construct(FormContract $form, CodeAnchorContract $codeAnchor = null)
     {
         $this->form = $form;
+        $this->codeAnchor = $codeAnchor;
     }
 
     /**
@@ -40,5 +44,10 @@ class QuotedForm implements FormContract
     public function getForm(): FormContract
     {
         return $this->form;
+    }
+
+    public function getCodeAnchor(): ?CodeAnchorContract
+    {
+        return $this->codeAnchor;
     }
 }

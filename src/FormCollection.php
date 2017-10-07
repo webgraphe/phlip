@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\Contracts\CodeAnchorContract;
 use Webgraphe\Phlip\Contracts\FormCollectionContract;
 use Webgraphe\Phlip\Contracts\FormCollectionIteratorContract;
 use Webgraphe\Phlip\Contracts\FormContract;
@@ -31,6 +32,13 @@ abstract class FormCollection implements FormCollectionContract
     public function getIterator(): FormCollectionIteratorContract
     {
         return new FormCollectionIterator($this);
+    }
+
+    public function getCodeAnchor(): ?CodeAnchorContract
+    {
+        $iterator = $this->getIterator();
+
+        return $iterator->valid() ? $iterator->current()->getCodeAnchor() : null;
     }
 
     public function __toString(): string

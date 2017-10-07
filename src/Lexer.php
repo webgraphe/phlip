@@ -67,13 +67,13 @@ class Lexer
 
     /**
      * @param string $source
+     * @param string|null $name
      * @return LexemeStream
-     * @throws Exception
      * @throws LexerException
      */
-    public function parseSource(string $source): LexemeStream
+    public function parseSource(string $source, string $name = null): LexemeStream
     {
-        $stream = CharacterStream::fromString($source);
+        $stream = CharacterStream::fromString($source, $name);
 
         $lexemes = [];
         try {
@@ -127,8 +127,9 @@ class Lexer
         return self::ESCAPED_CHARACTERS[$character] ?? $character;
     }
 
-    protected function parseString(Stream $stream): StringAtom
+    protected function parseString(CharacterStream $stream): StringAtom
     {
+        $anchor = new CodeAnchor($stream);
         $string = '';
         while (StringAtom::DELIMITER !== ($character = $stream->next()->current())) {
             if ("\\" === $character) {
@@ -137,10 +138,10 @@ class Lexer
             $string .= $character;
         }
 
-        return new StringAtom($string);
+        return StringAtom::fromString($string, $anchor);
     }
 
-    protected function parseComment(Stream $stream): Comment
+    protected function parseComment(CharacterStream $stream): Comment
     {
         $comment = '';
         while ($stream->valid() && "\n" !== $stream->current()) {
@@ -150,8 +151,9 @@ class Lexer
         return new Comment($comment);
     }
 
-    protected function parseWord(Stream $stream): LexemeContract
+    protected function parseWord(CharacterStream $stream): LexemeContract
     {
+        $anchor = new CodeAnchor($stream);
         $word = '';
         while ($stream->valid()) {
             $character = $stream->current();
@@ -164,14 +166,14 @@ class Lexer
         }
 
         switch (true) {
-            case $word && KeywordSymbol::CHARACTER === $word[0]:
-                return KeywordAtom::fromString($word);
             case DotSymbol::CHARACTER === $word:
                 return DotSymbol::instance();
+            case $word && KeywordSymbol::CHARACTER === $word[0]:
+                return KeywordAtom::fromString($word, $anchor);
             case NumberAtom::isNumber($word):
-                return new NumberAtom($word);
+                return NumberAtom::fromString($word, $anchor);
             default:
-                return IdentifierAtom::fromString($word);
+                return IdentifierAtom::fromString($word, $anchor);
         }
     }
 }
