@@ -3,21 +3,21 @@
 namespace Webgraphe\Phlip\FormCollection;
 
 use Webgraphe\Phlip\Atom;
-use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;
 
 class Map extends FormCollection
 {
-    /** @var Pair[] */
+    /** @var FormContract[] */
     private $pairs = [];
 
-    public function __construct(Pair ...$pairs)
+    public function __construct(ProperList ...$pairs)
     {
         foreach ($pairs as $pair) {
-            $key = Atom::assertStaticType($pair->getFirst());
-            $this->pairs[$key->getValue()] = $pair;
+            $this->pairs[Atom::assertStaticType($pair->assertHead())->getValue()] = $pair->getTail()->assertHead();
         }
     }
 
@@ -28,9 +28,8 @@ class Map extends FormCollection
     public function evaluate(ContextContract $context): \stdClass
     {
         $map = (object)[];
-        foreach ($this as $key => $value) {
-            /** @var $value Pair */
-            $map->{$key} = $value->getSecond()->evaluate($context);
+        foreach ($this->pairs as $key => $value) {
+            $map->{$key} = $value->evaluate($context);
         }
 
         return $map;
@@ -52,7 +51,7 @@ class Map extends FormCollection
     }
 
     /**
-     * @return Pair[]
+     * @return FormContract[]
      */
     public function all(): array
     {

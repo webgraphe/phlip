@@ -54,7 +54,7 @@ class FormBuilder
                 return new Map(
                     ...array_map(
                         function ($key, $value) {
-                            return new Pair($this->asForm($key), $this->asForm($value));
+                            return new ProperList($this->asForm($key), $this->asForm($value));
                         },
                         array_keys($properties),
                         array_values($properties)
