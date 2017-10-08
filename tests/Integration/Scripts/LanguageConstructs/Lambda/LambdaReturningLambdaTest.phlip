@@ -1,0 +1,9 @@
+(define make-plus-x
+    (lambda (x)
+        (lambda (y) (+ x y))
+    )
+)
+
+(define plus-5 (make-plus-x 5))
+
+(assert-equals 13 (plus-5 8))
