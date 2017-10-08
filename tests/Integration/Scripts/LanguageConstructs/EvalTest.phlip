@@ -1,0 +1,2 @@
+(assert-equals 3 (eval '(+ 1 2)))
+(assert-equals 3 (eval (cons '+ (cons 1 (cons 2 '())))))
