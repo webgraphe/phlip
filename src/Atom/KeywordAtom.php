@@ -22,13 +22,6 @@ class KeywordAtom extends Atom
         return new static($value, $codeAnchor);
     }
 
-    public static function fromIdentifierAtom(
-        IdentifierAtom $identifier,
-        CodeAnchorContract $codeAnchor = null
-    ): KeywordAtom {
-        return static::fromString($identifier->getValue(), $codeAnchor);
-    }
-
     /**
      * @param ContextContract $context
      * @return mixed

@@ -22,7 +22,7 @@ class DefineOperation extends PrimaryOperation
 
                 return $context->define(
                     $name->getValue(),
-                    LambdaOperation::invokeStatically(
+                    LambdaOperation::invokeStatic(
                         $context,
                         $variable->getTail(),
                         $forms->getTail()

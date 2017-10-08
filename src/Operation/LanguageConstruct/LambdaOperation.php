@@ -12,7 +12,7 @@ class LambdaOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'lambda';
 
-    public static function invokeStatically(
+    public static function invokeStatic(
         ContextContract $context,
         ProperList $parameters,
         ProperList $statements

@@ -1,0 +1,9 @@
+(assert-equals '(1 2 3 4 5)
+    (let list-numbers
+        ((n 5) (accumulator '()))
+        (if (= n 0)
+            accumulator
+            (list-numbers (- n 1) (cons n accumulator))
+        )
+    )
+)

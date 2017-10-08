@@ -16,28 +16,48 @@ class LetOperation extends PrimaryOperation
     {
         $context = $context->stack();
 
-        $variables = ProperList::assertStaticType($forms->getHead());
+        $head = $forms->assertHead();
+        $tail = $forms->getTail();
+
+        $letName = $head instanceof IdentifierAtom ? $head->getValue() : null;
+        [$parameters, $arguments] = $this->buildParameterArguments(
+            $context,
+            ProperList::assertStaticType($letName ? $tail->assertHead() : $head)
+        );
+        $statements = $letName ? $tail->getTail() : $tail;
+
+        $lambda = LambdaOperation::invokeStatic($context, $parameters, $statements);
+
+        if ($letName) {
+            $context->let($letName, $lambda);
+        }
+
+        return call_user_func($lambda, ...$arguments);
+    }
+
+    private function buildParameterArguments(ContextContract $context, ProperList $variables): array
+    {
+        $parameters = [];
+        $arguments = [];
         while ($variables && $variable = ProperList::assertStaticType($variables->getHead())) {
             $variables = $variables->getTail();
             $name = $variable->getHead();
             switch (true) {
                 case $name instanceof ProperList:
                     $lambdaName = IdentifierAtom::assertStaticType($name->getHead());
-                    $context->let(
-                        $lambdaName->getValue(),
-                        LambdaOperation::invokeStatically(
-                            $context,
-                            $name->getTail(),
-                            $variable->getTail()
-                        )
+                    $namedLambda = LambdaOperation::invokeStatic(
+                        $context,
+                        $name->getTail(),
+                        $variable->getTail()
                     );
+                    $context->let($lambdaName->getValue(), $namedLambda);
+                    $parameters[] = $lambdaName;
+                    $arguments[] = $namedLambda;
                     break;
 
                 case $name instanceof IdentifierAtom:
-                    $context->let(
-                        $name->getValue(),
-                        $variable->getTail()->assertHead()->evaluate($context)
-                    );
+                    $parameters[] = $name;
+                    $arguments[] = $variable->getTail()->assertHead()->evaluate($context);
                     break;
 
                 default:
@@ -45,14 +65,7 @@ class LetOperation extends PrimaryOperation
             }
         }
 
-        $result = null;
-        $statements = $forms->getTail();
-        while ($statement = $statements->getHead()) {
-            $result = $statement->evaluate($context);
-            $statements = $statements->getTail();
-        }
-
-        return $result;
+        return [new ProperList(...$parameters), $arguments];
     }
 
     /**

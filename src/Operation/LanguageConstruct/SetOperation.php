@@ -22,7 +22,7 @@ class SetOperation extends PrimaryOperation
 
                 return $context->set(
                     $name->getValue(),
-                    LambdaOperation::invokeStatically(
+                    LambdaOperation::invokeStatic(
                         $context,
                         $variable->getTail(),
                         $forms->getTail()

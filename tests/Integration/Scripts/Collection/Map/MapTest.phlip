@@ -1,3 +1,5 @@
 (define my-map {(key . "value")})
 (assert-equals my-map {(:key . "value")})
 (assert-equals (list {(key . "value")}) '({(key . "value")}))
+(define three 3)
+(assert-equals {(three . 3)} {(three . three)})

@@ -53,7 +53,7 @@ trait DefinesAssertionsInContexts
                     try {
                         if ($head instanceof FormContract && $toe instanceof FormContract) {
                             $this->assertTrue($head->equals($toe),
-                                "Expected $head out of got $toeExpression; got $toe");
+                                "Expected $head out of $toeExpression; got $toe");
                         } else {
                             $headType = is_object($head) ? get_class($head) : gettype($head);
                             $toeType = is_object($toe) ? get_class($toe) : gettype($toe);
