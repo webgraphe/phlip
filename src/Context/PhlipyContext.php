@@ -8,6 +8,59 @@ use Webgraphe\Phlip\Operation;
 
 class PhlipyContext extends Context
 {
+    /** @var string[] */
+    const PHP_MATH_FUNCTIONS = [
+        'abs',
+        'acos',
+        'acosh',
+        'asin',
+        'asinh',
+        'atan2',
+        'atan',
+        'atanh',
+        'base_convert',
+        'bindec',
+        'ceil',
+        'cos',
+        'cosh',
+        'decbin',
+        'dechex',
+        'decoct',
+        'deg2rad',
+        'exp',
+        'expm1',
+        'floor',
+        'fmod',
+        'getrandmax',
+        'hexdec',
+        'hypot',
+        'intdiv',
+        'is_finite',
+        'is_infinite',
+        'is_nan',
+        'lcg_value',
+        'log10',
+        'log1p',
+        'log',
+        'max',
+        'min',
+        'mt_getrandmax',
+        'mt_rand',
+        'mt_srand',
+        'octdec',
+        'pi',
+        'pow',
+        'rad2deg',
+        'rand',
+        'round',
+        'sin',
+        'sinh',
+        'sqrt',
+        'srand',
+        'tan',
+        'tanh',
+    ];
+
     public function __construct()
     {
         self::withLispPrimitives($this);
@@ -17,6 +70,7 @@ class PhlipyContext extends Context
         self::withComparisonOperators($this);
         self::withLogicOperators($this);
         self::withBitwiseOperators($this);
+        self::withPhpMathFunctions($this);
     }
 
     public static function withLispPrimitives(ContextContract $context): ContextContract
@@ -114,6 +168,18 @@ class PhlipyContext extends Context
         return $context;
     }
 
+    public static function withPhpMathFunctions(ContextContract $context): ContextContract
+    {
+        array_map(
+            function (string $function) use ($context) {
+                self::wrapPhpFunction($context, $function);
+            },
+            self::PHP_MATH_FUNCTIONS
+        );
+
+        return $context;
+    }
+
     public static function defineOperation(ContextContract $context, Operation $operation)
     {
         array_map(
@@ -122,5 +188,12 @@ class PhlipyContext extends Context
             },
             $operation->getIdentifiers()
         );
+    }
+
+    public static function wrapPhpFunction(ContextContract $context, string $function)
+    {
+        $context->define($function, function () use ($function) {
+            return call_user_func_array($function, func_get_args());
+        });
     }
 }

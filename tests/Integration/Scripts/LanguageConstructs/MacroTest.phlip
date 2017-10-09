@@ -3,3 +3,8 @@
 (macro plus-1 (a) (list '+ a 1))
 (macro plus-2 (a) (list '+ (list 'plus-1 a) 1))
 (assert-equals 5 (plus-2 3))
+
+(macro square (a) (cons '* (cons a (cons a '()))))
+(assert-equals 25 (square 5))
+(macro pythagorean-length (a b) (list 'sqrt (list '+ (list 'square a) (list 'square b))))
+(assert-equals 5 (pythagorean-length 3 4))

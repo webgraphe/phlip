@@ -34,7 +34,7 @@ class MacroOperation extends PrimaryOperation
             IdentifierAtom::assertStaticType($head)->getValue(),
             new Macro(
                 ProperList::assertStaticType($tail->assertHead()),
-                ProperList::assertStaticType($tail->getTail()->assertHead())
+                $tail->getTail()->assertHead()
             )
         );
 

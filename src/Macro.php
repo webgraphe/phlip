@@ -17,7 +17,7 @@ class Macro
     /** @var ProperList */
     private $body;
 
-    public function __construct(ProperList $parameters, ProperList $body)
+    public function __construct(ProperList $parameters, FormContract $body)
     {
         $this->parameters = $parameters;
         $this->body = $body;
