@@ -2,18 +2,19 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\ProgramException;
+use Webgraphe\Phlip\FormCollection\ProperList;
 
 class Program
 {
-    /** @var ProperList */
+    /** @var FormContract[] */
     private $statements;
 
     public function __construct(ProperList $statements)
     {
-        $this->statements = $statements;
+        $this->statements = $statements->all();
     }
 
     public static function parse(string $code, string $name = null, Lexer $lexer = null, Parser $parser = null): Program
@@ -38,16 +39,17 @@ class Program
 
     /**
      * @param ContextContract $context
+     * @param Walker|null $walker
      * @return mixed
      */
-    public function execute(ContextContract $context)
+    public function execute(ContextContract $context, Walker $walker = null)
     {
+        $walker = $walker ?? new Walker;
         $result = null;
 
-        $statements = $this->statements;
-        while ($statement = $statements->getHead()) {
-            $result = $statement->evaluate($context);
-            $statements = $statements->getTail();
+        foreach ($this->statements as $statement) {
+            // FIXME Will mess up proper lists used as syntactic sugar such as lambda
+            $result = $walker->apply($context, $statement)->evaluate($context);
         }
 
         return $result;

@@ -1,0 +1,5 @@
+(macro plus-a-b (a b) (list '+ a b))
+(assert-equals 13 (plus-a-b 5 8))
+(macro plus-1 (a) (list '+ a 1))
+(macro plus-2 (a) (list '+ (list 'plus-1 a) 1))
+(assert-equals 5 (plus-2 3))

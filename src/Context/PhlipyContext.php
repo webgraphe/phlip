@@ -44,6 +44,7 @@ class PhlipyContext extends Context
         self::defineOperation($context, new Operation\LanguageConstruct\WhileOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\BeginOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\EvalOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\MacroOperation);
 
         return $context;
     }

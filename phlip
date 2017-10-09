@@ -38,7 +38,7 @@ $context->define(
 );
 
 $context->define(
-    'eval',
+    'evaluate',
     function ($source) use ($context) {
         try {
             return Program::parse($source)->execute($context);
@@ -116,4 +116,4 @@ $context->define(
 
 $context->define('loop', $context->get('while'));
 
-Program::parse('(loop (print (eval (read))))')->execute($context);
+Program::parse('(loop (print (evaluate (read))))')->execute($context);

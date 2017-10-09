@@ -2,12 +2,12 @@
 
 namespace Webgraphe\Phlip\FormCollection;
 
-use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\EvaluationException;
+use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
@@ -22,6 +22,15 @@ class ProperList extends FormCollection
     public function __construct(FormContract ...$forms)
     {
         $this->forms = $forms;
+    }
+
+    public static function asList(FormContract $form): ProperList
+    {
+        if ($form instanceof ProperList) {
+            return $form;
+        }
+
+        return new ProperList($form);
     }
 
     public function getHead(): ?FormContract
