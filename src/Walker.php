@@ -11,6 +11,10 @@ class Walker
 {
     public function apply(ContextContract $context, FormContract $form): FormContract
     {
+        if ($form instanceof QuotedForm) {
+            return new QuotedForm($this->apply($context, $form->getForm()));
+        }
+
         if (!($form instanceof ProperList) || !count($form)) {
             return $form;
         }

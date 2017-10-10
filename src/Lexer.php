@@ -144,8 +144,8 @@ class Lexer
     protected function parseComment(CharacterStream $stream): Comment
     {
         $comment = '';
-        while ($stream->valid() && "\n" !== $stream->current()) {
-            $comment .= $stream->next()->current();
+        while ($stream->next()->valid() && "\n" !== $stream->current()) {
+            $comment .= $stream->current();
         }
 
         return new Comment($comment);
