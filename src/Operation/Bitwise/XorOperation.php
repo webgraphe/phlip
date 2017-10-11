@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Operation;
 
 class XorOperation extends Operation implements StandardOperationContract
 {
-    const IDENTIFIER = '^';
+    const IDENTIFIER = 'bit-xor';
 
     /**
      * @return string[]

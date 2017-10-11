@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Operation;
 
 class NotOperation extends Operation implements StandardOperationContract
 {
-    const IDENTIFIER = '~';
+    const IDENTIFIER = 'bit-not';
 
     /**
      * @return string[]

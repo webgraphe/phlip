@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Operation;
 
 class AndOperation extends Operation implements StandardOperationContract
 {
-    const IDENTIFIER = '&';
+    const IDENTIFIER = 'bit-and';
 
     /**
      * @return string[]

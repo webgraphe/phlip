@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Operation;
 
 class OrOperation extends Operation implements StandardOperationContract
 {
-    const IDENTIFIER = '|';
+    const IDENTIFIER = 'bit-or';
 
     /**
      * @return string[]

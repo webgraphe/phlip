@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Operation;
 
 class ShiftLeftOperation extends Operation implements StandardOperationContract
 {
-    const IDENTIFIER = '<<';
+    const IDENTIFIER = 'bit-shift-left';
 
     /**
      * @return string[]
