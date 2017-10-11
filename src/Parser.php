@@ -11,10 +11,12 @@ use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\DotSymbol;
+use Webgraphe\Phlip\Symbol\Mark\CommaSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
-use Webgraphe\Phlip\Symbol\QuoteSymbol;
+use Webgraphe\Phlip\Symbol\Mark\GraveAccentSymbol;
+use Webgraphe\Phlip\Symbol\Mark\StraightSingleMarkSymbol;
 
 class Parser
 {
@@ -56,8 +58,14 @@ class Parser
         $stream->next();
 
         switch (true) {
-            case $lexeme instanceof QuoteSymbol:
-                return new QuotedForm($this->parseNextForm($stream));
+            case $lexeme instanceof StraightSingleMarkSymbol:
+                return new MarkedForm\QuotedForm($this->parseNextForm($stream));
+
+            case $lexeme instanceof GraveAccentSymbol:
+                return new MarkedForm\QuasiquotedForm($this->parseNextForm($stream));
+
+            case $lexeme instanceof CommaSymbol:
+                return new MarkedForm\UnquotedForm($this->parseNextForm($stream));
 
             case $lexeme instanceof OpenListSymbol:
                 return $this->extractList($stream);

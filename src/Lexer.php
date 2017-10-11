@@ -15,10 +15,12 @@ use Webgraphe\Phlip\Symbol\Closing\CloseMapSymbol;
 use Webgraphe\Phlip\Symbol\Closing\CloseVectorSymbol;
 use Webgraphe\Phlip\Symbol\DotSymbol;
 use Webgraphe\Phlip\Symbol\KeywordSymbol;
+use Webgraphe\Phlip\Symbol\Mark\CommaSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
-use Webgraphe\Phlip\Symbol\QuoteSymbol;
+use Webgraphe\Phlip\Symbol\Mark\GraveAccentSymbol;
+use Webgraphe\Phlip\Symbol\Mark\StraightSingleMarkSymbol;
 
 class Lexer
 {
@@ -85,8 +87,14 @@ class Lexer
                     case $this->isCollectionDelimiter($current):
                         $lexemes[] = call_user_func([self::COLLECTION_DELIMITERS[$current], 'instance']);
                         break;
-                    case QuoteSymbol::CHARACTER === $current:
-                        $lexemes[] = QuoteSymbol::instance();
+                    case StraightSingleMarkSymbol::CHARACTER === $current:
+                        $lexemes[] = StraightSingleMarkSymbol::instance();
+                        break;
+                    case GraveAccentSymbol::CHARACTER === $current:
+                        $lexemes[] = GraveAccentSymbol::instance();
+                        break;
+                    case CommaSymbol::CHARACTER === $current:
+                        $lexemes[] = CommaSymbol::instance();
                         break;
                     case Comment::DELIMITER === $current:
                         $lexemes[] = $this->parseComment($stream);

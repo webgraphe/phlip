@@ -30,7 +30,7 @@ SOURCE;
             StringAtom::fromString('string'),
             Symbol\Opening\OpenListSymbol::instance(),
             IdentifierAtom::fromString('identifier2'),
-            Symbol\QuoteSymbol::instance(),
+            Symbol\Mark\StraightSingleMarkSymbol::instance(),
             IdentifierAtom::fromString('x'),
             NumberAtom::fromString('42'),
             NumberAtom::fromString('3.14'),

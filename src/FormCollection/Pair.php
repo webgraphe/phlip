@@ -103,4 +103,13 @@ class Pair extends FormCollection
     {
         return [$this->first, $this->second];
     }
+
+    /**
+     * @param callable $callback
+     * @return FormCollection|static
+     */
+    public function map(callable $callback): FormCollection
+    {
+        return new static(...array_map($callback, $this->all()));
+    }
 }

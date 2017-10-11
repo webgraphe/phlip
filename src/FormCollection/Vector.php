@@ -54,4 +54,13 @@ class Vector extends FormCollection
     {
         return $this->elements;
     }
+
+    /**
+     * @param callable $callback
+     * @return FormCollection|static
+     */
+    public function map(callable $callback): FormCollection
+    {
+        return new static(...array_map($callback, $this->all()));
+    }
 }

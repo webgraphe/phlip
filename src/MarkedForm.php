@@ -3,10 +3,9 @@
 namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\CodeAnchorContract;
-use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 
-class QuotedForm implements FormContract
+abstract class MarkedForm implements FormContract
 {
     /** @var FormContract */
     private $form;
@@ -19,18 +18,19 @@ class QuotedForm implements FormContract
         $this->codeAnchor = $codeAnchor;
     }
 
-    /**
-     * @param ContextContract $context
-     * @return FormContract
-     */
-    public function evaluate(ContextContract $context): FormContract
-    {
-        return $this->form;
-    }
-
     public function __toString(): string
     {
-        return "'" . (string)$this->form;
+        return $this->getMarkSymbol()->getValue() . (string)$this->form;
+    }
+
+    /**
+     * @param FormContract $form
+     * @param CodeAnchorContract|null $codeAnchor
+     * @return static
+     */
+    public function createNew(FormContract $form, CodeAnchorContract $codeAnchor = null): MarkedForm
+    {
+        return new static($form, $codeAnchor ?? $this->codeAnchor);
     }
 
     public function equals(FormContract $against): bool
@@ -50,4 +50,6 @@ class QuotedForm implements FormContract
     {
         return $this->codeAnchor;
     }
+
+    abstract protected function getMarkSymbol(): Symbol\Mark;
 }

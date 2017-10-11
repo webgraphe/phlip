@@ -6,7 +6,7 @@ use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Parser;
-use Webgraphe\Phlip\QuotedForm;
+use Webgraphe\Phlip\MarkedForm\QuotedForm;
 
 class QuotedFormTest extends TestCase
 {

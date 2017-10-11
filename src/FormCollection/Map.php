@@ -11,7 +11,7 @@ use Webgraphe\Phlip\Symbol\Opening;
 
 class Map extends FormCollection
 {
-    /** @var FormContract[] */
+    /** @var ProperList[] */
     private $pairs = [];
 
     public function __construct(ProperList ...$pairs)
@@ -51,10 +51,19 @@ class Map extends FormCollection
     }
 
     /**
-     * @return FormContract[]
+     * @return ProperList[]
      */
     public function all(): array
     {
         return $this->pairs;
+    }
+
+    /**
+     * @param callable $callback
+     * @return FormCollection|static
+     */
+    public function map(callable $callback): FormCollection
+    {
+        return new static(...array_map($callback, $this->all()));
     }
 }

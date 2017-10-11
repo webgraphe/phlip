@@ -1,12 +1,12 @@
 <?php
 
-namespace Webgraphe\Phlip\Symbol;
+namespace Webgraphe\Phlip\Symbol\Mark;
 
 use Webgraphe\Phlip\Symbol;
 
-class QuoteSymbol extends Symbol
+class CommaSymbol extends Symbol\Mark
 {
-    const CHARACTER = "'";
+    const CHARACTER = ",";
 
     public function getValue(): string
     {

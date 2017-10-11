@@ -123,4 +123,13 @@ class ProperList extends FormCollection
     {
         return Closing\CloseListSymbol::instance();
     }
+
+    /**
+     * @param callable $callback
+     * @return FormCollection|static
+     */
+    public function map(callable $callback): FormCollection
+    {
+        return new static(...array_map($callback, $this->all()));
+    }
 }
