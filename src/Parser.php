@@ -11,7 +11,7 @@ use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\DotSymbol;
-use Webgraphe\Phlip\Symbol\Mark\CommaSymbol;
+use Webgraphe\Phlip\Symbol\Mark\TildeSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
@@ -64,7 +64,7 @@ class Parser
             case $lexeme instanceof GraveAccentSymbol:
                 return new MarkedForm\QuasiquotedForm($this->parseNextForm($stream));
 
-            case $lexeme instanceof CommaSymbol:
+            case $lexeme instanceof TildeSymbol:
                 return new MarkedForm\UnquotedForm($this->parseNextForm($stream));
 
             case $lexeme instanceof OpenListSymbol:

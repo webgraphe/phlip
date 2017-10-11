@@ -19,6 +19,6 @@ class UnquotedForm extends MarkedForm
 
     protected function getMarkSymbol(): Symbol\Mark
     {
-        return Symbol\Mark\CommaSymbol::instance();
+        return Symbol\Mark\TildeSymbol::instance();
     }
 }

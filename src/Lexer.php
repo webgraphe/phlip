@@ -15,7 +15,7 @@ use Webgraphe\Phlip\Symbol\Closing\CloseMapSymbol;
 use Webgraphe\Phlip\Symbol\Closing\CloseVectorSymbol;
 use Webgraphe\Phlip\Symbol\DotSymbol;
 use Webgraphe\Phlip\Symbol\KeywordSymbol;
-use Webgraphe\Phlip\Symbol\Mark\CommaSymbol;
+use Webgraphe\Phlip\Symbol\Mark\TildeSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
@@ -93,8 +93,8 @@ class Lexer
                     case GraveAccentSymbol::CHARACTER === $current:
                         $lexemes[] = GraveAccentSymbol::instance();
                         break;
-                    case CommaSymbol::CHARACTER === $current:
-                        $lexemes[] = CommaSymbol::instance();
+                    case TildeSymbol::CHARACTER === $current:
+                        $lexemes[] = TildeSymbol::instance();
                         break;
                     case Comment::DELIMITER === $current:
                         $lexemes[] = $this->parseComment($stream);
