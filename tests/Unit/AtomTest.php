@@ -10,8 +10,9 @@ use Webgraphe\Phlip\Tests\TestCase;
 abstract class AtomTest extends TestCase
 {
     abstract protected function createAtom(CodeAnchor $anchor = null): Atom;
-    abstract protected function testEvaluation();
-    abstract protected function testStringConvertible();
+
+    abstract public function testEvaluation();
+    abstract public function testStringConvertible();
 
     public function testNullCodeAnchor()
     {
@@ -24,7 +25,7 @@ abstract class AtomTest extends TestCase
         $this->assertEquals($codeAnchor, $this->createAtom($codeAnchor)->getCodeAnchor());
     }
 
-    public function testEquals()
+    public function testEqualsWithDifferentCodeAnchors()
     {
         $codeAnchor = new CodeAnchor(CharacterStream::fromString(''));
         $this->assertTrue($this->createAtom()->equals($this->createAtom($codeAnchor)));
