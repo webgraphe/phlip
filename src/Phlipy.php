@@ -128,7 +128,6 @@ class Phlipy
         self::defineOperation($context, new Operation\Arithmetic\MultiplicationOperation);
         self::defineOperation($context, new Operation\Arithmetic\DivisionOperation);
         self::defineOperation($context, new Operation\Arithmetic\ModuloOperation);
-        self::defineOperation($context, new Operation\Arithmetic\RemainderOperation);
         self::defineOperation($context, new Operation\Arithmetic\ExponentiationOperation);
 
         return $context;

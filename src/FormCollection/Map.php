@@ -4,7 +4,6 @@ namespace Webgraphe\Phlip\FormCollection;
 
 use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;

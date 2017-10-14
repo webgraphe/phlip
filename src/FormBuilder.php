@@ -2,15 +2,14 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\FormCollection\Map;
-use Webgraphe\Phlip\FormCollection\Pair;
-use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\FormCollection\Map;
+use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\Vector;
 
 class FormBuilder
 {
