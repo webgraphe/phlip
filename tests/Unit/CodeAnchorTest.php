@@ -8,25 +8,38 @@ use Webgraphe\Phlip\Tests\TestCase;
 
 class CodeAnchorTest extends TestCase
 {
+    public function testCodeAnchorGetCode()
+    {
+        $stream = CharacterStream::fromString('abcdef');
+        $anchor = new CodeAnchor($stream);
+        $this->assertEquals('abcdef', $anchor->getCode());
+    }
+
+    public function testCodeAnchorGetSourceName()
+    {
+        $stream = CharacterStream::fromString('abcdef', 'source name');
+        $anchor = new CodeAnchor($stream);
+        $this->assertEquals('source name', $anchor->getSourceName());
+    }
+
     public function testCodeAnchorNoOffset()
     {
-        $code = 'this is a stream';
-        $stream = CharacterStream::fromString($code);
+        $stream = CharacterStream::fromString('abcdef');
+        $anchor = new CodeAnchor($stream);
+        $this->assertEquals(0, $stream->key());
+        $this->assertEquals(0, $anchor->getOffset());
+
+        $stream = CharacterStream::fromString('abcdef');
         $stream->next()->next()->next()->next()->next();
         $anchor = new CodeAnchor($stream);
-        $this->assertEquals($code, $anchor->getCode());
-        $this->assertEquals($stream->key(), $anchor->getOffset());
-        $this->assertNull($anchor->getSourceName());
+        $this->assertEquals(5, $stream->key());
+        $this->assertEquals(5, $anchor->getOffset());
     }
 
     public function testCodeAnchorWithOffset()
     {
-        $code = 'this is a stream';
-        $name = 'stream name';
-        $stream = CharacterStream::fromString($code, $name);
-        $anchor = new CodeAnchor($stream, 7);
-        $this->assertEquals($code, $anchor->getCode());
-        $this->assertEquals(7, $anchor->getOffset());
-        $this->assertEquals($name, $anchor->getSourceName());
+        $stream = CharacterStream::fromString('abcdef');
+        $anchor = new CodeAnchor($stream, 5);
+        $this->assertEquals(5, $anchor->getOffset());
     }
 }
