@@ -2,12 +2,12 @@
 
 namespace Webgraphe\Phlip\Tests\Traits;
 
-use Webgraphe\Phlip\Context\PhlipyContext;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
 
 /**
@@ -22,7 +22,7 @@ trait DefinesAssertionsInContexts
 {
     protected function contextWithAsserts(ContextContract $context = null): ContextContract
     {
-        $context = $context ?? new PhlipyContext;
+        $context = $context ?? Phlipy::context();
         $context->define('ContextException', ContextException::class);
         $context->define('EvaluationException', EvaluationException::class);
         $context->define(

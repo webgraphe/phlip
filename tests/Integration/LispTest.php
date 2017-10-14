@@ -2,10 +2,11 @@
 
 namespace Webgraphe\Phlip\Tests\Integration;
 
-use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
+use Webgraphe\Phlip\Tests\TestCase;
 
 class LispTest extends TestCase
 {
@@ -20,7 +21,7 @@ class LispTest extends TestCase
      */
     public function testHomoiconicity($script)
     {
-        $context = Context\PhlipyContext::withLispPrimitives(new Context);
+        $context = Phlipy::withLispPrimitives(new Context);
         $init = Program::parse(self::getScript());
         $init->execute($context);
 

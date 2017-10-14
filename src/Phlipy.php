@@ -1,12 +1,10 @@
 <?php
 
-namespace Webgraphe\Phlip\Context;
+namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Operation;
 
-class PhlipyContext extends Context
+class Phlipy
 {
     /** @var string[] */
     const PHP_MATH_FUNCTIONS = [
@@ -61,16 +59,19 @@ class PhlipyContext extends Context
         'tanh',
     ];
 
-    public function __construct()
+    public static function context(ContextContract $context = null): ContextContract
     {
-        self::withLispPrimitives($this);
-        self::withExtraLanguageConstructs($this);
-        self::withTypeOperators($this);
-        self::withArithmeticOperators($this);
-        self::withComparisonOperators($this);
-        self::withLogicOperators($this);
-        self::withBitwiseOperators($this);
-        self::withPhpMathFunctions($this);
+        $context = $context ?? new Context;
+        self::withLispPrimitives($context);
+        self::withExtraLanguageConstructs($context);
+        self::withTypeOperators($context);
+        self::withArithmeticOperators($context);
+        self::withComparisonOperators($context);
+        self::withLogicOperators($context);
+        self::withBitwiseOperators($context);
+        self::withPhpMathFunctions($context);
+
+        return $context;
     }
 
     public static function withLispPrimitives(ContextContract $context): ContextContract
