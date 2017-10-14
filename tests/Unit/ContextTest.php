@@ -17,6 +17,27 @@ class ContextTest extends TestCase
         $context->define('x', 3);
     }
 
+    public function testStackedDefinition()
+    {
+        $child = ($parent = new Context)->stack();
+        $this->assertFalse($parent->has('key'));
+        $this->assertNotEquals($child, $parent);
+        $child->define('key', 'value');
+        $this->assertTrue($parent->has('key'));
+        $this->assertEquals($child->get('key'), $parent->get('key'));
+        $child->set('key', 'new value');
+        $this->assertEquals('new value', $parent->get('key'));
+    }
+
+    public function testSet()
+    {
+        $context = new Context();
+        $context->define('key', 'old value');
+        $oldValue = $context->set('key', 'new value');
+        $this->assertEquals('old value', $oldValue);
+        $this->assertEquals('new value', $context->get('key'));
+    }
+
     public function testSetUndefined()
     {
         $context = new Context;
@@ -27,7 +48,7 @@ class ContextTest extends TestCase
 
     public function testLetAgain()
     {
-        $child = new Context(new Context());
+        $child = (new Context())->stack();
         $child->let('x', 2);
 
         $this->expectException(ContextException::class);
