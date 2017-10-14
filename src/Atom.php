@@ -13,7 +13,7 @@ abstract class Atom implements LexemeContract, FormContract
 
     /** @var string|number|bool|null */
     private $value;
-    /** @var CodeAnchorContract */
+    /** @var CodeAnchorContract|null */
     private $codeAnchor;
 
     protected function __construct($value, CodeAnchorContract $codeAnchor = null)
@@ -32,7 +32,7 @@ abstract class Atom implements LexemeContract, FormContract
         return $against instanceof static && $against->getValue() === $this->getValue();
     }
 
-    public function getCodeAnchor(): CodeAnchorContract
+    public function getCodeAnchor(): ?CodeAnchorContract
     {
         return $this->codeAnchor;
     }

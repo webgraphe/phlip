@@ -3,6 +3,7 @@
 namespace Tests\Webgraphe\Phlip\Unit;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
+use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Comment;
@@ -19,7 +20,7 @@ class LexerTest extends TestCase
         $lexer = new Lexer;
         $source = <<<SOURCE
 ; A comment
-(identifier1 "string" (identifier2 'x 42 3.14 . [1 2 3] {(key . value)}))
+(identifier1 "string" (identifier2 'x `(+ ~x ~y) 42 3.14 :keyword (key . value) [1 2 3] . {(key value)}))
 SOURCE;
         $lexemeStream = $lexer->parseSource($source);
         $this->assertNotNull($lexemeStream);
@@ -32,18 +33,31 @@ SOURCE;
             IdentifierAtom::fromString('identifier2'),
             Symbol\Mark\StraightSingleMarkSymbol::instance(),
             IdentifierAtom::fromString('x'),
+            Symbol\Mark\GraveAccentSymbol::instance(),
+            Symbol\Opening\OpenListSymbol::instance(),
+            IdentifierAtom::fromString('+'),
+            Symbol\Mark\TildeSymbol::instance(),
+            IdentifierAtom::fromString('x'),
+            Symbol\Mark\TildeSymbol::instance(),
+            IdentifierAtom::fromString('y'),
+            Symbol\Closing\CloseListSymbol::instance(),
             NumberAtom::fromString('42'),
             NumberAtom::fromString('3.14'),
+            KeywordAtom::fromString('keyword'),
+            Symbol\Opening\OpenListSymbol::instance(),
+            IdentifierAtom::fromString('key'),
             Symbol\DotSymbol::instance(),
+            IdentifierAtom::fromString('value'),
+            Symbol\Closing\CloseListSymbol::instance(),
             Symbol\Opening\OpenVectorSymbol::instance(),
             NumberAtom::fromString('1'),
             NumberAtom::fromString('2'),
             NumberAtom::fromString('3'),
             Symbol\Closing\CloseVectorSymbol::instance(),
+            Symbol\DotSymbol::instance(),
             Symbol\Opening\OpenMapSymbol::instance(),
             Symbol\Opening\OpenListSymbol::instance(),
             IdentifierAtom::fromString('key'),
-            Symbol\DotSymbol::instance(),
             IdentifierAtom::fromString('value'),
             Symbol\Closing\CloseListSymbol::instance(),
             Symbol\Closing\CloseMapSymbol::instance(),

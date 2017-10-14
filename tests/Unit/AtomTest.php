@@ -2,38 +2,31 @@
 
 namespace Webgraphe\Phlip\Tests\Unit;
 
-use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Atom\KeywordAtom;
-use Webgraphe\Phlip\Atom\NumberAtom;
-use Webgraphe\Phlip\Atom\StringAtom;
-use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Atom;
+use Webgraphe\Phlip\CodeAnchor;
+use Webgraphe\Phlip\Stream\CharacterStream;
 use Webgraphe\Phlip\Tests\TestCase;
 
-class AtomTest extends TestCase
+abstract class AtomTest extends TestCase
 {
-    public function testStringAtom()
+    abstract protected function createAtom(CodeAnchor $anchor = null): Atom;
+    abstract protected function testEvaluation();
+    abstract protected function testStringConvertible();
+
+    public function testNullCodeAnchor()
     {
-        $string = StringAtom::fromString('string');
-        $this->assertEquals('string', $string->getValue());
+        $this->assertNull($this->createAtom()->getCodeAnchor());
     }
 
-    public function testNumberAtom()
+    public function testNonNullCodeAnchor()
     {
-        $integer = NumberAtom::fromString('42');
-        $this->assertEquals(42, $integer->getValue());
-        $float = NumberAtom::fromString('3.14');
-        $this->assertEquals(3.14, $float->getValue());
+        $codeAnchor = new CodeAnchor(CharacterStream::fromString(''));
+        $this->assertEquals($codeAnchor, $this->createAtom($codeAnchor)->getCodeAnchor());
     }
 
-    public function testInvalidIdentifierAtom()
+    public function testEquals()
     {
-        $this->expectException(AssertionException::class);
-        IdentifierAtom::fromString(':(){}[]');
-    }
-
-    public function testEmptyKeyword()
-    {
-        $this->expectException(AssertionException::class);
-        KeywordAtom::fromString('');
+        $codeAnchor = new CodeAnchor(CharacterStream::fromString(''));
+        $this->assertTrue($this->createAtom()->equals($this->createAtom($codeAnchor)));
     }
 }
