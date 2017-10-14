@@ -49,7 +49,7 @@ class FormBuilder
                         $thing
                     )
                 );
-            case is_object($thing):
+            case $thing instanceof \stdClass:
                 $properties = get_object_vars($thing);
                 return new Map(
                     ...array_map(
