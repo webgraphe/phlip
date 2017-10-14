@@ -88,7 +88,7 @@ class ProperList extends FormCollection
 
         try {
             return call_user_func($callable, ...$arguments);
-        } catch (AssertionException $assertion) {
+        } catch (\Throwable $assertion) {
             throw EvaluationException::fromForm($this, 'Evaluation failed', 0, $assertion);
         }
     }

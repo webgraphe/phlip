@@ -11,7 +11,7 @@ class EvaluationException extends Exception
         FormContract $form,
         string $message,
         int $code = 0,
-        AssertionException $previous = null
+        \Throwable $previous = null
     ) {
         if ($previous) {
             $message .= " (from failed assertion; {$previous->getMessage()})";
