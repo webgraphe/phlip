@@ -6,7 +6,7 @@ use Webgraphe\Phlip\Contracts\LexemeContract;
 
 abstract class Symbol implements LexemeContract
 {
-    private function __construct()
+    final private function __construct()
     {
         // Symbols are immutable singletons
     }

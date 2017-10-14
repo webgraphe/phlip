@@ -4,6 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
@@ -15,10 +16,10 @@ class LambdaOperation extends PrimaryOperation
     public static function invokeStatic(
         ContextContract $context,
         ProperList $parameters,
-        ProperList $statements
+        FormContract ...$statements
     )
     {
-        return (new self)->invoke($context, new ProperList($parameters, ...$statements->all()));
+        return (new self)->invoke($context, new ProperList($parameters, ...$statements));
     }
 
     protected function invoke(ContextContract $context, ProperList $forms)
@@ -27,7 +28,7 @@ class LambdaOperation extends PrimaryOperation
         $statements = $forms->getTail();
 
         return function () use ($context, $parameters, $statements) {
-            $context = $context->stack();
+            $localContext = $context->stack();
 
             $arguments = self::assertArgumentsMatchingParameters($parameters, func_get_args());
 
@@ -35,12 +36,12 @@ class LambdaOperation extends PrimaryOperation
                 $argument = array_shift($arguments);
                 $parameter = IdentifierAtom::assertStaticType($parameters->getHead());
                 $parameters = $parameters->getTail();
-                $context->let($parameter->getValue(), $argument);
+                $localContext->let($parameter->getValue(), $argument);
             }
 
             $result = null;
             while ($statement = $statements->getHead()) {
-                $result = $statement->evaluate($context);
+                $result = $statement->evaluate($localContext);
                 $statements = $statements->getTail();
             }
 

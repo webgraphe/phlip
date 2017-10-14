@@ -17,7 +17,7 @@ abstract class Stream implements \Iterator
     /** @var string|null */
     private $name;
 
-    protected function __construct($stream, int $length, string $name = null)
+    final protected function __construct($stream, int $length, string $name = null)
     {
         $this->stream = $stream;
         $this->length = $length;

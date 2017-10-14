@@ -9,10 +9,10 @@ use Webgraphe\Phlip\FormCollection\ProperList;
 
 class Walker
 {
-    public function apply(ContextContract $context, FormContract $form): FormContract
+    public function apply(ContextContract $context, FormContract $form, FormBuilder $formBuilder = null): FormContract
     {
         if ($form instanceof MarkedForm) {
-            return $form->createNew($this->apply($context, $form->getForm()));
+            return $form->createNew($this->apply($context, $form->getForm(), $formBuilder));
         }
 
         if (!($form instanceof ProperList) || !count($form)) {
@@ -21,27 +21,23 @@ class Walker
 
         $head = $form->assertHead();
 
-        if (!($head instanceof IdentifierAtom)) {
+        if (!($head instanceof IdentifierAtom) || !$context->has($head->getValue())) {
             return $form;
         }
 
-        if (!$context->has($head->getValue())) {
-            return $form;
+        $definition = $context->get($head->getValue());
+        if ($definition instanceof Macro) {
+            return $this->apply($context, $definition->expand($form->getTail(), $formBuilder), $formBuilder);
         }
 
-        $macro = $context->get($head->getValue());
-        if (!($macro instanceof Macro)) {
-            return new ProperList(
-                $head,
-                ...array_map(
-                    function (FormContract $form) use ($context) {
-                        return $this->apply($context, $form);
-                    },
-                    $form->getTail()->all()
-                )
-            );
-        }
-
-        return $this->apply($context, $macro->expand($context, $form->getTail()));
+        return new ProperList(
+            $head,
+            ...array_map(
+                function (FormContract $form) use ($context, $formBuilder) {
+                    return $this->apply($context, $form, $formBuilder);
+                },
+                $form->getTail()->all()
+            )
+        );
     }
 }

@@ -45,11 +45,12 @@ class Program
     public function execute(ContextContract $context, Walker $walker = null)
     {
         $walker = $walker ?? new Walker;
-        $result = null;
+        $formBuilder = new FormBuilder;
 
+        $result = null;
         foreach ($this->statements as $statement) {
             // FIXME Will mess up proper lists used as syntactic sugar such as lambda
-            $result = $walker->apply($context, $statement)->evaluate($context);
+            $result = $walker->apply($context, $statement, $formBuilder)->evaluate($context);
         }
 
         return $result;

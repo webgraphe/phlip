@@ -12,7 +12,7 @@ abstract class MarkedForm implements FormContract
     /** @var CodeAnchorContract */
     private $codeAnchor;
 
-    public function __construct(FormContract $form, CodeAnchorContract $codeAnchor = null)
+    final public function __construct(FormContract $form, CodeAnchorContract $codeAnchor = null)
     {
         $this->form = $form;
         $this->codeAnchor = $codeAnchor;

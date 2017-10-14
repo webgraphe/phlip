@@ -27,16 +27,12 @@ class MacroOperation extends PrimaryOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $head = $forms->assertHead();
+        $name = IdentifierAtom::assertStaticType($forms->assertHead());
         $tail = $forms->getTail();
+        $parameters = ProperList::assertStaticType($tail->assertHead());
+        $body = $tail->getTail()->assertHead();
 
-        $context->define(
-            IdentifierAtom::assertStaticType($head)->getValue(),
-            new Macro(
-                ProperList::assertStaticType($tail->assertHead()),
-                $tail->getTail()->assertHead()
-            )
-        );
+        $context->define($name->getValue(), new Macro($context, $parameters, $body));
 
         return null;
     }

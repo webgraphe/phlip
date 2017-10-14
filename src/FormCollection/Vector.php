@@ -13,7 +13,7 @@ class Vector extends FormCollection
     /** @var FormContract[] */
     private $elements;
 
-    public function __construct(FormContract ...$elements)
+    final public function __construct(FormContract ...$elements)
     {
         $this->elements = $elements;
     }

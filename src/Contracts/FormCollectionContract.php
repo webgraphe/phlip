@@ -5,6 +5,9 @@ namespace Webgraphe\Phlip\Contracts;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;
 
+/**
+ * Immutable collection of forms.
+ */
 interface FormCollectionContract extends FormContract, \Countable, \IteratorAggregate
 {
     public function getOpeningSymbol(): Opening;

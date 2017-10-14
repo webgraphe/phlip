@@ -13,7 +13,7 @@ class Map extends FormCollection
     /** @var ProperList[] */
     private $pairs = [];
 
-    public function __construct(ProperList ...$pairs)
+    final public function __construct(ProperList ...$pairs)
     {
         foreach ($pairs as $pair) {
             $this->pairs[Atom::assertStaticType($pair->assertHead())->getValue()] = $pair->getTail()->assertHead();

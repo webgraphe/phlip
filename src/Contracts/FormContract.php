@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip\Contracts;
 
 /**
- * A token extracted by a parser.
+ * An immutable object meant to be evaluated.
  */
 interface FormContract extends StringConvertibleContract
 {

@@ -19,7 +19,7 @@ class ProperList extends FormCollection
     /** @var FormContract[] */
     private $forms;
 
-    public function __construct(FormContract ...$forms)
+    final public function __construct(FormContract ...$forms)
     {
         $this->forms = $forms;
     }

@@ -20,7 +20,7 @@ class Pair extends FormCollection
     /** @var FormContract */
     private $second;
 
-    public function __construct(FormContract $first, FormContract $second)
+    final public function __construct(FormContract $first, FormContract $second)
     {
         $this->first = $first;
         $this->second = $second;

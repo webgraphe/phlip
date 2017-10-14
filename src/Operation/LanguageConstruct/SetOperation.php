@@ -25,7 +25,7 @@ class SetOperation extends PrimaryOperation
                     LambdaOperation::invokeStatic(
                         $context,
                         $variable->getTail(),
-                        $forms->getTail()
+                        ...$forms->getTail()
                     )
                 );
 
