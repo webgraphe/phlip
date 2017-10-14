@@ -18,7 +18,7 @@ class PhlipyContext extends Context
         'atan2',
         'atan',
         'atanh',
-        'base_convert',
+        'base_convert' => 'base-convert',
         'bindec',
         'ceil',
         'cos',
@@ -31,22 +31,22 @@ class PhlipyContext extends Context
         'expm1',
         'floor',
         'fmod',
-        'getrandmax',
+        'getrandmax' => 'rand-max',
         'hexdec',
         'hypot',
         'intdiv',
-        'is_finite',
-        'is_infinite',
-        'is_nan',
-        'lcg_value',
+        'is_finite' => 'finite?',
+        'is_infinite' => 'infinite?',
+        'is_nan' => 'nan?',
+        'lcg_value' => 'lcg-value',
         'log10',
         'log1p',
         'log',
         'max',
         'min',
-        'mt_getrandmax',
-        'mt_rand',
-        'mt_srand',
+        'mt_getrandmax' => 'mt-rand-max',
+        'mt_rand' => 'mt-rand',
+        'mt_srand' => 'mt-rand-seed',
         'octdec',
         'pi',
         'pow',
@@ -56,7 +56,7 @@ class PhlipyContext extends Context
         'sin',
         'sinh',
         'sqrt',
-        'srand',
+        'srand' => 'rand-seed',
         'tan',
         'tanh',
     ];
@@ -171,10 +171,11 @@ class PhlipyContext extends Context
     public static function withPhpMathFunctions(ContextContract $context): ContextContract
     {
         array_map(
-            function (string $function) use ($context) {
-                self::wrapPhpFunction($context, $function);
+            function ($key, $value) use ($context) {
+                self::wrapPhpFunction($context, is_numeric($key) ? $value : $key, $value);
             },
-            self::PHP_MATH_FUNCTIONS
+            array_keys(self::PHP_MATH_FUNCTIONS),
+            array_values(self::PHP_MATH_FUNCTIONS)
         );
 
         return $context;
@@ -190,9 +191,9 @@ class PhlipyContext extends Context
         );
     }
 
-    public static function wrapPhpFunction(ContextContract $context, string $function)
+    public static function wrapPhpFunction(ContextContract $context, string $function, string $alias = null)
     {
-        $context->define($function, function () use ($function) {
+        $context->define($alias ?? $function, function () use ($function) {
             return call_user_func_array($function, func_get_args());
         });
     }
