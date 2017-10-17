@@ -100,6 +100,7 @@ class Phlipy
         self::defineOperation($context, new Operation\LanguageConstruct\BeginOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\EvalOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\MacroOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\MacroExpandOperation);
 
         return $context;
     }

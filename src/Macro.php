@@ -12,11 +12,14 @@ class Macro
 {
     use AssertsStaticType;
 
+    /** @var ProperList */
+    private $parameters;
     /** @var \Closure */
     private $lambda;
 
     public function __construct(ContextContract $context, ProperList $parameters, FormContract $body)
     {
+        $this->parameters = $parameters;
         $this->lambda = LambdaOperation::invokeStatic($context, $parameters, $body);
     }
 
@@ -25,5 +28,10 @@ class Macro
         $formBuilder = $formBuilder ?? new FormBuilder;
 
         return $formBuilder->asForm(call_user_func($this->lambda, ...ProperList::asList($form)->all()));
+    }
+
+    public function getParameters(): ProperList
+    {
+        return $this->parameters;
     }
 }
