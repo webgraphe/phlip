@@ -4,6 +4,7 @@ namespace Webgraphe\Phlip\MarkedForm;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\MarkedForm;
 use Webgraphe\Phlip\Symbol;
@@ -22,7 +23,7 @@ class QuasiquotedForm extends MarkedForm
     protected function apply(ContextContract $context, FormContract $form): FormContract
     {
         if ($form instanceof UnquotedForm) {
-            return $form->evaluate($context);
+            return (new FormBuilder)->asForm($form->evaluate($context));
         }
 
         if ($form instanceof FormCollection) {

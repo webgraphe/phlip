@@ -114,6 +114,7 @@ class Phlipy
         self::defineOperation($context, new Operation\Type\IsKeywordOperation);
         self::defineOperation($context, new Operation\Type\IsLambdaOperation);
         self::defineOperation($context, new Operation\Type\IsListOperation);
+        self::defineOperation($context, new Operation\Type\IsMacroOperation);
         self::defineOperation($context, new Operation\Type\IsOperationOperation);
         self::defineOperation($context, new Operation\Type\IsPairOperation);
         self::defineOperation($context, new Operation\Type\IsNumberOperation);
