@@ -16,10 +16,8 @@ use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\FormCollection\Map;
-use Webgraphe\Phlip\FormCollection\Pair;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\FormCollection\Vector;
-use Webgraphe\Phlip\Tests\TestCase;
 
 class ProperListTest extends FormCollectionTest implements PrimaryOperationContract
 {
