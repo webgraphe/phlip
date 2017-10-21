@@ -24,17 +24,15 @@ class FormBuilder
      */
     public function asForm($thing): FormContract
     {
-        static $true, $false, $null;
-
         switch (true) {
             case $thing instanceof FormContract:
                 return $thing;
             case null === $thing:
-                return $null ?? ($null = new ProperList);
+                return new ProperList;
             case true === $thing:
-                return $true ?? ($true = KeywordAtom::fromString('true'));
+                return KeywordAtom::fromString('true');
             case false === $thing:
-                return $false ?? ($false = new ProperList);
+                return new ProperList;
             case is_string($thing):
                 return StringAtom::fromString($thing);
             case is_numeric($thing):

@@ -4,6 +4,7 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 
@@ -39,18 +40,16 @@ class Program
 
     /**
      * @param ContextContract $context
-     * @param Walker|null $walker
+     * @param WalkerContract|null $walker
      * @return mixed
      */
-    public function execute(ContextContract $context, Walker $walker = null)
+    public function execute(ContextContract $context, WalkerContract $walker = null)
     {
-        $walker = $walker ?? new Walker;
-        $formBuilder = new FormBuilder;
+        $walker = $walker ?? new Walker($context);
 
         $result = null;
         foreach ($this->statements as $statement) {
-            // FIXME Will mess up proper lists used as syntactic sugar such as lambda
-            $result = $walker->apply($context, $statement, $formBuilder)->evaluate($context);
+            $result = $walker($statement)->evaluate($context);
         }
 
         return $result;

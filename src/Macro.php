@@ -20,10 +20,10 @@ class Macro
         $this->lambda = LambdaOperation::invokeStatic($context, $parameters, $body);
     }
 
-    public function expand(ProperList $form, FormBuilder $formBuilder = null): FormContract
+    public function expand(ProperList $body, FormBuilder $formBuilder = null): FormContract
     {
         $formBuilder = $formBuilder ?? new FormBuilder;
 
-        return $formBuilder->asForm(call_user_func($this->lambda, ...ProperList::asList($form)->all()));
+        return $formBuilder->asForm(call_user_func($this->lambda, ...ProperList::asList($body)->all()));
     }
 }

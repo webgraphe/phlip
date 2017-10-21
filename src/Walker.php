@@ -5,14 +5,27 @@ namespace Webgraphe\Phlip;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
+use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
 
-class Walker
+class Walker implements WalkerContract
 {
-    public function apply(ContextContract $context, FormContract $form, FormBuilder $formBuilder = null): FormContract
+    /** @var FormBuilder|null */
+    private $formBuilder;
+    /** @var ContextContract */
+    private $context;
+
+    public function __construct(ContextContract $context, FormBuilder $formBuilder = null)
+    {
+        $this->context = $context;
+        $this->formBuilder = $formBuilder ?? new FormBuilder;
+    }
+
+    public function __invoke(FormContract $form): FormContract
     {
         if ($form instanceof MarkedForm) {
-            return $form->createNew($this->apply($context, $form->getForm(), $formBuilder));
+            return $form->createNew($this($form->getForm()));
         }
 
         if (!($form instanceof ProperList) || !count($form)) {
@@ -21,23 +34,18 @@ class Walker
 
         $head = $form->assertHead();
 
-        if (!($head instanceof IdentifierAtom) || !$context->has($head->getValue())) {
+        if (!($head instanceof IdentifierAtom) || !$this->context->has($head->getValue())) {
             return $form;
         }
 
-        $definition = $context->get($head->getValue());
+        $definition = $this->context->get($head->getValue());
+
         if ($definition instanceof Macro) {
-            return $this->apply($context, $definition->expand($form->getTail(), $formBuilder), $formBuilder);
+            return $this($definition->expand($form->getTail(), $this->formBuilder));
         }
 
-        return new ProperList(
-            $head,
-            ...array_map(
-                function (FormContract $form) use ($context, $formBuilder) {
-                    return $this->apply($context, $form, $formBuilder);
-                },
-                $form->getTail()->all()
-            )
-        );
+        return $definition instanceof PrimaryOperationContract
+            ? new ProperList($head, ...$definition->walk($this, ...$form->getTail()->all()))
+            : $form->map($this);
     }
 }

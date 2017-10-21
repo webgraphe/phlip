@@ -4,6 +4,8 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
@@ -48,7 +50,7 @@ class LetOperation extends PrimaryOperation
                     $namedLambda = LambdaOperation::invokeStatic(
                         $context,
                         $name->getTail(),
-                        ...$variable->getTail()
+                        ...$variable->getTail()->all()
                     );
                     $context->let($lambdaName->getValue(), $namedLambda);
                     $parameters[] = $lambdaName;
@@ -74,5 +76,47 @@ class LetOperation extends PrimaryOperation
     public function getIdentifiers(): array
     {
         return [self::IDENTIFIER];
+    }
+
+    public function walk(WalkerContract $walker, FormContract ...$forms): array
+    {
+        $statement = new ProperList(...$forms);
+        $head = $statement->assertHead();
+        $tail = $statement->getTail();
+
+        if ($head instanceof IdentifierAtom) {
+            return array_merge(
+                [
+                    $walker($head),
+                    $this->walkParameterArguments($walker, ProperList::assertStaticType($tail->assertHead()))
+                ],
+                array_map($walker, $tail->getTail()->all())
+            );
+        }
+
+        return array_merge(
+            [$this->walkParameterArguments($walker, ProperList::assertStaticType($head))],
+            array_map($walker, $tail->all())
+        );
+    }
+
+    private function walkParameterArguments(WalkerContract $walker, ProperList $variables): ProperList
+    {
+        $pairs = [];
+
+        while ($variables && $variable = ProperList::assertStaticType($variables->getHead())) {
+            $variables = $variables->getTail();
+            $name = $variable->getHead();
+            switch (true) {
+                case $name instanceof ProperList:
+                    $pairs[] = new ProperList($name, ...array_map($walker, $variable->getTail()->all()));
+                    break;
+
+                default:
+                    $pairs[] = new ProperList(...array_map($walker, $variable->all()));
+            }
+        }
+
+        return new ProperList(...$pairs);
     }
 }

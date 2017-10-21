@@ -11,6 +11,7 @@ use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
+use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\FormCollection;
@@ -137,5 +138,15 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
                 return ProperList::asList($form);
             })
         );
+    }
+
+    /**
+     * @param WalkerContract $walker
+     * @param FormContract[] ...$forms
+     * @return array
+     */
+    public function walk(WalkerContract $walker, FormContract ...$forms): array
+    {
+        return array_map($walker, $forms);
     }
 }
