@@ -98,7 +98,7 @@ class Parser
                         throw new ParserException("Malformed dot-notation pair; right-hand side has too many forms");
                     }
                     if ($rest[0] instanceof ProperList) {
-                        return new ProperList(...array_merge($list, $rest));
+                        return new ProperList(...$list, ...$rest[0]->all());
                     }
 
                     return Pair::fromForms(...array_merge($list, $rest));

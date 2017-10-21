@@ -19,7 +19,7 @@ class ParserTest extends TestCase
 
     public function testStringConvertibleList()
     {
-        $source = '(identifier1 "string" (identifier2 \'x 42 3.14))';
+        $source = '(identifier1 "string" `(identifier2 \'x ~y 42 3.14 [a b] {(:key "value")}))';
         $this->assertEquals("($source)", (string)(new Parser)->parseLexemeStream((new Lexer)->parseSource($source)));
     }
 
@@ -45,5 +45,29 @@ class ParserTest extends TestCase
     {
         $this->expectException(ParserException::class);
         (new Parser)->parseLexemeStream((new Lexer)->parseSource("(1 . 2 3)"));
+    }
+
+    public function testValidPair()
+    {
+        $this->assertEquals(
+            '((1 . 2))',
+            (string)(new Parser)->parseLexemeStream((new Lexer)->parseSource("(1 . 2)"))
+        );
+    }
+
+    public function testValidNestedPairs()
+    {
+        $this->assertEquals(
+            '((1 2 . 3))',
+            (string)(new Parser)->parseLexemeStream((new Lexer)->parseSource("(1 . (2 . 3))"))
+        );
+    }
+
+    public function testValidPairWithEndingProperList()
+    {
+        $this->assertEquals(
+            '((1 2 3))',
+            (string)(new Parser)->parseLexemeStream((new Lexer)->parseSource("(1 . (2 3))"))
+        );
     }
 }

@@ -16,7 +16,8 @@ class Map extends FormCollection
     final public function __construct(ProperList ...$pairs)
     {
         foreach ($pairs as $pair) {
-            $this->pairs[Atom::assertStaticType($pair->assertHead())->getValue()] = $pair->getTail()->assertHead();
+            $pair->getTail()->assertHead();
+            $this->pairs[Atom::assertStaticType($pair->assertHead())->getValue()] = $pair;
         }
     }
 
@@ -28,7 +29,7 @@ class Map extends FormCollection
     {
         $map = (object)[];
         foreach ($this->pairs as $key => $value) {
-            $map->{$key} = $value->evaluate($context);
+            $map->{$key} = $value->getTail()->getHead()->evaluate($context);
         }
 
         return $map;
