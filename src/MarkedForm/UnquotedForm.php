@@ -17,7 +17,7 @@ class UnquotedForm extends MarkedForm
         return $this->getForm()->evaluate($context);
     }
 
-    protected function getMarkSymbol(): Symbol\Mark
+    public function getMarkSymbol(): Symbol\Mark
     {
         return Symbol\Mark\TildeSymbol::instance();
     }

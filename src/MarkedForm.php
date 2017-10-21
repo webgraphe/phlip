@@ -9,13 +9,10 @@ abstract class MarkedForm implements FormContract
 {
     /** @var FormContract */
     private $form;
-    /** @var CodeAnchorContract */
-    private $codeAnchor;
 
-    final public function __construct(FormContract $form, CodeAnchorContract $codeAnchor = null)
+    final public function __construct(FormContract $form)
     {
         $this->form = $form;
-        $this->codeAnchor = $codeAnchor;
     }
 
     public function __toString(): string
@@ -25,12 +22,11 @@ abstract class MarkedForm implements FormContract
 
     /**
      * @param FormContract $form
-     * @param CodeAnchorContract|null $codeAnchor
      * @return static
      */
-    public function createNew(FormContract $form, CodeAnchorContract $codeAnchor = null): MarkedForm
+    public function createNew(FormContract $form): MarkedForm
     {
-        return new static($form, $codeAnchor ?? $this->codeAnchor);
+        return new static($form);
     }
 
     public function equals(FormContract $against): bool
@@ -48,8 +44,8 @@ abstract class MarkedForm implements FormContract
 
     public function getCodeAnchor(): ?CodeAnchorContract
     {
-        return $this->codeAnchor;
+        return $this->form->getCodeAnchor();
     }
 
-    abstract protected function getMarkSymbol(): Symbol\Mark;
+    abstract public function getMarkSymbol(): Symbol\Mark;
 }

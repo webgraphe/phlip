@@ -37,7 +37,7 @@ class QuasiquotedForm extends MarkedForm
         return $form;
     }
 
-    protected function getMarkSymbol(): Symbol\Mark
+    public function getMarkSymbol(): Symbol\Mark
     {
         return Symbol\Mark\GraveAccentSymbol::instance();
     }

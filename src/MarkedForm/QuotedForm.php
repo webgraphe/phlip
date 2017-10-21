@@ -18,7 +18,7 @@ class QuotedForm extends MarkedForm
         return $this->getForm();
     }
 
-    protected function getMarkSymbol(): Symbol\Mark
+    public function getMarkSymbol(): Symbol\Mark
     {
         return Symbol\Mark\StraightSingleMarkSymbol::instance();
     }
