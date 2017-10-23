@@ -107,14 +107,9 @@ class LetOperation extends PrimaryOperation
         while ($variables && $variable = ProperList::assertStaticType($variables->getHead())) {
             $variables = $variables->getTail();
             $name = $variable->getHead();
-            switch (true) {
-                case $name instanceof ProperList:
-                    $pairs[] = new ProperList($name, ...array_map($walker, $variable->getTail()->all()));
-                    break;
-
-                default:
-                    $pairs[] = new ProperList(...array_map($walker, $variable->all()));
-            }
+            $pairs[] = $name instanceof ProperList
+                ? new ProperList($name, ...array_map($walker, $variable->getTail()->all()))
+                : new ProperList(...array_map($walker, $variable->all()));
         }
 
         return new ProperList(...$pairs);

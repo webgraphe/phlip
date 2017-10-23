@@ -16,24 +16,24 @@ class SetOperation extends PrimaryOperation
     {
         $variable = $forms->getHead();
 
-        switch (true) {
-            case $variable instanceof ProperList:
-                $name = IdentifierAtom::assertStaticType($variable->getHead());
+        if ($variable instanceof ProperList) {
+            $name = IdentifierAtom::assertStaticType($variable->getHead());
 
-                return $context->set(
-                    $name->getValue(),
-                    LambdaOperation::invokeStatic(
-                        $context,
-                        $variable->getTail(),
-                        ...$forms->getTail()
-                    )
-                );
+            return $context->set(
+                $name->getValue(),
+                LambdaOperation::invokeStatic(
+                    $context,
+                    $variable->getTail(),
+                    ...$forms->getTail()
+                )
+            );
+        }
 
-            case $variable instanceof IdentifierAtom:
-                return $context->set(
-                    $variable->getValue(),
-                    $forms->getTail()->assertHead()->evaluate($context)
-                );
+        if ($variable instanceof IdentifierAtom) {
+            return $context->set(
+                $variable->getValue(),
+                $forms->getTail()->assertHead()->evaluate($context)
+            );
         }
 
         throw EvaluationException::fromForm($variable, "Malformed set");

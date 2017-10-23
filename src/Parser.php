@@ -57,31 +57,35 @@ class Parser
         $lexeme = $stream->current();
         $stream->next();
 
-        switch (true) {
-            case $lexeme instanceof StraightSingleMarkSymbol:
-                return new MarkedForm\QuotedForm($this->parseNextForm($stream));
-
-            case $lexeme instanceof GraveAccentSymbol:
-                return new MarkedForm\QuasiquotedForm($this->parseNextForm($stream));
-
-            case $lexeme instanceof TildeSymbol:
-                return new MarkedForm\UnquotedForm($this->parseNextForm($stream));
-
-            case $lexeme instanceof OpenListSymbol:
-                return $this->extractList($stream);
-
-            case $lexeme instanceof OpenVectorSymbol:
-                return $this->extractVector($stream);
-
-            case $lexeme instanceof OpenMapSymbol:
-                return $this->extractMap($stream);
-
-            case $lexeme instanceof FormContract:
-                return $lexeme;
-
-            default:
-                throw new ParserException("Unexpected lexeme '$lexeme'");
+        if ($lexeme instanceof StraightSingleMarkSymbol) {
+            return new MarkedForm\QuotedForm($this->parseNextForm($stream));
         }
+
+        if ($lexeme instanceof GraveAccentSymbol) {
+            return new MarkedForm\QuasiquotedForm($this->parseNextForm($stream));
+        }
+
+        if ($lexeme instanceof TildeSymbol) {
+            return new MarkedForm\UnquotedForm($this->parseNextForm($stream));
+        }
+
+        if ($lexeme instanceof OpenListSymbol) {
+            return $this->extractList($stream);
+        }
+
+        if ($lexeme instanceof OpenVectorSymbol) {
+            return $this->extractVector($stream);
+        }
+
+        if ($lexeme instanceof OpenMapSymbol) {
+            return $this->extractMap($stream);
+        }
+
+        if ($lexeme instanceof FormContract) {
+            return $lexeme;
+        }
+
+        throw new ParserException("Unexpected lexeme '$lexeme'");
     }
 
     protected function extractList(LexemeStream $stream): FormContract

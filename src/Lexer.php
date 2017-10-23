@@ -81,7 +81,7 @@ class Lexer
         try {
             while ($stream->valid()) {
                 $current = $stream->current();
-                switch(true) {
+                switch (true) {
                     case $this->isWhitespace($current):
                         break;
                     case $this->isCollectionDelimiter($current):

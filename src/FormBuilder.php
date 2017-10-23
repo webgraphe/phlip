@@ -24,42 +24,51 @@ class FormBuilder
      */
     public function asForm($thing): FormContract
     {
-        switch (true) {
-            case $thing instanceof FormContract:
-                return $thing;
-            case null === $thing:
-                return new ProperList;
-            case true === $thing:
-                return KeywordAtom::fromString('true');
-            case false === $thing:
-                return new ProperList;
-            case is_string($thing):
-                return StringAtom::fromString($thing);
-            case is_numeric($thing):
-                return NumberAtom::fromString($thing);
-            case is_array($thing):
-                return new Vector(
-                    ...array_map(
-                        function ($element) {
-                            return $this->asForm($element);
-                        },
-                        $thing
-                    )
-                );
-            case $thing instanceof \stdClass:
-                $properties = get_object_vars($thing);
-                return new Map(
-                    ...array_map(
-                        function ($key, $value) {
-                            return new ProperList($this->asForm($key), $this->asForm($value));
-                        },
-                        array_keys($properties),
-                        array_values($properties)
-                    )
-                );
-            default:
-                $type = is_object($thing) ? get_class($thing) : gettype($thing);
-                throw new AssertionException("Unhandled '$type'");
+        if ($thing instanceof FormContract) {
+            return $thing;
         }
+
+        if (null === $thing || false === $thing) {
+            return new ProperList;
+        }
+
+        if (true === $thing) {
+            return KeywordAtom::fromString('true');
+        }
+
+        if (is_string($thing)) {
+            return StringAtom::fromString($thing);
+        }
+
+        if (is_numeric($thing)) {
+            return NumberAtom::fromString($thing);
+        }
+
+        if (is_array($thing)) {
+            return new Vector(
+                ...array_map(
+                    function ($element) {
+                        return $this->asForm($element);
+                    },
+                    $thing
+                )
+            );
+        }
+
+        if ($thing instanceof \stdClass) {
+            $properties = get_object_vars($thing);
+            return new Map(
+                ...array_map(
+                    function ($key, $value) {
+                        return new ProperList($this->asForm($key), $this->asForm($value));
+                    },
+                    array_keys($properties),
+                    array_values($properties)
+                )
+            );
+        }
+
+        $type = is_object($thing) ? get_class($thing) : gettype($thing);
+        throw new AssertionException("Unhandled '$type'");
     }
 }

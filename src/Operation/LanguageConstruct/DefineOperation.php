@@ -4,6 +4,8 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
@@ -16,27 +18,37 @@ class DefineOperation extends PrimaryOperation
     {
         $variable = $forms->assertHead();
 
-        switch (true) {
-            case $variable instanceof ProperList:
-                $name = IdentifierAtom::assertStaticType($variable->assertHead());
+        if ($variable instanceof ProperList) {
+            $name = IdentifierAtom::assertStaticType($variable->assertHead());
 
-                return $context->define(
-                    $name->getValue(),
-                    LambdaOperation::invokeStatic(
-                        $context,
-                        $variable->getTail(),
-                        ...$forms->getTail()
-                    )
-                );
+            return $context->define(
+                $name->getValue(),
+                LambdaOperation::invokeStatic(
+                    $context,
+                    $variable->getTail(),
+                    ...$forms->getTail()
+                )
+            );
+        }
 
-            case $variable instanceof IdentifierAtom:
-                return $context->define(
-                    $variable->getValue(),
-                    $forms->getTail()->assertHead()->evaluate($context)
-                );
+        if ($variable instanceof IdentifierAtom) {
+            return $context->define(
+                $variable->getValue(),
+                $forms->getTail()->assertHead()->evaluate($context)
+            );
         }
 
         throw EvaluationException::fromForm($variable, "Malformed define");
+    }
+
+    public function walk(WalkerContract $walker, FormContract ...$forms): array
+    {
+        $variable = array_shift($forms);
+        if ($variable instanceof ProperList) {
+            return array_merge([$variable], array_map($walker, $forms));
+        }
+
+        return array_map($walker, array_merge([$variable], $forms));
     }
 
     /**
