@@ -80,33 +80,9 @@ class Lexer
         $lexemes = [];
         try {
             while ($stream->valid()) {
-                $current = $stream->current();
-                switch (true) {
-                    case $this->isWhitespace($current):
-                        break;
-                    case $this->isCollectionDelimiter($current):
-                        $lexemes[] = call_user_func([self::COLLECTION_DELIMITERS[$current], 'instance']);
-                        break;
-                    case StraightSingleMarkSymbol::CHARACTER === $current:
-                        $lexemes[] = StraightSingleMarkSymbol::instance();
-                        break;
-                    case GraveAccentSymbol::CHARACTER === $current:
-                        $lexemes[] = GraveAccentSymbol::instance();
-                        break;
-                    case TildeSymbol::CHARACTER === $current:
-                        $lexemes[] = TildeSymbol::instance();
-                        break;
-                    case Comment::DELIMITER === $current:
-                        $lexemes[] = $this->parseComment($stream);
-                        break;
-                    case StringAtom::DELIMITER === $current:
-                        $lexemes[] = $this->parseString($stream);
-                        break;
-                    default:
-                        $lexemes[] = $this->parseWord($stream);
-                        break;
+                if ($lexeme = $this->extractLexeme($stream)) {
+                    $lexemes[] = $lexeme;
                 }
-
                 $stream->next();
             }
         } catch (Exception $e) {
@@ -183,5 +159,39 @@ class Lexer
             default:
                 return IdentifierAtom::fromString($word, $anchor);
         }
+    }
+
+    private function extractLexeme(CharacterStream $stream): ?LexemeContract
+    {
+        $current = $stream->current();
+        if ($this->isWhitespace($current)) {
+            return null;
+        }
+
+        if ($this->isCollectionDelimiter($current)) {
+            return call_user_func([self::COLLECTION_DELIMITERS[$current], 'instance']);
+        }
+
+        if (StraightSingleMarkSymbol::CHARACTER === $current) {
+            return StraightSingleMarkSymbol::instance();
+        }
+
+        if (GraveAccentSymbol::CHARACTER === $current) {
+            return GraveAccentSymbol::instance();
+        }
+
+        if (TildeSymbol::CHARACTER === $current) {
+            return TildeSymbol::instance();
+        }
+
+        if (Comment::DELIMITER === $current) {
+            return $this->parseComment($stream);
+        }
+
+        if (StringAtom::DELIMITER === $current) {
+            return $this->parseString($stream);
+        }
+
+        return $this->parseWord($stream);
     }
 }
