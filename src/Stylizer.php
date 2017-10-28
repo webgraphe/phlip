@@ -17,6 +17,13 @@ class Stylizer
         $this->formatter = $formatter;
     }
 
+    public function stylizeSource(string $source, Lexer $lexer = null): string
+    {
+        $lexer = $lexer ?? new Lexer;
+
+        return $this->stylizeLexemeStream($lexer->parseSource($source));
+    }
+
     public function stylizeLexemeStream(LexemeStream $stream): string
     {
         $top = 0;
@@ -25,23 +32,17 @@ class Stylizer
             $lexeme = $stream->current();
             $formattedLexeme = $this->formatLexeme($lexeme);
             $afresh = (0 === $top && !$stack[$top]) || 1 === count($stack[$top]);
-            switch (true) {
-                case $lexeme instanceof Opening:
-                    $stack[] = [];
-                    ++$top;
-                    $stack[$top][] = $afresh ? $formattedLexeme : " $formattedLexeme";
-                    break;
-
-                case $lexeme instanceof Closing:
-                    $stack[$top][] = $formattedLexeme;
-                    $popped = array_pop($stack);
-                    --$top;
-                    $stack[$top][] = implode('', $popped);
-                    break;
-
-                default:
-                    $stack[$top][] = $afresh ? $formattedLexeme : " $formattedLexeme";
-                    break;
+            if ($lexeme instanceof Opening) {
+                $stack[] = [];
+                ++$top;
+                $stack[$top][] = $afresh ? $formattedLexeme : " $formattedLexeme";
+            } elseif ($lexeme instanceof Closing) {
+                $stack[$top][] = $formattedLexeme;
+                $popped = array_pop($stack);
+                --$top;
+                $stack[$top][] = implode('', $popped);
+            } else {
+                $stack[$top][] = $afresh ? $formattedLexeme : " $formattedLexeme";
             }
             $stream->next();
         }

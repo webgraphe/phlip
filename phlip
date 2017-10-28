@@ -1,21 +1,25 @@
 #!/usr/bin/env php
 <?php
 
-use Webgraphe\Phlip\Atom;
-use Webgraphe\Phlip\Contracts;
-use Webgraphe\Phlip\FormBuilder;
-use Webgraphe\Phlip\Lexer;
-use Webgraphe\Phlip\Phlipy;
-use Webgraphe\Phlip\Program;
-use Webgraphe\Phlip\Stylizer;
-use Webgraphe\Phlip\Symbol;
+use Webgraphe\Phlip;
 
 require_once 'vendor/autoload.php';
 
-echo 'Go crazy, you may just "phlip" ;p' . PHP_EOL;
-echo "Type \033[1;37m(\033[0m\033[1;33mexit\033[0m\e[1;37m)\e[0m to quit." . PHP_EOL . PHP_EOL;
+$options = [
+    'verbose' => false
+];
+foreach ($argv as $arg) {
+    if (preg_match("/^--([^=]+)=?(.+)?/", $arg, $matches)) {
+        if (!isset($options[$matches[1]])) {
+            echo "Unhandled option '--$matches[1]'" . PHP_EOL;
+            exit(1);
+        }
 
-$context = Phlipy::context();
+        $options[$matches[1]] = $matches[2] ?? true;
+    }
+}
+
+$context = Phlip\Phlipy::context();
 
 $context->define(
     'read',
@@ -38,53 +42,61 @@ $context->define(
     'evaluate',
     function ($source) use ($context) {
         try {
-            return Program::parse($source)->execute($context);
+            return Phlip\Program::parse($source)->execute($context);
         } catch (\Throwable $t) {
             return $t;
         }
     }
 );
 
-$formBuilder = new FormBuilder;
-$stylizer = new Stylizer(
-    function (Contracts\LexemeContract $lexeme):string {
-        switch (true) {
-            case $lexeme instanceof Symbol:
-                return "\033[1;37m{$lexeme}\033[0m";
-            case $lexeme instanceof Atom\NumberAtom:
-                return "\033[1;36m{$lexeme}\033[0m";
-            case $lexeme instanceof Atom\StringAtom:
-                return "\033[1;34m{$lexeme}\033[0m";
-            case $lexeme instanceof Atom\IdentifierAtom:
-                return "\033[1;33m{$lexeme}\033[0m";
-            case $lexeme instanceof Atom\KeywordAtom:
-                return "\033[1;32m{$lexeme}\033[0m";
-            default:
-                return (string)$lexeme;
+$formBuilder = new Phlip\FormBuilder;
+$stylizer = new Phlip\Stylizer(
+    function (Phlip\Contracts\LexemeContract $lexeme): string {
+        if ($lexeme instanceof Phlip\Symbol) {
+            return "\033[1;37m{$lexeme}\033[0m";
         }
+
+        if ($lexeme instanceof Phlip\Atom\NumberAtom) {
+            return "\033[1;36m{$lexeme}\033[0m";
+        }
+
+        if ($lexeme instanceof Phlip\Atom\StringAtom) {
+            return "\033[1;34m{$lexeme}\033[0m";
+        }
+
+        if ($lexeme instanceof Phlip\Atom\IdentifierAtom) {
+            return "\033[1;33m{$lexeme}\033[0m";
+        }
+
+        if ($lexeme instanceof Phlip\Atom\KeywordAtom) {
+            return "\033[1;32m{$lexeme}\033[0m";
+        }
+
+        return (string)$lexeme;
     }
 );
+$lexer = new Phlip\Lexer;
 
 $context->define(
     'print',
-    function ($result) use ($formBuilder, $stylizer) {
+    function ($result) use ($formBuilder, $stylizer, $lexer, $options) {
         $color = '1;30';
         $type = gettype($result);
         $extra = null;
-        switch (true) {
-            case $result instanceof \Throwable:
-                $type = get_class($result);
-                $output = $result->getMessage();
+        if ($result instanceof \Throwable) {
+            $type = get_class($result);
+            $output = $result->getMessage();
+            if ($options['verbose']) {
                 $extra = $result->getTraceAsString();
-                $color = '0;31';
-                break;
-            /** @noinspection PhpMissingBreakStatementInspection */
-            case is_object($result):
+            }
+            $color = '0;31';
+        } else {
+            if (is_object($result)) {
                 $type = get_class($result);
-                // Intentional fall-through
-            default:
-                $form = $formBuilder->asForm($result);
-                $output = $stylizer->stylizeLexemeStream((new Lexer)->parseSource((string)$form));
+            }
+
+            $form = $formBuilder->asForm($result);
+            $output = $stylizer->stylizeLexemeStream($lexer->parseSource((string)$form));
         }
 
         if ($type) {
@@ -113,4 +125,7 @@ $context->define(
 
 $context->define('loop', $context->get('while'));
 
-Program::parse('(loop (print (evaluate (read))))')->execute($context);
+echo 'Go crazy, you may just "phlip" ;p' . PHP_EOL;
+echo "Type " . $stylizer->stylizeSource('(exit)', $lexer) . " to quit." . PHP_EOL . PHP_EOL;
+
+Phlip\Program::parse('(loop (print (evaluate (read))))')->execute($context);

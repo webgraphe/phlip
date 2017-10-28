@@ -138,27 +138,21 @@ class Lexer
     protected function parseWord(CharacterStream $stream): LexemeContract
     {
         $anchor = new CodeAnchor($stream);
-        $word = '';
-        while ($stream->valid()) {
-            $character = $stream->current();
-            if ($this->isWhiteSpace($character) || $this->isCollectionDelimiter($character)) {
-                $stream->previous();
-                break;
-            }
-            $stream->next();
-            $word .= $character;
+        $word = $this->extractWord($stream);
+
+        if (DotSymbol::CHARACTER === $word) {
+            return DotSymbol::instance();
         }
 
-        switch (true) {
-            case DotSymbol::CHARACTER === $word:
-                return DotSymbol::instance();
-            case $word && KeywordSymbol::CHARACTER === $word[0]:
-                return KeywordAtom::fromString($word, $anchor);
-            case NumberAtom::isNumber($word):
-                return NumberAtom::fromString($word, $anchor);
-            default:
-                return IdentifierAtom::fromString($word, $anchor);
+        if ($word && KeywordSymbol::CHARACTER === $word[0]) {
+            return KeywordAtom::fromString($word, $anchor);
         }
+
+        if (NumberAtom::isNumber($word)) {
+            return NumberAtom::fromString($word, $anchor);
+        }
+
+        return IdentifierAtom::fromString($word, $anchor);
     }
 
     private function extractLexeme(CharacterStream $stream): ?LexemeContract
@@ -193,5 +187,21 @@ class Lexer
         }
 
         return $this->parseWord($stream);
+    }
+
+    private function extractWord(CharacterStream $stream): string
+    {
+        $word = '';
+        while ($stream->valid()) {
+            $character = $stream->current();
+            if ($this->isWhiteSpace($character) || $this->isCollectionDelimiter($character)) {
+                $stream->previous();
+                break;
+            }
+            $stream->next();
+            $word .= $character;
+        }
+
+        return $word;
     }
 }

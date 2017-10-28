@@ -17,7 +17,6 @@ class LetOperation extends PrimaryOperation
     protected function invoke(ContextContract $context, ProperList $forms)
     {
         $localContext = $context->stack();
-
         $head = $forms->assertHead();
         $tail = $forms->getTail();
 
@@ -43,27 +42,19 @@ class LetOperation extends PrimaryOperation
         $arguments = [];
         while ($variables && $variable = ProperList::assertStaticType($variables->getHead())) {
             $variables = $variables->getTail();
-            $name = $variable->getHead();
-            switch (true) {
-                case $name instanceof ProperList:
-                    $lambdaName = IdentifierAtom::assertStaticType($name->getHead());
-                    $namedLambda = LambdaOperation::invokeStatic(
-                        $context,
-                        $name->getTail(),
-                        ...$variable->getTail()->all()
-                    );
-                    $context->let($lambdaName->getValue(), $namedLambda);
-                    $parameters[] = $lambdaName;
-                    $arguments[] = $namedLambda;
-                    break;
-
-                case $name instanceof IdentifierAtom:
-                    $parameters[] = $name;
-                    $arguments[] = $variable->getTail()->assertHead()->evaluate($context);
-                    break;
-
-                default:
-                    throw EvaluationException::fromForm($name, 'Malformed let');
+            $name = $variable->assertHead();
+            if ($name instanceof ProperList) {
+                $parameters[] = IdentifierAtom::assertStaticType($name->getHead());
+                $arguments[] = LambdaOperation::invokeStatic(
+                    $context,
+                    $name->getTail(),
+                    ...$variable->getTail()->all()
+                );
+            } elseif ($name instanceof IdentifierAtom) {
+                $parameters[] = $name;
+                $arguments[] = $variable->getTail()->assertHead()->evaluate($context);
+            } else {
+                throw EvaluationException::fromForm($name, 'Malformed let');
             }
         }
 
