@@ -14,7 +14,7 @@ class UnquotedForm extends MarkedForm
      */
     public function evaluate(ContextContract $context)
     {
-        return $this->getForm()->evaluate($context);
+        return $context->execute($this->getForm());
     }
 
     public function getMarkSymbol(): Symbol\Mark

@@ -6,7 +6,7 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
-use Webgraphe\Phlip\Exception\EvaluationException;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
@@ -34,11 +34,11 @@ class DefineOperation extends PrimaryOperation
         if ($variable instanceof IdentifierAtom) {
             return $context->define(
                 $variable->getValue(),
-                $forms->getTail()->assertHead()->evaluate($context)
+                $context->execute($forms->getTail()->assertHead())
             );
         }
 
-        throw EvaluationException::fromForm($variable, "Malformed define");
+        throw new AssertionException('Malformed define');
     }
 
     public function walk(WalkerContract $walker, FormContract ...$forms): array

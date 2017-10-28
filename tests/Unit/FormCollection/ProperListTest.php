@@ -13,7 +13,6 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\FormCollection\Map;
 use Webgraphe\Phlip\FormCollection\ProperList;
@@ -61,7 +60,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         $context = new Context;
         $context->define(
             IdentifierAtom::assertStaticType($list->assertHead())->getValue(),
-            function() {
+            function () {
                 return func_get_args();
             }
         );
@@ -116,10 +115,17 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
     public function testFailedEvaluation()
     {
         $context = new Context;
-        $context->define('fail', function() { throw new \Exception("Fail"); });
+        $context->define(
+            'fail',
+            function () {
+                throw new \Exception('Fail', 666);
+            }
+        );
         $list = new ProperList(IdentifierAtom::fromString('fail'));
 
-        $this->expectException(EvaluationException::class);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Fail');
+        $this->expectExceptionCode(666);
         $list->evaluate($context);
     }
 

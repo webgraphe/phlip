@@ -29,7 +29,7 @@ class Map extends FormCollection
     {
         $map = (object)[];
         foreach ($this->pairs as $key => $value) {
-            $map->{$key} = $value->getTail()->getHead()->evaluate($context);
+            $map->{$key} = $context->execute($value->getTail()->assertHead());
         }
 
         return $map;

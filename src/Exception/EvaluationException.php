@@ -2,22 +2,31 @@
 
 namespace Webgraphe\Phlip\Exception;
 
-use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception;
 
 class EvaluationException extends Exception
 {
-    public static function fromForm(
-        FormContract $form,
+    /** @var ContextContract */
+    private $context;
+
+    public static function fromContext(
+        ContextContract $context,
         string $message,
         int $code = 0,
         \Throwable $previous = null
     ) {
-        if ($previous) {
-            $message .= " (from failed assertion; {$previous->getMessage()})";
-        }
-        $message = trim("$message; " . (string)$form);
+        $self = new static($message, $code, $previous);
+        $self->context = $context;
 
-        return new static($message, $code, $previous);
+        return $self;
+    }
+
+    /**
+     * @return ContextContract
+     */
+    public function getContext(): ContextContract
+    {
+        return $this->context;
     }
 }

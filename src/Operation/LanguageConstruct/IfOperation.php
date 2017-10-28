@@ -19,14 +19,14 @@ class IfOperation extends PrimaryOperation
     {
         $tail = $forms->getTail();
 
-        if ($forms->assertHead()->evaluate($context)) {
+        if ($context->execute($forms->assertHead())) {
             $then = $tail->assertHead();
 
-            return $then->evaluate($context);
+            return $context->execute($then);
         }
 
         if ($else = $tail->getTail()->getHead()) {
-            return $else->evaluate($context);
+            return $context->execute($else);
         }
 
         return null;

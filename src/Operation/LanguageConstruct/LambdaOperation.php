@@ -42,7 +42,7 @@ class LambdaOperation extends PrimaryOperation
 
             $result = null;
             while ($statement = $statements->getHead()) {
-                $result = $statement->evaluate($localContext);
+                $result = $localContext->execute($statement);
                 $statements = $statements->getTail();
             }
 

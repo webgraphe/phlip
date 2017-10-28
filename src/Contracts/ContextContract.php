@@ -55,4 +55,17 @@ interface ContextContract
      * @return ContextContract
      */
     public function stack(): ContextContract;
+
+    /**
+     * @param FormContract $form
+     * @return mixed
+     */
+    public function execute(FormContract $form);
+
+    /**
+     * @return FormContract[]
+     */
+    public function getFormStack(): array;
+
+    public function getParent(): ?ContextContract;
 }

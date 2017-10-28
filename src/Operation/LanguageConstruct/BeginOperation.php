@@ -28,7 +28,7 @@ class BeginOperation extends PrimaryOperation
         $result = null;
         while ($form = $forms->getHead()) {
             $forms = $forms->getTail();
-            $result = $form->evaluate($context);
+            $result = $context->execute($form);
         }
 
         return $result;

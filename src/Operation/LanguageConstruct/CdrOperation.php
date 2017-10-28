@@ -26,6 +26,6 @@ class CdrOperation extends PrimaryOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
-        return ProperList::assertStaticType($forms->assertHead()->evaluate($context))->getTail();
+        return ProperList::assertStaticType($context->execute($forms->assertHead()))->getTail();
     }
 }

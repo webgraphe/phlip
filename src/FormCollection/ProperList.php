@@ -81,16 +81,12 @@ class ProperList extends FormCollection
             ? array_merge([$context], $this->getTail()->all())
             : array_map(
                 function (FormContract $form) use ($context) {
-                    return $form->evaluate($context);
+                    return $context->execute($form);
                 },
                 $this->getTail()->forms
             );
 
-        try {
-            return call_user_func($callable, ...$arguments);
-        } catch (\Throwable $assertion) {
-            throw EvaluationException::fromForm($this, 'Evaluation failed', 0, $assertion);
-        }
+        return call_user_func($callable, ...$arguments);
     }
 
     /**
@@ -101,7 +97,7 @@ class ProperList extends FormCollection
      */
     protected static function assertCallable(ContextContract $context, FormContract $form): callable
     {
-        if (!is_callable($thing = $form->evaluate($context))) {
+        if (!is_callable($thing = $context->execute($form))) {
             $type = is_object($thing) ? get_class($thing) : gettype($thing);
             throw new AssertionException("Not a callable; got '$type' from $form");
         }

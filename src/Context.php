@@ -3,13 +3,17 @@
 namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\ContextException;
 
 class Context implements ContextContract
 {
+    /** @var array */
     private $data = [];
     /** @var Context */
     private $parent;
+    /** @var FormContract[] */
+    private $formStack = [];
 
     /**
      * @param string $key $offset
@@ -104,5 +108,34 @@ class Context implements ContextContract
         $self->parent = $this;
 
         return $self;
+    }
+
+    /**
+     * @param FormContract $form
+     * @return mixed
+     */
+    public function execute(FormContract $form)
+    {
+        $this->formStack[] = $form;
+        $result = $form->evaluate($this);
+        array_pop($this->formStack);
+
+        return $result;
+    }
+
+    /**
+     * @return FormContract[]
+     */
+    public function getFormStack(): array
+    {
+        return $this->formStack;
+    }
+
+    /**
+     * @return ContextContract
+     */
+    public function getParent(): ?ContextContract
+    {
+        return $this->parent;
     }
 }

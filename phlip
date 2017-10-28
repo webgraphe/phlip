@@ -79,15 +79,30 @@ $lexer = new Phlip\Lexer;
 
 $context->define(
     'print',
-    function ($result) use ($formBuilder, $stylizer, $lexer, $options) {
+    $print = function ($result) use ($formBuilder, $stylizer, $lexer, $options, &$print) {
         $color = '1;30';
         $type = gettype($result);
-        $extra = null;
+        $extras = [];
         if ($result instanceof \Throwable) {
+            if ($previous = $result->getPrevious()) {
+                call_user_func($print, $previous);
+            }
             $type = get_class($result);
             $output = $result->getMessage();
+            if ($result instanceof Phlip\Exception\EvaluationException) {
+                $stack = [];
+                $context = $result->getContext();
+                while ($context) {
+                    $forms = $result->getContext()->getFormStack();
+                    while ($forms) {
+                        $stack[] = $stylizer->stylizeSource((string)array_pop($forms));
+                    }
+                    $context = $context->getParent();
+                }
+                $extras[] = 'Phlip Call Stack:' . PHP_EOL . implode(PHP_EOL, $stack);
+            }
             if ($options['verbose']) {
-                $extra = $result->getTraceAsString();
+                $extras[] = "PHP Stack Trace:" . PHP_EOL . $result->getTraceAsString();
             }
             $color = '0;31';
         } else {
@@ -95,18 +110,24 @@ $context->define(
                 $type = get_class($result);
             }
 
-            $form = $formBuilder->asForm($result);
-            $output = $stylizer->stylizeLexemeStream($lexer->parseSource((string)$form));
+            try {
+                $form = $formBuilder->asForm($result);
+                $output = $stylizer->stylizeLexemeStream($lexer->parseSource((string)$form));
+            } catch (\Throwable $t) {
+                $output = '';
+            }
         }
 
         if ($type) {
             echo "\033[{$color}m{$type}\033[0m" . PHP_EOL;
         }
+
         if (strlen($output = trim($output))) {
             echo $output . PHP_EOL;
         }
-        if (strlen($extra = trim($extra))) {
-            echo trim($extra) . PHP_EOL;
+
+        if ($extras) {
+            echo PHP_EOL . implode(PHP_EOL . PHP_EOL, $extras) . PHP_EOL;
         }
 
         echo PHP_EOL;

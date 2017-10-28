@@ -50,7 +50,7 @@ class Pair extends FormCollection
      */
     public function evaluate(ContextContract $context): array
     {
-        return [ $this->first->evaluate($context), $this->second->evaluate($context) ];
+        return [ $context->execute($this->first), $context->execute($this->second) ];
     }
 
     /**

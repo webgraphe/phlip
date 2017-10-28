@@ -26,7 +26,7 @@ class Vector extends FormCollection
     {
         return array_map(
             function (FormContract $form) use ($context) {
-                return $form->evaluate($context);
+                return $context->execute($form);
             },
             $this->elements
         );

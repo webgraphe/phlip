@@ -5,6 +5,7 @@ namespace Webgraphe\Phlip;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
+use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 
@@ -42,14 +43,19 @@ class Program
      * @param ContextContract $context
      * @param WalkerContract|null $walker
      * @return mixed
+     * @throws EvaluationException
      */
     public function execute(ContextContract $context, WalkerContract $walker = null)
     {
         $walker = $walker ?? new Walker($context);
 
         $result = null;
-        foreach ($this->statements as $statement) {
-            $result = $walker($statement)->evaluate($context);
+        try {
+            foreach ($this->statements as $statement) {
+                $result = $context->execute($walker($statement));
+            }
+        } catch (\Throwable $t) {
+            throw EvaluationException::fromContext(clone $context, 'Program execution failed', 0, $t);
         }
 
         return $result;

@@ -26,6 +26,6 @@ class CarOperation extends PrimaryOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
-        return ProperList::assertStaticType($forms->assertHead()->evaluate($context))->getHead();
+        return ProperList::assertStaticType($context->execute($forms->assertHead()))->getHead();
     }
 }

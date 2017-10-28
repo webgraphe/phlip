@@ -26,11 +26,11 @@ class WhileOperation extends PrimaryOperation
     protected function invoke(ContextContract $context, ProperList $forms)
     {
         $condition = $forms->assertHead();
-        while ($condition->evaluate($context)) {
+        while ($context->execute($condition)) {
             $statements = $forms->getTail();
             while ($statement = $statements->getHead()) {
                 $statements = $statements->getTail();
-                $statement->evaluate($context);
+                $context->execute($statement);
             }
         }
 

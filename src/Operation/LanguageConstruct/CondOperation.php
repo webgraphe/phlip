@@ -20,8 +20,8 @@ class CondOperation extends PrimaryOperation
         while ($condition = $forms->getHead()) {
             $forms = $forms->getTail();
             $condition = ProperList::assertStaticType($condition);
-            if ($condition->assertHead()->evaluate($context)) {
-                return $condition->getTail()->assertHead()->evaluate($context);
+            if ($context->execute($condition->assertHead())) {
+                return $context->execute($condition->getTail()->assertHead());
             }
         }
 

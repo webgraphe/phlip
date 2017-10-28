@@ -14,7 +14,7 @@ class OrOperation extends PrimaryOperation
     {
         $result = null;
         while ($form = $forms->getHead()) {
-            if ($result = $form->evaluate($context)) {
+            if ($result = $context->execute($form)) {
                 return $result;
             }
             $forms = $forms->getTail();

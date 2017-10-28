@@ -6,7 +6,7 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
-use Webgraphe\Phlip\Exception\EvaluationException;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
@@ -52,9 +52,9 @@ class LetOperation extends PrimaryOperation
                 );
             } elseif ($name instanceof IdentifierAtom) {
                 $parameters[] = $name;
-                $arguments[] = $variable->getTail()->assertHead()->evaluate($context);
+                $arguments[] = $context->execute($variable->getTail()->assertHead());
             } else {
-                throw EvaluationException::fromForm($name, 'Malformed let');
+                throw new AssertionException('Malformed let');
             }
         }
 

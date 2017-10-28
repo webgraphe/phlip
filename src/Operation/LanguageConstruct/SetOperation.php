@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Exception\EvaluationException;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
@@ -32,11 +32,11 @@ class SetOperation extends PrimaryOperation
         if ($variable instanceof IdentifierAtom) {
             return $context->set(
                 $variable->getValue(),
-                $forms->getTail()->assertHead()->evaluate($context)
+                $context->execute($forms->getTail()->assertHead())
             );
         }
 
-        throw EvaluationException::fromForm($variable, "Malformed set");
+        throw new AssertionException('Malformed set');
     }
 
     /**
