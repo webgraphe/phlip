@@ -6,7 +6,7 @@
     (define (ticker) (set x (plus-1 x)) x)
 )
 
-(assert-true(! (defined? x)))
+(assert-true(not (defined? x)))
 (assert-true(= (ticker) 1))
 (define x 0)
 (assert-true(defined? x))

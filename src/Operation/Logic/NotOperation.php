@@ -7,7 +7,6 @@ use Webgraphe\Phlip\Operation;
 
 class NotOperation extends Operation implements StandardOperationContract
 {
-    const IDENTIFIER = '!';
     const IDENTIFIER_ALTERNATIVE = 'not';
 
     public function __invoke(...$arguments)
@@ -20,6 +19,6 @@ class NotOperation extends Operation implements StandardOperationContract
      */
     public function getIdentifiers(): array
     {
-        return [self::IDENTIFIER, self::IDENTIFIER_ALTERNATIVE];
+        return [self::IDENTIFIER_ALTERNATIVE];
     }
 }

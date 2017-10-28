@@ -9,7 +9,6 @@ use Webgraphe\Phlip\Operation\PrimaryOperation;
 class AndOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'and';
-    const IDENTIFIER_ALTERNATIVE = '&&';
 
     protected function invoke(ContextContract $context, ProperList $forms)
     {
@@ -30,6 +29,6 @@ class AndOperation extends PrimaryOperation
      */
     public function getIdentifiers(): array
     {
-        return [self::IDENTIFIER, self::IDENTIFIER_ALTERNATIVE];
+        return [self::IDENTIFIER];
     }
 }
