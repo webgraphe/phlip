@@ -39,9 +39,8 @@ Then parse said script file:
 use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
 
-$defineFibonacci = Program::parseFile('path/to/fibonacci.phlip');
 $context = Phlipy::context();
-$defineFibonacci->execute($context);
+Program::parseFile('path/to/fibonacci.phlip')->execute($context);
 ```
 
 And even execute assertions in unit tests:
