@@ -11,25 +11,39 @@ use Webgraphe\Phlip\Tests\Unit\AtomTest;
 
 class KeywordAtomTest extends AtomTest
 {
+    /**
+     * @throws AssertionException
+     */
     public function testEmptyKeyword()
     {
         $this->expectException(AssertionException::class);
         KeywordAtom::fromString('');
     }
 
+    /**
+     * @throws AssertionException
+     */
     public function testEvaluation()
     {
         $keyword = KeywordAtom::fromString('keyword');
         $this->assertEquals($keyword, $keyword->evaluate(new Context));
     }
 
+    /**
+     * @throws AssertionException
+     */
     public function testStringConvertible()
     {
-        $this->assertEquals(':keyword', (string)KeywordAtom::fromString('keyword'));
+        $this->assertEquals('#keyword', (string)KeywordAtom::fromString('keyword'));
     }
 
+    /**
+     * @param CodeAnchor|null $anchor
+     * @return Atom
+     * @throws AssertionException
+     */
     protected function createAtom(CodeAnchor $anchor = null): Atom
     {
-        return KeywordAtom::fromString(':keyword', $anchor);
+        return KeywordAtom::fromString('#keyword', $anchor);
     }
 }

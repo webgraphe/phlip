@@ -3,7 +3,7 @@
 (assert-true (form? '"Hello world"))
 (assert-true (form? '(hello world)))
 (assert-true (form? '[1 2 3]))
-(assert-true (form? :keyword))
+(assert-true (form? #keyword))
 
 (assert-false (form? 1))
 (assert-false (form? define))

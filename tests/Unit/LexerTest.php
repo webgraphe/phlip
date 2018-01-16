@@ -18,7 +18,7 @@ class LexerTest extends TestCase
         $lexer = new Lexer;
         $source = <<<SOURCE
 ; A comment
-(identifier1 "string" (identifier2 'x `(+ ~x ~y) 42 3.14 :keyword (key . value) [1 2 3] . {(key value)}))
+(identifier1 "string" (identifier2 'x `(+ ~x ~y) 42 3.14 #keyword (key . value) [1 2 3] . {(key value)}))
 SOURCE;
         $lexemeStream = $lexer->parseSource($source);
         $this->assertNotNull($lexemeStream);

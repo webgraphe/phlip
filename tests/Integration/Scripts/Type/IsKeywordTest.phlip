@@ -1,2 +1,2 @@
-(assert-true (keyword? :keyword))
+(assert-true (keyword? #keyword))
 (assert-false (keyword? 'keyword))

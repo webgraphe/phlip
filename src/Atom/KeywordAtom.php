@@ -10,6 +10,12 @@ use Webgraphe\Phlip\Symbol\KeywordSymbol;
 
 class KeywordAtom extends Atom
 {
+    /**
+     * @param string $value
+     * @param CodeAnchorContract|null $codeAnchor
+     * @return KeywordAtom
+     * @throws AssertionException
+     */
     public static function fromString(string $value, CodeAnchorContract $codeAnchor = null): KeywordAtom
     {
         if (strlen($value) && KeywordSymbol::CHARACTER === $value[0]) {
@@ -33,6 +39,6 @@ class KeywordAtom extends Atom
 
     public function __toString(): string
     {
-        return ':' . $this->getValue();
+        return KeywordSymbol::CHARACTER . $this->getValue();
     }
 }

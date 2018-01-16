@@ -132,7 +132,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
     public function testMap()
     {
         $this->assertEquals(
-            '((test) (42) (3.14) (:keyword))',
+            '((test) (42) (3.14) (#keyword))',
             (string)(new ProperList(
                 IdentifierAtom::fromString('test'),
                 NumberAtom::fromString('42'),

@@ -1,2 +1,2 @@
-(define true :true)
-(assert-equals true :true)
+(define true #true)
+(assert-equals true #true)

@@ -6,7 +6,7 @@ use Webgraphe\Phlip\Symbol;
 
 class KeywordSymbol extends Symbol
 {
-    const CHARACTER = ":";
+    const CHARACTER = '#';
 
     public function getValue(): string
     {
