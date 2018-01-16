@@ -2,23 +2,31 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\EvaluationException;
+use Webgraphe\Phlip\Exception\LexerException;
+use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Exception\ProgramException;
-use Webgraphe\Phlip\FormCollection\ProperList;
 
 class Program
 {
-    /** @var FormContract[] */
+    /** @var Contracts\FormContract[] */
     private $statements;
 
-    public function __construct(ProperList $statements)
+    public function __construct(FormCollection\ProperList $statements)
     {
         $this->statements = $statements->all();
     }
 
+    /**
+     * @param string $code
+     * @param string|null $name
+     * @param Lexer|null $lexer
+     * @param Parser|null $parser
+     * @return Program
+     * @throws Exception
+     * @throws LexerException
+     * @throws ParserException
+     */
     public static function parse(string $code, string $name = null, Lexer $lexer = null, Parser $parser = null): Program
     {
         $lexer = $lexer ?? new Lexer;
@@ -27,6 +35,16 @@ class Program
         return new self($parser->parseLexemeStream($lexer->parseSource($code, $name)));
     }
 
+    /**
+     * @param string $path
+     * @param Lexer|null $lexer
+     * @param Parser|null $parser
+     * @return Program
+     * @throws Exception
+     * @throws LexerException
+     * @throws ParserException
+     * @throws ProgramException
+     */
     public static function parseFile(string $path, Lexer $lexer = null, Parser $parser = null): Program
     {
         if (!file_exists($path)) {
@@ -40,14 +58,25 @@ class Program
     }
 
     /**
-     * @param ContextContract $context
-     * @param WalkerContract|null $walker
+     * @param Contracts\ContextContract $context
+     * @param Contracts\WalkerContract|null $walker
+     * @param array $arguments
      * @return mixed
      * @throws EvaluationException
      */
-    public function execute(ContextContract $context, WalkerContract $walker = null)
-    {
+    public function execute(
+        Contracts\ContextContract $context,
+        Contracts\WalkerContract $walker = null,
+        array $arguments = []
+    ) {
         $walker = $walker ?? new Walker($context);
+
+        if ($arguments) {
+            $context = $context->stack();
+            foreach ($arguments as $key => $value) {
+                $context->let('$' . $key, $value);
+            }
+        }
 
         $result = null;
         try {
