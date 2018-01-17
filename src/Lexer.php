@@ -103,7 +103,7 @@ class Lexer
 
     protected function isWhiteSpace($character): bool
     {
-        return ctype_space($character);
+        return ctype_space($character) || ':' === $character || ',' === $character;
     }
 
     protected function replaceEscapedCharacter($character): string

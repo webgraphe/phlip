@@ -47,15 +47,25 @@ abstract class FormCollection implements FormCollectionContract
         return $iterator->valid() ? $iterator->current()->getCodeAnchor() : null;
     }
 
+    protected function stringifyFormItem(FormContract $form): string
+    {
+        return (string)$form;
+    }
+
+    protected function getFormItemDelimiter(): string
+    {
+        return ' ';
+    }
+
     public function __toString(): string
     {
         $formsAsString = [];
-        foreach ($this as $key => $form) {
-            $formsAsString[] = (string)$form;
+        foreach ($this as $form) {
+            $formsAsString[] = $this->stringifyFormItem($form);
         }
 
         return $this->getOpeningSymbol()->getValue()
-            . implode(' ', $formsAsString)
+            . implode($this->getFormItemDelimiter(), $formsAsString)
             . $this->getClosingSymbol()->getValue();
     }
 }

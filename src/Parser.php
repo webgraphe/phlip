@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\FormCollection\Map;
 use Webgraphe\Phlip\FormCollection\Pair;
@@ -127,12 +128,26 @@ class Parser
         return new Vector(...$elements);
     }
 
+    /**
+     * @param LexemeStream $stream
+     * @return Map
+     * @throws AssertionException
+     */
     protected function extractMap(LexemeStream $stream): Map
     {
-        $pairs = $this->extractNextFormsUntilClosingSymbol(
+        $keyValues = $this->extractNextFormsUntilClosingSymbol(
             $stream,
             OpenMapSymbol::instance()->getRelatedClosingSymbol()
         );
+
+        if (($count = count($keyValues)) % 2) {
+            throw new AssertionException("Malformed map; non-even number of key-value items");
+        }
+
+        $pairs = [];
+        for ($i = 0; $i < $count; $i += 2) {
+            $pairs[] = new ProperList($keyValues[$i], $keyValues[$i + 1]);
+        }
 
         return new Map(...$pairs);
     }

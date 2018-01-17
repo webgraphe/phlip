@@ -19,7 +19,7 @@ class ParserTest extends TestCase
 
     public function testStringConvertibleList()
     {
-        $source = '(identifier1 "string" `(identifier2 \'x ~y 42 3.14 [a b] {(#key "value")}))';
+        $source = '(identifier1 "string" `(identifier2 \'x ~y 42 3.14 [a b] {#key "value"}))';
         $this->assertEquals("($source)", (string)(new Parser)->parseLexemeStream((new Lexer)->parseSource($source)));
     }
 

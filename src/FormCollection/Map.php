@@ -2,8 +2,9 @@
 
 namespace Webgraphe\Phlip\FormCollection;
 
-use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;
@@ -13,11 +14,19 @@ class Map extends FormCollection
     /** @var ProperList[] */
     private $pairs = [];
 
+    /**
+     * Map constructor.
+     * @param ProperList[] ...$pairs
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     final public function __construct(ProperList ...$pairs)
     {
         foreach ($pairs as $pair) {
-            $pair->getTail()->assertHead();
-            $this->pairs[Atom::assertStaticType($pair->assertHead())->getValue()] = $pair;
+            if (2 !== ($count = $pair->count())) {
+                throw new AssertionException("Expected a proper list of 2 forms; got $count");
+            }
+
+            $this->pairs[] = $pair;
         }
     }
 
@@ -28,8 +37,8 @@ class Map extends FormCollection
     public function evaluate(ContextContract $context): \stdClass
     {
         $map = (object)[];
-        foreach ($this->pairs as $key => $value) {
-            $map->{$key} = $context->execute($value->getTail()->assertHead());
+        foreach ($this->pairs as $pair) {
+            $map->{$context->execute($pair->getHead())} = $context->execute($pair->getTail()->getHead());
         }
 
         return $map;
@@ -65,5 +74,12 @@ class Map extends FormCollection
     public function map(callable $callback): FormCollection
     {
         return new static(...array_map($callback, $this->all()));
+    }
+
+    protected function stringifyFormItem(FormContract $form): string
+    {
+        $list = ProperList::assertStaticType($form);
+
+        return (string)$list->getHead() . ' ' . (string)$list->getTail()->getHead();
     }
 }
