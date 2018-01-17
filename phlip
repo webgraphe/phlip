@@ -26,7 +26,7 @@ $context->define(
     function () {
         $lines = [];
         while (true) {
-            $line = rtrim(readline($lines ? '' : '> '));
+            $line = rtrim(readline($lines ? '' : 'phlip > '));
             $break = !$line || '\\' !== $line[strlen($line) - 1];
             $lines[] = rtrim($line, '\\');
             if ($break) {

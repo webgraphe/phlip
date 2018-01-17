@@ -1,5 +1,20 @@
 # phlip
-A dialect for PHP in the form of s-expressions like LISP.
+A context-based dialect parsed and executed by PHP in the form of s-expressions like LISP.
+
+> "_It's literally JSON with closures_"
+
+See for yourself:
+```lisp
+(define executable
+    {
+        "main": '(print "piece of cake")
+    })
+(eval (-> executable "main"))
+```
+
+Phlip considers `:` and `,` as white-spaces, and declares objects and arrays the same as JSON using `{}` and `[]`. Declare `null`, `true` and `false` in your context and Phlip supports the JSON syntax out-of-the-box!
+
+That's code-as-data and data-as-code at its best.
 
 ## Usage
 
@@ -48,11 +63,14 @@ And even execute assertions in unit tests:
 Program::parse('(assert-equals 7540113804746346429 (fibonacci 92))')->execute($context);
 ```
 
+Give it a try with the `phlip` REPL!
+
 ## Features
 
 * Easy to use
 * Easy to learn
-* Homoiconic!
+* Homoiconic! (the code has the same structure as the data)
+* Transform existing JSON streams with closures and symbols
 * Open to extensions to build your own s-expr language
 * Replaceable components designed with role interfaces
 * Ships with a literal REPL `(loop (print (eval (read))))`
