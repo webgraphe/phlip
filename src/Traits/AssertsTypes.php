@@ -6,6 +6,12 @@ use Webgraphe\Phlip\Exception\AssertionException;
 
 trait AssertsTypes
 {
+    /**
+     * @param mixed $expected
+     * @param mixed $thing
+     * @return mixed
+     * @throws AssertionException
+     */
     public static function assertType($expected, $thing)
     {
         if (null !== $thing && !is_a($thing, $expected)) {

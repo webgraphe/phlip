@@ -11,6 +11,11 @@ class DivisionOperation extends Operation implements StandardOperationContract
     const IDENTIFIER = '/';
     const IDENTIFIER_ALTERNATIVE = 'div';
 
+    /**
+     * @param array ...$arguments
+     * @return float|int|mixed
+     * @throws AssertionException
+     */
     public function __invoke(...$arguments)
     {
         $first = array_shift($arguments);

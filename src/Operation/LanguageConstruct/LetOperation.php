@@ -12,8 +12,15 @@ use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class LetOperation extends PrimaryOperation
 {
+    /** @var string */
     const IDENTIFIER = 'let';
 
+    /**
+     * @param ContextContract $context
+     * @param ProperList $forms
+     * @return mixed
+     * @throws AssertionException
+     */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
         $localContext = $context->stack();
@@ -36,6 +43,12 @@ class LetOperation extends PrimaryOperation
         return call_user_func($lambda, ...$arguments);
     }
 
+    /**
+     * @param ContextContract $context
+     * @param ProperList $variables
+     * @return array
+     * @throws AssertionException
+     */
     private function buildParameterArguments(ContextContract $context, ProperList $variables): array
     {
         $parameters = [];
@@ -69,6 +82,12 @@ class LetOperation extends PrimaryOperation
         return [self::IDENTIFIER];
     }
 
+    /**
+     * @param WalkerContract $walker
+     * @param FormContract[] ...$forms
+     * @return FormContract[]
+     * @throws AssertionException
+     */
     public function walk(WalkerContract $walker, FormContract ...$forms): array
     {
         $statement = new ProperList(...$forms);
@@ -91,6 +110,12 @@ class LetOperation extends PrimaryOperation
         );
     }
 
+    /**
+     * @param WalkerContract $walker
+     * @param ProperList $variables
+     * @return ProperList
+     * @throws AssertionException
+     */
     private function walkParameterArguments(WalkerContract $walker, ProperList $variables): ProperList
     {
         $pairs = [];

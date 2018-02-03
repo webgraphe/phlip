@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
@@ -22,7 +23,8 @@ class CarOperation extends PrimaryOperation
     /**
      * @param ContextContract $context
      * @param ProperList $forms
-     * @return mixed
+     * @return FormContract|null
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {

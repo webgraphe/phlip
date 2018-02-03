@@ -22,7 +22,8 @@ class MacroExpandOperation extends Operation implements StandardOperationContrac
 
     /**
      * @param array ...$arguments
-     * @return mixed
+     * @return FormContract
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     public function __invoke(...$arguments): FormContract
     {

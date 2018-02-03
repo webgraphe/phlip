@@ -11,7 +11,13 @@ class DefinedOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'defined?';
 
-    protected function invoke(ContextContract $context, ProperList $forms)
+    /**
+     * @param ContextContract $context
+     * @param ProperList $forms
+     * @return bool
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
+    protected function invoke(ContextContract $context, ProperList $forms): bool
     {
         $variable = IdentifierAtom::assertStaticType($forms->getHead());
 

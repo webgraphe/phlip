@@ -22,7 +22,8 @@ class MacroOperation extends PrimaryOperation
     /**
      * @param ContextContract $context
      * @param ProperList $forms
-     * @return mixed
+     * @return Macro
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     protected function invoke(ContextContract $context, ProperList $forms): Macro
     {

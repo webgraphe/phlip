@@ -22,7 +22,8 @@ class CdrOperation extends PrimaryOperation
     /**
      * @param ContextContract $context
      * @param ProperList $forms
-     * @return mixed
+     * @return ProperList
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {

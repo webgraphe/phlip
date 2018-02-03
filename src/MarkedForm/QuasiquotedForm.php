@@ -14,12 +14,19 @@ class QuasiquotedForm extends MarkedForm
     /**
      * @param ContextContract $context
      * @return FormContract
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     public function evaluate(ContextContract $context): FormContract
     {
         return $this->apply($context, $this->getForm());
     }
 
+    /**
+     * @param ContextContract $context
+     * @param FormContract $form
+     * @return FormContract
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     protected function apply(ContextContract $context, FormContract $form): FormContract
     {
         if ($form instanceof UnquotedForm) {

@@ -11,6 +11,7 @@ class SpaceshipOperation extends Operation\Comparison
     /**
      * @param array ...$arguments
      * @return mixed
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     public function __invoke(...$arguments)
     {

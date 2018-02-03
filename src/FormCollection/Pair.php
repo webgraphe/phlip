@@ -26,6 +26,13 @@ class Pair extends FormCollection
         $this->second = $second;
     }
 
+    /**
+     * @param FormContract $left
+     * @param FormContract $right
+     * @param FormContract[] ...$others
+     * @return Pair
+     * @throws AssertionException
+     */
     public static function fromForms(FormContract $left, FormContract $right, FormContract ...$others): Pair
     {
         if ($others) {

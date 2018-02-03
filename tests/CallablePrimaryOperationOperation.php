@@ -31,7 +31,7 @@ class CallablePrimaryOperationOperation implements PrimaryOperationContract
     /**
      * @param WalkerContract $walker
      * @param FormContract[] ...$forms
-     * @return array
+     * @return FormContract[]
      */
     public function walk(WalkerContract $walker, FormContract ...$forms): array
     {

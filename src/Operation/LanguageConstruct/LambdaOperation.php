@@ -14,15 +14,27 @@ class LambdaOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'lambda';
 
+    /**
+     * @param ContextContract $context
+     * @param ProperList $parameters
+     * @param FormContract[] ...$statements
+     * @return \Closure
+     * @throws AssertionException
+     */
     public static function invokeStatic(
         ContextContract $context,
         ProperList $parameters,
         FormContract ...$statements
-    )
-    {
+    ) {
         return (new self)->invoke($context, new ProperList($parameters, ...$statements));
     }
 
+    /**
+     * @param ContextContract $context
+     * @param ProperList $forms
+     * @return \Closure
+     * @throws AssertionException
+     */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
         $parameters = ProperList::assertStaticType($forms->assertHead());
@@ -50,6 +62,12 @@ class LambdaOperation extends PrimaryOperation
         };
     }
 
+    /**
+     * @param ProperList $parameters
+     * @param array $arguments
+     * @return array
+     * @throws AssertionException
+     */
     private static function assertArgumentsMatchingParameters(ProperList $parameters, array $arguments): array
     {
         $argumentCount = count($arguments);
@@ -69,6 +87,12 @@ class LambdaOperation extends PrimaryOperation
         return [self::IDENTIFIER];
     }
 
+    /**
+     * @param WalkerContract $walker
+     * @param FormContract[] ...$forms
+     * @return array
+     * @throws AssertionException
+     */
     public function walk(WalkerContract $walker, FormContract ...$forms): array
     {
         $statement = new ProperList(...$forms);

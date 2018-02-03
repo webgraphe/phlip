@@ -23,6 +23,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
     /**
      * @param CodeAnchor|null $anchor
      * @return FormCollection|ProperList
+     * @throws AssertionException
      */
     protected function createFormCollection(CodeAnchor $anchor = null): FormCollection
     {
@@ -35,6 +36,10 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         );
     }
 
+    /**
+     * @throws AssertionException
+     * @throws \Exception
+     */
     public function testStringConvertible()
     {
         $this->assertEquals('()', (string)new ProperList);
@@ -49,6 +54,11 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         );
     }
 
+    /**
+     * @throws AssertionException
+     * @throws \Exception
+     * @throws \Webgraphe\Phlip\Exception\ContextException
+     */
     public function testEvaluation()
     {
         $list = $this->createFormCollection();
@@ -75,6 +85,10 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         );
     }
 
+    /**
+     * @throws AssertionException
+     * @throws \Exception
+     */
     public function testEmptyList()
     {
         $list = new ProperList;
@@ -88,6 +102,10 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         $list->assertHead();
     }
 
+    /**
+     * @throws AssertionException
+     * @throws \Exception
+     */
     public function testAsList()
     {
         $list = new ProperList;
@@ -97,6 +115,10 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         $this->assertTrue(ProperList::asList($identifier)->equals(new ProperList($identifier)));
     }
 
+    /**
+     * @throws AssertionException
+     * @throws \Webgraphe\Phlip\Exception\ContextException
+     */
     public function testNotCallable()
     {
         $list = new ProperList(IdentifierAtom::fromString('not-callable'));
@@ -112,6 +134,10 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         return $forms;
     }
 
+    /**
+     * @throws AssertionException
+     * @throws \Webgraphe\Phlip\Exception\ContextException
+     */
     public function testFailedEvaluation()
     {
         $context = new Context;
@@ -129,6 +155,10 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         $list->evaluate($context);
     }
 
+    /**
+     * @throws AssertionException
+     * @throws \Exception
+     */
     public function testMap()
     {
         $this->assertEquals(
@@ -147,7 +177,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
     /**
      * @param WalkerContract $walker
      * @param FormContract[] ...$forms
-     * @return array
+     * @return FormContract[]
      */
     public function walk(WalkerContract $walker, FormContract ...$forms): array
     {

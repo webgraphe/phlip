@@ -30,6 +30,7 @@ class ConsOperation extends Operation implements StandardOperationContract
     /**
      * @param FormContract[] ...$arguments
      * @return ProperList|Pair|FormContract
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     public function __invoke(...$arguments): FormContract
     {

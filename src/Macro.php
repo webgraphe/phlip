@@ -15,11 +15,23 @@ class Macro
     /** @var \Closure */
     private $lambda;
 
+    /**
+     * @param ContextContract $context
+     * @param ProperList $parameters
+     * @param FormContract $body
+     * @throws Exception\AssertionException
+     */
     public function __construct(ContextContract $context, ProperList $parameters, FormContract $body)
     {
         $this->lambda = LambdaOperation::invokeStatic($context, $parameters, $body);
     }
 
+    /**
+     * @param ProperList $body
+     * @param FormBuilder|null $formBuilder
+     * @return FormContract
+     * @throws Exception\AssertionException
+     */
     public function expand(ProperList $body, FormBuilder $formBuilder = null): FormContract
     {
         $formBuilder = $formBuilder ?? new FormBuilder;

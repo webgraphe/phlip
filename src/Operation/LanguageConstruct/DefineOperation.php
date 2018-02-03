@@ -14,6 +14,12 @@ class DefineOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'define';
 
+    /**
+     * @param ContextContract $context
+     * @param ProperList $forms
+     * @return mixed
+     * @throws AssertionException
+     */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
         $variable = $forms->assertHead();
@@ -41,6 +47,11 @@ class DefineOperation extends PrimaryOperation
         throw new AssertionException('Malformed define');
     }
 
+    /**
+     * @param WalkerContract $walker
+     * @param FormContract[] ...$forms
+     * @return FormContract[]
+     */
     public function walk(WalkerContract $walker, FormContract ...$forms): array
     {
         $variable = array_shift($forms);

@@ -12,6 +12,12 @@ class SetOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'set';
 
+    /**
+     * @param ContextContract $context
+     * @param ProperList $forms
+     * @return mixed
+     * @throws AssertionException
+     */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
         $variable = $forms->getHead();

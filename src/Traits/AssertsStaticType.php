@@ -9,6 +9,7 @@ trait AssertsStaticType
     /**
      * @param mixed $thing
      * @return static
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     public static function assertStaticType($thing)
     {

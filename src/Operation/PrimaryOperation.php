@@ -24,7 +24,7 @@ abstract class PrimaryOperation extends Operation implements PrimaryOperationCon
     /**
      * @param WalkerContract $walker
      * @param FormContract[] ...$forms
-     * @return array
+     * @return FormContract[]
      */
     public function walk(WalkerContract $walker, FormContract ...$forms): array
     {

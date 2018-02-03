@@ -70,12 +70,18 @@ class Map extends FormCollection
     /**
      * @param callable $callback
      * @return FormCollection|static
+     * @throws AssertionException
      */
     public function map(callable $callback): FormCollection
     {
         return new static(...array_map($callback, $this->all()));
     }
 
+    /**
+     * @param FormContract $form
+     * @return string
+     * @throws AssertionException
+     */
     protected function stringifyFormItem(FormContract $form): string
     {
         $list = ProperList::assertStaticType($form);

@@ -17,6 +17,13 @@ class Stylizer
         $this->formatter = $formatter;
     }
 
+    /**
+     * @param string $source
+     * @param Lexer|null $lexer
+     * @return string
+     * @throws Exception\LexerException
+     * @throws Exception\StreamException
+     */
     public function stylizeSource(string $source, Lexer $lexer = null): string
     {
         $lexer = $lexer ?? new Lexer;
@@ -24,6 +31,11 @@ class Stylizer
         return $this->stylizeLexemeStream($lexer->parseSource($source));
     }
 
+    /**
+     * @param LexemeStream $stream
+     * @return string
+     * @throws Exception\StreamException
+     */
     public function stylizeLexemeStream(LexemeStream $stream): string
     {
         $top = 0;

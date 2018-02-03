@@ -9,6 +9,11 @@ class NotEqualOperation extends Operation\Comparison
     const IDENTIFIER = '!=';
     const IDENTIFIER_ALTERNATIVE = 'neq?';
 
+    /**
+     * @param array ...$arguments
+     * @return bool|mixed
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     public function __invoke(...$arguments)
     {
         $left = self::assertNativeValue(array_shift($arguments));
