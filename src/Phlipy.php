@@ -107,7 +107,8 @@ class Phlipy
 
     public static function withTypeOperators(ContextContract $context): ContextContract
     {
-        self::defineOperation($context, new Operation\Type\IsArrayOperation);
+        self::defineOperation($context, new Operation\Type\IsVectorOperation);
+        self::defineOperation($context, new Operation\Type\IsMapOperation);
         self::defineOperation($context, new Operation\Type\IsCallableOperation);
         self::defineOperation($context, new Operation\Type\IsFormOperation);
         self::defineOperation($context, new Operation\Type\IsIdentifierOperation);

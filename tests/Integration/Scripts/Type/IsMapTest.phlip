@@ -1,0 +1,3 @@
+(assert-true (map? {"foo" "bar" "baz" "bbq"}))
+(assert-false (map? 1))
+(assert-false (map? [1 2 3]))

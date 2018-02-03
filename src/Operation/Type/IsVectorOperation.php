@@ -5,9 +5,10 @@ namespace Webgraphe\Phlip\Operation\Type;
 use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Operation\Type;
 
-class IsArrayOperation extends Type
+class IsVectorOperation extends Type
 {
-    const IDENTIFIER = 'array?';
+    const IDENTIFIER = 'vector?';
+
     /**
      * @param array ...$arguments
      * @return bool
@@ -16,7 +17,22 @@ class IsArrayOperation extends Type
     {
         $argument = array_shift($arguments);
 
-        return is_array($argument) || $argument instanceof Vector;
+        return self::isIndexedArray($argument) || $argument instanceof Vector;
+    }
+
+    /**
+     * @param mixed $array
+     * @return bool
+     */
+    public static function isIndexedArray($array): bool
+    {
+        if (!is_array($array)) {
+            return false;
+        }
+
+        $keys = array_keys($array);
+
+        return $keys === array_keys($keys);
     }
 
     /**

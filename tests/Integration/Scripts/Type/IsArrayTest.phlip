@@ -1,2 +1,0 @@
-(assert-true (array? [1 2 3]))
-(assert-false (array? 1))
