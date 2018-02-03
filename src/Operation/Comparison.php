@@ -2,9 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation;
 
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Operation;
 
 abstract class Comparison extends StandardOperation
 {
