@@ -2,10 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Arithmetic;
 
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class ModuloOperation extends Operation implements StandardOperationContract
+class ModuloOperation extends StandardOperation
 {
     const IDENTIFIER = '%';
     const IDENTIFIER_ALTERNATIVE = 'mod';

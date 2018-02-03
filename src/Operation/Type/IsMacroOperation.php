@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\Macro;
-use Webgraphe\Phlip\Operation\Type;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class IsMacroOperation extends Type
+class IsMacroOperation extends StandardOperation
 {
     const IDENTIFIER = 'macro?';
     /**

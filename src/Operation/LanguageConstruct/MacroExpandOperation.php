@@ -3,12 +3,11 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Macro;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class MacroExpandOperation extends Operation implements StandardOperationContract
+class MacroExpandOperation extends StandardOperation
 {
     const IDENTIFIER = 'macro-expand';
 

@@ -3,11 +3,10 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom;
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class AtomOperation extends Operation implements StandardOperationContract
+class AtomOperation extends StandardOperation
 {
     const IDENTIFIER = 'atom?';
 

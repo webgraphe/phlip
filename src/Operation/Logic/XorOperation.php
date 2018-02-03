@@ -2,10 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Logic;
 
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class XorOperation extends Operation implements StandardOperationContract
+class XorOperation extends StandardOperation
 {
     const IDENTIFIER = 'xor';
 

@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\Type;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class IsListOperation extends Type
+class IsListOperation extends StandardOperation
 {
     const IDENTIFIER = 'list?';
     /**

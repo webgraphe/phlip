@@ -2,10 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Arithmetic;
 
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class ExponentiationOperation extends Operation implements StandardOperationContract
+class ExponentiationOperation extends StandardOperation
 {
     const IDENTIFIER = '**';
 

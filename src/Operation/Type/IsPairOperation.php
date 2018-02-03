@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\FormCollection\Pair;
-use Webgraphe\Phlip\Operation\Type;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class IsPairOperation extends Type
+class IsPairOperation extends StandardOperation
 {
     const IDENTIFIER = 'pair?';
     /**

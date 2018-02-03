@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
-use Webgraphe\Phlip\Operation\Type;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class IsLambdaOperation extends Type
+class IsLambdaOperation extends StandardOperation
 {
     const IDENTIFIER = 'lambda?';
     /**

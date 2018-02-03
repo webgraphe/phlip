@@ -2,12 +2,11 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class ListOperation extends Operation implements StandardOperationContract
+class ListOperation extends StandardOperation
 {
     const IDENTIFIER = 'list';
 

@@ -3,11 +3,12 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Operation\Type;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class IsFormOperation extends Type
+class IsFormOperation extends StandardOperation
 {
     const IDENTIFIER = 'form?';
+
     /**
      * @param array ...$arguments
      * @return bool

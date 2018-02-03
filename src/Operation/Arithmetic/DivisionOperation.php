@@ -2,11 +2,10 @@
 
 namespace Webgraphe\Phlip\Operation\Arithmetic;
 
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class DivisionOperation extends Operation implements StandardOperationContract
+class DivisionOperation extends StandardOperation
 {
     const IDENTIFIER = '/';
     const IDENTIFIER_ALTERNATIVE = 'div';

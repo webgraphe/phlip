@@ -2,18 +2,17 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\FormCollection\Pair;
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\FormBuilder;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\FormCollection\Pair;
 use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\Operation\StandardOperation;
 use Webgraphe\Phlip\Traits\AssertsTypes;
 
 /**
  * Differs from the traditional cons. This operation un-shifts an element in a proper list.
  */
-class ConsOperation extends Operation implements StandardOperationContract
+class ConsOperation extends StandardOperation
 {
     use AssertsTypes;
 

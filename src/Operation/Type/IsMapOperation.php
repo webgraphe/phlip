@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\FormCollection\Map;
-use Webgraphe\Phlip\Operation\Type;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class IsMapOperation extends Type
+class IsMapOperation extends StandardOperation
 {
     const IDENTIFIER = 'map?';
 

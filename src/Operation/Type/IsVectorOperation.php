@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\FormCollection\Vector;
-use Webgraphe\Phlip\Operation\Type;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class IsVectorOperation extends Type
+class IsVectorOperation extends StandardOperation
 {
     const IDENTIFIER = 'vector?';
 

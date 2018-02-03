@@ -3,10 +3,9 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class EqualityOperation extends Operation implements StandardOperationContract
+class EqualityOperation extends StandardOperation
 {
     const IDENTIFIER = 'equals?';
 

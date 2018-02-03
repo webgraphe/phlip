@@ -6,7 +6,7 @@ use Webgraphe\Phlip\Contracts\StandardOperationContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Operation;
 
-abstract class Comparison extends Operation implements StandardOperationContract
+abstract class Comparison extends StandardOperation
 {
     /**
      * @param mixed $thing

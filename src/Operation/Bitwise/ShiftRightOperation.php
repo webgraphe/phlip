@@ -2,10 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Bitwise;
 
-use Webgraphe\Phlip\Contracts\StandardOperationContract;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\StandardOperation;
 
-class ShiftRightOperation extends Operation implements StandardOperationContract
+class ShiftRightOperation extends StandardOperation
 {
     const IDENTIFIER = 'bit-shift-right';
 
