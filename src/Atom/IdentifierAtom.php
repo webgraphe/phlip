@@ -9,7 +9,8 @@ use Webgraphe\Phlip\Exception\AssertionException;
 
 class IdentifierAtom extends Atom
 {
-    const IDENTIFIER_REGEX = '/^[^:\s\'\(\)\[\]\{\}]+$/';
+    /** @var string excludes white spaces, quotes, collection delimiters, keyword prefix, colon and comma */
+    const IDENTIFIER_REGEX = '/^[^#:,\s\'"\(\)\[\]\{\}]+$/';
 
     /**
      * @param string $value

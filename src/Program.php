@@ -2,11 +2,6 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Exception\EvaluationException;
-use Webgraphe\Phlip\Exception\LexerException;
-use Webgraphe\Phlip\Exception\ParserException;
-use Webgraphe\Phlip\Exception\ProgramException;
-
 class Program
 {
     /** @var Contracts\FormContract[] */
@@ -23,9 +18,8 @@ class Program
      * @param Lexer|null $lexer
      * @param Parser|null $parser
      * @return Program
-     * @throws Exception
-     * @throws LexerException
-     * @throws ParserException
+     * @throws Exception\LexerException
+     * @throws Exception\ParserException
      */
     public static function parse(string $code, string $name = null, Lexer $lexer = null, Parser $parser = null): Program
     {
@@ -40,18 +34,17 @@ class Program
      * @param Lexer|null $lexer
      * @param Parser|null $parser
      * @return Program
-     * @throws Exception
-     * @throws LexerException
-     * @throws ParserException
-     * @throws ProgramException
+     * @throws Exception\LexerException
+     * @throws Exception\ParserException
+     * @throws Exception\IOException
      */
     public static function parseFile(string $path, Lexer $lexer = null, Parser $parser = null): Program
     {
         if (!file_exists($path)) {
-            throw new ProgramException("Not a file");
+            throw Exception\IOException::fromPath($path, "Not a file");
         }
         if (!is_readable($path)) {
-            throw new ProgramException("File not readable");
+            throw Exception\IOException::fromPath($path, "File not readable");
         }
 
         return static::parse(file_get_contents($path), $lexer, $parser);
@@ -62,7 +55,7 @@ class Program
      * @param Contracts\WalkerContract|null $walker
      * @param array $arguments
      * @return mixed
-     * @throws EvaluationException
+     * @throws Exception\ProgramException
      */
     public function execute(
         Contracts\ContextContract $context,
@@ -84,7 +77,7 @@ class Program
                 $result = $context->execute($walker($statement));
             }
         } catch (\Throwable $t) {
-            throw EvaluationException::fromContext(clone $context, 'Program execution failed', 0, $t);
+            throw Exception\ProgramException::fromContext(clone $context, 'Program execution failed', 0, $t);
         }
 
         return $result;

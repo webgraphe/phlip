@@ -3,8 +3,6 @@
 namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\FormCollection\Map;
 use Webgraphe\Phlip\FormCollection\Pair;
 use Webgraphe\Phlip\FormCollection\ProperList;
@@ -24,8 +22,7 @@ class Parser
     /**
      * @param LexemeStream $stream
      * @return ProperList
-     * @throws Exception
-     * @throws ParserException
+     * @throws Exception\ParserException
      */
     public function parseLexemeStream(LexemeStream $stream): ProperList
     {
@@ -37,12 +34,10 @@ class Parser
                     $statements[] = $statement;
                 }
             }
+        } catch (Exception\ParserException $parserException) {
+            throw $parserException;
         } catch (Exception $exception) {
-            if ($exception instanceof ParserException) {
-                throw $exception;
-            }
-
-            throw new ParserException('Failed parsing lexeme stream', 0, $exception);
+            throw new Exception\ParserException('Failed parsing lexeme stream', 0, $exception);
         }
 
         return new ProperList(...$statements);
@@ -51,7 +46,9 @@ class Parser
     /**
      * @param LexemeStream $stream
      * @return FormContract
-     * @throws \Exception
+     * @throws Exception\AssertionException
+     * @throws Exception\StreamException
+     * @throws Exception\ParserException
      */
     protected function parseNextForm(LexemeStream $stream): FormContract
     {
@@ -86,9 +83,16 @@ class Parser
             return $lexeme;
         }
 
-        throw new ParserException("Unexpected lexeme '$lexeme'");
+        throw new Exception\ParserException("Unexpected lexeme '$lexeme'");
     }
 
+    /**
+     * @param LexemeStream $stream
+     * @return FormContract
+     * @throws Exception\AssertionException
+     * @throws Exception\StreamException
+     * @throws Exception\ParserException
+     */
     protected function extractList(LexemeStream $stream): FormContract
     {
         $list = [];
@@ -96,11 +100,13 @@ class Parser
         while ($stream->current() !== $closingSymbol) {
             if ($stream->current() instanceof DotSymbol) {
                 if (!$list) {
-                    throw new ParserException("Malformed dot-notation pair; missing left-hand side");
+                    throw new Exception\ParserException("Malformed dot-notation pair; missing left-hand side");
                 }
                 if ($rest = $this->extractNextFormsUntilClosingSymbol($stream->next(), $closingSymbol)) {
                     if (count($rest) > 1) {
-                        throw new ParserException("Malformed dot-notation pair; right-hand side has too many forms");
+                        throw new Exception\ParserException(
+                            "Malformed dot-notation pair; right-hand side has too many forms"
+                        );
                     }
                     if ($rest[0] instanceof ProperList) {
                         return new ProperList(...$list, ...$rest[0]->all());
@@ -109,7 +115,7 @@ class Parser
                     return Pair::fromForms(...array_merge($list, $rest));
                 }
 
-                throw new ParserException("Malformed dot-notation pair; missing right-hand side");
+                throw new Exception\ParserException("Malformed dot-notation pair; missing right-hand side");
             }
             $list[] = $this->parseNextForm($stream);
         }
@@ -118,6 +124,13 @@ class Parser
         return new ProperList(...$list);
     }
 
+    /**
+     * @param LexemeStream $stream
+     * @return Vector
+     * @throws Exception\AssertionException
+     * @throws Exception\ParserException
+     * @throws Exception\StreamException
+     */
     protected function extractVector(LexemeStream $stream): Vector
     {
         $elements = $this->extractNextFormsUntilClosingSymbol(
@@ -131,7 +144,9 @@ class Parser
     /**
      * @param LexemeStream $stream
      * @return Map
-     * @throws AssertionException
+     * @throws Exception\AssertionException
+     * @throws Exception\ParserException
+     * @throws Exception\StreamException
      */
     protected function extractMap(LexemeStream $stream): Map
     {
@@ -141,7 +156,7 @@ class Parser
         );
 
         if (($count = count($keyValues)) % 2) {
-            throw new AssertionException("Malformed map; non-even number of key-value items");
+            throw new Exception\AssertionException("Malformed map; non-even number of key-value items");
         }
 
         $pairs = [];
@@ -156,6 +171,9 @@ class Parser
      * @param LexemeStream $stream
      * @param Closing $symbol
      * @return FormContract[]
+     * @throws Exception\AssertionException
+     * @throws Exception\ParserException
+     * @throws Exception\StreamException
      */
     protected function extractNextFormsUntilClosingSymbol(LexemeStream $stream, Closing $symbol): array
     {

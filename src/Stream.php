@@ -30,6 +30,10 @@ abstract class Stream implements \Iterator
         return $this->cursor;
     }
 
+    /**
+     * @return mixed|string
+     * @throws StreamException
+     */
     public function current()
     {
         if (null === $this->current) {

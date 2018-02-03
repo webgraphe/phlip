@@ -22,6 +22,7 @@ class WhileOperation extends PrimaryOperation
      * @param ContextContract $context
      * @param ProperList $forms
      * @return mixed
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {

@@ -10,22 +10,24 @@ class JsonTest extends TestCase
 {
     private static function getJsonFilePath()
     {
-        return file_get_contents(__DIR__ . '/Data/menu.json');
+        return __DIR__ . '/Data/menu.json';
     }
 
     /**
-     * @throws \Webgraphe\Phlip\Exception
-     * @throws \Webgraphe\Phlip\Exception\EvaluationException
+     * @throws \Webgraphe\Phlip\Exception\ContextException
+     * @throws \Webgraphe\Phlip\Exception\IOException
      * @throws \Webgraphe\Phlip\Exception\LexerException
      * @throws \Webgraphe\Phlip\Exception\ParserException
+     * @throws \Webgraphe\Phlip\Exception\ProgramException
+     * @throws \Exception
      */
     public function testJson()
     {
-        $init = Program::parse(self::getJsonFilePath());
+        $init = Program::parseFile(self::getJsonFilePath());
         $context = new Context;
         $context->define('null', null);
         $data = $init->execute($context);
-        $jsonDecodedData = json_decode(self::getJsonFilePath());
+        $jsonDecodedData = json_decode(file_get_contents(self::getJsonFilePath()));
         $this->assertEquals($data, $jsonDecodedData);
     }
 }

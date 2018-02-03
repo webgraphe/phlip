@@ -4,6 +4,7 @@ namespace Webgraphe\Phlip\Tests\Unit;
 
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Exception\IOException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Program;
@@ -11,6 +12,10 @@ use Webgraphe\Phlip\Tests\TestCase;
 
 class ProgramTest extends TestCase
 {
+    /**
+     * @throws ProgramException
+     * @throws \Exception
+     */
     public function testProgram()
     {
         $program = new Program(
@@ -23,11 +28,24 @@ class ProgramTest extends TestCase
         $this->assertEquals(3, $program->execute(new Context));
     }
 
+    /**
+     * @throws ProgramException
+     * @throws \Exception
+     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws \Webgraphe\Phlip\Exception\ParserException
+     */
     public function testParse()
     {
         $this->assertEquals(3, Program::parse('1 2 3')->execute(new Context));
     }
 
+    /**
+     * @throws ProgramException
+     * @throws \Exception
+     * @throws \Webgraphe\Phlip\Exception\IOException
+     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws \Webgraphe\Phlip\Exception\ParserException
+     */
     public function testParseFile()
     {
         $file = __DIR__ . '/ProgramTest.phlip';
@@ -35,15 +53,25 @@ class ProgramTest extends TestCase
         $this->assertEquals(file_get_contents($file), '"' . $program->execute(new Context) . '"');
     }
 
+    /**
+     * @throws \Webgraphe\Phlip\Exception\IOException
+     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws \Webgraphe\Phlip\Exception\ParserException
+     */
     public function testParseNonExistentFile()
     {
-        $this->expectException(ProgramException::class);
+        $this->expectException(IOException::class);
         Program::parseFile("Seriously you named a file after this very sentence");
     }
 
+    /**
+     * @throws IOException
+     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws \Webgraphe\Phlip\Exception\ParserException
+     */
     public function testParseNonReadableFile()
     {
-        $this->expectException(ProgramException::class);
+        $this->expectException(IOException::class);
         Program::parseFile('/dev/rtc0');
     }
 }

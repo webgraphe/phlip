@@ -16,6 +16,10 @@ class CharacterStream extends Stream
         return new static($stream, strlen($stream), $name);
     }
 
+    /**
+     * @return string
+     * @throws \Webgraphe\Phlip\Exception\StreamException
+     */
     public function current(): string
     {
         return parent::current();

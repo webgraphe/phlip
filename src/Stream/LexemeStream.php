@@ -15,6 +15,10 @@ class LexemeStream extends Stream
         return new static($lexemes, count($lexemes));
     }
 
+    /**
+     * @return LexemeContract
+     * @throws \Webgraphe\Phlip\Exception\StreamException
+     */
     public function current(): LexemeContract
     {
         return parent::current();

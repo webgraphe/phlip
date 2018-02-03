@@ -22,6 +22,11 @@ class Walker implements WalkerContract
         $this->formBuilder = $formBuilder ?? new FormBuilder;
     }
 
+    /**
+     * @param FormContract $form
+     * @return FormContract
+     * @throws Exception\AssertionException
+     */
     public function __invoke(FormContract $form): FormContract
     {
         if ($form instanceof MarkedForm) {

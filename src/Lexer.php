@@ -7,7 +7,6 @@ use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Contracts\LexemeContract;
-use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Stream\CharacterStream;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing\CloseListSymbol;
@@ -71,7 +70,7 @@ class Lexer
      * @param string $source
      * @param string|null $name
      * @return LexemeStream
-     * @throws LexerException
+     * @throws Exception\LexerException
      */
     public function parseSource(string $source, string $name = null): LexemeStream
     {
@@ -86,7 +85,7 @@ class Lexer
                 $stream->next();
             }
         } catch (Exception $e) {
-            throw new LexerException("Failed parsing source", 0, $e);
+            throw new Exception\LexerException("Failed parsing source", 0, $e);
         }
 
         if ($this->lexemeFilter) {
@@ -125,6 +124,11 @@ class Lexer
         return StringAtom::fromString($string, $anchor);
     }
 
+    /**
+     * @param CharacterStream $stream
+     * @return Comment
+     * @throws Exception\StreamException
+     */
     protected function parseComment(CharacterStream $stream): Comment
     {
         $comment = '';
@@ -135,6 +139,12 @@ class Lexer
         return new Comment($comment);
     }
 
+    /**
+     * @param CharacterStream $stream
+     * @return LexemeContract
+     * @throws Exception\AssertionException
+     * @throws Exception\StreamException
+     */
     protected function parseWord(CharacterStream $stream): LexemeContract
     {
         $anchor = new CodeAnchor($stream);
@@ -155,6 +165,12 @@ class Lexer
         return IdentifierAtom::fromString($word, $anchor);
     }
 
+    /**
+     * @param CharacterStream $stream
+     * @return null|LexemeContract
+     * @throws Exception\AssertionException
+     * @throws Exception\StreamException
+     */
     private function extractLexeme(CharacterStream $stream): ?LexemeContract
     {
         $current = $stream->current();
@@ -189,6 +205,11 @@ class Lexer
         return $this->parseWord($stream);
     }
 
+    /**
+     * @param CharacterStream $stream
+     * @return string
+     * @throws Exception\StreamException
+     */
     private function extractWord(CharacterStream $stream): string
     {
         $word = '';

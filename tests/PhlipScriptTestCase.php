@@ -22,6 +22,12 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
         $this->file = $file;
     }
 
+    /**
+     * @throws \Webgraphe\Phlip\Exception
+     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws \Webgraphe\Phlip\Exception\ParserException
+     * @throws \Webgraphe\Phlip\Exception\ProgramException
+     */
     public function testScript()
     {
         $context = $this->contextWithAsserts();
@@ -31,7 +37,7 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
     /**
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return 1;
     }
@@ -41,7 +47,7 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return $this->file;
     }

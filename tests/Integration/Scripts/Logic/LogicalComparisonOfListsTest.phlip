@@ -1,1 +1,1 @@
-(assert-exception EvaluationException (= 'false 'false))
+(assert-exception ProgramException (= 'false 'false))

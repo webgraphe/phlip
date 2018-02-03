@@ -6,7 +6,6 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\EvaluationException;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;
@@ -39,14 +38,15 @@ class ProperList extends FormCollection
     }
 
     /**
+     * @param string $message
      * @return FormContract
      * @throws AssertionException
      */
-    public function assertHead(): FormContract
+    public function assertHead($message = "List is empty"): FormContract
     {
         $head = $this->getHead();
         if (!$head) {
-            throw new AssertionException("List is empty");
+            throw new AssertionException($message);
         }
 
         return $head;
@@ -68,7 +68,7 @@ class ProperList extends FormCollection
     /**
      * @param ContextContract $context
      * @return mixed
-     * @throws EvaluationException
+     * @throws AssertionException
      */
     public function evaluate(ContextContract $context)
     {
@@ -76,7 +76,7 @@ class ProperList extends FormCollection
             return null;
         }
 
-        $callable = self::assertCallable($context, $this->assertHead());
+        $callable = self::assertCallable($context, $this->getHead());
         $arguments = $callable instanceof PrimaryOperationContract
             ? array_merge([$context], $this->getTail()->all())
             : array_map(

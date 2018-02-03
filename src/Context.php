@@ -104,7 +104,7 @@ class Context implements ContextContract
 
     public function stack(): ContextContract
     {
-        $self = new self();
+        $self = new self;
         $self->parent = $this;
 
         return $self;

@@ -8,15 +8,22 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 
 class StringAtom extends Atom
 {
+    /** @var string */
+    const DELIMITER = '"';
+    /** @var string */
+    const CARRIAGE_RETURN = "\r";
+    /** @var string */
+    const NEW_LINE = "\n";
+    /** @var string */
+    const ESCAPE_CHARACTER = '\\';
+
     /** @var string[] */
     const SEARCH_AND_REPLACE = [
-        '\\' => '\\\\',
-        '"' => '\\"',
-        "\r" => '\\r',
-        "\n" => '\\n'
+        self::ESCAPE_CHARACTER => self::ESCAPE_CHARACTER . self::ESCAPE_CHARACTER,
+        self::DELIMITER => '\\' . self::DELIMITER,
+        self::CARRIAGE_RETURN => self::ESCAPE_CHARACTER . 'r',
+        self::NEW_LINE => self::ESCAPE_CHARACTER . 'n'
     ];
-
-    const DELIMITER = '"';
 
     public static function fromString(string $value, CodeAnchorContract $codeAnchor = null): StringAtom
     {
