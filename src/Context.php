@@ -17,6 +17,8 @@ class Context implements ContextContract
     private $formStack = [];
     /** @var WalkerContract  */
     private $walker;
+    /** @var int */
+    private $ticks = 0;
 
     public function __construct(FormBuilder $formBuilder = null)
     {
@@ -127,6 +129,7 @@ class Context implements ContextContract
         $form = call_user_func($this->walker, $form);
         $this->formStack[] = $form;
         $result = $form->evaluate($this);
+        $this->tick();
         array_pop($this->formStack);
 
         return $result;
@@ -146,5 +149,19 @@ class Context implements ContextContract
     public function getParent(): ?ContextContract
     {
         return $this->parent;
+    }
+
+    public function tick()
+    {
+        if ($this->getParent()) {
+            $this->getParent()->tick();
+        }
+
+        ++$this->ticks;
+    }
+
+    public function getTicks(): int
+    {
+        return $this->ticks;
     }
 }
