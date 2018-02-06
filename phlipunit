@@ -26,4 +26,8 @@ if (empty($paths)) {
     fatalError("No Test.phlip files to run");
 }
 
-\PHPUnit\TextUI\TestRunner::run(new PhlipScriptTestSuite($paths), ['colors' => 'always']);
+try {
+    \PHPUnit\TextUI\TestRunner::run(new PhlipScriptTestSuite($paths), ['colors' => 'always']);
+} catch (\Exception $e) {
+    fatalError($e->getMessage());
+}

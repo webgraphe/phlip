@@ -2,14 +2,16 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\FormCollection\ProperList;
+
 class Program
 {
-    /** @var Contracts\FormContract[] */
+    /** @var ProperList */
     private $statements;
 
-    public function __construct(FormCollection\ProperList $statements)
+    public function __construct(ProperList $statements)
     {
-        $this->statements = $statements->all();
+        $this->statements = $statements;
     }
 
     /**
@@ -27,6 +29,14 @@ class Program
         $parser = $parser ?? new Parser;
 
         return new self($parser->parseLexemeStream($lexer->parseSource($code, $name)));
+    }
+
+    /**
+     * @return ProperList
+     */
+    public function getStatements(): ProperList
+    {
+        return $this->statements;
     }
 
     /**
@@ -52,18 +62,12 @@ class Program
 
     /**
      * @param Contracts\ContextContract $context
-     * @param Contracts\WalkerContract|null $walker
      * @param array $arguments
      * @return mixed
      * @throws Exception\ProgramException
      */
-    public function execute(
-        Contracts\ContextContract $context,
-        Contracts\WalkerContract $walker = null,
-        array $arguments = []
-    ) {
-        $walker = $walker ?? new Walker($context);
-
+    public function execute(Contracts\ContextContract $context, array $arguments = [])
+    {
         if ($arguments) {
             $context = $context->stack();
             foreach ($arguments as $key => $value) {
@@ -73,8 +77,10 @@ class Program
 
         $result = null;
         try {
-            foreach ($this->statements as $statement) {
-                $result = $context->execute($walker($statement));
+            $statements = $this->statements;
+            while ($head = $statements->getHead()) {
+                $statements = $statements->getTail();
+                $result = $context->execute($head);
             }
         } catch (\Throwable $t) {
             throw Exception\ProgramException::fromContext(clone $context, 'Program execution failed', 0, $t);

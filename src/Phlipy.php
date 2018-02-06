@@ -98,7 +98,7 @@ class Phlipy
         self::defineOperation($context, new Operation\LanguageConstruct\ListOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\WhileOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\BeginOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\EvalOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\ExecuteOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\MacroOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\MacroExpandOperation);
 
@@ -171,6 +171,35 @@ class Phlipy
         return $context;
     }
 
+    public static function withRepl(ContextContract $context, array $options = []): ContextContract
+    {
+        self::defineOperation(
+            $context,
+            new Operation\Repl\ReadOperation(
+                isset($options['read']['prompt']) ? $options['read']['prompt'] : 'phlip > '
+            )
+        );
+        self::defineOperation(
+            $context,
+            new Operation\LanguageConstruct\WhileOperation(
+                isset($options['loop']['identifier']) ? $options['loop']['identifier'] : 'loop'
+            )
+        );
+        self::defineOperation($context, new Operation\Repl\EvalOperation);
+        self::defineOperation(
+            $context,
+            $printOperation = new Operation\Repl\PrintOperation(
+                isset($options['print']['stylizer']) ? $options['print']['stylizer'] : null,
+                isset($options['print']['formBuilder']) ? $options['print']['formBuilder'] : null,
+                isset($options['print']['lexer']) ? $options['print']['lexer'] : null,
+                isset($options['options']) ? $options['options'] : []
+            )
+        );
+        self::defineOperation($context, new Operation\Repl\ExitOperation);
+
+        return $context;
+    }
+
     public static function withPhpMathFunctions(ContextContract $context): ContextContract
     {
         array_map(
@@ -199,5 +228,17 @@ class Phlipy
         $context->define($alias ?? $function, function () use ($function) {
             return call_user_func_array($function, func_get_args());
         });
+    }
+
+    public static function optionsFromGlobals()
+    {
+        $options = [];
+        foreach ($_SERVER['argv'] as $arg) {
+            if (preg_match("/^--([^=]+)=?(.+)?/", $arg, $matches)) {
+                $options['options'][$matches[1]] = $matches[2] ?? true;
+            }
+        }
+
+        return $options;
     }
 }

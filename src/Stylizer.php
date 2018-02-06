@@ -2,6 +2,10 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phlip\Atom\IdentifierAtom;
+use Webgraphe\Phlip\Atom\KeywordAtom;
+use Webgraphe\Phlip\Atom\NumberAtom;
+use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Contracts\LexemeContract;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing;
@@ -14,7 +18,34 @@ class Stylizer
 
     public function __construct(callable $formatter = null)
     {
-        $this->formatter = $formatter;
+        $this->formatter = $formatter ?? static::cliFormatter();
+    }
+
+    public static function cliFormatter(): \Closure
+    {
+        return function (LexemeContract $lexeme): string {
+            if ($lexeme instanceof Symbol) {
+                return "\033[1;37m{$lexeme}\033[0m";
+            }
+
+            if ($lexeme instanceof NumberAtom) {
+                return "\033[1;36m{$lexeme}\033[0m";
+            }
+
+            if ($lexeme instanceof StringAtom) {
+                return "\033[1;34m{$lexeme}\033[0m";
+            }
+
+            if ($lexeme instanceof IdentifierAtom) {
+                return "\033[1;33m{$lexeme}\033[0m";
+            }
+
+            if ($lexeme instanceof KeywordAtom) {
+                return "\033[1;32m{$lexeme}\033[0m";
+            }
+
+            return (string)$lexeme;
+        };
     }
 
     /**

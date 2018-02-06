@@ -6,9 +6,9 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation;
 
-class EvalOperation extends Operation\PrimaryOperation
+class ExecuteOperation extends Operation\PrimaryOperation
 {
-    const IDENTIFIER = 'eval';
+    const IDENTIFIER = 'execute';
 
     /**
      * @return string[]
@@ -22,10 +22,16 @@ class EvalOperation extends Operation\PrimaryOperation
      * @param ContextContract $context
      * @param ProperList $forms
      * @return mixed
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
-        return $context->execute(ProperList::assertStaticType($context->execute($forms->assertHead())));
+        $result = null;
+
+        while ($head = $forms->getHead()) {
+            $forms = $forms->getTail();
+            $result = $context->execute($context->execute($head));
+        }
+
+        return $result;
     }
 }

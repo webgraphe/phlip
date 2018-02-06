@@ -9,13 +9,20 @@ use Webgraphe\Phlip\Operation\PrimaryOperation;
 class WhileOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'while';
+    /** @var string */
+    private $identifier;
+
+    public function __construct(string $identifier = self::IDENTIFIER)
+    {
+        $this->identifier = $identifier;
+    }
 
     /**
      * @return string[]
      */
     public function getIdentifiers(): array
     {
-        return [self::IDENTIFIER];
+        return [$this->identifier];
     }
 
     /**

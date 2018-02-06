@@ -4,6 +4,7 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\ContextException;
 
 class Context implements ContextContract
@@ -14,6 +15,13 @@ class Context implements ContextContract
     private $parent;
     /** @var FormContract[] */
     private $formStack = [];
+    /** @var WalkerContract  */
+    private $walker;
+
+    public function __construct(FormBuilder $formBuilder = null)
+    {
+        $this->walker = new Walker($this, $formBuilder);
+    }
 
     /**
      * @param string $key $offset
@@ -116,6 +124,7 @@ class Context implements ContextContract
      */
     public function execute(FormContract $form)
     {
+        $form = call_user_func($this->walker, $form);
         $this->formStack[] = $form;
         $result = $form->evaluate($this);
         array_pop($this->formStack);
