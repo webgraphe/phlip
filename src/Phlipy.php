@@ -171,28 +171,27 @@ class Phlipy
         return $context;
     }
 
-    public static function withRepl(ContextContract $context, array $options = []): ContextContract
+    public static function withRepl(ContextContract $context, array $config = [], array $options = []): ContextContract
     {
         self::defineOperation(
             $context,
             new Operation\Repl\ReadOperation(
-                isset($options['read']['prompt']) ? $options['read']['prompt'] : 'phlip > '
+                isset($config['read.prompt']) ? $config['read.prompt'] : 'phlip > '
             )
         );
         self::defineOperation(
             $context,
             new Operation\LanguageConstruct\WhileOperation(
-                isset($options['loop']['identifier']) ? $options['loop']['identifier'] : 'loop'
+                isset($config['loop.identifier']) ? $config['loop.identifier'] : 'loop'
             )
         );
         self::defineOperation($context, new Operation\Repl\EvalOperation);
         self::defineOperation(
             $context,
             $printOperation = new Operation\Repl\PrintOperation(
-                isset($options['print']['stylizer']) ? $options['print']['stylizer'] : null,
-                isset($options['print']['formBuilder']) ? $options['print']['formBuilder'] : null,
-                isset($options['print']['lexer']) ? $options['print']['lexer'] : null,
-                isset($options['options']) ? $options['options'] : []
+                isset($config['print.formBuilder']) ? $config['print.formBuilder'] : null,
+                isset($config['print.lexer']) ? $options['print.lexer'] : null,
+                $options
             )
         );
         self::defineOperation($context, new Operation\Repl\ExitOperation);
@@ -235,7 +234,7 @@ class Phlipy
         $options = [];
         foreach ($_SERVER['argv'] as $arg) {
             if (preg_match("/^--([^=]+)=?(.+)?/", $arg, $matches)) {
-                $options['options'][$matches[1]] = $matches[2] ?? true;
+                $options[$matches[1]] = $matches[2] ?? true;
             }
         }
 

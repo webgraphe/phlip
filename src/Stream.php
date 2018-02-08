@@ -7,15 +7,16 @@ use Webgraphe\Phlip\Exception\StreamException;
 abstract class Stream implements \Iterator
 {
     /** @var mixed */
-    private $stream;
+    protected $stream;
+    /** @var int */
+    protected $length = 0;
+    /** @var string|null */
+    protected $name;
+
     /** @var int */
     private $cursor = 0;
-    /** @var int */
-    private $length = 0;
     /** @var string */
     private $current;
-    /** @var string|null */
-    private $name;
 
     final protected function __construct($stream, int $length, string $name = null)
     {

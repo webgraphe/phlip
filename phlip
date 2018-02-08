@@ -5,7 +5,27 @@ namespace Webgraphe\Phlip;
 
 require_once 'vendor/autoload.php';
 
-$context = Phlipy::withRepl(Phlipy::context(), Phlipy::optionsFromGlobals());
+$context = Phlipy::withRepl(Phlipy::context(), [], $options = Phlipy::optionsFromGlobals());
+
+if (!empty($options['help'])) {
+    echo <<<USAGE
+Webgraphe Phlip
+
+Usage:
+    $ phlip [OPTIONS]
+    $ phlip [OPTIONS] < FILENAME
+    $ echo "phlip script" | phlip [OPTIONS]
+
+  Options:
+    --help          Displays usage
+    --colors        Toggles CLI colors
+    --json-alike    Toggles JSON-alike output
+    --return-types  Toggles display of return types
+    --verbose       Toggles more verbose output
+
+USAGE;
+    exit(0);
+}
 
 try {
     // Phlip script injected from the input
@@ -20,9 +40,14 @@ try {
     }
 
     // Interactive REPL prompt
-    echo 'Webgraphe Phlip REPL prompt' . PHP_EOL;
+    echo 'Webgraphe Phlip' . PHP_EOL;
     echo "Type (exit) to quit." . PHP_EOL . PHP_EOL;
     Program::parse('(loop (print (eval (read))))')->execute($context);
 } catch (\Throwable $exception) {
-    echo "FATAL ERROR: " . $exception->getMessage() . PHP_EOL . PHP_EOL;
+    echo "Webgraphe Phlip FATAL ERROR: " . PHP_EOL;
+    while ($exception) {
+        echo '- ' . get_class($exception) . ': ' . $exception->getMessage() . PHP_EOL;
+        $exception = $exception->getPrevious();
+    }
+    exit(1);
 }

@@ -48,10 +48,7 @@ class Lexer
      */
     public function __construct(callable $lexemeFilter = null)
     {
-        if (!func_num_args()) {
-            $lexemeFilter = $this->getDefaultLexemeFilter();
-        }
-        $this->lexemeFilter = $lexemeFilter;
+        $this->lexemeFilter = func_num_args() < 2 ? $this->getDefaultLexemeFilter() : $lexemeFilter;
     }
 
     /**
@@ -116,7 +113,7 @@ class Lexer
         $string = '';
         while (StringAtom::DELIMITER !== ($character = $stream->next()->current())) {
             if ("\\" === $character) {
-                $character = $this->replaceEscapedCharacter($character);
+                $character = $this->replaceEscapedCharacter($stream->next()->current());
             }
             $string .= $character;
         }
