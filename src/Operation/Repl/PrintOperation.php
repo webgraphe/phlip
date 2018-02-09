@@ -27,6 +27,30 @@ class PrintOperation extends StandardOperation
     /** @var string */
     const OPTION_JSON_ALIKE = 'json-alike';
 
+    /** @var string */
+    const CLI_COLOR_TYPE = '1;30';
+    /** @var string */
+    const CLI_COLOR_EXCEPTION = '0;31';
+    /** @var string */
+    const CLI_COLOR_SYMBOL = '1;37';
+    /** @var string */
+    const CLI_COLOR_NUMBER = '1;36';
+    /** @var string */
+    const CLI_COLOR_STRING = '1;34';
+    /** @var string */
+    const CLI_COLOR_IDENTIFIER = '1;33';
+    /** @var string */
+    const CLI_COLOR_KEYWORD = '1;32';
+
+    /** @var string[] */
+    const CLI_LEXEME_COLORS = [
+        Symbol::class => self::CLI_COLOR_SYMBOL,
+        NumberAtom::class => self::CLI_COLOR_NUMBER,
+        StringAtom::class => self::CLI_COLOR_STRING,
+        IdentifierAtom::class => self::CLI_COLOR_IDENTIFIER,
+        KeywordAtom::class => self::CLI_COLOR_KEYWORD,
+    ];
+
     /** @var FormBuilder */
     private $formBuilder;
     /** @var array */
@@ -68,72 +92,47 @@ class PrintOperation extends StandardOperation
     public function __invoke(...$arguments)
     {
         $argument = $arguments ? $arguments[0] : null;
+        $type = is_object($argument) ? $type = get_class($argument) : gettype($argument);
+        $stackTraces = [];
+        $color = self::CLI_COLOR_TYPE;
+        $subject = null;
 
-        $color = '1;30';
-        $type = gettype($argument);
-        $extras = [];
         if ($argument instanceof \Throwable) {
+            $color = self::CLI_COLOR_EXCEPTION;
             if ($previous = $argument->getPrevious()) {
                 call_user_func($this, $previous);
             }
-            $type = get_class($argument);
             $subject = $argument->getMessage();
-            if ($argument instanceof ProgramException) {
-                $stack = [];
-                $context = $argument->getContext();
-                while ($context) {
-                    $forms = $argument->getContext()->getFormStack();
-                    while ($forms) {
-                        $stack[] = $this->stringifyLexemeStream($this->lexer->parseSource((string)array_pop($forms)));
-                    }
-                    $context = $context->getParent();
-                }
-                $extras[] = 'Phlip Stack Trace:'
-                    . PHP_EOL
-                    . implode(
-                        PHP_EOL,
-                        array_map(
-                            function ($key, $value) {
-                                return '#' . $key . ' ' . $value;
-                            },
-                            array_keys($stack),
-                            $stack
-                        )
-                    );
-            }
             if ($this->options[self::OPTION_VERBOSE]) {
-                $extras[] = "PHP Stack Trace:" . PHP_EOL . $argument->getTraceAsString();
+                if ($argument instanceof ProgramException) {
+                    $stackTraces[] = $this->dumpProgramExceptionStackTrace($argument);
+                }
+                $stackTraces[] = "PHP Stack Trace:" . PHP_EOL . $argument->getTraceAsString();
             }
-            $color = '0;31';
         } else {
-            if (is_object($argument)) {
-                $type = get_class($argument);
-            }
-
             try {
                 $form = $this->formBuilder->asForm($argument);
                 $subject = $this->stringifyLexemeStream($this->lexer->parseSource((string)$form));
             } catch (\Throwable $t) {
-                $subject = '';
+                call_user_func($this, $t);
             }
         }
 
         $output = '';
-        if ($this->options[self::OPTION_RETURN_TYPE] && $type) {
+        if ($this->options[self::OPTION_RETURN_TYPE]) {
             $output .= ($this->options[self::OPTION_COLORS] ? "\033[{$color}m{$type}\033[0m" : $type) . PHP_EOL;
         }
 
+        // The subject could be "0"
         if (strlen($subject = trim($subject))) {
             $output .= $subject . PHP_EOL;
         }
 
-        if ($extras) {
-            $output .= PHP_EOL . implode(PHP_EOL . PHP_EOL, $extras) . PHP_EOL;
+        if ($stackTraces) {
+            $output .= PHP_EOL . implode(PHP_EOL . PHP_EOL, $stackTraces) . PHP_EOL;
         }
 
-        $output .= PHP_EOL;
-
-        echo $output;
+        echo $output . PHP_EOL;
 
         return true;
     }
@@ -144,44 +143,53 @@ class PrintOperation extends StandardOperation
             $stream = $stream->jsonAlike();
         }
 
-        return (string)$stream->withLexemeStylizer(
-            $this->options[self::OPTION_COLORS]
-                ? self::cliColors()
-                : self::cliPlain()
-        );
-    }
+        if ($this->options[self::OPTION_COLORS]) {
+            return $stream->withLexemeStylizer(self::cliColors());
+        }
 
-    public static function cliPlain(): \Closure
-    {
-        return function (LexemeContract $lexeme): string {
-            return (string)$lexeme;
-        };
+        return $stream;
     }
 
     public static function cliColors(): \Closure
     {
         return function (LexemeContract $lexeme): string {
-            if ($lexeme instanceof Symbol) {
-                return "\033[1;37m{$lexeme}\033[0m";
-            }
+            $class = get_class($lexeme);
 
-            if ($lexeme instanceof NumberAtom) {
-                return "\033[1;36m{$lexeme}\033[0m";
-            }
-
-            if ($lexeme instanceof StringAtom) {
-                return "\033[1;34m{$lexeme}\033[0m";
-            }
-
-            if ($lexeme instanceof IdentifierAtom) {
-                return "\033[1;33m{$lexeme}\033[0m";
-            }
-
-            if ($lexeme instanceof KeywordAtom) {
-                return "\033[1;32m{$lexeme}\033[0m";
-            }
-
-            return (string)$lexeme;
+            return isset(self::CLI_LEXEME_COLORS[$class])
+                ? "\033[". self::CLI_LEXEME_COLORS[$class] . 'm' . $lexeme ."\033[0m"
+                : (string)$lexeme;
         };
+    }
+
+    /**
+     * @param ProgramException $exception
+     * @return string
+     * @throws \Webgraphe\Phlip\Exception\LexerException
+     */
+    private function dumpProgramExceptionStackTrace(ProgramException $exception): string
+    {
+        $stack = [];
+        $context = $exception->getContext();
+        while ($context) {
+            $forms = $exception->getContext()->getFormStack();
+            while ($forms) {
+                $stack[] = $this->stringifyLexemeStream($this->lexer->parseSource((string)array_pop($forms)));
+            }
+            $context = $context->getParent();
+        }
+
+        return 'Phlip Stack Trace:'
+            . PHP_EOL
+            . implode(
+                PHP_EOL,
+                array_map(
+                    function ($key, $value) {
+                        return '#' . $key . ' ' . $value;
+                    },
+                    array_keys($stack),
+                    $stack
+                )
+            );
+
     }
 }
