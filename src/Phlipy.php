@@ -66,6 +66,7 @@ class Phlipy
         self::withComparisonOperators($context);
         self::withLogicOperators($context);
         self::withBitwiseOperators($context);
+        self::withStringFunctions($context);
         self::withPhpMathFunctions($context);
 
         return $context;
@@ -97,6 +98,7 @@ class Phlipy
         self::defineOperation($context, new Operation\LanguageConstruct\BeginOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\ExecuteOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\MacroOperation);
+        self::defineOperation($context, new Operation\LanguageConstruct\LengthOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\MacroExpandOperation);
 
         return $context;
@@ -236,5 +238,29 @@ class Phlipy
         }
 
         return $options;
+    }
+
+    private static function withStringFunctions(ContextContract $context): ContextContract
+    {
+        self::wrapPhpFunction($context, 'crc32');
+        self::wrapPhpFunction($context, 'explode');
+        self::defineOperation($context, new Operation\String\ImplodeOperation);
+        self::wrapPhpFunction($context, 'md5');
+        self::wrapPhpFunction($context, 'number_format', 'number-format');
+        self::wrapPhpFunction($context, 'sha1');
+        self::wrapPhpFunction($context, 'sprintf', 'string-format');
+        self::wrapPhpFunction($context, 'str_pad', 'string-pad');
+        self::wrapPhpFunction($context, 'str_repeat', 'string-repeat');
+        self::wrapPhpFunction($context, 'str_replace', 'string-replace');
+        self::wrapPhpFunction($context, 'mb_strtolower', 'lowercase');
+        self::wrapPhpFunction($context, 'mb_strtoupper', 'uppercase');
+        self::wrapPhpFunction($context, 'mb_substr', 'substring');
+        self::wrapPhpFunction($context, 'ltrim');
+        self::wrapPhpFunction($context, 'rtrim');
+        self::wrapPhpFunction($context, 'chop');
+        self::wrapPhpFunction($context, 'trim');
+        self::wrapPhpFunction($context, 'wordwrap');
+
+        return $context;
     }
 }
