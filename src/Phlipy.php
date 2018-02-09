@@ -6,56 +6,6 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 
 class Phlipy
 {
-    /** @var string[] */
-    const PHP_MATH_FUNCTIONS = [
-        'abs',
-        'acos',
-        'acosh',
-        'asin',
-        'asinh',
-        'atan2',
-        'atan',
-        'atanh',
-        'base_convert' => 'base-convert',
-        'bindec',
-        'ceil',
-        'cos',
-        'cosh',
-        'decbin',
-        'dechex',
-        'decoct',
-        'deg2rad',
-        'exp',
-        'expm1',
-        'floor',
-        'fmod',
-        'getrandmax' => 'rand-max',
-        'hexdec',
-        'hypot',
-        'intdiv',
-        'is_finite' => 'finite?',
-        'is_infinite' => 'infinite?',
-        'is_nan' => 'nan?',
-        'lcg_value' => 'lcg-value',
-        'log10',
-        'log1p',
-        'log',
-        'max',
-        'min',
-        'octdec',
-        'pi',
-        'pow',
-        'rad2deg',
-        'rand',
-        'round',
-        'sin',
-        'sinh',
-        'sqrt',
-        'srand' => 'rand-seed',
-        'tan',
-        'tanh',
-    ];
-
     public static function context(ContextContract $context = null): ContextContract
     {
         $context = $context ?? new Context;
@@ -200,13 +150,52 @@ class Phlipy
 
     public static function withPhpMathFunctions(ContextContract $context): ContextContract
     {
-        array_map(
-            function ($key, $value) use ($context) {
-                self::wrapPhpFunction($context, is_numeric($key) ? $value : $key, $value);
-            },
-            array_keys(self::PHP_MATH_FUNCTIONS),
-            array_values(self::PHP_MATH_FUNCTIONS)
-        );
+        self::wrapPhpFunction($context, 'abs');
+        self::wrapPhpFunction($context, 'acos');
+        self::wrapPhpFunction($context, 'acosh');
+        self::wrapPhpFunction($context, 'asin');
+        self::wrapPhpFunction($context, 'asinh');
+        self::wrapPhpFunction($context, 'atan2');
+        self::wrapPhpFunction($context, 'atan');
+        self::wrapPhpFunction($context, 'atanh');
+        self::wrapPhpFunction($context, 'base_convert', 'base-convert');
+        self::wrapPhpFunction($context, 'bindec');
+        self::wrapPhpFunction($context, 'ceil');
+        self::wrapPhpFunction($context, 'cos');
+        self::wrapPhpFunction($context, 'cosh');
+        self::wrapPhpFunction($context, 'decbin');
+        self::wrapPhpFunction($context, 'dechex');
+        self::wrapPhpFunction($context, 'decoct');
+        self::wrapPhpFunction($context, 'deg2rad');
+        self::wrapPhpFunction($context, 'exp');
+        self::wrapPhpFunction($context, 'expm1');
+        self::wrapPhpFunction($context, 'floor');
+        self::wrapPhpFunction($context, 'fmod');
+        self::wrapPhpFunction($context, 'getrandmax', 'rand-max');
+        self::wrapPhpFunction($context, 'hexdec');
+        self::wrapPhpFunction($context, 'hypot');
+        self::wrapPhpFunction($context, 'intdiv');
+        self::wrapPhpFunction($context, 'is_finite', 'finite?');
+        self::wrapPhpFunction($context, 'is_infinite', 'infinite?');
+        self::wrapPhpFunction($context, 'is_nan', 'nan?');
+        self::wrapPhpFunction($context, 'lcg_value', 'lcg-value');
+        self::wrapPhpFunction($context, 'log10');
+        self::wrapPhpFunction($context, 'log1p');
+        self::wrapPhpFunction($context, 'log');
+        self::wrapPhpFunction($context, 'max');
+        self::wrapPhpFunction($context, 'min');
+        self::wrapPhpFunction($context, 'octdec');
+        self::wrapPhpFunction($context, 'pi');
+        self::wrapPhpFunction($context, 'pow');
+        self::wrapPhpFunction($context, 'rad2deg');
+        self::wrapPhpFunction($context, 'rand');
+        self::wrapPhpFunction($context, 'round');
+        self::wrapPhpFunction($context, 'sin');
+        self::wrapPhpFunction($context, 'sinh');
+        self::wrapPhpFunction($context, 'sqrt');
+        self::wrapPhpFunction($context, 'srand', 'rand-seed');
+        self::wrapPhpFunction($context, 'tan');
+        self::wrapPhpFunction($context, 'tanh');
 
         return $context;
     }
