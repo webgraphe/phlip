@@ -1,4 +1,5 @@
 {
+    "disclaimer": "This file is used by tests/Integration/JsonTest.php",
     "menu": {
         "header": "SVG Viewer",
         "items": [

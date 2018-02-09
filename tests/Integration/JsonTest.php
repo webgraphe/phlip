@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip\Tests\Integration;
 
 use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
 
@@ -29,5 +30,17 @@ class JsonTest extends TestCase
         $data = $init->execute($context);
         $jsonDecodedData = json_decode(file_get_contents(self::getJsonFilePath()));
         $this->assertEquals($data, $jsonDecodedData);
+    }
+
+    /**
+     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws \Exception
+     */
+    public function testJsonAlike()
+    {
+        $lexer = new Lexer;
+        $json = trim(file_get_contents(self::getJsonFilePath()));
+        $lexemeStream = $lexer->parseSource(file_get_contents(self::getJsonFilePath()))->jsonAlike();
+        $this->assertEquals($json, (string)$lexemeStream);
     }
 }

@@ -32,14 +32,6 @@ class Program
     }
 
     /**
-     * @return ProperList
-     */
-    public function getStatements(): ProperList
-    {
-        return $this->statements;
-    }
-
-    /**
      * @param string $path
      * @param Lexer|null $lexer
      * @param Parser|null $parser
