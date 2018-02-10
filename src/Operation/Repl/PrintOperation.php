@@ -95,14 +95,14 @@ class PrintOperation extends StandardOperation
         $type = is_object($argument) ? $type = get_class($argument) : gettype($argument);
         $stackTraces = [];
         $color = self::CLI_COLOR_TYPE;
-        $subject = null;
+        $value = null;
 
         if ($argument instanceof \Throwable) {
             $color = self::CLI_COLOR_EXCEPTION;
             if ($previous = $argument->getPrevious()) {
                 call_user_func($this, $previous);
             }
-            $subject = $argument->getMessage();
+            $value = $argument->getMessage();
             if ($this->options[self::OPTION_VERBOSE]) {
                 if ($argument instanceof ProgramException) {
                     $stackTraces[] = $this->dumpProgramExceptionStackTrace($argument);
@@ -112,9 +112,9 @@ class PrintOperation extends StandardOperation
         } else {
             try {
                 $form = $this->formBuilder->asForm($argument);
-                $subject = $this->stringifyLexemeStream($this->lexer->parseSource((string)$form));
+                $value = $this->stringifyLexemeStream($this->lexer->parseSource((string)$form));
             } catch (\Throwable $t) {
-                call_user_func($this, $t);
+                // do nothing
             }
         }
 
@@ -123,9 +123,9 @@ class PrintOperation extends StandardOperation
             $output .= ($this->options[self::OPTION_COLORS] ? "\033[{$color}m{$type}\033[0m" : $type) . PHP_EOL;
         }
 
-        // The subject could be "0"
-        if (strlen($subject = trim($subject))) {
-            $output .= $subject . PHP_EOL;
+        // The value could be "0"
+        if (strlen($value = trim($value))) {
+            $output .= $value . PHP_EOL;
         }
 
         if ($stackTraces) {

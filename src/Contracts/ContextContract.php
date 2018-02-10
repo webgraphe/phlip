@@ -62,7 +62,7 @@ interface ContextContract
      */
     public function execute(FormContract $form);
 
-    public function tick();
+    public function tick(FormContract $form): FormContract;
 
     public function getTicks(): int;
 

@@ -16,8 +16,11 @@ trait AssertsTypes
     {
         if (null !== $thing && !is_a($thing, $expected)) {
             $actual = is_object($thing) ? get_class($thing) : gettype($thing);
+            if (is_scalar($thing) || is_object($thing) && method_exists($thing, '__toString')) {
+                $actual .= " $thing";
+            }
 
-            throw new AssertionException("Expected '$expected', got $actual");
+            throw new AssertionException("Expected $expected, got $actual");
         }
 
         return $thing;

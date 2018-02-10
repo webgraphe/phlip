@@ -125,7 +125,18 @@ class Phlipy
         self::defineOperation(
             $context,
             new Operation\Repl\ReadOperation(
-                isset($config['read.prompt']) ? $config['read.prompt'] : 'phlip > '
+                isset($config['read.prompt'])
+                    ? $config['read.prompt']
+                    : function () use ($context, $options) {
+                    static $lastTicks;
+                    $prompt = 'phlip [%TICKS%] > ';
+                    $ticks = null === $lastTicks
+                        ? 0
+                        : $context->getTicks() - $lastTicks - 6;
+                    $lastTicks = $context->getTicks();
+
+                    return str_replace('%TICKS%', $ticks, $prompt);
+                }
             )
         );
         self::defineOperation(

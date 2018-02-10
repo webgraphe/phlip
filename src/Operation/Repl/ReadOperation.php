@@ -8,10 +8,10 @@ class ReadOperation extends StandardOperation
 {
     const IDENTIFIER = 'read';
 
-    /** @var string */
+    /** @var string|callable */
     private $prompt;
 
-    public function __construct(string $prompt = null)
+    public function __construct($prompt = null)
     {
         $this->prompt = $prompt;
     }
@@ -32,7 +32,14 @@ class ReadOperation extends StandardOperation
     {
         $lines = [];
         while (true) {
-            $line = rtrim(readline($lines ? '' : $this->prompt));
+            $prompt = $lines ? '' : $this->prompt;
+            $line = rtrim(
+                readline(
+                    is_callable($prompt)
+                        ? call_user_func($prompt)
+                        : $prompt
+                )
+            );
             $break = !$line || '\\' !== $line[strlen($line) - 1];
             $lines[] = rtrim($line, '\\');
             if ($break) {
