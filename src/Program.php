@@ -54,30 +54,40 @@ class Program
 
     /**
      * @param Contracts\ContextContract $context
+     * @return \Closure
+     */
+    public function compile(Contracts\ContextContract $context)
+    {
+        return function (...$arguments) use ($context) {
+            if ($arguments) {
+                $context = $context->stack();
+                foreach ($arguments as $key => $value) {
+                    $context->let('$' . $key, $value);
+                }
+            }
+
+            $result = null;
+            try {
+                $statements = $this->statements;
+                while ($head = $statements->getHead()) {
+                    $statements = $statements->getTail();
+                    $result = $context->execute($head);
+                }
+            } catch (\Throwable $t) {
+                throw Exception\ProgramException::fromContext(clone $context, 'Program execution failed', 0, $t);
+            }
+
+            return $result;
+        };
+    }
+
+    /**
+     * @param Contracts\ContextContract $context
      * @param array $arguments
      * @return mixed
-     * @throws Exception\ProgramException
      */
     public function execute(Contracts\ContextContract $context, array $arguments = [])
     {
-        if ($arguments) {
-            $context = $context->stack();
-            foreach ($arguments as $key => $value) {
-                $context->let('$' . $key, $value);
-            }
-        }
-
-        $result = null;
-        try {
-            $statements = $this->statements;
-            while ($head = $statements->getHead()) {
-                $statements = $statements->getTail();
-                $result = $context->execute($head);
-            }
-        } catch (\Throwable $t) {
-            throw Exception\ProgramException::fromContext(clone $context, 'Program execution failed', 0, $t);
-        }
-
-        return $result;
+        return call_user_func($this->compile($context), ...$arguments);
     }
 }

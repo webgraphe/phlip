@@ -1,20 +1,30 @@
 # phlip
-A context-based dialect parsed and executed by PHP in the form of s-expressions like LISP.
+A JSON-alike dialect supporting [s-expressions](https://en.wikipedia.org/wiki/S-expression).
 
 > "_It's literally JSON with closures_"
 
-See for yourself:
+Consider this Phlip script:
 ```lisp
-(define executable
+(let
+    (
+        (factorial
+            (lambda (x) (if (> x 1) (* x (factorial (- x 1))) x))
+        )
+    )
     {
-        "main": '(print "piece of cake")
-    })
-(eval (-> executable "main"))
+        "factorial-of-10": (factorial 10)
+    }
+)
 ```
+This would return:
+```json
+{
+    "factorial-of-10": 3628800
+}
+```
+Phlip considers `:` and `,` as white-spaces, and declares objects and arrays the same as JSON using `{}` and `[]`. By declaring `null`, `true` and `false` in a context you can _flip_ a JSON stream into a Phlip script right out-of-the-box!
 
-Phlip considers `:` and `,` as white-spaces, and declares objects and arrays the same as JSON using `{}` and `[]`. Declare `null`, `true` and `false` in your context and Phlip supports the JSON syntax out-of-the-box!
-
-That's code-as-data and data-as-code at its best.
+That's _code-as-data_ and _data-as-code_ at its best.
 
 ## Usage
 
