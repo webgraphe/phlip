@@ -10,10 +10,24 @@ class ReadOperation extends StandardOperation
 
     /** @var string|callable */
     private $prompt;
+    /** @var bool */
+    private $multiLine = false;
 
     public function __construct($prompt = null)
     {
         $this->prompt = $prompt;
+    }
+
+    /**
+     * @param null $prompt
+     * @return static
+     */
+    public static function multiLine($prompt = null)
+    {
+        $self = new static($prompt);
+        $self->multiLine = true;
+
+        return $self;
     }
 
     /**
@@ -40,11 +54,16 @@ class ReadOperation extends StandardOperation
                         : $prompt
                 )
             );
-            $break = !$line || '\\' !== $line[strlen($line) - 1];
+            $break = $this->multiLine && !$line
+                || !$this->multiLine && $line && '\\' !== $line[strlen($line) - 1];
             $lines[] = rtrim($line, '\\');
             if ($break) {
                 break;
             }
+        }
+
+        if ($return = trim(implode(PHP_EOL, $lines))) {
+            readline_add_history($return);
         }
 
         return implode(PHP_EOL, $lines);

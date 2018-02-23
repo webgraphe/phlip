@@ -13,6 +13,9 @@ class ScriptsTest extends TestCase
     /**
      * @dataProvider scriptFiles
      * @param string $file
+     * @throws \Webgraphe\Phlip\Exception\IOException
+     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws \Webgraphe\Phlip\Exception\ParserException
      */
     public function testScripts($file)
     {

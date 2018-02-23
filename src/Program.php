@@ -45,11 +45,12 @@ class Program
         if (!file_exists($path)) {
             throw Exception\IOException::fromPath($path, "Not a file");
         }
+
         if (!is_readable($path)) {
             throw Exception\IOException::fromPath($path, "File not readable");
         }
 
-        return static::parse(file_get_contents($path), $lexer, $parser);
+        return static::parse(file_get_contents($path), $path, $lexer, $parser);
     }
 
     /**

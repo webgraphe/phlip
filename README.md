@@ -7,9 +7,7 @@ Consider this Phlip script:
 ```lisp
 (let
     (
-        (factorial
-            (lambda (x) (if (> x 1) (* x (factorial (- x 1))) x))
-        )
+        (factorial (lambda (x) (if (= x 0) 1 (* x (factorial (- x 1))))))
     )
     {
         "factorial-of-10": (factorial 10)
@@ -17,12 +15,12 @@ Consider this Phlip script:
 )
 ```
 This would return:
-```json
+```lisp
 {
     "factorial-of-10": 3628800
 }
 ```
-Phlip considers `:` and `,` as white-spaces, and declares objects and arrays the same as JSON using `{}` and `[]`. By declaring `null`, `true` and `false` in a context you can _flip_ a JSON stream into a Phlip script right out-of-the-box!
+Phlip considers `:` and `,` as white-spaces, and declares objects and arrays (respectively maps and vectors) the same as JSON using `{}` and `[]`. By declaring `null`, `true` and `false` in a context you can _flip_ a JSON stream into a Phlip script!
 
 That's _code-as-data_ and _data-as-code_ at its best.
 
@@ -46,31 +44,18 @@ var_dump($factorialOf4); // int(24)
 
 Define programs in script files:
 ```lisp
-; fibonacci.phlip
-(define fibonacci
-    (lambda (x)
-        (let ((even 0) (odd 1))
-            (while (> x 1)
-                (set even (+ even odd))
-                (set odd (+ odd even))
-                (set x (- x 2)))
-            (if (% x 2)
-                odd
-                even))))
+; factorial.phlip
+(lambda (x) (if (= x 0) 1 (* x (factorial (- x 1)))))
 ```
 
-Then parse said script file:
+Then parse said script file (`lambda` returns a closure):
 ```php
 use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
 
-$context = Phlipy::context();
-Program::parseFile('path/to/fibonacci.phlip')->execute($context);
-```
+$factorial = Program::parseFile('path/to/fibonacci.phlip')->execute(Phlipy::context());
 
-And even execute assertions in unit tests:
-```php
-Program::parse('(assert-equals 7540113804746346429 (fibonacci 92))')->execute($context);
+$factorial(8); // int(40320)
 ```
 
 Give it a try with the `phlip` REPL!

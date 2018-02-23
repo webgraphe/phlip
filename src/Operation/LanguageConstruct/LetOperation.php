@@ -57,18 +57,25 @@ class LetOperation extends PrimaryOperation
             $variables = $variables->getTail();
             $name = $variable->assertHead();
             if ($name instanceof ProperList) {
-                $parameters[] = IdentifierAtom::assertStaticType($name->getHead());
-                $arguments[] = LambdaOperation::invokeStatic(
+                $parameter = IdentifierAtom::assertStaticType($name->getHead());
+                $argument = LambdaOperation::invokeStatic(
                     $context,
                     $name->getTail(),
                     ...$variable->getTail()->all()
                 );
             } elseif ($name instanceof IdentifierAtom) {
-                $parameters[] = $name;
-                $arguments[] = $context->execute($variable->getTail()->assertHead());
+                $parameter = $name;
+                $argument = $context->execute($variable->getTail()->assertHead());
             } else {
                 throw new AssertionException('Malformed let');
             }
+
+            if (is_callable($argument)) {
+                $context->let($parameter->getValue(), $argument);
+            }
+
+            $parameters[] = $parameter;
+            $arguments[] = $argument;
         }
 
         return [new ProperList(...$parameters), $arguments];

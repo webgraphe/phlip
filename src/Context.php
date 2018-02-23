@@ -152,8 +152,8 @@ class Context implements ContextContract
 
     public function tick(FormContract $form): FormContract
     {
-        if ($this->getParent()) {
-            $this->getParent()->tick($form);
+        if ($parent = $this->getParent()) {
+            $parent->tick($form);
         }
 
         ++$this->ticks;

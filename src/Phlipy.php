@@ -9,7 +9,7 @@ class Phlipy
     public static function context(ContextContract $context = null): ContextContract
     {
         $context = $context ?? new Context;
-        self::withLispPrimitives($context);
+        self::withBasicLanguageConstructs($context);
         self::withExtraLanguageConstructs($context);
         self::withTypeOperators($context);
         self::withArithmeticOperators($context);
@@ -22,7 +22,7 @@ class Phlipy
         return $context;
     }
 
-    public static function withLispPrimitives(ContextContract $context): ContextContract
+    public static function withBasicLanguageConstructs(ContextContract $context): ContextContract
     {
         self::defineOperation($context, new Operation\LanguageConstruct\DefineOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\QuoteOperation);
@@ -120,37 +120,46 @@ class Phlipy
         return $context;
     }
 
-    public static function withRepl(ContextContract $context, array $config = [], array $options = []): ContextContract
+    private static function readPrompt(ContextContract $context, string $prompt = null): \Closure
     {
+        return function () use ($context, $prompt) {
+            static $lastTicks;
+            $prompt = $prompt ?? 'phlip [%TICKS%] > ';
+            $ticks = null === $lastTicks
+                ? 0
+                : $context->getTicks() - $lastTicks - 6;
+            $lastTicks = $context->getTicks();
+
+            return str_replace('%TICKS%', $ticks, $prompt);
+        };
+    }
+
+    public static function withRepl(ContextContract $context, array $options = []): ContextContract
+    {
+        $prompt = self::readPrompt($context, isset($options['read.prompt']) ? (string)$options['read.prompt'] : null);
         self::defineOperation(
             $context,
-            new Operation\Repl\ReadOperation(
-                isset($config['read.prompt'])
-                    ? $config['read.prompt']
-                    : function () use ($context, $options) {
-                    static $lastTicks;
-                    $prompt = 'phlip [%TICKS%] > ';
-                    $ticks = null === $lastTicks
-                        ? 0
-                        : $context->getTicks() - $lastTicks - 6;
-                    $lastTicks = $context->getTicks();
-
-                    return str_replace('%TICKS%', $ticks, $prompt);
-                }
-            )
+            !empty($options['read.multi-line'])
+                ? Operation\Repl\ReadOperation::multiLine($prompt)
+                : new Operation\Repl\ReadOperation($prompt)
         );
+
         self::defineOperation(
             $context,
             new Operation\LanguageConstruct\WhileOperation(
-                isset($config['loop.identifier']) ? $config['loop.identifier'] : 'loop'
+                isset($options['loop.identifier']) ? (string)$options['loop.identifier'] : 'loop'
             )
         );
         self::defineOperation($context, new Operation\Repl\EvalOperation);
         self::defineOperation(
             $context,
             $printOperation = new Operation\Repl\PrintOperation(
-                isset($config['print.formBuilder']) ? $config['print.formBuilder'] : null,
-                isset($config['print.lexer']) ? $options['print.lexer'] : null,
+                isset($options['print.form-builder']) && $options['print.form-builder'] instanceof FormBuilder
+                    ? $options['print.form-builder']
+                    : null,
+                isset($options['print.lexer']) && $options['print.lexer'] instanceof Lexer
+                    ? $options['print.lexer']
+                    : null,
                 $options
             )
         );
@@ -228,9 +237,9 @@ class Phlipy
         });
     }
 
-    public static function optionsFromGlobals()
+    public static function optionsFromGlobals(array $defaults = [])
     {
-        $options = [];
+        $options = $defaults;
         foreach ($_SERVER['argv'] as $arg) {
             if (preg_match("/^--([^=]+)=?(.+)?/", $arg, $matches)) {
                 $options[$matches[1]] = $matches[2] ?? true;

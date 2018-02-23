@@ -12,3 +12,22 @@
 (assert-true(defined? x))
 (assert-true(= (ticker) 2))
 (assert-true(= x 0))
+
+(assert-false (defined? factorial))
+
+(assert-equals
+    {
+        10 3628800
+        20 2432902008176640000
+    }
+    (let
+        ((factorial (lambda (x) (if (= x 0) 1 (* x (factorial (- x 1)))))))
+        (assert-true (defined? factorial))
+        {
+            10 (factorial 10)
+            20 (factorial 20)
+        }
+    )
+)
+
+(assert-false (defined? factorial))

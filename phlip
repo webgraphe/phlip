@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip;
 
 require_once 'vendor/autoload.php';
 
-$context = Phlipy::withRepl(Phlipy::context(), [], $options = Phlipy::optionsFromGlobals());
+$context = Phlipy::withRepl(Phlipy::context(), $options = Phlipy::optionsFromGlobals());
 
 if (!empty($options['help'])) {
     echo <<<USAGE
@@ -17,11 +17,14 @@ Usage:
     $ echo "phlip script" | phlip [OPTIONS]
 
   Options:
-    --help          Displays usage
-    --colors        Toggles CLI colors
-    --json-alike    Toggles JSON-alike output
-    --return-types  Toggles display of return types
-    --verbose       Toggles more verbose output
+    --help ···························· Displays usage
+    --colors ·························· Toggles CLI colors
+    --json-alike ······················ Toggles JSON-alike output
+    --return-types ···················· Toggles display of return types
+    --verbose ························· Toggles more verbose output
+    --read.prompt= ···················· Replaces the prompt (defaults to "phlip [%TICKS%] > ")
+    --read.multi-line ················· Toggles support to capture multi-lines (hit ENTER twice to submit forms)
+
 
 USAGE;
     exit(0);
@@ -30,11 +33,8 @@ USAGE;
 try {
     // Phlip script injected from the input
     if (false !== ftell(STDIN)) {
-        $script = trim(file_get_contents('php://stdin'));
-        $result = Program::parse($script)->execute($context);
-        $context = $context->stack();
-        $context->let('result', $result);
-        Program::parse('(print result)')->execute($context);
+        $context->define('stdin', trim(file_get_contents('php://stdin')));
+        Program::parse('(print (eval stdin))')->execute($context);
 
         exit(0);
     }
