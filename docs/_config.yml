@@ -1,1 +1,3 @@
 remote_theme: LeakyAbstractions/pretty-docs
+
+theme: jekyll-theme-architect
