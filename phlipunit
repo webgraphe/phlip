@@ -3,7 +3,26 @@
 
 use Webgraphe\Phlip\Tests\PhlipScriptTestSuite;
 
-require_once 'vendor/autoload.php';
+$autoloadFiles = [__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php'];
+foreach ($autoloadFiles as $autoloadFile) {
+    if (file_exists($autoloadFile)) {
+        define('PHLIP_AUTOLOAD_FILE', $autoloadFile);
+        break;
+    }
+}
+unset($autoloadFile);
+if (!defined('PHLIP_AUTOLOAD_FILE')) {
+    fwrite(
+        STDERR,
+        'You need to set up the project dependencies using Composer:' . PHP_EOL
+        . PHP_EOL
+        . '    composer install' . PHP_EOL
+        . PHP_EOL .
+        'You can learn all about Composer on https://getcomposer.org/.' . PHP_EOL
+    );
+    die(1);
+}
+require PHLIP_AUTOLOAD_FILE;
 
 function fatalError($message)
 {
