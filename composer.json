@@ -18,7 +18,9 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/webgraphe/phlip/issues"
+        "email": "jpleveille+phlip@gmail.com",
+        "issues": "https://github.com/webgraphe/phlip/issues",
+        "docs": "https://webgraphe.github.io/phlip"
     },
     "prefer-stable": true,
     "require": {
