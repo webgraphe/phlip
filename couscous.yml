@@ -1,6 +1,6 @@
 template:
-    url: https://github.com/pnowy/CouscousNativeTemplate
-    index: index.md
+    url: https://github.com/CouscousPHP/Template-Light
+    index: 0.index.md
 
 include:
     - docs
@@ -17,64 +17,28 @@ branch: gh-pages
 
 baseUrl: https://webgraphe.github.io/phlip
 
-title: Webgraphe Phlip
-subTitle: An embeddable scripting language for PHP
+title: Phlip
+subTitle: Embeddable scripts for PHP
 fontAwesomeIcon: fa fa-fw fa-code
 footerText: By Jean-Philippe Léveillé <jpleveille at gmail dot com>
 
 menu:
-    sections:
-        home:
-            name: Webgraphe Phlip
-            items:
-                index:
-                    text: Home
-                    relativeUrl: index.html
-                install:
-                    text: Get started
-                    relativeUrl: install.html
-        language:
-            name: Phlip, the scripting language
-            items:
-                syntax:
-                    text: Syntax Rules
-                    relativeUrl: language/syntax.html
-                atoms:
-                    text: Atoms
-                    relativeUrl: language/atoms.html
-                lists:
-                    text: Lists
-                    relativeUrl: language/lists.html
-                vectors:
-                    text: Vectors
-                    relativeUrl: language/vectors.html
-                maps:
-                    text: Maps
-                    relativeUrl: language/Maps.html
+    items:
+        index:
+            text: Home
+            relativeUrl: index.html
+        install:
+            text: Get started
+            relativeUrl: 1.install.html
+        phlip:
+            text: Phlip, the scripting language
+            relativeUrl: 2.phlip.html
         phlipy:
-            name: Phlipy, the dialect
-            items:
-        components:
-            name: Components
-            items:
-                lexer:
-                    text: Lexer
-                    relativeUrl: language/lexer.html
-                parser:
-                    text: Parser
-                    relativeUrl: language/parser.html
-                program:
-                    text: Program
-                    relativeUrl: language/program.html
-                context:
-                    text: Context
-                    relativeUrl: language/context.html
+            text: Phlipy, the dialect
+            relativeUrl: 3.phlipy.html
+        core:
+            text: Core components
+            relativeUrl: 4.core.html
         utilities:
-            name: Utilities
-            items:
-                phlip:
-                    text: CLI phlip
-                    relativeUrl: utitlities/phlip.html
-                phlipunit:
-                    text: CLI phlipunit
-                    relativeUrl: utitlities/phlipunit.html
+            text: Utilities
+            relativeUrl: 5.utilities.html

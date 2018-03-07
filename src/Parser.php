@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\FormCollection\Map;
-use Webgraphe\Phlip\FormCollection\Pair;
+use Webgraphe\Phlip\FormCollection\DottedPair;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Stream\LexemeStream;
@@ -112,7 +112,7 @@ class Parser
                         return new ProperList(...$list, ...$rest[0]->all());
                     }
 
-                    return Pair::fromForms(...array_merge($list, $rest));
+                    return DottedPair::fromForms(...array_merge($list, $rest));
                 }
 
                 throw new Exception\ParserException("Malformed dot-notation pair; missing right-hand side");

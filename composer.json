@@ -1,10 +1,11 @@
 {
     "name": "webgraphe/phlip",
-    "description": "A dialect for PHP in the form of s-expressions like LISP",
+    "description": "Embeddable scripts for PHP",
     "type": "library",
     "keywords": [
         "lisp",
         "s-expression",
+        "embeddable",
         "dialect"
     ],
     "homepage": "https://github.com/webgraphe/phlip",
@@ -24,8 +25,7 @@
         "php": "^7.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "7.0.*",
-        "phploc/phploc": "*"
+        "phpunit/phpunit": "7.0.*"
     },
     "bin": [
         "phlipunit",

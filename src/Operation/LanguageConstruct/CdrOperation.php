@@ -3,6 +3,9 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\FormCollection\DottedPair;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
@@ -22,11 +25,16 @@ class CdrOperation extends PrimaryOperation
     /**
      * @param ContextContract $context
      * @param ProperList $forms
-     * @return ProperList
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @return FormContract
+     * @throws AssertionException
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
-        return ProperList::assertStaticType($context->execute($forms->assertHead()))->getTail();
+        $consCell = $context->execute($forms->assertHead());
+        if ($consCell instanceof DottedPair) {
+            return $consCell->getSecond();
+        }
+
+        return ProperList::assertStaticType($consCell)->getTail();
     }
 }

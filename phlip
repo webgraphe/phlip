@@ -24,7 +24,7 @@ if (!defined('PHLIP_AUTOLOAD_FILE')) {
 }
 require PHLIP_AUTOLOAD_FILE;
 
-$context = Phlipy::withRepl(Phlipy::context(), $options = Phlipy::optionsFromGlobals());
+$context = Phlipy::withRepl(Phlipy::bootstrap(), $options = Phlipy::optionsFromGlobals());
 
 if (!empty($options['help'])) {
     echo <<<USAGE

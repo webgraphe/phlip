@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
-use Webgraphe\Phlip\FormCollection\Pair;
+use Webgraphe\Phlip\FormCollection\DottedPair;
 use Webgraphe\Phlip\Operation\StandardOperation;
 
 class IsPairOperation extends StandardOperation
@@ -16,7 +16,7 @@ class IsPairOperation extends StandardOperation
     {
         $argument = array_shift($arguments);
 
-        return $argument instanceof Pair;
+        return $argument instanceof DottedPair;
     }
 
     /**

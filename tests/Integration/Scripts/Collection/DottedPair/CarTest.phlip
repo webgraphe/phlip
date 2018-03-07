@@ -1,0 +1,1 @@
+(assert-equals (car '(2 . 3)) '2)

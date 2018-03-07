@@ -6,7 +6,7 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 
 class Phlipy
 {
-    public static function context(ContextContract $context = null): ContextContract
+    public static function bootstrap(ContextContract $context = null): ContextContract
     {
         $context = $context ?? new Context;
         self::withBasicLanguageConstructs($context);

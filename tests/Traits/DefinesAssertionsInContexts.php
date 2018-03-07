@@ -22,7 +22,7 @@ trait DefinesAssertionsInContexts
 {
     protected function contextWithAsserts(ContextContract $context = null): ContextContract
     {
-        $context = $context ?? Phlipy::context();
+        $context = $context ?? Phlipy::bootstrap();
         $context->define(
             'assert-true',
             new CallablePrimaryOperationOperation(

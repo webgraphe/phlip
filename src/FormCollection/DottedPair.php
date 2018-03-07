@@ -11,7 +11,7 @@ use Webgraphe\Phlip\Symbol\DotSymbol;
 use Webgraphe\Phlip\Symbol\Opening;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
 
-class Pair extends FormCollection
+class DottedPair extends FormCollection
 {
     use AssertsStaticType;
 
@@ -30,20 +30,20 @@ class Pair extends FormCollection
      * @param FormContract $left
      * @param FormContract $right
      * @param FormContract[] ...$others
-     * @return Pair
+     * @return DottedPair
      * @throws AssertionException
      */
-    public static function fromForms(FormContract $left, FormContract $right, FormContract ...$others): Pair
+    public static function fromForms(FormContract $left, FormContract $right, FormContract ...$others): DottedPair
     {
         if ($others) {
-            return new Pair($left, static::fromForms($right, ...$others));
+            return new DottedPair($left, static::fromForms($right, ...$others));
         }
 
         if ($right instanceof ProperList) {
             throw new AssertionException("Unexpected proper list");
         }
 
-        return new Pair($left, $right);
+        return new DottedPair($left, $right);
     }
 
     public function count(): int

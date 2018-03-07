@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\FormBuilder;
-use Webgraphe\Phlip\FormCollection\Pair;
+use Webgraphe\Phlip\FormCollection\DottedPair;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\StandardOperation;
 use Webgraphe\Phlip\Traits\AssertsTypes;
@@ -28,7 +28,7 @@ class ConsOperation extends StandardOperation
 
     /**
      * @param FormContract[] ...$arguments
-     * @return ProperList|Pair|FormContract
+     * @return ProperList|DottedPair|FormContract
      * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     public function __invoke(...$arguments): FormContract
@@ -40,7 +40,7 @@ class ConsOperation extends StandardOperation
             return new ProperList($head, ...$tail->all());
         }
 
-        return new Pair($head, $tail);
+        return new DottedPair($head, $tail);
     }
 
     /**
