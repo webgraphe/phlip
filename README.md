@@ -28,6 +28,8 @@ $square = $program->execute($context);
 var_dump($square(M_PI)); // (double)9.8696044010894
 ```
 
+Install with [`composer require webgraphe/phlip`](https://packagist.org/packages/webgraphe/phlip)
+
 ### Why use Phlip
 * Easy to use
 * Easy to learn
