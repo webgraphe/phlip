@@ -1,6 +1,3 @@
----
-currentMenu: index
----
 ## Embeddable scripts for PHP
 
 [Phlip](https://github.com/webgraphe/phlip) (pronounced \\ˈflip\\) is an embeddable scripting language for
