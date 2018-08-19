@@ -3,7 +3,11 @@
 
 namespace Webgraphe\Phlip;
 
-$autoloadFiles = [__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php'];
+$autoloadFiles = [
+    __DIR__ . '/../../autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/vendor/autoload.php'
+];
 foreach ($autoloadFiles as $autoloadFile) {
     if (file_exists($autoloadFile)) {
         define('PHLIP_AUTOLOAD_FILE', $autoloadFile);
@@ -14,17 +18,17 @@ unset($autoloadFile);
 if (!defined('PHLIP_AUTOLOAD_FILE')) {
     fwrite(
         STDERR,
-        'You need to set up the project dependencies using Composer:' . PHP_EOL
-        . PHP_EOL
-        . '    composer install' . PHP_EOL
-        . PHP_EOL .
-        'You can learn all about Composer on https://getcomposer.org/.' . PHP_EOL
+        'You need to set up the project dependencies using Composer:' . PHP_EOL . PHP_EOL
+        . '    composer install' . PHP_EOL . PHP_EOL
+        . 'You can learn all about Composer on https://getcomposer.org/.' . PHP_EOL
     );
-    die(1);
+    exit(1);
 }
+
+/** @noinspection PhpIncludeInspection */
 require PHLIP_AUTOLOAD_FILE;
 
-$context = Phlipy::withRepl(Phlipy::bootstrap(), $options = Phlipy::optionsFromGlobals());
+$options = Phlipy::optionsFromGlobals();
 
 if (!empty($options['help'])) {
     echo <<<USAGE
@@ -50,8 +54,10 @@ USAGE;
 }
 
 try {
-    // Phlip script injected from the input
-    if (false !== ftell(STDIN)) {
+    $context = Phlipy::withRepl(Phlipy::bootstrap(), $options);
+
+    $io = new IOMode(STDIN);
+    if ($io->getSize() && ($io->isRegularFile() || $io->isNamedPipe())) {
         $context->define('stdin', trim(file_get_contents('php://stdin')));
         Program::parse('(print (eval stdin))')->execute($context);
 
@@ -60,10 +66,10 @@ try {
 
     // Interactive REPL prompt
     echo 'Webgraphe Phlip' . PHP_EOL;
-    echo "Type (exit) to quit." . PHP_EOL . PHP_EOL;
+    echo 'Type (exit) to quit.' . PHP_EOL . PHP_EOL;
     Program::parse('(loop (print (eval (read))))')->execute($context);
 } catch (\Throwable $exception) {
-    echo "Webgraphe Phlip FATAL ERROR: " . PHP_EOL;
+    echo "Webgraphe Phlip FATAL ERROR:" . PHP_EOL;
     while ($exception) {
         echo '- ' . get_class($exception) . ': ' . $exception->getMessage() . PHP_EOL;
         $exception = $exception->getPrevious();

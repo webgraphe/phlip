@@ -39,8 +39,7 @@ class JsonTest extends TestCase
     public function testJsonAlike()
     {
         $lexer = new Lexer;
-        $json = trim(file_get_contents(self::getJsonFilePath()));
         $lexemeStream = $lexer->parseSource(file_get_contents(self::getJsonFilePath()))->jsonAlike();
-        $this->assertEquals($json, (string)$lexemeStream);
+        $this->assertJsonStringEqualsJsonFile(self::getJsonFilePath(), (string)$lexemeStream);
     }
 }

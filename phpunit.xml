@@ -21,4 +21,8 @@
             <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
+
+    <php>
+        <ini name="xdebug.max_nesting_level" value="512" />
+    </php>
 </phpunit>
