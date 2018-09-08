@@ -16,7 +16,7 @@ class Map extends FormCollection
 
     /**
      * Map constructor.
-     * @param ProperList[] ...$pairs
+     * @param ProperList ...$pairs
      * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     final public function __construct(ProperList ...$pairs)

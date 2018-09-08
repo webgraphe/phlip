@@ -91,7 +91,7 @@ class LetOperation extends PrimaryOperation
 
     /**
      * @param WalkerContract $walker
-     * @param FormContract[] ...$forms
+     * @param FormContract ...$forms
      * @return FormContract[]
      * @throws AssertionException
      */

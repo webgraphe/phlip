@@ -13,6 +13,11 @@ use Webgraphe\Phlip\Tests\Unit\MarkedFormTest;
 
 class QuotedFormTest extends MarkedFormTest
 {
+    /**
+     * @param CodeAnchorContract|null $codeAnchor
+     * @return FormContract
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     protected function createForm(CodeAnchorContract $codeAnchor = null): FormContract
     {
         return new ProperList(
@@ -27,6 +32,9 @@ class QuotedFormTest extends MarkedFormTest
         return new MarkedForm\QuotedForm($form);
     }
 
+    /**
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     public function testEvaluation()
     {
         $this->assertTrue(

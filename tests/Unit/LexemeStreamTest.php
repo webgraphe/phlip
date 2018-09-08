@@ -8,6 +8,9 @@ use Webgraphe\Phlip\Stream\LexemeStream;
 
 class LexemeStreamTest extends TestCase
 {
+    /**
+     * @throws StreamException
+     */
     public function testEmpty()
     {
         $stream = LexemeStream::fromLexemes();

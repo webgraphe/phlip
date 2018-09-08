@@ -17,7 +17,7 @@ class LambdaOperation extends PrimaryOperation
     /**
      * @param ContextContract $context
      * @param ProperList $parameters
-     * @param FormContract[] ...$statements
+     * @param FormContract ...$statements
      * @return \Closure
      * @throws AssertionException
      */
@@ -89,7 +89,7 @@ class LambdaOperation extends PrimaryOperation
 
     /**
      * @param WalkerContract $walker
-     * @param FormContract[] ...$forms
+     * @param FormContract ...$forms
      * @return array
      * @throws AssertionException
      */

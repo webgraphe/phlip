@@ -107,6 +107,11 @@ class Lexer
         return self::ESCAPED_CHARACTERS[$character] ?? $character;
     }
 
+    /**
+     * @param CharacterStream $stream
+     * @return StringAtom
+     * @throws Exception\StreamException
+     */
     protected function parseString(CharacterStream $stream): StringAtom
     {
         $anchor = new CodeAnchor($stream);

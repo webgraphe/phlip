@@ -10,14 +10,16 @@ use Webgraphe\Phlip\Tests\TestCase;
 
 class LispTest extends TestCase
 {
-    private static function getScript()
+    private static function getScript(): ?string
     {
-        return file_get_contents(__DIR__ . "/Scripts/Lisp.phlip");
+        return file_get_contents(__DIR__ . "/Scripts/Lisp.phlip") ?: null;
     }
 
     /**
      * @dataProvider scripts
      * @param $script
+     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws \Webgraphe\Phlip\Exception\ParserException
      */
     public function testHomoiconicity($script)
     {

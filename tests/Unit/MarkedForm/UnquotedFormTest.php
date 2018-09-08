@@ -11,6 +11,11 @@ use Webgraphe\Phlip\Tests\Unit\MarkedFormTest;
 
 class UnquotedFormTest extends MarkedFormTest
 {
+    /**
+     * @param CodeAnchorContract|null $codeAnchor
+     * @return FormContract
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     protected function createForm(CodeAnchorContract $codeAnchor = null): FormContract
     {
         return IdentifierAtom::fromString('x', $codeAnchor);
@@ -21,6 +26,10 @@ class UnquotedFormTest extends MarkedFormTest
         return new MarkedForm\UnquotedForm($form);
     }
 
+    /**
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws \Webgraphe\Phlip\Exception\ContextException
+     */
     public function testEvaluation()
     {
         $context = new Context;

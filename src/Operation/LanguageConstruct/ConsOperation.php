@@ -27,7 +27,7 @@ class ConsOperation extends StandardOperation
     }
 
     /**
-     * @param FormContract[] ...$arguments
+     * @param FormContract ...$arguments
      * @return ProperList|DottedPair|FormContract
      * @throws \Webgraphe\Phlip\Exception\AssertionException
      */

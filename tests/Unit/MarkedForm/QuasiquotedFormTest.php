@@ -14,6 +14,11 @@ use Webgraphe\Phlip\Tests\Unit\MarkedFormTest;
 
 class QuasiquotedFormTest extends MarkedFormTest
 {
+    /**
+     * @param CodeAnchorContract|null $codeAnchor
+     * @return FormContract
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     protected function createForm(CodeAnchorContract $codeAnchor = null): FormContract
     {
         return new ProperList(
@@ -23,6 +28,10 @@ class QuasiquotedFormTest extends MarkedFormTest
         );
     }
 
+    /**
+     * @return ContextContract
+     * @throws \Webgraphe\Phlip\Exception\ContextException
+     */
     private function getContext(): ContextContract
     {
         $context = new Context;
@@ -32,6 +41,10 @@ class QuasiquotedFormTest extends MarkedFormTest
         return $context;
     }
 
+    /**
+     * @return FormContract
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     private function getFormWithUnquotedIdentifiers(): FormContract
     {
         return new ProperList(
@@ -46,6 +59,10 @@ class QuasiquotedFormTest extends MarkedFormTest
         return new MarkedForm\QuasiquotedForm($form);
     }
 
+    /**
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws \Webgraphe\Phlip\Exception\ContextException
+     */
     public function testEvaluation()
     {
         $this->assertTrue(

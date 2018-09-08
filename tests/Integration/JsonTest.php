@@ -19,7 +19,6 @@ class JsonTest extends TestCase
      * @throws \Webgraphe\Phlip\Exception\IOException
      * @throws \Webgraphe\Phlip\Exception\LexerException
      * @throws \Webgraphe\Phlip\Exception\ParserException
-     * @throws \Webgraphe\Phlip\Exception\ProgramException
      * @throws \Exception
      */
     public function testJson()

@@ -11,6 +11,9 @@ use Webgraphe\Phlip\Tests\TestCase;
 
 class FormBuilderTest extends TestCase
 {
+    /**
+     * @throws AssertionException
+     */
     public function testForm()
     {
         $builder = new FormBuilder;
@@ -22,6 +25,9 @@ class FormBuilderTest extends TestCase
         $this->assertTrue($list->equals($builder->asForm($list)));
     }
 
+    /**
+     * @throws AssertionException
+     */
     public function testNull()
     {
         $builder = new FormBuilder;
@@ -29,6 +35,9 @@ class FormBuilderTest extends TestCase
         $this->assertNull($builder->asForm(null)->evaluate(new Context));
     }
 
+    /**
+     * @throws AssertionException
+     */
     public function testTrue()
     {
         $builder = new FormBuilder;
@@ -36,6 +45,9 @@ class FormBuilderTest extends TestCase
         $this->assertNotEmpty($builder->asForm(true)->evaluate(new Context));
     }
 
+    /**
+     * @throws AssertionException
+     */
     public function testFalse()
     {
         $builder = new FormBuilder;
@@ -43,6 +55,9 @@ class FormBuilderTest extends TestCase
         $this->assertEmpty($builder->asForm(false)->evaluate(new Context));
     }
 
+    /**
+     * @throws AssertionException
+     */
     public function testString()
     {
         $builder = new FormBuilder;
@@ -50,6 +65,9 @@ class FormBuilderTest extends TestCase
         $this->assertEquals("string", $builder->asForm("string")->evaluate(new Context));
     }
 
+    /**
+     * @throws AssertionException
+     */
     public function testNumeric()
     {
         $builder = new FormBuilder;
@@ -59,6 +77,9 @@ class FormBuilderTest extends TestCase
         $this->assertEquals(3.14, $builder->asForm(3.14)->evaluate(new Context));
     }
 
+    /**
+     * @throws AssertionException
+     */
     public function testVector()
     {
         $builder = new FormBuilder;
@@ -67,6 +88,9 @@ class FormBuilderTest extends TestCase
         $this->assertEquals([1, 2, 3], $builder->asForm([1, 2, 3])->evaluate(new Context));
     }
 
+    /**
+     * @throws AssertionException
+     */
     public function testMap()
     {
         $builder = new FormBuilder;
@@ -76,6 +100,9 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($object, $builder->asForm($object)->evaluate(new Context));
     }
 
+    /**
+     * @throws AssertionException
+     */
     public function testUnhandledType()
     {
         $builder = new FormBuilder;

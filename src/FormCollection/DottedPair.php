@@ -29,7 +29,7 @@ class DottedPair extends FormCollection
     /**
      * @param FormContract $left
      * @param FormContract $right
-     * @param FormContract[] ...$others
+     * @param FormContract ...$others
      * @return DottedPair
      * @throws AssertionException
      */

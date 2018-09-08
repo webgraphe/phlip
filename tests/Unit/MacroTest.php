@@ -14,6 +14,10 @@ use Webgraphe\Phlip\Tests\TestCase;
 
 class MacroTest extends TestCase
 {
+    /**
+     * @return Context
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     public function testSingleMacroExpansion()
     {
         $context = new Context;
@@ -31,6 +35,7 @@ class MacroTest extends TestCase
     /**
      * @depends testSingleMacroExpansion
      * @param ContextContract $context
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
      */
     public function testNestedMacroExpansion(ContextContract $context)
     {
@@ -48,6 +53,11 @@ class MacroTest extends TestCase
         );
     }
 
+    /**
+     * @param ContextContract $context
+     * @return Macro
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     private function defineSquareMacro(ContextContract $context): Macro
     {
         $this->assertFalse($context->has('square'), 'square macro already defined');
@@ -72,6 +82,11 @@ class MacroTest extends TestCase
         return $context->get('square');
     }
 
+    /**
+     * @param ContextContract $context
+     * @return Macro
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     private function definePythagorasMacro(ContextContract $context): Macro
     {
         $this->assertFalse($context->has('pythagoras'), 'square macro already defined');
@@ -100,6 +115,12 @@ class MacroTest extends TestCase
         return $context->get('pythagoras');
     }
 
+    /**
+     * @param int $a
+     * @param int $b
+     * @return ProperList
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     private function getExpectedPythagorasExpansion(int $a, int $b): ProperList
     {
         $atomA = NumberAtom::fromString((string)$a);
@@ -116,6 +137,11 @@ class MacroTest extends TestCase
         );
     }
 
+    /**
+     * @param int $a
+     * @return ProperList
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     */
     private function getExpectedSquareExpansion(int $a)
     {
         $atomA = NumberAtom::fromString((string)$a);

@@ -13,6 +13,11 @@ use Webgraphe\Phlip\Tests\TestCase;
 
 class LexerTest extends TestCase
 {
+    /**
+     * @throws LexerException
+     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws \Webgraphe\Phlip\Exception\StreamException
+     */
     public function testParse()
     {
         $lexer = new Lexer;
@@ -75,6 +80,9 @@ SOURCE;
 
     }
 
+    /**
+     * @throws LexerException
+     */
     public function testUnexpectedEndOfString()
     {
         $lexer = new Lexer;
@@ -83,6 +91,9 @@ SOURCE;
         $lexer->parseSource('"non-terminated string');
     }
 
+    /**
+     * @throws LexerException
+     */
     public function testUnexpectedEndOfEscapedString()
     {
         $lexer = new Lexer;

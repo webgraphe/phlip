@@ -26,7 +26,6 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
      * @throws \Webgraphe\Phlip\Exception
      * @throws \Webgraphe\Phlip\Exception\LexerException
      * @throws \Webgraphe\Phlip\Exception\ParserException
-     * @throws \Webgraphe\Phlip\Exception\ProgramException
      */
     public function testScript()
     {

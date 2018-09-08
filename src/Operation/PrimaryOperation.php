@@ -13,7 +13,7 @@ abstract class PrimaryOperation extends Operation implements PrimaryOperationCon
 {
     /**
      * @param ContextContract $context
-     * @param FormContract[] $forms
+     * @param FormContract ...$forms
      * @return mixed
      */
     public final function __invoke(ContextContract $context, FormContract ...$forms)
@@ -23,7 +23,7 @@ abstract class PrimaryOperation extends Operation implements PrimaryOperationCon
 
     /**
      * @param WalkerContract $walker
-     * @param FormContract[] ...$forms
+     * @param FormContract ...$forms
      * @return FormContract[]
      */
     public function walk(WalkerContract $walker, FormContract ...$forms): array

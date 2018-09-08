@@ -10,6 +10,10 @@ use Webgraphe\Phlip\MarkedForm\QuotedForm;
 
 class QuotedFormTest extends TestCase
 {
+    /**
+     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws \Webgraphe\Phlip\Exception\ParserException
+     */
     public function testQuotedNumberAtom()
     {
         $source = "'123";

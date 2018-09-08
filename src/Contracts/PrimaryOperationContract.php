@@ -10,7 +10,7 @@ interface PrimaryOperationContract extends OperationContract
 {
     /**
      * @param ContextContract $context
-     * @param FormContract[] $forms
+     * @param FormContract ...$forms
      * @return mixed
      */
     public function __invoke(ContextContract $context, FormContract ...$forms);
@@ -20,7 +20,7 @@ interface PrimaryOperationContract extends OperationContract
      * Convenient to protect some forms to be expanded.
      *
      * @param WalkerContract $walker
-     * @param FormContract[] ...$forms
+     * @param FormContract ...$forms
      * @return FormContract[]
      */
     public function walk(WalkerContract $walker, FormContract ...$forms): array;

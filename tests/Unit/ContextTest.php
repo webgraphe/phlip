@@ -8,6 +8,9 @@ use Webgraphe\Phlip\Exception\ContextException;
 
 class ContextTest extends TestCase
 {
+    /**
+     * @throws ContextException
+     */
     public function testRedefinition()
     {
         $context = new Context;
@@ -17,6 +20,9 @@ class ContextTest extends TestCase
         $context->define('x', 3);
     }
 
+    /**
+     * @throws ContextException
+     */
     public function testStackedDefinition()
     {
         $child = ($parent = new Context)->stack();
@@ -29,6 +35,9 @@ class ContextTest extends TestCase
         $this->assertEquals('new value', $parent->get('key'));
     }
 
+    /**
+     * @throws ContextException
+     */
     public function testSet()
     {
         $context = new Context();
@@ -38,6 +47,9 @@ class ContextTest extends TestCase
         $this->assertEquals('new value', $context->get('key'));
     }
 
+    /**
+     * @throws ContextException
+     */
     public function testSetUndefined()
     {
         $context = new Context;
@@ -55,6 +67,9 @@ class ContextTest extends TestCase
         $child->let('x', 3);
     }
 
+    /**
+     * @throws ContextException
+     */
     public function testGetUndefined()
     {
         $context = new Context();
@@ -63,6 +78,9 @@ class ContextTest extends TestCase
         $context->get('x');
     }
 
+    /**
+     * @throws ContextException
+     */
     public function testParentHas()
     {
         $child = ($parent = new Context())->stack();

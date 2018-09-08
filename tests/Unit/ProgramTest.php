@@ -5,7 +5,6 @@ namespace Webgraphe\Phlip\Tests\Unit;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Exception\IOException;
-use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
@@ -13,7 +12,6 @@ use Webgraphe\Phlip\Tests\TestCase;
 class ProgramTest extends TestCase
 {
     /**
-     * @throws ProgramException
      * @throws \Exception
      */
     public function testProgram()
@@ -29,7 +27,6 @@ class ProgramTest extends TestCase
     }
 
     /**
-     * @throws ProgramException
      * @throws \Exception
      * @throws \Webgraphe\Phlip\Exception\LexerException
      * @throws \Webgraphe\Phlip\Exception\ParserException
@@ -40,7 +37,6 @@ class ProgramTest extends TestCase
     }
 
     /**
-     * @throws ProgramException
      * @throws \Exception
      * @throws \Webgraphe\Phlip\Exception\IOException
      * @throws \Webgraphe\Phlip\Exception\LexerException
