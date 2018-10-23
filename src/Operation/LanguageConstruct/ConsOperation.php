@@ -40,7 +40,7 @@ class ConsOperation extends StandardOperation
             return new ProperList($head, ...$tail->all());
         }
 
-        return new DottedPair($head, $tail);
+        return DottedPair::fromForms($head, $tail);
     }
 
     /**

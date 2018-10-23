@@ -20,7 +20,7 @@ class DottedPair extends FormCollection
     /** @var FormContract */
     private $second;
 
-    final public function __construct(FormContract $first, FormContract $second)
+    final protected function __construct(FormContract $first, FormContract $second)
     {
         $this->first = $first;
         $this->second = $second;
@@ -36,14 +36,14 @@ class DottedPair extends FormCollection
     public static function fromForms(FormContract $left, FormContract $right, FormContract ...$others): DottedPair
     {
         if ($others) {
-            return new DottedPair($left, static::fromForms($right, ...$others));
+            return new static($left, static::fromForms($right, ...$others));
         }
 
         if ($right instanceof ProperList) {
             throw new AssertionException("Unexpected proper list");
         }
 
-        return new DottedPair($left, $right);
+        return new static($left, $right);
     }
 
     public function count(): int
