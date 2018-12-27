@@ -18,6 +18,7 @@ class Phlipy
         self::withBitwiseOperators($context);
         self::withStringFunctions($context);
         self::withPhpMathFunctions($context);
+        self::withErrors($context);
 
         return $context;
     }
@@ -116,6 +117,36 @@ class Phlipy
         self::defineOperation($context, new Operation\Bitwise\XorOperation);
         self::defineOperation($context, new Operation\Bitwise\ShiftLeftOperation);
         self::defineOperation($context, new Operation\Bitwise\ShiftRightOperation);
+
+        return $context;
+    }
+
+    public static function withErrors(ContextContract $context): ContextContract
+    {
+        $context->define(
+            'notice',
+            function ($message) {
+                trigger_error($message, E_USER_NOTICE);
+            }
+        );
+        $context->define(
+            'warning',
+            function ($message) {
+                trigger_error($message, E_USER_WARNING);
+            }
+        );
+        $context->define(
+            'error',
+            function ($message) {
+                trigger_error($message, E_USER_ERROR);
+            }
+        );
+        $context->define(
+            'deprecated',
+            function ($message) {
+                trigger_error($message, E_USER_DEPRECATED);
+            }
+        );
 
         return $context;
     }

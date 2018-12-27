@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip\FormCollection;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormCollectionContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection;
@@ -15,9 +16,8 @@ class Map extends FormCollection
     private $pairs = [];
 
     /**
-     * Map constructor.
      * @param ProperList ...$pairs
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     final public function __construct(ProperList ...$pairs)
     {
@@ -31,14 +31,30 @@ class Map extends FormCollection
     }
 
     /**
+     * @param mixed $key
+     * @return string|integer
+     * @throws AssertionException
+     */
+    private static function assertScalarOrNull($key)
+    {
+        if (!is_scalar($key) && null !== $key) {
+            throw new AssertionException('Key is not a scalar');
+        }
+
+        return $key;
+    }
+
+    /**
      * @param ContextContract $context
      * @return \stdClass
+     * @throws AssertionException
      */
     public function evaluate(ContextContract $context): \stdClass
     {
         $map = (object)[];
         foreach ($this->pairs as $pair) {
-            $map->{$context->execute($pair->getHead())} = $context->execute($pair->getTail()->getHead());
+            $key = $context->execute($pair->getHead());
+            $map->{self::assertScalarOrNull($key)} = $context->execute($pair->getTail()->getHead());
         }
 
         return $map;
@@ -69,10 +85,10 @@ class Map extends FormCollection
 
     /**
      * @param callable $callback
-     * @return FormCollection|static
+     * @return FormCollectionContract|static
      * @throws AssertionException
      */
-    public function map(callable $callback): FormCollection
+    public function map(callable $callback): FormCollectionContract
     {
         return new static(...array_map($callback, $this->all()));
     }

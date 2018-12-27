@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\FormCollection;
 
+use Webgraphe\Phlip\Contracts\FormCollectionContract;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
@@ -113,9 +114,9 @@ class DottedPair extends FormCollection
 
     /**
      * @param callable $callback
-     * @return FormCollection|static
+     * @return FormCollectionContract|static
      */
-    public function map(callable $callback): FormCollection
+    public function map(callable $callback): FormCollectionContract
     {
         return new static(...array_map($callback, $this->all()));
     }

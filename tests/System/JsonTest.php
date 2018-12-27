@@ -1,6 +1,6 @@
 <?php
 
-namespace Webgraphe\Phlip\Tests\Integration;
+namespace Webgraphe\Phlip\Tests\System;
 
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Lexer;
@@ -11,7 +11,7 @@ class JsonTest extends TestCase
 {
     private static function getJsonFilePath()
     {
-        return __DIR__ . '/Data/menu.json';
+        return dirname(__DIR__) . '/Data/Json/phlip.json';
     }
 
     /**
@@ -26,6 +26,8 @@ class JsonTest extends TestCase
         $init = Program::parseFile(self::getJsonFilePath());
         $context = new Context;
         $context->define('null', null);
+        $context->define('true', true);
+        $context->define('false', false);
         $data = $init->execute($context);
         $jsonDecodedData = json_decode(file_get_contents(self::getJsonFilePath()));
         $this->assertEquals($data, $jsonDecodedData);

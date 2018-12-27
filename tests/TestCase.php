@@ -10,6 +10,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function relativeProjectPath($relativePath): ?string
     {
-        return realpath(dirname(__DIR__) . "/$relativePath");
+        return realpath(sprintf('%s/%s', dirname(__DIR__), $relativePath));
     }
 }

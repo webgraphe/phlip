@@ -1,6 +1,6 @@
 <?php
 
-namespace Webgraphe\Phlip\Tests\Integration;
+namespace Webgraphe\Phlip\Tests\System;
 
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\FormContract;
@@ -12,7 +12,7 @@ class LispTest extends TestCase
 {
     private static function getScript(): ?string
     {
-        return file_get_contents(__DIR__ . "/Scripts/Lisp.phlip") ?: null;
+        return file_get_contents(dirname(__DIR__) . "/Data/Lisp/Lisp.phlip") ?: null;
     }
 
     /**

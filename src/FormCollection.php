@@ -29,12 +29,6 @@ abstract class FormCollection implements FormCollectionContract
         );
     }
 
-    /**
-     * @param callable $callback
-     * @return FormCollection|static
-     */
-    abstract public function map(callable $callback): FormCollection;
-
     public function getIterator(): FormCollectionIteratorContract
     {
         return new FormCollectionIterator($this);

@@ -18,14 +18,7 @@ class KeywordAtom extends Atom
      */
     public static function fromString(string $value, CodeAnchorContract $codeAnchor = null): KeywordAtom
     {
-        if (strlen($value) && KeywordSymbol::CHARACTER === $value[0]) {
-            $value = substr($value, 1);
-        }
-        if (!strlen($value)) {
-            throw new AssertionException('Keyword is empty');
-        }
-
-        return new static($value, $codeAnchor);
+        return new static(self::assertNormalizedKeyword($value), $codeAnchor);
     }
 
     /**
@@ -40,5 +33,19 @@ class KeywordAtom extends Atom
     public function __toString(): string
     {
         return KeywordSymbol::CHARACTER . $this->getValue();
+    }
+
+    /**
+     * @param string $value
+     * @return string
+     * @throws AssertionException
+     */
+    public static function assertNormalizedKeyword(string $value): string
+    {
+        if (strlen($value) && KeywordSymbol::CHARACTER === $value[0]) {
+            $value = substr($value, 1);
+        }
+
+        return self::assertValidIdentifier($value);
     }
 }

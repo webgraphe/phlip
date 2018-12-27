@@ -29,7 +29,7 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
      */
     public function testScript()
     {
-        $context = $this->contextWithAsserts();
+        $context = $this->contextWithAssertions();
         Program::parseFile($this->file)->execute($context);
     }
 

@@ -22,4 +22,6 @@ interface FormCollectionContract extends FormContract, \Countable, \IteratorAggr
      * @return FormContract[]
      */
     public function all(): array;
+
+    public function map(callable $callback): FormCollectionContract;
 }

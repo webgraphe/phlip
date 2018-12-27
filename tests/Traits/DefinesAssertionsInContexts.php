@@ -4,6 +4,7 @@ namespace Webgraphe\Phlip\Tests\Traits;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
@@ -20,7 +21,7 @@ use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
  */
 trait DefinesAssertionsInContexts
 {
-    protected function contextWithAsserts(ContextContract $context = null): ContextContract
+    protected function contextWithAssertions(ContextContract $context = null): ContextContract
     {
         $context = $context ?? Phlipy::bootstrap();
         $context->define(
@@ -50,8 +51,10 @@ trait DefinesAssertionsInContexts
                     $toe = $toeExpression->evaluate($context);
                     try {
                         if ($head instanceof FormContract && $toe instanceof FormContract) {
-                            $this->assertTrue($head->equals($toe),
-                                "Expected $head out of $toeExpression; got $toe");
+                            $this->assertTrue(
+                                $head->equals($toe),
+                                "Expected $head out of $toeExpression; got $toe"
+                            );
                         } else {
                             $headType = is_object($head) ? get_class($head) : gettype($head);
                             $toeType = is_object($toe) ? get_class($toe) : gettype($toe);

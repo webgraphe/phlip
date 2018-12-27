@@ -1,0 +1,5 @@
+(assert-equals #true #true)
+(assert-not-equals #false #true)
+(define true #true)
+(assert-equals true #true)
+(assert-not-equals true #false)

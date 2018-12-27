@@ -1,1 +1,0 @@
-(assert-equals '(1 2 . 3) (cons 1 (cons 2 3)))

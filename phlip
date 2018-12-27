@@ -3,6 +3,8 @@
 
 namespace Webgraphe\Phlip;
 
+use Webgraphe\Phollow\ErrorHandler;
+
 $autoloadFiles = [
     __DIR__ . '/../../autoload.php',
     __DIR__ . '/../vendor/autoload.php',
@@ -28,6 +30,8 @@ if (!defined('PHLIP_AUTOLOAD_FILE')) {
 
 /** @noinspection PhpIncludeInspection */
 require PHLIP_AUTOLOAD_FILE;
+
+ErrorHandler::create()->register();
 
 $options = Phlipy::optionsFromGlobals();
 
