@@ -31,8 +31,6 @@ if (!defined('PHLIP_AUTOLOAD_FILE')) {
 /** @noinspection PhpIncludeInspection */
 require PHLIP_AUTOLOAD_FILE;
 
-ErrorHandler::create()->register();
-
 $options = Phlipy::optionsFromGlobals();
 
 if (!empty($options['help'])) {
