@@ -1,5 +1,6 @@
 {
     "name": "webgraphe/phlip",
+    "version": "0.4.0-dev",
     "description": "Embeddable scripts for PHP",
     "type": "library",
     "keywords": [
@@ -24,10 +25,10 @@
     },
     "prefer-stable": true,
     "require": {
-        "php": "^7.1"
+        "php": "^7.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "7.*"
+        "phpunit/phpunit": "^8.0"
     },
     "bin": [
         "phlipunit",

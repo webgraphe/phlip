@@ -13,8 +13,7 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
 {
     use DefinesAssertionsInContexts;
 
-    /** @var string */
-    private $file;
+    private string $file;
 
     public function __construct(string $file)
     {
@@ -33,19 +32,11 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
         Program::parseFile($this->file)->execute($context);
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return 1;
     }
 
-    /**
-     * Returns a string representation of the object.
-     *
-     * @return string
-     */
     public function toString(): string
     {
         return $this->file;

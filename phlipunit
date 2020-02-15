@@ -1,9 +1,14 @@
 #!/usr/bin/env php
 <?php
 
+use PHPUnit\TextUI\TestRunner;
 use Webgraphe\Phlip\Tests\PhlipScriptTestSuite;
 
-$autoloadFiles = [__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php'];
+$autoloadFiles = [
+    __DIR__ . '/../../autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/vendor/autoload.php'
+];
 foreach ($autoloadFiles as $autoloadFile) {
     if (file_exists($autoloadFile)) {
         define('PHLIP_AUTOLOAD_FILE', $autoloadFile);
@@ -34,9 +39,7 @@ $paths = [];
 $arguments = $_SERVER['argv'];
 array_shift($arguments);
 foreach ($arguments as $argument) {
-    if (0 === strpos($argument, '--')) {
-        // TODO Implement options support
-    } else {
+    if ('-' !== $argument[0]) {
         $paths[] = $argument;
     }
 }
@@ -46,7 +49,15 @@ if (empty($paths)) {
 }
 
 try {
-    \PHPUnit\TextUI\TestRunner::run(new PhlipScriptTestSuite($paths), ['colors' => 'always']);
+    $runner = new TestRunner();
+    $runner->doRun(
+        new PhlipScriptTestSuite($paths),
+        [
+            'colors' => 'always',
+            // As of writing this 8.5.2's runner doesn't handle warnings
+            'warnings' => [],
+        ]
+    );
 } catch (\Exception $e) {
     fatalError($e->getMessage());
 }

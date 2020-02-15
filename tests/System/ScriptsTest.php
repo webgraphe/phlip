@@ -24,9 +24,9 @@ class ScriptsTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return string[][]
      */
-    public function scriptFiles()
+    public function scriptFiles(): array
     {
         $files = self::globRecursive(
             $this->relativeProjectPath('tests/Data/Scripts'),
