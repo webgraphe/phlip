@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Tests\Unit;
 
+use Exception;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
@@ -13,6 +14,7 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\FormCollection\Map;
 use Webgraphe\Phlip\FormCollection\ProperList;
@@ -38,7 +40,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
 
     /**
      * @throws AssertionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStringConvertible()
     {
@@ -56,8 +58,8 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
 
     /**
      * @throws AssertionException
-     * @throws \Exception
-     * @throws \Webgraphe\Phlip\Exception\ContextException
+     * @throws Exception
+     * @throws ContextException
      */
     public function testEvaluation()
     {
@@ -87,7 +89,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
 
     /**
      * @throws AssertionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function testEmptyList()
     {
@@ -104,7 +106,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
 
     /**
      * @throws AssertionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function testAsList()
     {
@@ -117,7 +119,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
 
     /**
      * @throws AssertionException
-     * @throws \Webgraphe\Phlip\Exception\ContextException
+     * @throws ContextException
      */
     public function testNotCallable()
     {
@@ -136,7 +138,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
 
     /**
      * @throws AssertionException
-     * @throws \Webgraphe\Phlip\Exception\ContextException
+     * @throws ContextException
      */
     public function testFailedEvaluation()
     {
@@ -144,12 +146,12 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         $context->define(
             'fail',
             function () {
-                throw new \Exception('Fail', 666);
+                throw new Exception('Fail', 666);
             }
         );
         $list = new ProperList(IdentifierAtom::fromString('fail'));
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Fail');
         $this->expectExceptionCode(666);
         $list->evaluate($context);
@@ -157,7 +159,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
 
     /**
      * @throws AssertionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function testMap()
     {

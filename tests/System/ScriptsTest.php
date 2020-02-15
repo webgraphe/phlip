@@ -2,6 +2,10 @@
 
 namespace Webgraphe\Phlip\Tests\System;
 
+use DirectoryIterator;
+use Webgraphe\Phlip\Exception\IOException;
+use Webgraphe\Phlip\Exception\LexerException;
+use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInContexts;
@@ -13,9 +17,9 @@ class ScriptsTest extends TestCase
     /**
      * @dataProvider scriptFiles
      * @param string $file
-     * @throws \Webgraphe\Phlip\Exception\IOException
-     * @throws \Webgraphe\Phlip\Exception\LexerException
-     * @throws \Webgraphe\Phlip\Exception\ParserException
+     * @throws IOException
+     * @throws LexerException
+     * @throws ParserException
      */
     public function testScript($file)
     {
@@ -30,7 +34,7 @@ class ScriptsTest extends TestCase
     {
         $files = self::globRecursive(
             $this->relativeProjectPath('tests/Data/Scripts'),
-            function (\DirectoryIterator $iterator) {
+            function (DirectoryIterator $iterator) {
                 return $iterator->isFile() && preg_match('/Test\\.phlip$/', $iterator->getFilename());
             }
         );

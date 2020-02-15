@@ -2,20 +2,18 @@
 
 namespace Webgraphe\Phlip;
 
+use Iterator;
 use Webgraphe\Phlip\Exception\StreamException;
 
-abstract class Stream implements \Iterator
+abstract class Stream implements Iterator
 {
     /** @var mixed */
     protected $stream;
-    /** @var int */
-    protected $length = 0;
-    /** @var string|null */
-    protected $name;
+    protected int $length = 0;
+    protected ?string $name;
 
-    /** @var int */
-    private $cursor = 0;
-    /** @var string */
+    private int $cursor = 0;
+    /** @var mixed */
     private $current;
 
     final protected function __construct($stream, int $length, string $name = null)
@@ -32,7 +30,7 @@ abstract class Stream implements \Iterator
     }
 
     /**
-     * @return mixed|string
+     * @return mixed
      * @throws StreamException
      */
     public function current()

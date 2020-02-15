@@ -17,8 +17,7 @@ abstract class Atom implements LexemeContract, FormContract
 
     /** @var string|number|bool|null */
     private $value;
-    /** @var CodeAnchorContract|null */
-    private $codeAnchor;
+    private ?CodeAnchorContract $codeAnchor;
 
     final protected function __construct($value, CodeAnchorContract $codeAnchor = null)
     {

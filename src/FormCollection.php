@@ -9,6 +9,10 @@ use Webgraphe\Phlip\Contracts\FormContract;
 
 abstract class FormCollection implements FormCollectionContract
 {
+    /**
+     * @param FormContract $against
+     * @return bool
+     */
     public function equals(FormContract $against): bool
     {
         $count = count($this);
@@ -17,23 +21,32 @@ abstract class FormCollection implements FormCollectionContract
         }
 
         $iterator = $this->getIterator();
-        return $count === iterator_apply(
-            $iterator,
-            function (FormCollectionIterator $self, FormCollectionIterator $other) {
-                $result = $self->current()->equals($other->current());
-                $other->next();
 
-                return $result;
-            },
-            [ $iterator, $against->getIterator() ]
-        );
+        return $count === iterator_apply(
+                $iterator,
+                function (FormCollectionIterator $self, FormCollectionIterator $other) {
+                    $result = $self->current()->equals($other->current());
+                    $other->next();
+
+                    return $result;
+                },
+                [$iterator, $against->getIterator()]
+            );
     }
 
+    /**
+     * Guaranteed iterator returned.
+     *
+     * @return FormCollectionIteratorContract
+     */
     public function getIterator(): FormCollectionIteratorContract
     {
         return new FormCollectionIterator($this);
     }
 
+    /**
+     * @return CodeAnchorContract|null
+     */
     public function getCodeAnchor(): ?CodeAnchorContract
     {
         $iterator = $this->getIterator();

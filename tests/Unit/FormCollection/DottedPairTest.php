@@ -11,7 +11,7 @@ use Webgraphe\Phlip\Tests\TestCase;
 class DottedPairTest extends TestCase
 {
     /**
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     public function testUnexpectedProperList()
     {

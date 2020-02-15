@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip;
 
+use stdClass;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
@@ -55,7 +56,7 @@ class FormBuilder
             );
         }
 
-        if ($thing instanceof \stdClass) {
+        if ($thing instanceof stdClass) {
             $properties = get_object_vars($thing);
             return new Map(
                 ...array_map(

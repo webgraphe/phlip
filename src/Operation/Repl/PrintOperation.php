@@ -2,11 +2,14 @@
 
 namespace Webgraphe\Phlip\Operation\Repl;
 
+use Closure;
+use Throwable;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Contracts\LexemeContract;
+use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\Lexer;
@@ -16,6 +19,7 @@ use Webgraphe\Phlip\Symbol;
 
 class PrintOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'print';
 
     /** @var string */
@@ -51,17 +55,17 @@ class PrintOperation extends StandardOperation
         KeywordAtom::class => self::CLI_COLOR_KEYWORD,
     ];
 
-    /** @var FormBuilder */
-    private $formBuilder;
-    /** @var array */
-    private $options = [
+    private FormBuilder $formBuilder;
+
+    /** @var bool[] */
+    private array $options = [
         self::OPTION_RETURN_TYPE => false,
         self::OPTION_COLORS => false,
         self::OPTION_VERBOSE => false,
         self::OPTION_JSON_ALIKE => false,
     ];
-    /** @var Lexer */
-    private $lexer;
+
+    private Lexer $lexer;
 
     public function __construct(
         FormBuilder $formBuilder = null,
@@ -87,7 +91,7 @@ class PrintOperation extends StandardOperation
     /**
      * @param array ...$arguments
      * @return mixed
-     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws LexerException
      */
     public function __invoke(...$arguments)
     {
@@ -97,7 +101,7 @@ class PrintOperation extends StandardOperation
         $color = self::CLI_COLOR_TYPE;
         $value = null;
 
-        if ($argument instanceof \Throwable) {
+        if ($argument instanceof Throwable) {
             $color = self::CLI_COLOR_EXCEPTION;
             if ($previous = $argument->getPrevious()) {
                 call_user_func($this, $previous);
@@ -113,7 +117,7 @@ class PrintOperation extends StandardOperation
             try {
                 $form = $this->formBuilder->asForm($argument);
                 $value = $this->stringifyLexemeStream($this->lexer->parseSource((string)$form));
-            } catch (\Throwable $t) {
+            } catch (Throwable $t) {
                 // do nothing
             }
         }
@@ -150,13 +154,13 @@ class PrintOperation extends StandardOperation
         return $stream;
     }
 
-    public static function cliColors(): \Closure
+    public static function cliColors(): Closure
     {
         return function (LexemeContract $lexeme): string {
             $class = get_class($lexeme);
 
             return isset(self::CLI_LEXEME_COLORS[$class])
-                ? "\033[". self::CLI_LEXEME_COLORS[$class] . 'm' . $lexeme ."\033[0m"
+                ? "\033[" . self::CLI_LEXEME_COLORS[$class] . 'm' . $lexeme . "\033[0m"
                 : (string)$lexeme;
         };
     }
@@ -164,7 +168,7 @@ class PrintOperation extends StandardOperation
     /**
      * @param ProgramException $exception
      * @return string
-     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws LexerException
      */
     private function dumpProgramExceptionStackTrace(ProgramException $exception): string
     {
@@ -190,6 +194,5 @@ class PrintOperation extends StandardOperation
                     $stack
                 )
             );
-
     }
 }

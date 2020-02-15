@@ -8,6 +8,8 @@ use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\CodeAnchorContract;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\MarkedForm;
 use Webgraphe\Phlip\Tests\Unit\MarkedFormTest;
@@ -17,7 +19,7 @@ class QuasiquotedFormTest extends MarkedFormTest
     /**
      * @param CodeAnchorContract|null $codeAnchor
      * @return FormContract
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     protected function createForm(CodeAnchorContract $codeAnchor = null): FormContract
     {
@@ -30,7 +32,7 @@ class QuasiquotedFormTest extends MarkedFormTest
 
     /**
      * @return ContextContract
-     * @throws \Webgraphe\Phlip\Exception\ContextException
+     * @throws ContextException
      */
     private function getContext(): ContextContract
     {
@@ -43,7 +45,7 @@ class QuasiquotedFormTest extends MarkedFormTest
 
     /**
      * @return FormContract
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     private function getFormWithUnquotedIdentifiers(): FormContract
     {
@@ -60,8 +62,8 @@ class QuasiquotedFormTest extends MarkedFormTest
     }
 
     /**
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
-     * @throws \Webgraphe\Phlip\Exception\ContextException
+     * @throws AssertionException
+     * @throws ContextException
      */
     public function testEvaluation()
     {

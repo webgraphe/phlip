@@ -2,16 +2,18 @@
 
 namespace Webgraphe\Phlip\Operation\Comparison;
 
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Operation;
 
 class SpaceshipOperation extends Operation\Comparison
 {
+    /** @var string */
     const IDENTIFIER = '<=>';
 
     /**
      * @param array ...$arguments
      * @return mixed
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     public function __invoke(...$arguments)
     {

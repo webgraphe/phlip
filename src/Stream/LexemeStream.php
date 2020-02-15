@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Stream;
 
+use Closure;
 use Webgraphe\Phlip\Contracts\LexemeContract;
 use Webgraphe\Phlip\Contracts\StringConvertibleContract;
 use Webgraphe\Phlip\Exception\StreamException;
@@ -14,10 +15,8 @@ use Webgraphe\Phlip\Symbol\Opening;
  */
 class LexemeStream extends Stream implements StringConvertibleContract
 {
-    /** @var bool */
-    private $jsonAlike = false;
-    /** @var \Closure|null */
-    private $lexemeStylizer;
+    private bool $jsonAlike = false;
+    private ?Closure $lexemeStylizer = null;
 
     public static function fromLexemes(LexemeContract ...$lexemes)
     {
@@ -42,7 +41,7 @@ class LexemeStream extends Stream implements StringConvertibleContract
 
     /**
      * @return LexemeContract
-     * @throws \Webgraphe\Phlip\Exception\StreamException
+     * @throws StreamException
      */
     public function current(): LexemeContract
     {

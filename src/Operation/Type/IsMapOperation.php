@@ -2,11 +2,13 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
+use stdClass;
 use Webgraphe\Phlip\FormCollection\Map;
 use Webgraphe\Phlip\Operation\StandardOperation;
 
 class IsMapOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'map?';
 
     /**
@@ -17,7 +19,7 @@ class IsMapOperation extends StandardOperation
     {
         $argument = array_shift($arguments);
 
-        return $argument instanceof \stdClass || $argument instanceof Map;
+        return $argument instanceof stdClass || $argument instanceof Map;
     }
 
     /**

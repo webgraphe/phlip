@@ -9,11 +9,11 @@ use Webgraphe\Phlip\Contracts\FormContract;
 class FormCollectionIterator implements FormCollectionIteratorContract
 {
     /** @var FormContract[] */
-    private $elements = [];
+    private array $elements = [];
     /** @var int[]|string[] */
-    private $keys = [];
-    private $offset = 0;
-    private $size = 0;
+    private array $keys = [];
+    private int $offset = 0;
+    private int $size = 0;
 
     public function __construct(FormCollectionContract $collection)
     {

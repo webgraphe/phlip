@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Stream;
 
+use Webgraphe\Phlip\Exception\StreamException;
 use Webgraphe\Phlip\Stream;
 
 /**
@@ -9,7 +10,7 @@ use Webgraphe\Phlip\Stream;
  */
 class CharacterStream extends Stream
 {
-    public static function fromString(string $stream, string $name = null)
+    public static function fromString(string $stream, string $name = null): CharacterStream
     {
         $stream = str_replace(["\r\n", "\r"], ["\n", "\n"], $stream);
 
@@ -18,7 +19,7 @@ class CharacterStream extends Stream
 
     /**
      * @return string
-     * @throws \Webgraphe\Phlip\Exception\StreamException
+     * @throws StreamException
      */
     public function current(): string
     {

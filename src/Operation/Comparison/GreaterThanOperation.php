@@ -2,17 +2,20 @@
 
 namespace Webgraphe\Phlip\Operation\Comparison;
 
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Operation;
 
 class GreaterThanOperation extends Operation\Comparison
 {
+    /** @var string */
     const IDENTIFIER = '>';
+    /** @var string */
     const IDENTIFIER_ALTERNATIVE= 'gt?';
 
     /**
      * @param array ...$arguments
      * @return mixed
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     public function __invoke(...$arguments)
     {

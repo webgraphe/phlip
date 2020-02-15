@@ -4,6 +4,8 @@ namespace Webgraphe\Phlip\Tests\System;
 
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\LexerException;
+use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
@@ -18,8 +20,8 @@ class LispTest extends TestCase
     /**
      * @dataProvider scripts
      * @param $script
-     * @throws \Webgraphe\Phlip\Exception\LexerException
-     * @throws \Webgraphe\Phlip\Exception\ParserException
+     * @throws LexerException
+     * @throws ParserException
      */
     public function testHomoiconicity($script)
     {

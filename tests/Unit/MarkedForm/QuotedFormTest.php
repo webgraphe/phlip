@@ -7,6 +7,7 @@ use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\CodeAnchorContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\MarkedForm;
 use Webgraphe\Phlip\Tests\Unit\MarkedFormTest;
@@ -16,7 +17,7 @@ class QuotedFormTest extends MarkedFormTest
     /**
      * @param CodeAnchorContract|null $codeAnchor
      * @return FormContract
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     protected function createForm(CodeAnchorContract $codeAnchor = null): FormContract
     {
@@ -33,7 +34,7 @@ class QuotedFormTest extends MarkedFormTest
     }
 
     /**
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     public function testEvaluation()
     {

@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\FormCollection;
 
+use stdClass;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormCollectionContract;
 use Webgraphe\Phlip\Contracts\FormContract;
@@ -13,7 +14,7 @@ use Webgraphe\Phlip\Symbol\Opening;
 class Map extends FormCollection
 {
     /** @var ProperList[] */
-    private $pairs = [];
+    private array $pairs = [];
 
     /**
      * @param ProperList ...$pairs
@@ -46,10 +47,10 @@ class Map extends FormCollection
 
     /**
      * @param ContextContract $context
-     * @return \stdClass
+     * @return stdClass
      * @throws AssertionException
      */
-    public function evaluate(ContextContract $context): \stdClass
+    public function evaluate(ContextContract $context): stdClass
     {
         $map = (object)[];
         foreach ($this->pairs as $pair) {

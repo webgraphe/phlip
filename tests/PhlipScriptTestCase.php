@@ -2,6 +2,9 @@
 
 namespace Webgraphe\Phlip\Tests;
 
+use Webgraphe\Phlip\Exception\IOException;
+use Webgraphe\Phlip\Exception\LexerException;
+use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInContexts;
 
@@ -22,9 +25,9 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Webgraphe\Phlip\Exception
-     * @throws \Webgraphe\Phlip\Exception\LexerException
-     * @throws \Webgraphe\Phlip\Exception\ParserException
+     * @throws IOException
+     * @throws LexerException
+     * @throws ParserException
      */
     public function testScript()
     {

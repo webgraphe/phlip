@@ -4,6 +4,7 @@ namespace Webgraphe\Phlip\MarkedForm;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\MarkedForm;
@@ -14,7 +15,7 @@ class QuasiquotedForm extends MarkedForm
     /**
      * @param ContextContract $context
      * @return FormContract
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     public function evaluate(ContextContract $context): FormContract
     {
@@ -25,7 +26,7 @@ class QuasiquotedForm extends MarkedForm
      * @param ContextContract $context
      * @param FormContract $form
      * @return FormContract
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     protected function apply(ContextContract $context, FormContract $form): FormContract
     {

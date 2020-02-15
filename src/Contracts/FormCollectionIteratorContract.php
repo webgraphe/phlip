@@ -2,7 +2,9 @@
 
 namespace Webgraphe\Phlip\Contracts;
 
-interface FormCollectionIteratorContract extends \Iterator
+use Iterator;
+
+interface FormCollectionIteratorContract extends Iterator
 {
     public function current(): ?FormContract;
 

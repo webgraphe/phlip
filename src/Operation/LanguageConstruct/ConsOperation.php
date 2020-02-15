@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection\DottedPair;
 use Webgraphe\Phlip\FormCollection\ProperList;
@@ -16,10 +17,10 @@ class ConsOperation extends StandardOperation
 {
     use AssertsTypes;
 
+    /** @var string */
     const IDENTIFIER = 'cons';
 
-    /** @var FormBuilder */
-    private $formBuilder;
+    private FormBuilder $formBuilder;
 
     public function __construct(FormBuilder $formBuilder = null)
     {
@@ -29,7 +30,7 @@ class ConsOperation extends StandardOperation
     /**
      * @param FormContract ...$arguments
      * @return ProperList|DottedPair|FormContract
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     public function __invoke(...$arguments): FormContract
     {

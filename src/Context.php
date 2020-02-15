@@ -9,16 +9,12 @@ use Webgraphe\Phlip\Exception\ContextException;
 
 class Context implements ContextContract
 {
-    /** @var array */
-    private $data = [];
-    /** @var Context */
-    private $parent;
+    private array $data = [];
+    private ?Context $parent = null;
     /** @var FormContract[] */
-    private $formStack = [];
-    /** @var WalkerContract  */
-    private $walker;
-    /** @var int */
-    private $ticks = 0;
+    private array $formStack = [];
+    private WalkerContract $walker;
+    private int $ticks = 0;
 
     public function __construct(FormBuilder $formBuilder = null)
     {

@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Repl;
 
+use Throwable;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
@@ -9,6 +10,7 @@ use Webgraphe\Phlip\Program;
 
 class EvalOperation extends PrimaryOperation
 {
+    /** @var string */
     const IDENTIFIER = 'eval';
 
     /**
@@ -30,7 +32,7 @@ class EvalOperation extends PrimaryOperation
             $source = $context->execute($forms->assertHead());
 
             return Program::parse($source)->execute($context);
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             return $t;
         }
     }

@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip;
 
+use Closure;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
@@ -12,8 +13,7 @@ class Macro
 {
     use AssertsStaticType;
 
-    /** @var \Closure */
-    private $lambda;
+    private Closure $lambda;
 
     /**
      * @param ContextContract $context

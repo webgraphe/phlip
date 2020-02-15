@@ -8,10 +8,10 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class ListOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'list';
 
-    /** @var FormBuilder */
-    private $formBuilder;
+    private FormBuilder $formBuilder;
 
     public function __construct(FormBuilder $formBuilder = null)
     {

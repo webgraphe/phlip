@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Macro;
 use Webgraphe\Phlip\MarkedForm\QuasiquotedForm;
@@ -16,7 +17,7 @@ class MacroTest extends TestCase
 {
     /**
      * @return Context
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     public function testSingleMacroExpansion()
     {
@@ -35,7 +36,7 @@ class MacroTest extends TestCase
     /**
      * @depends testSingleMacroExpansion
      * @param ContextContract $context
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     public function testNestedMacroExpansion(ContextContract $context)
     {
@@ -56,7 +57,7 @@ class MacroTest extends TestCase
     /**
      * @param ContextContract $context
      * @return Macro
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     private function defineSquareMacro(ContextContract $context): Macro
     {
@@ -85,7 +86,7 @@ class MacroTest extends TestCase
     /**
      * @param ContextContract $context
      * @return Macro
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     private function definePythagorasMacro(ContextContract $context): Macro
     {
@@ -119,7 +120,7 @@ class MacroTest extends TestCase
      * @param int $a
      * @param int $b
      * @return ProperList
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     private function getExpectedPythagorasExpansion(int $a, int $b): ProperList
     {
@@ -140,7 +141,7 @@ class MacroTest extends TestCase
     /**
      * @param int $a
      * @return ProperList
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     private function getExpectedSquareExpansion(int $a)
     {

@@ -3,12 +3,14 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Macro;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class MacroOperation extends PrimaryOperation
 {
+    /** @var string */
     const IDENTIFIER = 'macro';
 
     /**
@@ -23,7 +25,7 @@ class MacroOperation extends PrimaryOperation
      * @param ContextContract $context
      * @param ProperList $forms
      * @return Macro
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     protected function invoke(ContextContract $context, ProperList $forms): Macro
     {

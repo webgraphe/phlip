@@ -2,7 +2,12 @@
 
 namespace Webgraphe\Phlip\Tests\System;
 
+use Exception;
 use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\IOException;
+use Webgraphe\Phlip\Exception\LexerException;
+use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
@@ -15,11 +20,11 @@ class JsonTest extends TestCase
     }
 
     /**
-     * @throws \Webgraphe\Phlip\Exception\ContextException
-     * @throws \Webgraphe\Phlip\Exception\IOException
-     * @throws \Webgraphe\Phlip\Exception\LexerException
-     * @throws \Webgraphe\Phlip\Exception\ParserException
-     * @throws \Exception
+     * @throws ContextException
+     * @throws IOException
+     * @throws LexerException
+     * @throws ParserException
+     * @throws Exception
      */
     public function testJson()
     {
@@ -34,8 +39,8 @@ class JsonTest extends TestCase
     }
 
     /**
-     * @throws \Webgraphe\Phlip\Exception\LexerException
-     * @throws \Exception
+     * @throws LexerException
+     * @throws Exception
      */
     public function testJsonAlike()
     {

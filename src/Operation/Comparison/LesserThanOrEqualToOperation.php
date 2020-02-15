@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Comparison;
 
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Operation;
 
 class LesserThanOrEqualToOperation extends Operation\Comparison
@@ -12,7 +13,7 @@ class LesserThanOrEqualToOperation extends Operation\Comparison
     /**
      * @param array ...$arguments
      * @return mixed
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     public function __invoke(...$arguments)
     {

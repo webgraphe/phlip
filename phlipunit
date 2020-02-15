@@ -27,6 +27,8 @@ if (!defined('PHLIP_AUTOLOAD_FILE')) {
     );
     die(1);
 }
+
+/** @noinspection PhpIncludeInspection */
 require PHLIP_AUTOLOAD_FILE;
 
 function fatalError($message)
@@ -58,6 +60,6 @@ try {
             'warnings' => [],
         ]
     );
-} catch (\Exception $e) {
+} catch (Exception $e) {
     fatalError($e->getMessage());
 }

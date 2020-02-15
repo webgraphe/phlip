@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip;
 
+use Closure;
 use Webgraphe\Phlip\Contracts\ContextContract;
 
 class Phlipy
@@ -151,7 +152,7 @@ class Phlipy
         return $context;
     }
 
-    private static function readPrompt(ContextContract $context, string $prompt = null): \Closure
+    private static function readPrompt(ContextContract $context, string $prompt = null): Closure
     {
         return function () use ($context, $prompt) {
             static $lastTicks;

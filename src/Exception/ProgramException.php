@@ -2,19 +2,19 @@
 
 namespace Webgraphe\Phlip\Exception;
 
+use Throwable;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception;
 
 class ProgramException extends Exception
 {
-    /** @var ContextContract */
-    private $context;
+    private ContextContract $context;
 
     public static function fromContext(
         ContextContract $context,
         string $message,
         int $code = 0,
-        \Throwable $previous = null
+        Throwable $previous = null
     ) {
         $self = new static($message, $code, $previous);
         $self->context = $context;

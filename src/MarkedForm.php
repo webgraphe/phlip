@@ -7,8 +7,7 @@ use Webgraphe\Phlip\Contracts\FormContract;
 
 abstract class MarkedForm implements FormContract
 {
-    /** @var FormContract */
-    private $form;
+    private FormContract $form;
 
     final public function __construct(FormContract $form)
     {

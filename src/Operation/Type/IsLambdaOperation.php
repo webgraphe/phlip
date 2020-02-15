@@ -2,11 +2,14 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
+use Closure;
 use Webgraphe\Phlip\Operation\StandardOperation;
 
 class IsLambdaOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'lambda?';
+
     /**
      * @param array ...$arguments
      * @return bool
@@ -15,7 +18,7 @@ class IsLambdaOperation extends StandardOperation
     {
         $argument = array_shift($arguments);
 
-        return $argument instanceof \Closure;
+        return $argument instanceof Closure;
     }
 
     /**

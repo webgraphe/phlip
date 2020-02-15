@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Tests\Unit;
 
+use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Tests\TestCase;
@@ -13,7 +14,7 @@ class ParserTest extends TestCase
 {
     /**
      * @throws ParserException
-     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws LexerException
      */
     public function testIncoherentStatement()
     {
@@ -23,7 +24,7 @@ class ParserTest extends TestCase
 
     /**
      * @throws ParserException
-     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws LexerException
      */
     public function testStringConvertibleList()
     {
@@ -42,7 +43,7 @@ class ParserTest extends TestCase
 
     /**
      * @throws ParserException
-     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws LexerException
      */
     public function testMalformedPairMissingLeftHandSide()
     {
@@ -52,7 +53,7 @@ class ParserTest extends TestCase
 
     /**
      * @throws ParserException
-     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws LexerException
      */
     public function testMalformedPairMissingRightHandSide()
     {
@@ -62,7 +63,7 @@ class ParserTest extends TestCase
 
     /**
      * @throws ParserException
-     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws LexerException
      */
     public function testMalformedPairTooManyFormsOnRightHandSide()
     {
@@ -72,7 +73,7 @@ class ParserTest extends TestCase
 
     /**
      * @throws ParserException
-     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws LexerException
      */
     public function testValidPair()
     {
@@ -84,7 +85,7 @@ class ParserTest extends TestCase
 
     /**
      * @throws ParserException
-     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws LexerException
      */
     public function testValidNestedPairs()
     {
@@ -96,7 +97,7 @@ class ParserTest extends TestCase
 
     /**
      * @throws ParserException
-     * @throws \Webgraphe\Phlip\Exception\LexerException
+     * @throws LexerException
      */
     public function testValidPairWithEndingProperList()
     {

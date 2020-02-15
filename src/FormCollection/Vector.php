@@ -12,7 +12,7 @@ use Webgraphe\Phlip\Symbol\Opening;
 class Vector extends FormCollection
 {
     /** @var FormContract[] */
-    private $elements;
+    private array $elements;
 
     final public function __construct(FormContract ...$elements)
     {

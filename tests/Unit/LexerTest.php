@@ -6,7 +6,9 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\LexerException;
+use Webgraphe\Phlip\Exception\StreamException;
 use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Symbol;
 use Webgraphe\Phlip\Tests\TestCase;
@@ -15,8 +17,8 @@ class LexerTest extends TestCase
 {
     /**
      * @throws LexerException
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
-     * @throws \Webgraphe\Phlip\Exception\StreamException
+     * @throws AssertionException
+     * @throws StreamException
      */
     public function testParse()
     {

@@ -2,6 +2,8 @@
 
 namespace Webgraphe\Phlip\Tests\Unit;
 
+use Webgraphe\Phlip\Exception\LexerException;
+use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Lexer;
@@ -11,8 +13,8 @@ use Webgraphe\Phlip\MarkedForm\QuotedForm;
 class QuotedFormTest extends TestCase
 {
     /**
-     * @throws \Webgraphe\Phlip\Exception\LexerException
-     * @throws \Webgraphe\Phlip\Exception\ParserException
+     * @throws LexerException
+     * @throws ParserException
      */
     public function testQuotedNumberAtom()
     {

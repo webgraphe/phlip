@@ -2,12 +2,13 @@
 
 namespace Webgraphe\Phlip;
 
+use Closure;
+use Throwable;
 use Webgraphe\Phlip\FormCollection\ProperList;
 
 class Program
 {
-    /** @var ProperList */
-    private $statements;
+    private ProperList $statements;
 
     public function __construct(ProperList $statements)
     {
@@ -55,7 +56,7 @@ class Program
 
     /**
      * @param Contracts\ContextContract $context
-     * @return \Closure
+     * @return Closure
      */
     public function compile(Contracts\ContextContract $context)
     {
@@ -74,7 +75,7 @@ class Program
                     $statements = $statements->getTail();
                     $result = $context->execute($head);
                 }
-            } catch (\Throwable $t) {
+            } catch (Throwable $t) {
                 throw Exception\ProgramException::fromContext(clone $context, 'Program execution failed', 0, $t);
             }
 

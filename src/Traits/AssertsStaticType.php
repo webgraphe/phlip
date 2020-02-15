@@ -2,6 +2,8 @@
 
 namespace Webgraphe\Phlip\Traits;
 
+use Webgraphe\Phlip\Exception\AssertionException;
+
 trait AssertsStaticType
 {
     use AssertsTypes;
@@ -9,7 +11,7 @@ trait AssertsStaticType
     /**
      * @param mixed $thing
      * @return static
-     * @throws \Webgraphe\Phlip\Exception\AssertionException
+     * @throws AssertionException
      */
     public static function assertStaticType($thing)
     {

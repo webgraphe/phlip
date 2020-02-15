@@ -10,8 +10,7 @@ class ReadOperation extends StandardOperation
 
     /** @var string|callable */
     private $prompt;
-    /** @var bool */
-    private $multiLine = false;
+    private bool $multiLine = false;
 
     public function __construct($prompt = null)
     {
@@ -19,7 +18,7 @@ class ReadOperation extends StandardOperation
     }
 
     /**
-     * @param null $prompt
+     * @param string|callable|null $prompt
      * @return static
      */
     public static function multiLine($prompt = null)

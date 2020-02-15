@@ -2,7 +2,10 @@
 
 namespace Webgraphe\Phlip\Tests;
 
+use DirectoryIterator;
 use PHPUnit\Framework\TestSuite;
+use RuntimeException;
+use SplFileInfo;
 use Webgraphe\Phlip\Tests\Traits\GlobsPathsRecursively;
 
 /**
@@ -16,19 +19,19 @@ class PhlipScriptTestSuite extends TestSuite
     {
         parent::__construct();
 
-        $phlipTestFileFilter = function (\DirectoryIterator $iterator) {
+        $phlipTestFileFilter = function (DirectoryIterator $iterator) {
             return $iterator->isFile() && preg_match('/Test\\.phlip$/', $iterator->getFilename());
         };
 
         $files = [];
         foreach ($paths as $path) {
-            $fileInfo = new \SplFileInfo($path);
+            $fileInfo = new SplFileInfo($path);
             if (!$fileInfo->isReadable()) {
-                throw new \RuntimeException("Cannot open file/directory {$fileInfo->getPathname()}");
+                throw new RuntimeException("Cannot open file/directory {$fileInfo->getPathname()}");
             }
             if ($fileInfo->isFile()) {
                 if (!preg_match('/Test\\.phlip$/', $fileInfo->getFilename())) {
-                    throw new \RuntimeException("{$fileInfo->getPathname()} is not a test file");
+                    throw new RuntimeException("{$fileInfo->getPathname()} is not a test file");
                 }
                 $realPath = $fileInfo->getRealPath();
                 $files[$realPath] = $realPath;

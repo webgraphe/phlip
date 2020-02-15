@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
+use Closure;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
@@ -18,7 +19,7 @@ class LambdaOperation extends PrimaryOperation
      * @param ContextContract $context
      * @param ProperList $parameters
      * @param FormContract ...$statements
-     * @return \Closure
+     * @return Closure
      * @throws AssertionException
      */
     public static function invokeStatic(
@@ -32,7 +33,7 @@ class LambdaOperation extends PrimaryOperation
     /**
      * @param ContextContract $context
      * @param ProperList $forms
-     * @return \Closure
+     * @return Closure
      * @throws AssertionException
      */
     protected function invoke(ContextContract $context, ProperList $forms)
