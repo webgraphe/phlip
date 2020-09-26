@@ -3,8 +3,6 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phollow\ErrorHandler;
-
 $autoloadFiles = [
     __DIR__ . '/../../autoload.php',
     __DIR__ . '/../vendor/autoload.php',
