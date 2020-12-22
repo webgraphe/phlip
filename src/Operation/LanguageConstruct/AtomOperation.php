@@ -8,6 +8,7 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class AtomOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'atom?';
 
     public function __invoke(...$arguments): bool

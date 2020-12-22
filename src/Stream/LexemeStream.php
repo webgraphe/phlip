@@ -15,10 +15,14 @@ use Webgraphe\Phlip\Symbol\Opening;
  */
 class LexemeStream extends Stream implements StringConvertibleContract
 {
-    private bool $jsonAlike = false;
-    private ?Closure $lexemeStylizer = null;
+    /** @var Closure|null */
+    private $lexemeStylizer = null;
 
-    public static function fromLexemes(LexemeContract ...$lexemes)
+    /**
+     * @param LexemeContract ...$lexemes
+     * @return static
+     */
+    public static function fromLexemes(LexemeContract ...$lexemes): self
     {
         return new static($lexemes, count($lexemes));
     }
@@ -27,14 +31,6 @@ class LexemeStream extends Stream implements StringConvertibleContract
     {
         $stream = clone $this;
         $stream->lexemeStylizer = $lexemeStylizer;
-
-        return $stream;
-    }
-
-    public function jsonAlike(): LexemeStream
-    {
-        $stream = clone $this;
-        $stream->jsonAlike = true;
 
         return $stream;
     }
@@ -84,16 +80,15 @@ class LexemeStream extends Stream implements StringConvertibleContract
                 if ($opening instanceof Opening\OpenMapSymbol) {
                     $items = array_map(
                         function (array $pair) {
-                            return implode($this->jsonAlike ? ': ' : ' ', $pair);
+                            return implode(' ', $pair);
                         },
                         array_chunk($items, 2)
                     );
                 }
-                $separator = $this->jsonAlike && !($opening instanceof Opening\OpenListSymbol) ? ',' : '';
                 $content = str_replace(
                         PHP_EOL,
                         PHP_EOL . '    ',
-                        PHP_EOL . implode($separator . PHP_EOL, $items)
+                        PHP_EOL . implode(PHP_EOL, $items)
                     )
                     . PHP_EOL;
             }
@@ -106,7 +101,7 @@ class LexemeStream extends Stream implements StringConvertibleContract
 
         return $output;
     }
-    
+
     protected function stylizeLexeme(LexemeContract $lexeme): string
     {
         return $this->lexemeStylizer ? call_user_func($this->lexemeStylizer, $lexeme) : (string)$lexeme;

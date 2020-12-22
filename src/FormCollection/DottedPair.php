@@ -16,8 +16,10 @@ class DottedPair extends FormCollection
 {
     use AssertsStaticType;
 
-    private FormContract $first;
-    private FormContract $second;
+    /** @var FormContract */
+    private $first;
+    /** @var FormContract */
+    private $second;
 
     final protected function __construct(FormContract $first, FormContract $second)
     {

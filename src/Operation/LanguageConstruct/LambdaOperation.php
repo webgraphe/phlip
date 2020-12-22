@@ -26,7 +26,7 @@ class LambdaOperation extends PrimaryOperation
         ContextContract $context,
         ProperList $parameters,
         FormContract ...$statements
-    ) {
+    ): Closure {
         return (new self)->invoke($context, new ProperList($parameters, ...$statements));
     }
 
@@ -36,7 +36,7 @@ class LambdaOperation extends PrimaryOperation
      * @return Closure
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms)
+    protected function invoke(ContextContract $context, ProperList $forms): Closure
     {
         $parameters = ProperList::assertStaticType($forms->assertHead());
         $statements = $forms->getTail();

@@ -11,10 +11,6 @@ class IsMapOperation extends StandardOperation
     /** @var string */
     const IDENTIFIER = 'map?';
 
-    /**
-     * @param array ...$arguments
-     * @return bool
-     */
     public function __invoke(...$arguments): bool
     {
         $argument = array_shift($arguments);

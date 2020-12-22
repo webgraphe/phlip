@@ -7,12 +7,9 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class IsVectorOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'vector?';
 
-    /**
-     * @param array ...$arguments
-     * @return bool
-     */
     public function __invoke(...$arguments): bool
     {
         $argument = array_shift($arguments);

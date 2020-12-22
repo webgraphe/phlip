@@ -4,9 +4,9 @@ namespace Webgraphe\Phlip\Symbol\Mark;
 
 use Webgraphe\Phlip\Symbol;
 
-class TildeSymbol extends Symbol\Mark
+class QuoteSymbol extends Symbol\Mark
 {
-    const CHARACTER = "~";
+    const CHARACTER = "'";
 
     public function getValue(): string
     {

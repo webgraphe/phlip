@@ -2,6 +2,8 @@
 
 namespace Webgraphe\Phlip\Contracts;
 
+use Webgraphe\Phlip\Exception\ContextException;
+
 /**
  * A multi-layered dictionary.
  */
@@ -14,7 +16,7 @@ interface ContextContract
      * @param mixed $value
      * @return mixed
      */
-    public function define($key, $value);
+    public function define(string $key, $value);
 
     /**
      * Sets the value for an existing dictionary entry at the closest level possible.
@@ -23,7 +25,7 @@ interface ContextContract
      * @param mixed $value
      * @return mixed
      */
-    public function set($key, $value);
+    public function set(string $key, $value);
 
     /**
      * Defines a dictionary entry at the lowest level.
@@ -32,13 +34,14 @@ interface ContextContract
      * @param mixed $value
      * @return mixed
      */
-    public function let($key, $value);
+    public function let(string $key, $value);
 
     /**
      * Retrieves a dictionary entry at the closest level possible.
      *
      * @param $offset
      * @return mixed
+     * @throws ContextException If not found
      */
     public function get($offset);
 

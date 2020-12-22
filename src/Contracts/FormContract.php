@@ -2,6 +2,8 @@
 
 namespace Webgraphe\Phlip\Contracts;
 
+use Webgraphe\Phlip\Exception\ContextException;
+
 /**
  * An immutable object meant to be evaluated.
  */
@@ -10,6 +12,7 @@ interface FormContract extends StringConvertibleContract
     /**
      * @param ContextContract $context
      * @return mixed
+     * @throws ContextException
      */
     public function evaluate(ContextContract $context);
 

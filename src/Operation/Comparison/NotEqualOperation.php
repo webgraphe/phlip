@@ -14,10 +14,10 @@ class NotEqualOperation extends Operation\Comparison
 
     /**
      * @param array ...$arguments
-     * @return bool|mixed
+     * @return bool
      * @throws AssertionException
      */
-    public function __invoke(...$arguments)
+    public function __invoke(...$arguments): bool
     {
         $left = self::assertNativeValue(array_shift($arguments));
         $right = self::assertNativeValue(array_shift($arguments));

@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\CodeAnchorContract;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
 
 class IdentifierAtom extends Atom
 {
@@ -23,6 +24,7 @@ class IdentifierAtom extends Atom
     /**
      * @param ContextContract $context
      * @return mixed
+     * @throws ContextException
      */
     public function evaluate(ContextContract $context)
     {

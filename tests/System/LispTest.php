@@ -25,7 +25,7 @@ class LispTest extends TestCase
      */
     public function testHomoiconicity($script)
     {
-        $context = Phlipy::withBasicLanguageConstructs(new Context);
+        $context = Phlipy::basic(new Context);
         $init = Program::parse(self::getScript());
         $init->execute($context);
 

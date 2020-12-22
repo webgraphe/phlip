@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class ExponentiationOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = '**';
 
     public function __invoke(...$arguments)

@@ -11,8 +11,10 @@ use Webgraphe\Phlip\FormCollection\ProperList;
 
 class Walker implements WalkerContract
 {
-    private FormBuilder $formBuilder;
-    private ContextContract $context;
+    /** @var FormBuilder */
+    private $formBuilder;
+    /** @var ContextContract */
+    private $context;
 
     public function __construct(ContextContract $context, FormBuilder $formBuilder = null)
     {
@@ -24,6 +26,7 @@ class Walker implements WalkerContract
      * @param FormContract $form
      * @return FormContract
      * @throws Exception\AssertionException
+     * @throws Exception\ContextException
      */
     public function __invoke(FormContract $form): FormContract
     {

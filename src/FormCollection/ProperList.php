@@ -17,7 +17,7 @@ class ProperList extends FormCollection
     use AssertsStaticType;
 
     /** @var FormContract[] */
-    private array $forms;
+    private $forms;
 
     final public function __construct(FormContract ...$forms)
     {

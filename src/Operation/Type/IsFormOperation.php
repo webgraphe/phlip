@@ -7,12 +7,9 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class IsFormOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'form?';
 
-    /**
-     * @param array ...$arguments
-     * @return bool
-     */
     public function __invoke(...$arguments): bool
     {
         $argument = array_shift($arguments);

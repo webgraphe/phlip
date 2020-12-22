@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class ExitOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'exit';
 
     /**

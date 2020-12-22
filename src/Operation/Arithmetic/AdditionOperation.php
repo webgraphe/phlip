@@ -6,7 +6,9 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class AdditionOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = '+';
+    /** @var string */
     const IDENTIFIER_ALTERNATIVE = 'add';
 
     public function __invoke(...$arguments)

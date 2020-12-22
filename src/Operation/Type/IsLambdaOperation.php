@@ -10,10 +10,6 @@ class IsLambdaOperation extends StandardOperation
     /** @var string */
     const IDENTIFIER = 'lambda?';
 
-    /**
-     * @param array ...$arguments
-     * @return bool
-     */
     public function __invoke(...$arguments): bool
     {
         $argument = array_shift($arguments);

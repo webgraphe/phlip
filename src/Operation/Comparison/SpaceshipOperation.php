@@ -12,10 +12,10 @@ class SpaceshipOperation extends Operation\Comparison
 
     /**
      * @param array ...$arguments
-     * @return mixed
+     * @return int
      * @throws AssertionException
      */
-    public function __invoke(...$arguments)
+    public function __invoke(...$arguments): int
     {
         $left = self::assertNativeValue(array_shift($arguments));
         $right = self::assertNativeValue(array_shift($arguments));

@@ -53,7 +53,7 @@ class LetOperation extends PrimaryOperation
     {
         $parameters = [];
         $arguments = [];
-        while ($variables && $variable = ProperList::assertStaticType($variables->getHead())) {
+        while (($head = $variables->getHead()) && $variable = ProperList::assertStaticType($head)) {
             $variables = $variables->getTail();
             $name = $variable->assertHead();
             if ($name instanceof ProperList) {
@@ -127,7 +127,7 @@ class LetOperation extends PrimaryOperation
     {
         $pairs = [];
 
-        while ($variables && $variable = ProperList::assertStaticType($variables->getHead())) {
+        while (($head = $variables->getHead()) && $variable = ProperList::assertStaticType($head)) {
             $variables = $variables->getTail();
             $name = $variable->getHead();
             $pairs[] = $name instanceof ProperList

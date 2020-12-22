@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class NotOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'bit-not';
 
     /**

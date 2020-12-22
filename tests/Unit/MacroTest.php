@@ -66,7 +66,7 @@ class MacroTest extends TestCase
         $a = IdentifierAtom::fromString('a');
         $context->define(
             'square',
-            // (macro square (a) `(* ~a ~a))
+            // (macro square (a) `(* ,a ,a))
             new Macro(
                 $context,
                 new ProperList($a),
@@ -99,7 +99,7 @@ class MacroTest extends TestCase
             new Macro(
                 $context,
                 new ProperList($a, $b),
-                // (macro pythagoras (a b) `(sqrt (+ (square ~a) (square ~a))))
+                // (macro pythagoras (a b) `(sqrt (+ (square ,a) (square ,b))))
                 new QuasiquotedForm(
                     new ProperList(
                         IdentifierAtom::fromString('square-root'),

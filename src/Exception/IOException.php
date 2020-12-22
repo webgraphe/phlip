@@ -7,7 +7,8 @@ use Webgraphe\Phlip\Exception;
 
 class IOException extends Exception
 {
-    private string $path = '';
+    /** @var string */
+    private $path = '';
 
     public static function fromPath(
         string $path,

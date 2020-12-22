@@ -4,17 +4,24 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\ContextException;
 
-class Context implements ContextContract
+class Context implements ContextContract, PhpClassInteroperableContract
 {
-    private array $data = [];
-    private ?Context $parent = null;
+    /** @var array */
+    private $data = [];
+    /** @var ContextContract|null */
+    private $parent;
     /** @var FormContract[] */
-    private array $formStack = [];
-    private WalkerContract $walker;
-    private int $ticks = 0;
+    private $formStack = [];
+    /** @var WalkerContract */
+    private $walker;
+    /** @var int */
+    private $ticks = 0;
+    /** @var string[] */
+    private $enabledClasses = [];
 
     public function __construct(FormBuilder $formBuilder = null)
     {
@@ -27,7 +34,7 @@ class Context implements ContextContract
      * @return mixed
      * @throws ContextException
      */
-    public function define($key, $value)
+    public function define(string $key, $value)
     {
         if ($this->parent) {
             return $this->parent->define($key, $value);
@@ -41,25 +48,25 @@ class Context implements ContextContract
     }
 
     /**
-     * @param mixed $offset
+     * @param mixed $key
      * @param mixed $value
      * @return mixed
      * @throws ContextException
      */
-    public function set($offset, $value)
+    public function set(string $key, $value)
     {
-        if (array_key_exists($offset, $this->data)) {
-            $previous = $this->data[$offset];
-            $this->data[$offset] = $value;
+        if (array_key_exists($key, $this->data)) {
+            $previous = $this->data[$key];
+            $this->data[$key] = $value;
 
             return $previous;
         }
 
         if ($this->parent) {
-            return $this->parent->set($offset, $value);
+            return $this->parent->set($key, $value);
         }
 
-        throw new ContextException("Undefined '$offset'");
+        throw new ContextException("Undefined '$key'");
     }
 
     /**
@@ -68,7 +75,7 @@ class Context implements ContextContract
      * @return mixed
      * @throws ContextException
      */
-    public function let($key, $value)
+    public function let(string $key, $value)
     {
         if (array_key_exists($key, $this->data)) {
             throw new ContextException("Can't redefine local '$key'");
@@ -160,5 +167,21 @@ class Context implements ContextContract
     public function getTicks(): int
     {
         return $this->ticks;
+    }
+
+    /**
+     * @param string $class
+     * @return static
+     */
+    public function enableClass(string $class): self
+    {
+        $this->enabledClasses[$class] = $class;
+
+        return $this;
+    }
+
+    public function isClassEnabled(string $class): bool
+    {
+        return array_key_exists($class, $this->enabledClasses);
     }
 }

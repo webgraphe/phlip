@@ -7,11 +7,9 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class IsKeywordOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'keyword?';
-    /**
-     * @param array ...$arguments
-     * @return bool
-     */
+
     public function __invoke(...$arguments): bool
     {
         $argument = array_shift($arguments);

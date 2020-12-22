@@ -9,6 +9,8 @@ use Webgraphe\Phlip\Exception\IOException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\Operation\Arithmetic\AdditionOperation;
+use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
 
@@ -49,7 +51,23 @@ class ProgramTest extends TestCase
     {
         $file = __DIR__ . '/ProgramTest.phlip';
         $program = Program::parseFile($file);
-        $this->assertEquals(file_get_contents($file), '"' . $program->execute(new Context) . '"');
+        $this->assertEquals(file_get_contents($file), '"' . $program->execute(new Context()) . '"');
+    }
+
+    /**
+     * @throws LexerException
+     * @throws ParserException
+     */
+    public function testExecuteWithParameters()
+    {
+        $this->assertEquals(
+            (string)(new ProperList(
+                NumberAtom::fromString('1'),
+                NumberAtom::fromString('2'),
+                NumberAtom::fromString('3')
+            )),
+            Program::parse('`(,$0 ,$1 ,$2)')->execute(new Context(), 1, 2, 3)
+        );
     }
 
     /**

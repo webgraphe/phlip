@@ -7,11 +7,9 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class IsMacroOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'macro?';
-    /**
-     * @param array ...$arguments
-     * @return bool
-     */
+
     public function __invoke(...$arguments): bool
     {
         return array_shift($arguments) instanceof Macro;

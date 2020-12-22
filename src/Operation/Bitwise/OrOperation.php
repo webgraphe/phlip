@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class OrOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'bit-or';
 
     /**

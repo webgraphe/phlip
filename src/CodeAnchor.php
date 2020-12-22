@@ -8,9 +8,9 @@ use Webgraphe\Phlip\Stream\CharacterStream;
 class CodeAnchor implements CodeAnchorContract
 {
     /** @var CharacterStream */
-    private CharacterStream $stream;
+    private $stream;
     /** @var int */
-    private int $offset;
+    private $offset;
 
     public function __construct(CharacterStream $stream, int $offset = null)
     {

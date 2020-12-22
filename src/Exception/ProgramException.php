@@ -8,14 +8,15 @@ use Webgraphe\Phlip\Exception;
 
 class ProgramException extends Exception
 {
-    private ContextContract $context;
+    /** @var ContextContract */
+    private $context;
 
     public static function fromContext(
         ContextContract $context,
         string $message,
         int $code = 0,
         Throwable $previous = null
-    ) {
+    ): self {
         $self = new static($message, $code, $previous);
         $self->context = $context;
 

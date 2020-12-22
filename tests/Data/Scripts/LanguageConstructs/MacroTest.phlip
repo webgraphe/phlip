@@ -9,5 +9,5 @@
 (define pythagorean-length (macro (a b) (list 'sqrt (list '+ (list 'square a) (list 'square b)))))
 (assert-equals 5 (pythagorean-length 3 4))
 
-(define plus-3 (macro (x) `(+ ~x 3)))
+(define plus-3 (macro (x) `(+ ,x 3)))
 (assert-equals 5 (plus-3 2))

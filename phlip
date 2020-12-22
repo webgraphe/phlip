@@ -6,7 +6,7 @@ namespace Webgraphe\Phlip;
 $autoloadFiles = [
     __DIR__ . '/../../autoload.php',
     __DIR__ . '/../vendor/autoload.php',
-    __DIR__ . '/vendor/autoload.php'
+    __DIR__ . '/vendor/autoload.php',
 ];
 foreach ($autoloadFiles as $autoloadFile) {
     if (file_exists($autoloadFile)) {
@@ -29,7 +29,15 @@ if (!defined('PHLIP_AUTOLOAD_FILE')) {
 /** @noinspection PhpIncludeInspection */
 require PHLIP_AUTOLOAD_FILE;
 
-$options = Phlipy::optionsFromGlobals();
+$options = iterator_to_array(
+    (function () {
+        foreach ($_SERVER['argv'] as $arg) {
+            if (preg_match("/^--([^=]+)=?(.+)?/", $arg, $matches)) {
+                yield $matches[1] => $matches[2] ?? true;
+            }
+        }
+    })()
+);
 
 if (!empty($options['help'])) {
     echo <<<USAGE
@@ -55,7 +63,7 @@ USAGE;
 }
 
 try {
-    $context = Phlipy::withRepl(Phlipy::bootstrap(), $options);
+    $context = Phlipy::withRepl(Phlipy::standard(), $options);
 
     $io = new IOMode(STDIN);
     if ($io->getSize() && ($io->isRegularFile() || $io->isNamedPipe())) {

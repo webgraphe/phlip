@@ -14,7 +14,7 @@ use Webgraphe\Phlip\Symbol\Opening;
 class Map extends FormCollection
 {
     /** @var ProperList[] */
-    private array $pairs = [];
+    private $pairs = [];
 
     /**
      * @param ProperList ...$pairs

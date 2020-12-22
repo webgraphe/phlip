@@ -13,7 +13,8 @@ class Macro
 {
     use AssertsStaticType;
 
-    private Closure $lambda;
+    /** @var Closure */
+    private $lambda;
 
     /**
      * @param ContextContract $context

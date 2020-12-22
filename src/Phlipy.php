@@ -3,29 +3,15 @@
 namespace Webgraphe\Phlip;
 
 use Closure;
+use RuntimeException;
 use Webgraphe\Phlip\Contracts\ContextContract;
 
 class Phlipy
 {
-    public static function bootstrap(ContextContract $context = null): ContextContract
+    public static function basic(ContextContract $context = null): ContextContract
     {
         $context = $context ?? new Context;
-        self::withBasicLanguageConstructs($context);
-        self::withExtraLanguageConstructs($context);
-        self::withTypeOperators($context);
-        self::withArithmeticOperators($context);
-        self::withComparisonOperators($context);
-        self::withLogicOperators($context);
-        self::withBitwiseOperators($context);
-        self::withStringFunctions($context);
-        self::withPhpMathFunctions($context);
-        self::withErrors($context);
 
-        return $context;
-    }
-
-    public static function withBasicLanguageConstructs(ContextContract $context): ContextContract
-    {
         self::defineOperation($context, new Operation\LanguageConstruct\DefineOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\QuoteOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\CarOperation);
@@ -39,7 +25,27 @@ class Phlipy
         return $context;
     }
 
-    public static function withExtraLanguageConstructs(ContextContract $context): ContextContract
+    public static function standard(ContextContract $context = null): ContextContract
+    {
+        $context = self::basic($context);
+
+        self::withExtraLanguageConstructs($context);
+        self::withTypeOperators($context);
+        self::withArithmeticOperators($context);
+        self::withComparisonOperators($context);
+        self::withLogicOperators($context);
+        self::withBitwiseOperators($context);
+        self::withPhpInterop($context);
+        self::withStringFunctions($context);
+        self::withPhpMathFunctions($context);
+        self::withErrors($context);
+        // TODO Remove
+        $context->enableClass(\DateTime::class);
+
+        return $context;
+    }
+
+    protected static function withExtraLanguageConstructs(ContextContract $context): ContextContract
     {
         self::defineOperation($context, new Operation\LanguageConstruct\DefinedOperation);
         self::defineOperation($context, new Operation\LanguageConstruct\LetOperation);
@@ -56,7 +62,7 @@ class Phlipy
         return $context;
     }
 
-    public static function withTypeOperators(ContextContract $context): ContextContract
+    protected static function withTypeOperators(ContextContract $context): ContextContract
     {
         self::defineOperation($context, new Operation\Type\IsVectorOperation);
         self::defineOperation($context, new Operation\Type\IsMapOperation);
@@ -75,7 +81,7 @@ class Phlipy
         return $context;
     }
 
-    public static function withArithmeticOperators(ContextContract $context): ContextContract
+    protected static function withArithmeticOperators(ContextContract $context): ContextContract
     {
         self::defineOperation($context, new Operation\Arithmetic\AdditionOperation);
         self::defineOperation($context, new Operation\Arithmetic\SubtractionOperation);
@@ -87,7 +93,7 @@ class Phlipy
         return $context;
     }
 
-    public static function withComparisonOperators(ContextContract $context): ContextContract
+    protected static function withComparisonOperators(ContextContract $context): ContextContract
     {
         self::defineOperation($context, new Operation\Comparison\EqualityOperation);
         self::defineOperation($context, new Operation\Comparison\NotEqualOperation);
@@ -100,7 +106,7 @@ class Phlipy
         return $context;
     }
 
-    public static function withLogicOperators(ContextContract $context): ContextContract
+    protected static function withLogicOperators(ContextContract $context): ContextContract
     {
         self::defineOperation($context, new Operation\Logic\AndOperation);
         self::defineOperation($context, new Operation\Logic\OrOperation);
@@ -110,7 +116,7 @@ class Phlipy
         return $context;
     }
 
-    public static function withBitwiseOperators(ContextContract $context): ContextContract
+    protected static function withBitwiseOperators(ContextContract $context): ContextContract
     {
         self::defineOperation($context, new Operation\Bitwise\AndOperation);
         self::defineOperation($context, new Operation\Bitwise\OrOperation);
@@ -122,7 +128,18 @@ class Phlipy
         return $context;
     }
 
-    public static function withErrors(ContextContract $context): ContextContract
+    protected static function withPhpInterop(ContextContract $context): ContextContract
+    {
+        self::defineOperation($context, new Operation\Interop\StaticOperation());
+        self::defineOperation($context, new Operation\Interop\NewOperation());
+        self::defineOperation($context, new Operation\Interop\ObjectOperation());
+        self::defineOperation($context, new Operation\Interop\CloneOperation());
+        self::defineOperation($context, new Operation\Interop\InstanceOperation());
+
+        return $context;
+    }
+
+    protected static function withErrors(ContextContract $context): ContextContract
     {
         $context->define(
             'notice',
@@ -152,11 +169,11 @@ class Phlipy
         return $context;
     }
 
-    private static function readPrompt(ContextContract $context, string $prompt = null): Closure
+    protected static function readPrompt(ContextContract $context, string $prompt = null): Closure
     {
         return function () use ($context, $prompt) {
             static $lastTicks;
-            $prompt = $prompt ?? 'phlip [%TICKS%] > ';
+            $prompt = $prompt ?? 'phlip [%TICKS%] >>> ';
             $ticks = null === $lastTicks
                 ? 0
                 : $context->getTicks() - $lastTicks - 6;
@@ -200,7 +217,7 @@ class Phlipy
         return $context;
     }
 
-    public static function withPhpMathFunctions(ContextContract $context): ContextContract
+    protected static function withPhpMathFunctions(ContextContract $context): ContextContract
     {
         self::wrapPhpFunction($context, 'abs');
         self::wrapPhpFunction($context, 'acos');
@@ -252,7 +269,7 @@ class Phlipy
         return $context;
     }
 
-    public static function defineOperation(ContextContract $context, Operation $operation)
+    protected static function defineOperation(ContextContract $context, Operation $operation)
     {
         array_map(
             function (string $identifier) use ($context, $operation) {
@@ -262,30 +279,28 @@ class Phlipy
         );
     }
 
+    /**
+     * @param ContextContract $context
+     * @param string $function
+     * @param string|null $alias
+     * @throws RuntimeException
+     */
     public static function wrapPhpFunction(ContextContract $context, string $function, string $alias = null)
     {
+        if (!function_exists($function)) {
+            throw new RuntimeException("Undefined function {$function}()");
+        }
+
         $context->define($alias ?? $function, function () use ($function) {
             return call_user_func_array($function, func_get_args());
         });
     }
 
-    public static function optionsFromGlobals(array $defaults = [])
-    {
-        $options = $defaults;
-        foreach ($_SERVER['argv'] as $arg) {
-            if (preg_match("/^--([^=]+)=?(.+)?/", $arg, $matches)) {
-                $options[$matches[1]] = $matches[2] ?? true;
-            }
-        }
-
-        return $options;
-    }
-
     private static function withStringFunctions(ContextContract $context): ContextContract
     {
         self::wrapPhpFunction($context, 'crc32');
-        self::wrapPhpFunction($context, 'explode');
-        self::defineOperation($context, new Operation\String\ImplodeOperation);
+        self::wrapPhpFunction($context, 'explode', 'split');
+        self::wrapPhpFunction($context, 'implode');
         self::wrapPhpFunction($context, 'md5');
         self::wrapPhpFunction($context, 'number_format', 'number-format');
         self::wrapPhpFunction($context, 'sha1');

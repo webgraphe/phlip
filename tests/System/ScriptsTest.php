@@ -21,7 +21,7 @@ class ScriptsTest extends TestCase
      * @throws LexerException
      * @throws ParserException
      */
-    public function testScript($file)
+    public function testScript(string $file)
     {
         $context = $this->contextWithAssertions();
         Program::parseFile($file)->execute($context);

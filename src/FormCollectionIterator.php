@@ -9,17 +9,20 @@ use Webgraphe\Phlip\Contracts\FormContract;
 class FormCollectionIterator implements FormCollectionIteratorContract
 {
     /** @var FormContract[] */
-    private array $elements = [];
+    private $elements;
     /** @var int[]|string[] */
-    private array $keys = [];
-    private int $offset = 0;
-    private int $size = 0;
+    private $keys;
+    /** @var int */
+    private $offset;
+    /** @var int */
+    private $size;
 
     public function __construct(FormCollectionContract $collection)
     {
         $this->elements = $collection->all();
         $this->keys = array_keys($this->elements);
         $this->size = count($collection);
+        $this->offset = 0;
     }
 
     public function current(): ?FormContract

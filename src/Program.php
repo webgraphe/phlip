@@ -8,7 +8,8 @@ use Webgraphe\Phlip\FormCollection\ProperList;
 
 class Program
 {
-    private ProperList $statements;
+    /** @var ProperList */
+    private $statements;
 
     public function __construct(ProperList $statements)
     {
@@ -58,7 +59,7 @@ class Program
      * @param Contracts\ContextContract $context
      * @return Closure
      */
-    public function compile(Contracts\ContextContract $context)
+    public function compile(Contracts\ContextContract $context): Closure
     {
         return function (...$arguments) use ($context) {
             if ($arguments) {
@@ -85,10 +86,10 @@ class Program
 
     /**
      * @param Contracts\ContextContract $context
-     * @param array $arguments
+     * @param mixed ...$arguments
      * @return mixed
      */
-    public function execute(Contracts\ContextContract $context, array $arguments = [])
+    public function execute(Contracts\ContextContract $context, ...$arguments)
     {
         return call_user_func($this->compile($context), ...$arguments);
     }

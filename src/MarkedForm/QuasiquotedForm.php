@@ -5,6 +5,7 @@ namespace Webgraphe\Phlip\MarkedForm;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\MarkedForm;
@@ -27,6 +28,7 @@ class QuasiquotedForm extends MarkedForm
      * @param FormContract $form
      * @return FormContract
      * @throws AssertionException
+     * @throws ContextException
      */
     protected function apply(ContextContract $context, FormContract $form): FormContract
     {
@@ -36,7 +38,7 @@ class QuasiquotedForm extends MarkedForm
 
         if ($form instanceof FormCollection) {
             return $form->map(
-                function(FormContract $form) use ($context) {
+                function (FormContract $form) use ($context) {
                     return $this->apply($context, $form);
                 }
             );
@@ -47,6 +49,6 @@ class QuasiquotedForm extends MarkedForm
 
     public function getMarkSymbol(): Symbol\Mark
     {
-        return Symbol\Mark\GraveAccentSymbol::instance();
+        return Symbol\Mark\QuasiquoteSymbol::instance();
     }
 }

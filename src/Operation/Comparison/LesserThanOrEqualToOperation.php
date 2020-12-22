@@ -7,15 +7,17 @@ use Webgraphe\Phlip\Operation;
 
 class LesserThanOrEqualToOperation extends Operation\Comparison
 {
+    /** @var string */
     const IDENTIFIER = '<=';
+    /** @var string */
     const IDENTIFIER_ALTERNATIVE= 'lte?';
 
     /**
      * @param array ...$arguments
-     * @return mixed
+     * @return bool
      * @throws AssertionException
      */
-    public function __invoke(...$arguments)
+    public function __invoke(...$arguments): bool
     {
         $left = self::assertNativeValue(array_shift($arguments));
         $right = self::assertNativeValue(array_shift($arguments));

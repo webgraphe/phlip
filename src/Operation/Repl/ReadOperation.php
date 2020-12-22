@@ -6,11 +6,13 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class ReadOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'read';
 
     /** @var string|callable */
     private $prompt;
-    private bool $multiLine = false;
+    /** @var bool */
+    private $multiLine = false;
 
     public function __construct($prompt = null)
     {
@@ -21,7 +23,7 @@ class ReadOperation extends StandardOperation
      * @param string|callable|null $prompt
      * @return static
      */
-    public static function multiLine($prompt = null)
+    public static function multiLine($prompt = null): self
     {
         $self = new static($prompt);
         $self->multiLine = true;

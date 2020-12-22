@@ -14,12 +14,12 @@ use Webgraphe\Phlip\Symbol\Closing\CloseMapSymbol;
 use Webgraphe\Phlip\Symbol\Closing\CloseVectorSymbol;
 use Webgraphe\Phlip\Symbol\DotSymbol;
 use Webgraphe\Phlip\Symbol\KeywordSymbol;
-use Webgraphe\Phlip\Symbol\Mark\TildeSymbol;
+use Webgraphe\Phlip\Symbol\Mark\UnquoteSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
-use Webgraphe\Phlip\Symbol\Mark\GraveAccentSymbol;
-use Webgraphe\Phlip\Symbol\Mark\StraightSingleMarkSymbol;
+use Webgraphe\Phlip\Symbol\Mark\QuasiquoteSymbol;
+use Webgraphe\Phlip\Symbol\Mark\QuoteSymbol;
 
 class Lexer
 {
@@ -99,7 +99,7 @@ class Lexer
 
     protected function isWhiteSpace($character): bool
     {
-        return ctype_space($character) || ':' === $character || ',' === $character;
+        return ctype_space($character);
     }
 
     protected function replaceEscapedCharacter($character): string
@@ -184,16 +184,16 @@ class Lexer
             return call_user_func([self::COLLECTION_DELIMITERS[$current], 'instance']);
         }
 
-        if (StraightSingleMarkSymbol::CHARACTER === $current) {
-            return StraightSingleMarkSymbol::instance();
+        if (QuoteSymbol::CHARACTER === $current) {
+            return QuoteSymbol::instance();
         }
 
-        if (GraveAccentSymbol::CHARACTER === $current) {
-            return GraveAccentSymbol::instance();
+        if (QuasiquoteSymbol::CHARACTER === $current) {
+            return QuasiquoteSymbol::instance();
         }
 
-        if (TildeSymbol::CHARACTER === $current) {
-            return TildeSymbol::instance();
+        if (UnquoteSymbol::CHARACTER === $current) {
+            return UnquoteSymbol::instance();
         }
 
         if (Comment::DELIMITER === $current) {

@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\StandardOperation;
@@ -11,7 +12,8 @@ class ListOperation extends StandardOperation
     /** @var string */
     const IDENTIFIER = 'list';
 
-    private FormBuilder $formBuilder;
+    /** @var FormBuilder */
+    private $formBuilder;
 
     public function __construct(FormBuilder $formBuilder = null)
     {
@@ -20,9 +22,10 @@ class ListOperation extends StandardOperation
 
     /**
      * @param array ...$arguments
-     * @return mixed
+     * @return ProperList
+     * @throws AssertionException
      */
-    public function __invoke(...$arguments)
+    public function __invoke(...$arguments): ProperList
     {
         return new ProperList(
             ...array_map(
