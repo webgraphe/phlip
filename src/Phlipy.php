@@ -39,8 +39,6 @@ class Phlipy
         self::withStringFunctions($context);
         self::withPhpMathFunctions($context);
         self::withErrors($context);
-        // TODO Remove
-        $context->enableClass(\DateTime::class);
 
         return $context;
     }

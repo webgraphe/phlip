@@ -126,6 +126,7 @@ class Context implements ContextContract, PhpClassInteroperableContract
     /**
      * @param FormContract $form
      * @return mixed
+     * @throws ContextException
      */
     public function execute(FormContract $form)
     {

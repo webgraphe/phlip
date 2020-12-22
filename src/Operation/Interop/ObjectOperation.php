@@ -31,6 +31,7 @@ class ObjectOperation extends PhpInteroperableOperation
     protected function invoke(ContextContract $context, ProperList $forms)
     {
         $object = $forms->assertHead()->evaluate($context);
+        $identifier = is_object($object) ? get_class($object) : gettype($object);
         if ($object instanceof IdentifierAtom) {
             $object = $context->get($identifier = $object->getValue());
         }
