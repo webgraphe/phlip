@@ -167,28 +167,13 @@ class Phlipy
         return $context;
     }
 
-    protected static function readPrompt(ContextContract $context, string $prompt = null): Closure
-    {
-        return function () use ($context, $prompt) {
-            static $lastTicks;
-            $prompt = $prompt ?? 'phlip [%TICKS%] >>> ';
-            $ticks = null === $lastTicks
-                ? 0
-                : $context->getTicks() - $lastTicks - 6;
-            $lastTicks = $context->getTicks();
-
-            return str_replace('%TICKS%', $ticks, $prompt);
-        };
-    }
-
     public static function withRepl(ContextContract $context, array $options = []): ContextContract
     {
-        $prompt = self::readPrompt($context, isset($options['read.prompt']) ? (string)$options['read.prompt'] : null);
         self::defineOperation(
             $context,
             !empty($options['read.multi-line'])
-                ? Operation\Repl\ReadOperation::multiLine($prompt)
-                : new Operation\Repl\ReadOperation($prompt)
+                ? Operation\Repl\ReadOperation::multiLine()
+                : new Operation\Repl\ReadOperation()
         );
 
         self::defineOperation(

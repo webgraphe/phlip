@@ -1,0 +1,5 @@
+(assert-equals "public constant" (:: Webgraphe\Phlip\Tests\Dummy PUBLIC_CONSTANT))
+(assert-equals "public static field" (:: Webgraphe\Phlip\Tests\Dummy $publicStaticField))
+(assert-equals "public static method" (:: Webgraphe\Phlip\Tests\Dummy publicStaticMethod))
+(assert-equals "same static name method" (:: Webgraphe\Phlip\Tests\Dummy sameStaticName))
+(assert-equals "same static name constant" (:: Webgraphe\Phlip\Tests\Dummy -sameStaticName))

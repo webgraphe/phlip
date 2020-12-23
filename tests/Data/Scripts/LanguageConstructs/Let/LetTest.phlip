@@ -3,7 +3,7 @@
         (x 0)
         ((plus-1 x) (+ x 1))
     )
-    (define (ticker) (set x (plus-1 x)) x)
+    (define (ticker) (set! x (plus-1 x)) x)
 )
 
 (assert-true(not (defined? x)))

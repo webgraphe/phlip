@@ -4,9 +4,9 @@ namespace Webgraphe\Phlip\Exception;
 
 use Throwable;
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Exception;
+use Webgraphe\Phlip\PhlipException;
 
-class ProgramException extends Exception
+class ProgramException extends PhlipException
 {
     /** @var ContextContract */
     private $context;

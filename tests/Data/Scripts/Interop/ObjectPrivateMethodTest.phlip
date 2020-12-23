@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (-> (new Webgraphe\Phlip\Tests\Dummy) privateInstanceMethod)
+    "Call to non-public instance method 'Webgraphe\\Phlip\\Tests\\Dummy->privateInstanceMethod()'"
+)

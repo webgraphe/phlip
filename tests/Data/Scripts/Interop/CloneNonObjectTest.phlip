@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (clone 123)
+    "Cannot clone a non-object"
+)

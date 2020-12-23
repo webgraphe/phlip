@@ -81,7 +81,7 @@ class Lexer
                 }
                 $stream->next();
             }
-        } catch (Exception $e) {
+        } catch (PhlipException $e) {
             throw new Exception\LexerException("Failed parsing source", 0, $e);
         }
 
@@ -109,14 +109,15 @@ class Lexer
 
     /**
      * @param CharacterStream $stream
+     * @param string $delimiter
      * @return StringAtom
      * @throws Exception\StreamException
      */
-    protected function parseString(CharacterStream $stream): StringAtom
+    protected function parseString(CharacterStream $stream, string $delimiter): StringAtom
     {
         $anchor = new CodeAnchor($stream);
         $string = '';
-        while (StringAtom::DELIMITER !== ($character = $stream->next()->current())) {
+        while ($delimiter !== ($character = $stream->next()->current())) {
             if ("\\" === $character) {
                 $character = $this->replaceEscapedCharacter($stream->next()->current());
             }
@@ -201,7 +202,7 @@ class Lexer
         }
 
         if (StringAtom::DELIMITER === $current) {
-            return $this->parseString($stream);
+            return $this->parseString($stream, $current);
         }
 
         return $this->parseWord($stream);

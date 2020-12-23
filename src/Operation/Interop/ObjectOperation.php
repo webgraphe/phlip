@@ -32,14 +32,15 @@ class ObjectOperation extends PhpInteroperableOperation
     {
         $object = $forms->assertHead()->evaluate($context);
         $identifier = is_object($object) ? get_class($object) : gettype($object);
-        if ($object instanceof IdentifierAtom) {
-            $object = $context->get($identifier = $object->getValue());
-        }
         $this->assertClassEnabled($this->assertPhpInteroperableContext($context, static::class), $object);
 
         $tail = $forms->getTail();
         $member = IdentifierAtom::assertStaticType($tail->assertHead())->getValue();
         if (method_exists($object, $member)) {
+            if (!is_callable($callable = [$object, $member])) {
+                throw new AssertionException("Call to non-public instance method '{$identifier}->{$member}()'");
+            }
+
             return call_user_func(
                 [$object, $member],
                 ...array_map(
@@ -61,6 +62,6 @@ class ObjectOperation extends PhpInteroperableOperation
             return $object->$member;
         }
 
-        throw new AssertionException("Undefined field '{$identifier}->{$member}'");
+        throw new AssertionException("Undefined public field '{$identifier}->{$member}'");
     }
 }

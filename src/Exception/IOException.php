@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Exception;
 
 use Throwable;
-use Webgraphe\Phlip\Exception;
+use Webgraphe\Phlip\PhlipException;
 
-class IOException extends Exception
+class IOException extends PhlipException
 {
     /** @var string */
     private $path = '';

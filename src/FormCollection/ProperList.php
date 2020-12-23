@@ -100,6 +100,7 @@ class ProperList extends FormCollection
     {
         if (!is_callable($thing = $context->execute($form))) {
             $type = is_object($thing) ? get_class($thing) : gettype($thing);
+
             throw new AssertionException("Not a callable; got '$type' from $form");
         }
 

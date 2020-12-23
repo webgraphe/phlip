@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Interop;
 
+use Throwable;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
@@ -38,6 +39,10 @@ class StaticOperation extends PhpInteroperableOperation
         $tail = $forms->getTail();
         $member = IdentifierAtom::assertStaticType($tail->assertHead())->getValue();
         if (method_exists($class, $member)) {
+            if (!is_callable($callable = [$class, $member])) {
+                throw new AssertionException("Call to non-public static method '{$class}::{$member}()'");
+            }
+
             return call_user_func(
                 [$class, $member],
                 ...array_map(
@@ -60,10 +65,15 @@ class StaticOperation extends PhpInteroperableOperation
         if ('$' === substr($member, 0, 1)) {
             $field = substr($member, 1);
             if (property_exists($class, $field)) {
-                return $class::$$field;
+                try {
+                    return $class::$$field;
+                } catch (Throwable $t) {
+                    throw new AssertionException("Cannot access non-public field '{$class}::{$member}'");
+                }
             }
         }
 
-        throw new AssertionException("Undefined field '{$class}::{$member}'");
+        // TODO Differentiate between non-existent and non-public
+        throw new AssertionException("Undefined public field '{$class}::{$member}'");
     }
 }

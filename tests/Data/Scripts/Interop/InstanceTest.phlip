@@ -1,0 +1,1 @@
+(assert-false (instance? 123 Webgraphe\Phlip\Tests\Dummy))

@@ -5,4 +5,4 @@
 ; (define three 3)
 ; (assert-equals {three 3} {three three})
 ; (assert-equals {three 3} {three (+ 1 2)})
-(assert-exception ProgramException {[1 2 3] [1 2 3]})
+(assert-exception AssertionException {[1 2 3] [1 2 3]})

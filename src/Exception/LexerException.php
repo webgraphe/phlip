@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Exception;
 
-use Webgraphe\Phlip\Exception;
+use Webgraphe\Phlip\PhlipException;
 
-class LexerException extends Exception
+class LexerException extends PhlipException
 {
 
 }

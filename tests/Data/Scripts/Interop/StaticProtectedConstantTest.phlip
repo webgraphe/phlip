@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (:: Webgraphe\Phlip\Tests\Dummy PROTECTED_CONSTANT)
+    "Undefined public field 'Webgraphe\\Phlip\\Tests\\Dummy::PROTECTED_CONSTANT'"
+)

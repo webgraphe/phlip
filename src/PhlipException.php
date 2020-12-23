@@ -2,9 +2,10 @@
 
 namespace Webgraphe\Phlip;
 
+use Exception;
 use Throwable;
 
-class Exception extends \Exception
+class PhlipException extends Exception
 {
     final public function __construct(string $message = '', int $code = 0, Throwable $previous = null)
     {

@@ -2,13 +2,16 @@
 
 namespace Webgraphe\Phlip\Tests\Traits;
 
+use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
+use Webgraphe\Phlip\Tests\Dummy;
 
 /**
  * @method void assertTrue($condition, $message = '')
@@ -20,6 +23,15 @@ use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
  */
 trait DefinesAssertionsInContexts
 {
+    private function stringize($anything): string
+    {
+        if (is_scalar($anything) || (is_object($anything) && method_exists($anything, '__toString'))) {
+            return (string)$anything;
+        }
+
+        return is_object($anything) ? get_class($anything) : gettype($anything);
+    }
+
     protected function contextWithAssertions(ContextContract $context = null): ContextContract
     {
         $context = $context ?? Phlipy::standard();
@@ -54,9 +66,9 @@ trait DefinesAssertionsInContexts
                             "Expected $head out of $toeExpression; got $toe"
                         );
                     } else {
-                        $headType = is_object($head) ? get_class($head) : gettype($head);
-                        $toeType = is_object($toe) ? get_class($toe) : gettype($toe);
-                        $this->assertEquals($head, $toe, "Expected $headType out of $toeExpression; got $toeType");
+                        $headString = $this->stringize($head);
+                        $toeString = $this->stringize($toe);
+                        $this->assertEquals($head, $toe, "Expected $headString out of $toeExpression; got $toeString");
                     }
                 }
             )
@@ -79,6 +91,7 @@ trait DefinesAssertionsInContexts
             )
         );
 
+        $context->define('AssertionException', AssertionException::class);
         $context->define('ContextException', ContextException::class);
         $context->define('ProgramException', ProgramException::class);
         $context->define(
@@ -88,10 +101,16 @@ trait DefinesAssertionsInContexts
                     /** @var self $test */
                     $name = $expressions->assertHead()->evaluate($context);
                     $this->expectException($name);
+                    if ($message = $expressions->getTail()->getTail()->getHead()) {
+                        $this->expectExceptionMessage($message->evaluate($context));
+                    }
                     $expressions->getTail()->assertHead()->evaluate($context);
                 }
             )
         );
+        if ($context instanceof Context) {
+            $context->enableClass(Dummy::class);
+        }
 
         return $context;
     }

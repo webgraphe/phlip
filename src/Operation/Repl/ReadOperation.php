@@ -2,28 +2,44 @@
 
 namespace Webgraphe\Phlip\Operation\Repl;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Closure;
+use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\Operation\PrimaryOperation;
 
-class ReadOperation extends StandardOperation
+class ReadOperation extends PrimaryOperation
 {
     /** @var string */
     const IDENTIFIER = 'read';
 
-    /** @var string|callable */
+    /** @var Closure */
     private $prompt;
     /** @var bool */
     private $multiLine = false;
 
-    public function __construct($prompt = null)
+    public function __construct(Closure $prompt = null)
     {
-        $this->prompt = $prompt;
+        $this->prompt = $prompt ?? self::readPrompt();
+    }
+
+    protected static function readPrompt(string $prompt = null): Closure
+    {
+        return function (ContextContract $context) {
+            static $lastTicks;
+            $ticks = null === $lastTicks
+                ? 0
+                : max(0, $context->getTicks() - $lastTicks - 6);
+            $lastTicks = $context->getTicks();
+
+            return sprintf('[%d] >>> ', $ticks);
+        };
     }
 
     /**
-     * @param string|callable|null $prompt
+     * @param Closure|null $prompt
      * @return static
      */
-    public static function multiLine($prompt = null): self
+    public static function multiLine(Closure $prompt = null): self
     {
         $self = new static($prompt);
         $self->multiLine = true;
@@ -40,10 +56,11 @@ class ReadOperation extends StandardOperation
     }
 
     /**
-     * @param array ...$arguments
-     * @return mixed
+     * @param ContextContract $context
+     * @param ProperList $forms
+     * @return string
      */
-    public function __invoke(...$arguments)
+    protected function invoke(ContextContract $context, ProperList $forms)
     {
         $lines = [];
         while (true) {
@@ -51,14 +68,19 @@ class ReadOperation extends StandardOperation
             $line = rtrim(
                 readline(
                     is_callable($prompt)
-                        ? call_user_func($prompt)
+                        ? call_user_func($prompt, $context)
                         : $prompt
                 )
             );
             $break = $this->multiLine && !$line
-                || !$this->multiLine && $line && '\\' !== $line[strlen($line) - 1];
-            $lines[] = rtrim($line, '\\');
+                || !$this->multiLine && '\\' !== $line[strlen($line) - 1];
+            if ($line) {
+                $lines[] = rtrim($line, '\\');
+            }
             if ($break) {
+                if (!$lines) {
+                    return $this->invoke($context, $forms);
+                }
                 break;
             }
         }

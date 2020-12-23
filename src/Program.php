@@ -76,6 +76,8 @@ class Program
                     $statements = $statements->getTail();
                     $result = $context->execute($head);
                 }
+            } catch (PhlipException $t) {
+                throw $t;
             } catch (Throwable $t) {
                 throw Exception\ProgramException::fromContext(clone $context, 'Program execution failed', 0, $t);
             }

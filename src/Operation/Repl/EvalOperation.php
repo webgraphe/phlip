@@ -31,7 +31,7 @@ class EvalOperation extends PrimaryOperation
         try {
             $source = $context->execute($forms->assertHead());
 
-            return Program::parse($source)->execute($context);
+            return strlen($source) ? Program::parse($source)->execute($context) : null;
         } catch (Throwable $t) {
             return $t;
         }

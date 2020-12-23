@@ -10,7 +10,7 @@ use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class SetOperation extends PrimaryOperation
 {
-    const IDENTIFIER = 'set';
+    const IDENTIFIER = 'set!';
 
     /**
      * @param ContextContract $context

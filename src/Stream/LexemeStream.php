@@ -51,6 +51,7 @@ class LexemeStream extends Stream implements StringConvertibleContract
     {
         $output = '';
         try {
+            $this->rewind();
             while ($this->valid()) {
                 $output .= $this->toString();
             }

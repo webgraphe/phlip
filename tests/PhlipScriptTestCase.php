@@ -16,7 +16,7 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
 {
     use DefinesAssertionsInContexts;
 
-    private string $file;
+    private $file;
 
     public function __construct(string $file)
     {

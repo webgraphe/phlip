@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Webgraphe\Phlip\Unit;
+namespace Webgraphe\Phlip\Tests\Unit;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
@@ -80,6 +80,47 @@ SOURCE;
             ++$i;
         }
 
+        $toString = <<<SOURCE
+(
+    identifier1
+    "string"
+    (
+        identifier2
+        '
+        x
+        `
+        (
+            +
+            ,
+            x
+            ,
+            y
+        )
+        42
+        3.14
+        #keyword
+        (
+            key
+            .
+            value
+        )
+        [
+            1
+            2
+            3
+        ]
+        .
+        {
+            (
+                key
+                value
+            )
+        }
+    )
+)
+SOURCE;
+
+        $this->assertEquals($toString, (string)$lexemeStream);
     }
 
     /**

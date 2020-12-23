@@ -36,7 +36,7 @@ class Parser
             }
         } catch (Exception\ParserException $parserException) {
             throw $parserException;
-        } catch (Exception $exception) {
+        } catch (PhlipException $exception) {
             throw new Exception\ParserException('Failed parsing lexeme stream', 0, $exception);
         }
 

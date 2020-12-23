@@ -27,25 +27,20 @@ class CloneOperation extends PrimaryOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $head = $forms->assertHead();
-        $identifier = IdentifierAtom::assertStaticType($head);
-
-        return clone $this->assertObject($context, $identifier->getValue());
+        return clone $this->assertObject($forms->assertHead()->evaluate($context));
     }
 
     /**
-     * @param ContextContract $context
-     * @param string $identifier
-     * @return object|string
+     * @param mixed $thing
+     * @return object
      * @throws AssertionException
-     * @throws ContextException
      */
-    private function assertObject(ContextContract $context, string $identifier)
+    private function assertObject($thing): object
     {
-        if (!is_object($object = $context->get($identifier))) {
-            throw new AssertionException("'{$identifier}' is not an object");
+        if (!is_object($thing)) {
+            throw new AssertionException("Cannot clone a non-object");
         }
 
-        return $object;
+        return $thing;
     }
 }
