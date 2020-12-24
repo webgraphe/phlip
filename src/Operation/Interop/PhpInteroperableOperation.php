@@ -17,10 +17,10 @@ abstract class PhpInteroperableOperation extends PrimaryOperation
      */
     protected function assertPhpInteroperableContext(ContextContract $context, string $class): ContextContract
     {
-        if (!is_subclass_of($context, PhpClassInteroperableContract::class)) {
-            throw new ContextException("Class '{$class}' requires an PHP interoperable context");
+        if ($context instanceof PhpClassInteroperableContract) {
+            return $context;
         }
 
-        return $context;
+        throw new ContextException("Class '{$class}' requires an PHP interoperable context");
     }
 }

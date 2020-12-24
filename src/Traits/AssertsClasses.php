@@ -13,7 +13,7 @@ trait AssertsClasses
      * @return object|string
      * @throws AssertionException
      */
-    private function assertClassExists(string $identifier)
+    public static function assertClassExists(string $identifier)
     {
         if (!class_exists($identifier)) {
             throw new AssertionException("Class '{$identifier}' not found");
@@ -29,16 +29,14 @@ trait AssertsClasses
      * @throws AssertionException
      * @throws ContextException
      */
-    private function assertClassEnabled(PhpClassInteroperableContract $context, $classOrInstance)
+    public static function assertClassEnabled(PhpClassInteroperableContract $context, $classOrInstance)
     {
-        $identifier = is_object($classOrInstance)
-            ? get_class($classOrInstance)
-            : (string)$classOrInstance;
+        $class = is_object($classOrInstance) ? get_class($classOrInstance) : $classOrInstance;
 
-        if (!$context->isClassEnabled($identifier)) {
-            throw new ContextException("PHP Class '{$identifier}' is not enabled");
+        if (!$context->isClassEnabled($class)) {
+            throw new ContextException("PHP Class '{$class}' interoperability is not enabled");
         }
 
-        return $this->assertClassExists($identifier);
+        return static::assertClassExists($class);
     }
 }

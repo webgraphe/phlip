@@ -110,6 +110,7 @@ trait DefinesAssertionsInContexts
         );
         if ($context instanceof Context) {
             $context->enableClass(Dummy::class);
+            $context->enableClass('Undefined');
         }
 
         return $context;

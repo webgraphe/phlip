@@ -2,17 +2,23 @@
 
 namespace Webgraphe\Phlip\Operation\Interop;
 
-use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Traits\AssertsObjects;
 
 class CloneOperation extends PrimaryOperation
 {
+    use AssertsObjects;
+
+    /** @var string */
     public const IDENTIFIER = 'clone';
 
+    /**
+     * @return string[]
+     */
     public function getIdentifiers(): array
     {
         return [self::IDENTIFIER];
@@ -25,22 +31,8 @@ class CloneOperation extends PrimaryOperation
      * @throws AssertionException
      * @throws ContextException
      */
-    protected function invoke(ContextContract $context, ProperList $forms)
+    protected function invoke(ContextContract $context, ProperList $forms): object
     {
-        return clone $this->assertObject($forms->assertHead()->evaluate($context));
-    }
-
-    /**
-     * @param mixed $thing
-     * @return object
-     * @throws AssertionException
-     */
-    private function assertObject($thing): object
-    {
-        if (!is_object($thing)) {
-            throw new AssertionException("Cannot clone a non-object");
-        }
-
-        return $thing;
+        return clone static::assertObject($forms->assertHead()->evaluate($context));
     }
 }

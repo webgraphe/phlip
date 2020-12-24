@@ -8,6 +8,7 @@ use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Exception\IOException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
+use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\Arithmetic\AdditionOperation;
 use Webgraphe\Phlip\Phlipy;
@@ -29,6 +30,31 @@ class ProgramTest extends TestCase
             )
         );
         $this->assertEquals(3, $program->execute(new Context));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testProgramFailure()
+    {
+        $message = 'Fail';
+
+        $context = new Context();
+        $context->define(
+            'fail',
+            function () use ($message) {
+                throw new Exception($message);
+            }
+        );
+
+        try {
+            Program::parse('(fail)')->execute($context);
+            $this->fail("Failed to fail");
+        } catch (ProgramException $e) {
+            $this->assertInstanceOf(Exception::class, $previous = $e->getPrevious());
+            $this->assertEquals($message, $previous->getMessage());
+            $this->assertEquals($context, $e->getContext());
+        }
     }
 
     /**

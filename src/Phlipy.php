@@ -2,7 +2,6 @@
 
 namespace Webgraphe\Phlip;
 
-use Closure;
 use RuntimeException;
 use Webgraphe\Phlip\Contracts\ContextContract;
 

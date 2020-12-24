@@ -14,8 +14,12 @@ class NewOperation extends PhpInteroperableOperation
 {
     use AssertsClasses;
 
+    /** @var string */
     public const IDENTIFIER = 'new';
 
+    /**
+     * @return string[]
+     */
     public function getIdentifiers(): array
     {
         return [self::IDENTIFIER];
@@ -30,7 +34,7 @@ class NewOperation extends PhpInteroperableOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms): object
     {
-        $class = $this->assertClassEnabled(
+        $class = static::assertClassEnabled(
             $this->assertPhpInteroperableContext($context, static::class),
             IdentifierAtom::assertStaticType($forms->assertHead())->getValue()
         );

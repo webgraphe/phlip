@@ -1,5 +1,5 @@
 (assert-exception
     AssertionException
     (:: Webgraphe\Phlip\Tests\Dummy $protectedStaticField)
-    "Cannot access non-public field 'Webgraphe\\Phlip\\Tests\\Dummy::$protectedStaticField'"
+    "Cannot access 'Webgraphe\\Phlip\\Tests\\Dummy::$protectedStaticField'"
 )

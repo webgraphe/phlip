@@ -13,8 +13,12 @@ class InstanceOperation extends PrimaryOperation
 {
     use AssertsClasses;
 
+    /** @var string */
     public const IDENTIFIER = 'instance?';
 
+    /**
+     * @return string[]
+     */
     public function getIdentifiers(): array
     {
         return [self::IDENTIFIER];
@@ -30,7 +34,7 @@ class InstanceOperation extends PrimaryOperation
     protected function invoke(ContextContract $context, ProperList $forms): bool
     {
         $thing = $forms->assertHead()->evaluate($context);
-        $class = $this->assertClassExists($forms->getTail()->getHead());
+        $class = static::assertClassExists($forms->getTail()->getHead());
 
         return $thing instanceof $class;
     }

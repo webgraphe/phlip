@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (set! (:: Webgraphe\Phlip\Tests\Dummy protectedStaticField) 123)
+    "Cannot access 'Webgraphe\\Phlip\\Tests\\Dummy::protectedStaticField'"
+)

@@ -4,6 +4,9 @@ namespace Webgraphe\Phlip;
 
 use Closure;
 use Throwable;
+use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 
 class Program
@@ -87,9 +90,13 @@ class Program
     }
 
     /**
+     * @noinspection PhpDocRedundantThrowsInspection These exception
      * @param Contracts\ContextContract $context
      * @param mixed ...$arguments
      * @return mixed
+     * @throws ProgramException
+     * @throws AssertionException
+     * @throws ContextException
      */
     public function execute(Contracts\ContextContract $context, ...$arguments)
     {

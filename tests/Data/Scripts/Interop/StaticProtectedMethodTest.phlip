@@ -1,5 +1,5 @@
 (assert-exception
     AssertionException
     (:: Webgraphe\Phlip\Tests\Dummy protectedStaticMethod)
-    "Call to non-public static method 'Webgraphe\\Phlip\\Tests\\Dummy::protectedStaticMethod()'"
+    "Cannot call 'Webgraphe\\Phlip\\Tests\\Dummy::protectedStaticMethod()'"
 )

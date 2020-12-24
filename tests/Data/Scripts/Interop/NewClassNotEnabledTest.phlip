@@ -1,0 +1,5 @@
+(assert-exception
+    ContextException
+    (new DateTime)
+    "PHP Class 'DateTime' interoperability is not enabled"
+)

@@ -22,7 +22,7 @@ class ReadOperation extends PrimaryOperation
         $this->prompt = $prompt ?? self::readPrompt();
     }
 
-    protected static function readPrompt(string $prompt = null): Closure
+    protected static function readPrompt(): Closure
     {
         return function (ContextContract $context) {
             static $lastTicks;
@@ -60,7 +60,7 @@ class ReadOperation extends PrimaryOperation
      * @param ProperList $forms
      * @return string
      */
-    protected function invoke(ContextContract $context, ProperList $forms)
+    protected function invoke(ContextContract $context, ProperList $forms): string
     {
         $lines = [];
         while (true) {

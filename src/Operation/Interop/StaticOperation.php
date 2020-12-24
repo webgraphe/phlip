@@ -15,8 +15,12 @@ class StaticOperation extends PhpInteroperableOperation
 {
     use AssertsClasses;
 
+    /** @var string */
     public const IDENTIFIER = '::';
 
+    /**
+     * @return string[]
+     */
     public function getIdentifiers(): array
     {
         return [self::IDENTIFIER];
@@ -31,7 +35,7 @@ class StaticOperation extends PhpInteroperableOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $class = $this->assertClassEnabled(
+        $class = static::assertClassEnabled(
             $this->assertPhpInteroperableContext($context, static::class),
             IdentifierAtom::assertStaticType($forms->assertHead())->getValue()
         );
@@ -40,7 +44,7 @@ class StaticOperation extends PhpInteroperableOperation
         $member = IdentifierAtom::assertStaticType($tail->assertHead())->getValue();
         if (method_exists($class, $member)) {
             if (!is_callable($callable = [$class, $member])) {
-                throw new AssertionException("Call to non-public static method '{$class}::{$member}()'");
+                throw new AssertionException("Cannot call '{$class}::{$member}()'");
             }
 
             return call_user_func(
@@ -52,6 +56,10 @@ class StaticOperation extends PhpInteroperableOperation
                     $tail->getTail()->all()
                 )
             );
+        }
+
+        if (count($tail->getTail())) {
+            throw new AssertionException("Cannot call undefined '{$class}::{$member}()'");
         }
 
         if ('-' === substr($member, 0, 1)) {
@@ -68,12 +76,28 @@ class StaticOperation extends PhpInteroperableOperation
                 try {
                     return $class::$$field;
                 } catch (Throwable $t) {
-                    throw new AssertionException("Cannot access non-public field '{$class}::{$member}'");
+                    throw new AssertionException("Cannot access '{$class}::{$member}'", 0, $t);
                 }
             }
         }
 
         // TODO Differentiate between non-existent and non-public
-        throw new AssertionException("Undefined public field '{$class}::{$member}'");
+        throw new AssertionException("Cannot access undefined '{$class}::{$member}'");
+    }
+
+    /**
+     * @param string $class
+     * @param string $member
+     * @param mixed $value
+     * @return mixed
+     * @throws AssertionException
+     */
+    public function assign(string $class, string $member, $value)
+    {
+        try {
+            return $class::$$member = $value;
+        } catch (Throwable $t) {
+            throw new AssertionException("Cannot access '{$class}::{$member}'", 0, $t);
+        }
     }
 }
