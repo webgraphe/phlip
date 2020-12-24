@@ -5,13 +5,13 @@ namespace Webgraphe\Phlip\Tests\Unit;
 use Exception;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\IOException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\Arithmetic\AdditionOperation;
-use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
 
@@ -83,6 +83,9 @@ class ProgramTest extends TestCase
     /**
      * @throws LexerException
      * @throws ParserException
+     * @throws ProgramException
+     * @throws AssertionException
+     * @throws ContextException
      */
     public function testExecuteWithParameters()
     {

@@ -5,6 +5,7 @@ namespace Webgraphe\Phlip\Tests\Unit;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Tests\TestCase;
@@ -27,6 +28,7 @@ class FormBuilderTest extends TestCase
 
     /**
      * @throws AssertionException
+     * @throws ContextException
      */
     public function testNull()
     {
@@ -37,6 +39,7 @@ class FormBuilderTest extends TestCase
 
     /**
      * @throws AssertionException
+     * @throws ContextException
      */
     public function testTrue()
     {
@@ -47,6 +50,7 @@ class FormBuilderTest extends TestCase
 
     /**
      * @throws AssertionException
+     * @throws ContextException
      */
     public function testFalse()
     {
@@ -57,6 +61,7 @@ class FormBuilderTest extends TestCase
 
     /**
      * @throws AssertionException
+     * @throws ContextException
      */
     public function testString()
     {
@@ -67,6 +72,7 @@ class FormBuilderTest extends TestCase
 
     /**
      * @throws AssertionException
+     * @throws ContextException
      */
     public function testNumeric()
     {
@@ -79,6 +85,7 @@ class FormBuilderTest extends TestCase
 
     /**
      * @throws AssertionException
+     * @throws ContextException
      */
     public function testVector()
     {
@@ -90,6 +97,7 @@ class FormBuilderTest extends TestCase
 
     /**
      * @throws AssertionException
+     * @throws ContextException
      */
     public function testMap()
     {

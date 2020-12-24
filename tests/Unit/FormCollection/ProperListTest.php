@@ -1,6 +1,6 @@
 <?php
 
-namespace Webgraphe\Phlip\Tests\Unit;
+namespace Webgraphe\Phlip\Tests\Unit\FormCollection;
 
 use Exception;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
@@ -19,6 +19,7 @@ use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\FormCollection\Map;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\FormCollection\Vector;
+use Webgraphe\Phlip\Tests\Unit\FormCollectionTest;
 
 class ProperListTest extends FormCollectionTest implements PrimaryOperationContract
 {
@@ -170,9 +171,11 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
                 NumberAtom::fromString('42'),
                 NumberAtom::fromString('3.14'),
                 KeywordAtom::fromString('keyword')
-            ))->map(function (FormContract $form) {
-                return ProperList::asList($form);
-            })
+            ))->map(
+                function (FormContract $form) {
+                    return ProperList::asList($form);
+                }
+            )
         );
     }
 
