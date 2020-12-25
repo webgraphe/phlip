@@ -10,7 +10,7 @@ class ContextTest extends TestCase
 {
     public function testInitialStates()
     {
-        $context = new Context;
+        $context = new Context();
         $this->assertEquals(0, $context->getTicks());
         $this->assertEmpty($context->getFormStack());
     }
@@ -20,7 +20,7 @@ class ContextTest extends TestCase
      */
     public function testRedefinition()
     {
-        $context = new Context;
+        $context = new Context();
         $context->define('x', 2);
 
         $this->expectException(ContextException::class);
@@ -32,7 +32,7 @@ class ContextTest extends TestCase
      */
     public function testStackedDefinition()
     {
-        $child = ($parent = new Context)->stack();
+        $child = ($parent = new Context())->stack();
         $this->assertFalse($parent->has('key'));
         $this->assertNotEquals($child, $parent);
         $child->define('key', 'value');
@@ -59,7 +59,7 @@ class ContextTest extends TestCase
      */
     public function testSetUndefined()
     {
-        $context = new Context;
+        $context = new Context();
 
         $this->expectException(ContextException::class);
         $context->set('x', 2);

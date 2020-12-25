@@ -22,7 +22,7 @@ class LexerTest extends TestCase
      */
     public function testParse()
     {
-        $lexer = new Lexer;
+        $lexer = new Lexer();
         $source = <<<SOURCE
 ; A comment
 (identifier1 "string" (identifier2 'x `(+ ,x ,y) 42 3.14 #keyword (key . value) [1 2 3] . {(key value)}))
@@ -128,7 +128,7 @@ SOURCE;
      */
     public function testUnexpectedEndOfString()
     {
-        $lexer = new Lexer;
+        $lexer = new Lexer();
 
         $this->expectException(LexerException::class);
         $lexer->parseSource('"non-terminated string');
@@ -139,7 +139,7 @@ SOURCE;
      */
     public function testUnexpectedEndOfEscapedString()
     {
-        $lexer = new Lexer;
+        $lexer = new Lexer();
 
         $this->expectException(LexerException::class);
         $lexer->parseSource('"non-terminated escaped string\\');

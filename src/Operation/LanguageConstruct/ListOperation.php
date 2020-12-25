@@ -17,7 +17,7 @@ class ListOperation extends StandardOperation
 
     public function __construct(FormBuilder $formBuilder = null)
     {
-        $this->formBuilder = $formBuilder ?? new FormBuilder;
+        $this->formBuilder = $formBuilder ?? new FormBuilder();
     }
 
     /**

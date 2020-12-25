@@ -35,7 +35,7 @@ class Macro
      */
     public function expand(ProperList $body, FormBuilder $formBuilder = null): FormContract
     {
-        $formBuilder = $formBuilder ?? new FormBuilder;
+        $formBuilder = $formBuilder ?? new FormBuilder();
 
         return $formBuilder->asForm(call_user_func($this->lambda, ...ProperList::asList($body)->all()));
     }

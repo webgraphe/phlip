@@ -13,6 +13,7 @@ use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class LambdaOperation extends PrimaryOperation
 {
+    /** @var string */
     const IDENTIFIER = 'lambda';
 
     /**
@@ -27,7 +28,7 @@ class LambdaOperation extends PrimaryOperation
         ProperList $parameters,
         FormContract ...$statements
     ): Closure {
-        return (new self)->invoke($context, new ProperList($parameters, ...$statements));
+        return (new static())->invoke($context, new ProperList($parameters, ...$statements));
     }
 
     /**
@@ -42,7 +43,7 @@ class LambdaOperation extends PrimaryOperation
         $statements = $forms->getTail();
 
         return function () use ($context, $parameters, $statements) {
-            $localContext = $context->stack();
+            $context = $context->stack();
 
             $arguments = self::assertArgumentsMatchingParameters($parameters, func_get_args());
 
@@ -50,12 +51,12 @@ class LambdaOperation extends PrimaryOperation
                 $argument = array_shift($arguments);
                 $parameter = IdentifierAtom::assertStaticType($parameters->assertHead());
                 $parameters = $parameters->getTail();
-                $localContext->let($parameter->getValue(), $argument);
+                $context->let($parameter->getValue(), $argument);
             }
 
             $result = null;
             while ($statement = $statements->getHead()) {
-                $result = $localContext->execute($statement);
+                $result = $context->execute($statement);
                 $statements = $statements->getTail();
             }
 

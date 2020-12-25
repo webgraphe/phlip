@@ -23,7 +23,7 @@ class MacroTest extends TestCase
      */
     public function testSingleMacroExpansion(): Context
     {
-        $context = new Context;
+        $context = new Context();
         $square = $this->defineSquareMacro($context);
 
         $this->assertTrue(

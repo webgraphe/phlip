@@ -4,7 +4,6 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\ContextException;
 
@@ -115,7 +114,8 @@ class Context implements ContextContract
 
     public function stack(): ContextContract
     {
-        $self = new self;
+        $self = new static();
+        $self->walker = $this->walker;
         $self->parent = $this;
 
         return $self;

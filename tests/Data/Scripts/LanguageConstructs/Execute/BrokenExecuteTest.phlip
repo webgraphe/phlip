@@ -1,0 +1,2 @@
+(define (broken-eval-formula formula) (let ((x 2) (y 3)) (execute formula)))
+(assert-equals 5 (broken-eval-formula '(+ x y)))

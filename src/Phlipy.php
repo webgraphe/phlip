@@ -33,16 +33,16 @@ class Phlipy
      */
     public static function basic(ContextContract $context = null): self
     {
-        return (new static($context ?? new Context))
-            ->withOperation(new Operation\LanguageConstruct\DefineOperation)
-            ->withOperation(new Operation\LanguageConstruct\QuoteOperation)
-            ->withOperation(new Operation\LanguageConstruct\CarOperation)
-            ->withOperation(new Operation\LanguageConstruct\CdrOperation)
-            ->withOperation(new Operation\LanguageConstruct\ConsOperation)
-            ->withOperation(new Operation\LanguageConstruct\AtomOperation)
-            ->withOperation(new Operation\LanguageConstruct\EqualityOperation)
-            ->withOperation(new Operation\LanguageConstruct\CondOperation)
-            ->withOperation(new Operation\LanguageConstruct\LambdaOperation);
+        return (new static($context ?? new Context()))
+            ->withOperation(new Operation\LanguageConstruct\DefineOperation())
+            ->withOperation(new Operation\LanguageConstruct\QuoteOperation())
+            ->withOperation(new Operation\LanguageConstruct\CarOperation())
+            ->withOperation(new Operation\LanguageConstruct\CdrOperation())
+            ->withOperation(new Operation\LanguageConstruct\ConsOperation())
+            ->withOperation(new Operation\LanguageConstruct\AtomOperation())
+            ->withOperation(new Operation\LanguageConstruct\EqualityOperation())
+            ->withOperation(new Operation\LanguageConstruct\CondOperation())
+            ->withOperation(new Operation\LanguageConstruct\LambdaOperation());
     }
 
     /**
@@ -79,17 +79,17 @@ class Phlipy
     protected function withExtraLanguageConstructs(): self
     {
         return $this
-            ->withOperation(new Operation\LanguageConstruct\DefinedOperation)
-            ->withOperation(new Operation\LanguageConstruct\LetOperation)
-            ->withOperation(new Operation\LanguageConstruct\SetOperation)
-            ->withOperation(new Operation\LanguageConstruct\IfOperation)
-            ->withOperation(new Operation\LanguageConstruct\ListOperation)
-            ->withOperation(new Operation\LanguageConstruct\WhileOperation)
-            ->withOperation(new Operation\LanguageConstruct\BeginOperation)
-            ->withOperation(new Operation\LanguageConstruct\ExecuteOperation)
-            ->withOperation(new Operation\LanguageConstruct\MacroOperation)
-            ->withOperation(new Operation\LanguageConstruct\LengthOperation)
-            ->withOperation(new Operation\LanguageConstruct\MacroExpandOperation);
+            ->withOperation(new Operation\LanguageConstruct\DefinedOperation())
+            ->withOperation(new Operation\LanguageConstruct\LetOperation())
+            ->withOperation(new Operation\LanguageConstruct\SetOperation())
+            ->withOperation(new Operation\LanguageConstruct\IfOperation())
+            ->withOperation(new Operation\LanguageConstruct\ListOperation())
+            ->withOperation(new Operation\LanguageConstruct\WhileOperation())
+            ->withOperation(new Operation\LanguageConstruct\BeginOperation())
+            ->withOperation(new Operation\LanguageConstruct\ExecuteOperation())
+            ->withOperation(new Operation\LanguageConstruct\MacroOperation())
+            ->withOperation(new Operation\LanguageConstruct\LengthOperation())
+            ->withOperation(new Operation\LanguageConstruct\MacroExpandOperation());
     }
 
     /**
@@ -98,19 +98,19 @@ class Phlipy
     protected function withTypeOperators(): self
     {
         return $this
-            ->withOperation(new Operation\Type\IsVectorOperation)
-            ->withOperation(new Operation\Type\IsMapOperation)
-            ->withOperation(new Operation\Type\IsCallableOperation)
-            ->withOperation(new Operation\Type\IsFormOperation)
-            ->withOperation(new Operation\Type\IsIdentifierOperation)
-            ->withOperation(new Operation\Type\IsKeywordOperation)
-            ->withOperation(new Operation\Type\IsLambdaOperation)
-            ->withOperation(new Operation\Type\IsListOperation)
-            ->withOperation(new Operation\Type\IsMacroOperation)
-            ->withOperation(new Operation\Type\IsOperationOperation)
-            ->withOperation(new Operation\Type\IsPairOperation)
-            ->withOperation(new Operation\Type\IsNumberOperation)
-            ->withOperation(new Operation\Type\IsStringOperation);
+            ->withOperation(new Operation\Type\IsVectorOperation())
+            ->withOperation(new Operation\Type\IsMapOperation())
+            ->withOperation(new Operation\Type\IsCallableOperation())
+            ->withOperation(new Operation\Type\IsFormOperation())
+            ->withOperation(new Operation\Type\IsIdentifierOperation())
+            ->withOperation(new Operation\Type\IsKeywordOperation())
+            ->withOperation(new Operation\Type\IsLambdaOperation())
+            ->withOperation(new Operation\Type\IsListOperation())
+            ->withOperation(new Operation\Type\IsMacroOperation())
+            ->withOperation(new Operation\Type\IsOperationOperation())
+            ->withOperation(new Operation\Type\IsPairOperation())
+            ->withOperation(new Operation\Type\IsNumberOperation())
+            ->withOperation(new Operation\Type\IsStringOperation());
     }
 
     /**
@@ -119,12 +119,12 @@ class Phlipy
     protected function withArithmeticOperators(): self
     {
         return $this
-            ->withOperation(new Operation\Arithmetic\AdditionOperation)
-            ->withOperation(new Operation\Arithmetic\SubtractionOperation)
-            ->withOperation(new Operation\Arithmetic\MultiplicationOperation)
-            ->withOperation(new Operation\Arithmetic\DivisionOperation)
-            ->withOperation(new Operation\Arithmetic\ModuloOperation)
-            ->withOperation(new Operation\Arithmetic\ExponentiationOperation);
+            ->withOperation(new Operation\Arithmetic\AdditionOperation())
+            ->withOperation(new Operation\Arithmetic\SubtractionOperation())
+            ->withOperation(new Operation\Arithmetic\MultiplicationOperation())
+            ->withOperation(new Operation\Arithmetic\DivisionOperation())
+            ->withOperation(new Operation\Arithmetic\ModuloOperation())
+            ->withOperation(new Operation\Arithmetic\ExponentiationOperation());
     }
 
     /**
@@ -133,13 +133,13 @@ class Phlipy
     protected function withComparisonOperators(): self
     {
         return $this
-            ->withOperation(new Operation\Comparison\EqualityOperation)
-            ->withOperation(new Operation\Comparison\NotEqualOperation)
-            ->withOperation(new Operation\Comparison\GreaterThanOperation)
-            ->withOperation(new Operation\Comparison\GreaterThanOrEqualToOperation)
-            ->withOperation(new Operation\Comparison\LesserThanOperation)
-            ->withOperation(new Operation\Comparison\LesserThanOrEqualToOperation)
-            ->withOperation(new Operation\Comparison\SpaceshipOperation);
+            ->withOperation(new Operation\Comparison\EqualityOperation())
+            ->withOperation(new Operation\Comparison\NotEqualOperation())
+            ->withOperation(new Operation\Comparison\GreaterThanOperation())
+            ->withOperation(new Operation\Comparison\GreaterThanOrEqualToOperation())
+            ->withOperation(new Operation\Comparison\LesserThanOperation())
+            ->withOperation(new Operation\Comparison\LesserThanOrEqualToOperation())
+            ->withOperation(new Operation\Comparison\SpaceshipOperation());
     }
 
     /**
@@ -148,10 +148,10 @@ class Phlipy
     protected function withLogicOperators(): self
     {
         return $this
-            ->withOperation(new Operation\Logic\AndOperation)
-            ->withOperation(new Operation\Logic\OrOperation)
-            ->withOperation(new Operation\Logic\NotOperation)
-            ->withOperation(new Operation\Logic\XorOperation);
+            ->withOperation(new Operation\Logic\AndOperation())
+            ->withOperation(new Operation\Logic\OrOperation())
+            ->withOperation(new Operation\Logic\NotOperation())
+            ->withOperation(new Operation\Logic\XorOperation());
     }
 
     /**
@@ -160,12 +160,12 @@ class Phlipy
     protected function withBitwiseOperators(): self
     {
         return $this
-            ->withOperation(new Operation\Bitwise\AndOperation)
-            ->withOperation(new Operation\Bitwise\OrOperation)
-            ->withOperation(new Operation\Bitwise\NotOperation)
-            ->withOperation(new Operation\Bitwise\XorOperation)
-            ->withOperation(new Operation\Bitwise\ShiftLeftOperation)
-            ->withOperation(new Operation\Bitwise\ShiftRightOperation);
+            ->withOperation(new Operation\Bitwise\AndOperation())
+            ->withOperation(new Operation\Bitwise\OrOperation())
+            ->withOperation(new Operation\Bitwise\NotOperation())
+            ->withOperation(new Operation\Bitwise\XorOperation())
+            ->withOperation(new Operation\Bitwise\ShiftLeftOperation())
+            ->withOperation(new Operation\Bitwise\ShiftRightOperation());
     }
 
     /**
@@ -243,7 +243,7 @@ class Phlipy
                     isset($options['loop.identifier']) ? (string)$options['loop.identifier'] : self::LOOP_IDENTIFIER
                 )
             )
-            ->withOperation(new Operation\Repl\EvalOperation)
+            ->withOperation(new Operation\Repl\EvalOperation())
             ->withOperation(
                 $printOperation = new Operation\Repl\PrintOperation(
                     isset($options['print.form-builder']) && $options['print.form-builder'] instanceof FormBuilder
@@ -255,7 +255,7 @@ class Phlipy
                     $options
                 )
             )
-            ->withOperation(new Operation\Repl\ExitOperation);
+            ->withOperation(new Operation\Repl\ExitOperation());
     }
 
     /**

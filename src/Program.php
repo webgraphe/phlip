@@ -30,10 +30,10 @@ class Program
      */
     public static function parse(string $code, string $name = null, Lexer $lexer = null, Parser $parser = null): Program
     {
-        $lexer = $lexer ?? new Lexer;
-        $parser = $parser ?? new Parser;
+        $lexer = $lexer ?? new Lexer();
+        $parser = $parser ?? new Parser();
 
-        return new self($parser->parseLexemeStream($lexer->parseSource($code, $name)));
+        return new static($parser->parseLexemeStream($lexer->parseSource($code, $name)));
     }
 
     /**

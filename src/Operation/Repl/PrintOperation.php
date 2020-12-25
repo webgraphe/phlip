@@ -75,8 +75,8 @@ class PrintOperation extends StandardOperation
             $this->options[$key] = array_key_exists($key, $options) ? $options[$key] : $value;
         }
 
-        $this->formBuilder = $formBuilder ?? new FormBuilder;
-        $this->lexer = $lexer ?? new Lexer;
+        $this->formBuilder = $formBuilder ?? new FormBuilder();
+        $this->lexer = $lexer ?? new Lexer();
     }
 
     /**

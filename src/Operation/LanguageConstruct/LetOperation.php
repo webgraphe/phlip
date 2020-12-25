@@ -23,21 +23,21 @@ class LetOperation extends PrimaryOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $localContext = $context->stack();
+        $context = $context->stack();
         $head = $forms->assertHead();
         $tail = $forms->getTail();
 
         $letName = $head instanceof IdentifierAtom ? $head->getValue() : null;
         [$parameters, $arguments] = $this->buildParameterArguments(
-            $localContext,
+            $context,
             ProperList::assertStaticType($letName ? $tail->assertHead() : $head)
         );
         $statements = $letName ? $tail->getTail() : $tail;
 
-        $lambda = LambdaOperation::invokeStatic($localContext, $parameters, ...$statements);
+        $lambda = LambdaOperation::invokeStatic($context, $parameters, ...$statements);
 
         if ($letName) {
-            $localContext->let($letName, $lambda);
+            $context->let($letName, $lambda);
         }
 
         return call_user_func($lambda, ...$arguments);

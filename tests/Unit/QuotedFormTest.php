@@ -20,7 +20,7 @@ class QuotedFormTest extends TestCase
     {
         $source = "'123";
         /** @var QuotedForm $quotedExpression */
-        $quotedExpression = (new Parser)->parseLexemeStream((new Lexer)->parseSource($source))->getHead();
+        $quotedExpression = (new Parser())->parseLexemeStream((new Lexer())->parseSource($source))->getHead();
         $this->assertInstanceOf(QuotedForm::class, $quotedExpression);
         $this->assertEquals($source, (string)$quotedExpression);
         /** @var NumberAtom $expression */

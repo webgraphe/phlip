@@ -41,7 +41,7 @@ class QuotedFormTest extends MarkedFormTest
     public function testEvaluation()
     {
         $this->assertTrue(
-            $this->createForm()->equals($this->createMarkedForm($this->createForm())->evaluate(new Context))
+            $this->createForm()->equals($this->createMarkedForm($this->createForm())->evaluate(new Context()))
         );
     }
 }

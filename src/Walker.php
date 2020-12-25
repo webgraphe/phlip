@@ -19,7 +19,7 @@ class Walker implements WalkerContract
     public function __construct(ContextContract $context, FormBuilder $formBuilder = null)
     {
         $this->context = $context;
-        $this->formBuilder = $formBuilder ?? new FormBuilder;
+        $this->formBuilder = $formBuilder ?? new FormBuilder();
     }
 
     /**

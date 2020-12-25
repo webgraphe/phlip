@@ -16,7 +16,7 @@ class IOException extends PhlipException
         int $code = 0,
         Throwable $previous = null
     ): IOException {
-        $exception = new self($message, $code, $previous);
+        $exception = new static($message, $code, $previous);
         $exception->path = $path;
 
         return $exception;

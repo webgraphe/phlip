@@ -32,7 +32,7 @@ class ProgramTest extends TestCase
                 NumberAtom::fromString('3')
             )
         );
-        $this->assertEquals(3, $program->execute(new Context));
+        $this->assertEquals(3, $program->execute(new Context()));
     }
 
     /**
@@ -67,7 +67,7 @@ class ProgramTest extends TestCase
      */
     public function testParse()
     {
-        $this->assertEquals(3, Program::parse('1 2 3')->execute(new Context));
+        $this->assertEquals(3, Program::parse('1 2 3')->execute(new Context()));
     }
 
     /**

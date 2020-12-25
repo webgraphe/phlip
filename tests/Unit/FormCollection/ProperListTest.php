@@ -45,7 +45,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
      */
     public function testStringConvertible()
     {
-        $this->assertEquals('()', (string)new ProperList);
+        $this->assertEquals('()', (string)new ProperList());
         $this->assertEquals(
             '(test 1 2 3)',
             (string)new ProperList(
@@ -65,12 +65,12 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
     public function testEvaluation()
     {
         $list = $this->createFormCollection();
-        $context = new Context;
+        $context = new Context();
         $context->define(IdentifierAtom::assertStaticType($list->assertHead())->getValue(), $this);
         $this->assertTrue($list->getTail()->equals(new ProperList(...$list->evaluate($context))));
 
         $list = $this->createFormCollection();
-        $context = new Context;
+        $context = new Context();
         $context->define(
             IdentifierAtom::assertStaticType($list->assertHead())->getValue(),
             function () {
@@ -94,12 +94,12 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
      */
     public function testEmptyList()
     {
-        $list = new ProperList;
+        $list = new ProperList();
         $this->assertEmpty($list->all());
         $this->assertCount(0, $list);
         $this->assertNull($list->getHead());
         $this->assertTrue($list->equals($list->getTail()));
-        $this->assertNull($list->evaluate(new Context));
+        $this->assertNull($list->evaluate(new Context()));
 
         $this->expectException(AssertionException::class);
         $list->assertHead();
@@ -111,7 +111,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
      */
     public function testAsList()
     {
-        $list = new ProperList;
+        $list = new ProperList();
         $this->assertEquals($list, ProperList::asList($list));
 
         $identifier = IdentifierAtom::fromString('identifier');
@@ -125,7 +125,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
     public function testNotCallable()
     {
         $list = new ProperList(IdentifierAtom::fromString('not-callable'));
-        $context = new Context;
+        $context = new Context();
         $context->define('not-callable', "This is a callable");
 
         $this->expectException(AssertionException::class);
@@ -143,7 +143,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
      */
     public function testFailedEvaluation()
     {
-        $context = new Context;
+        $context = new Context();
         $context->define(
             'fail',
             function () {

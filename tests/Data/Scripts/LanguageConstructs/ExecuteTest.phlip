@@ -1,4 +1,0 @@
-(assert-equals 3 (execute '(+ 1 2)))
-(assert-equals 3 (execute '3))
-(assert-equals 3 (execute (cons '+ (cons 1 (cons 2 '())))))
-(assert-equals 7 (execute '(+ 1 2) '(+ 3 4)))

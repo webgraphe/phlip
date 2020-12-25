@@ -34,7 +34,7 @@ class QuasiquotedForm extends MarkedForm
     protected function apply(ContextContract $context, FormContract $form): FormContract
     {
         if ($form instanceof UnquotedForm) {
-            return (new FormBuilder)->asForm($form->evaluate($context));
+            return (new FormBuilder())->asForm($form->evaluate($context));
         }
 
         if ($form instanceof FormCollection) {

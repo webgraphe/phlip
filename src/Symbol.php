@@ -18,7 +18,7 @@ abstract class Symbol implements LexemeContract
     {
         static $instance;
         if (!$instance) {
-            $instance = new static;
+            $instance = new static();
         }
 
         return $instance;
