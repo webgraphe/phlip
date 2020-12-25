@@ -2,9 +2,12 @@
 
 namespace Webgraphe\Phlip\Tests\Unit;
 
+use DateTime;
 use Exception;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\IOException;
@@ -12,6 +15,8 @@ use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\Operation\Interop\CloneOperation;
+use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
 
@@ -128,5 +133,24 @@ class ProgramTest extends TestCase
 
             throw $e;
         }
+    }
+
+    /**
+     * @throws AssertionException
+     * @throws ContextException
+     * @throws LexerException
+     * @throws ParserException
+     * @throws ProgramException
+     */
+    public function testNonInteroperableContextOnInterop()
+    {
+        $context = Phlipy::passive();
+        $context->define('now', new DateTime());
+        $context->define('clone', new CloneOperation());
+
+        $this->expectException(ContextException::class);
+        $this->expectExceptionMessage("Class 'DateTime' requires an PHP interoperable context");
+
+        Program::parse('(clone now)')->execute($context);
     }
 }

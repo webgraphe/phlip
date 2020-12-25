@@ -8,7 +8,7 @@ use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\ContextException;
 
-class Context implements ContextContract, PhpClassInteroperableContract
+class Context implements ContextContract
 {
     /** @var array */
     private $data = [];
@@ -20,8 +20,6 @@ class Context implements ContextContract, PhpClassInteroperableContract
     private $walker;
     /** @var int */
     private $ticks = 0;
-    /** @var string[] */
-    private $enabledClasses = [];
 
     public function __construct(FormBuilder $formBuilder = null)
     {
@@ -85,21 +83,21 @@ class Context implements ContextContract, PhpClassInteroperableContract
     }
 
     /**
-     * @param $offset
+     * @param $key
      * @return mixed|null
      * @throws ContextException
      */
-    public function get($offset)
+    public function get($key)
     {
-        if (array_key_exists($offset, $this->data)) {
-            return $this->data[$offset];
+        if (array_key_exists($key, $this->data)) {
+            return $this->data[$key];
         }
 
         if ($this->parent) {
             return $this->parent->get(...func_get_args());
         }
 
-        throw new ContextException("Undefined '$offset'");
+        throw new ContextException("Undefined '$key'");
     }
 
     public function has(string $key): bool
@@ -168,21 +166,5 @@ class Context implements ContextContract, PhpClassInteroperableContract
     public function getTicks(): int
     {
         return $this->ticks;
-    }
-
-    /**
-     * @param string $class
-     * @return static
-     */
-    public function enableClass(string $class): self
-    {
-        $this->enabledClasses[$class] = $class;
-
-        return $this;
-    }
-
-    public function isClassEnabled(string $class): bool
-    {
-        return array_key_exists($class, $this->enabledClasses);
     }
 }

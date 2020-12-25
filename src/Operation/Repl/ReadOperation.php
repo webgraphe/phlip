@@ -56,6 +56,22 @@ class ReadOperation extends PrimaryOperation
     }
 
     /**
+     * @return bool
+     */
+    public function isMultiLine(): bool
+    {
+        return $this->multiLine;
+    }
+
+    /**
+     * @return Closure
+     */
+    public function getPrompt(): Closure
+    {
+        return $this->prompt;
+    }
+
+    /**
      * @param ContextContract $context
      * @param ProperList $forms
      * @return string

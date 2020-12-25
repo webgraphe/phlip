@@ -1,4 +1,6 @@
 (define plus-a-b (macro (a b) (list '+ a b)))
+(assert-true (macro? plus-a-b))
+(assert-false (macro? "not a macro"))
 (assert-equals 13 (plus-a-b 5 8))
 (define plus-1 (macro (a) (list '+ a 1)))
 (define plus-2 (macro (a) (list '+ (list 'plus-1 a) 1)))
@@ -11,3 +13,5 @@
 
 (define plus-3 (macro (x) `(+ ,x 3)))
 (assert-equals 5 (plus-3 2))
+
+(assert-equals '(+ 4 3) (macro-expand plus-3 `(4)))

@@ -39,11 +39,11 @@ interface ContextContract
     /**
      * Retrieves a dictionary entry at the closest level possible.
      *
-     * @param $offset
+     * @param $key
      * @return mixed
      * @throws ContextException If not found
      */
-    public function get($offset);
+    public function get($key);
 
     /**
      * Tells if a dictionary entry exists at any level.

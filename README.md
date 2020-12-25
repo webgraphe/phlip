@@ -20,7 +20,7 @@ use Webgraphe\Phlip\Program;
 // Tokenize and parse code into a program
 $program = Program::parse('(lambda (x) (* x x))');
 // Bootstrap a new context with the Phlipy dialect
-$context = Phlipy::standard();
+$context = Phlipy::active();
 // Execute program within said context
 $square = $program->execute($context);
 

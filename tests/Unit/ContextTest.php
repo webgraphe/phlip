@@ -8,6 +8,13 @@ use Webgraphe\Phlip\Exception\ContextException;
 
 class ContextTest extends TestCase
 {
+    public function testInitialStates()
+    {
+        $context = new Context;
+        $this->assertEquals(0, $context->getTicks());
+        $this->assertEmpty($context->getFormStack());
+    }
+
     /**
      * @throws ContextException
      */

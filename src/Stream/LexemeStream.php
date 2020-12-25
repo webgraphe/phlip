@@ -3,6 +3,7 @@
 namespace Webgraphe\Phlip\Stream;
 
 use Closure;
+use Throwable;
 use Webgraphe\Phlip\Contracts\LexemeContract;
 use Webgraphe\Phlip\Contracts\StringConvertibleContract;
 use Webgraphe\Phlip\Exception\StreamException;
@@ -15,8 +16,8 @@ use Webgraphe\Phlip\Symbol\Opening;
  */
 class LexemeStream extends Stream implements StringConvertibleContract
 {
-    /** @var Closure|null */
-    private $lexemeStylizer = null;
+    /** @var Closure */
+    private $lexemeStylizer;
 
     /**
      * @param LexemeContract ...$lexemes
@@ -24,7 +25,11 @@ class LexemeStream extends Stream implements StringConvertibleContract
      */
     public static function fromLexemes(LexemeContract ...$lexemes): self
     {
-        return new static($lexemes, count($lexemes));
+        return (new static($lexemes, count($lexemes)))->withLexemeStylizer(
+            function (LexemeContract $lexeme): string {
+                return (string)$lexeme;
+            }
+        );
     }
 
     public function withLexemeStylizer(callable $lexemeStylizer): LexemeStream
@@ -55,7 +60,7 @@ class LexemeStream extends Stream implements StringConvertibleContract
             while ($this->valid()) {
                 $output .= $this->toString();
             }
-        } catch (StreamException $e) {
+        } catch (Throwable $e) {
             return "ERROR: " . $e->getMessage();
         }
 
@@ -105,6 +110,6 @@ class LexemeStream extends Stream implements StringConvertibleContract
 
     protected function stylizeLexeme(LexemeContract $lexeme): string
     {
-        return $this->lexemeStylizer ? call_user_func($this->lexemeStylizer, $lexeme) : (string)$lexeme;
+        return call_user_func($this->lexemeStylizer, $lexeme);
     }
 }

@@ -32,7 +32,7 @@ class KeywordAtom extends Atom
 
     public function __toString(): string
     {
-        return KeywordSymbol::CHARACTER . $this->getValue();
+        return KeywordSymbol::instance()->getValue() . $this->getValue();
     }
 
     /**

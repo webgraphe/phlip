@@ -6,10 +6,9 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
 use Webgraphe\Phlip\Traits\AssertsObjects;
 
-class CloneOperation extends PrimaryOperation
+class CloneOperation extends PhpInteroperableOperation
 {
     use AssertsObjects;
 
@@ -33,6 +32,9 @@ class CloneOperation extends PrimaryOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms): object
     {
-        return clone static::assertObject($forms->assertHead()->evaluate($context));
+        $original = static::assertObject($forms->assertHead()->evaluate($context));
+        $this->assertPhpInteroperableContext($context, get_class($original));
+
+        return clone $original;
     }
 }

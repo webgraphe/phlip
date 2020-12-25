@@ -13,7 +13,7 @@ abstract class Atom implements LexemeContract, FormContract
     use AssertsStaticType;
 
     /** @var string excludes white spaces, quotes, collection delimiters, keyword prefix, colon and comma */
-    const IDENTIFIER_REGEX = '/^[^#\s\'"\(\)\[\]\{\}]+$/';
+    const IDENTIFIER_REGEX = '/^[^#\s\'"\(\)\[\]\{\}0-9][^#\s\'"\(\)\[\]\{\}]*$/';
 
     /** @var string|number|bool|null */
     private $value;

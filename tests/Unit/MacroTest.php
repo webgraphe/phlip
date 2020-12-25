@@ -49,8 +49,8 @@ class MacroTest extends TestCase
             $this->getExpectedPythagorasExpansion(3, 4)->equals(
                 $pythagoras->expand(
                     new ProperList(
-                        IdentifierAtom::fromString('3'),
-                        IdentifierAtom::fromString('4')
+                        NumberAtom::fromString('3'),
+                        NumberAtom::fromString('4')
                     )
                 )
             )

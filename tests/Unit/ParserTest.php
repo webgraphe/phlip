@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Tests\Unit;
 
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
@@ -105,5 +106,19 @@ class ParserTest extends TestCase
             '((1 2 3))',
             (string)(new Parser)->parseLexemeStream((new Lexer)->parseSource("(1 . (2 3))"))
         );
+    }
+
+    /**
+     * @throws LexerException
+     */
+    public function testInvalidMap()
+    {
+        try {
+            (new Parser)->parseLexemeStream((new Lexer)->parseSource("{#a 1 #b}"));
+            $this->fail("Expected ParserException for malformed map");
+        } catch (ParserException $e) {
+            $this->assertInstanceOf(AssertionException::class, $previous = $e->getPrevious());
+            $this->assertEquals("Malformed map; non-even number of key-value items", $previous->getMessage());
+        }
     }
 }

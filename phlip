@@ -63,7 +63,7 @@ USAGE;
 }
 
 try {
-    $context = Phlipy::withRepl(Phlipy::standard(), $options);
+    $context = Phlipy::withRepl(Phlipy::active(), $options);
 
     $io = new IOMode(STDIN);
     if ($io->getSize() && ($io->isRegularFile() || $io->isNamedPipe())) {

@@ -23,7 +23,7 @@ class PrintOperation extends StandardOperation
     const IDENTIFIER = 'print';
 
     /** @var string */
-    const OPTION_RETURN_TYPE = 'return-types';
+    const OPTION_RETURN_TYPES = 'return-types';
     /** @var string */
     const OPTION_COLORS = 'colors';
     /** @var string */
@@ -58,7 +58,7 @@ class PrintOperation extends StandardOperation
 
     /** @var bool[] */
     private $options = [
-        self::OPTION_RETURN_TYPE => false,
+        self::OPTION_RETURN_TYPES => false,
         self::OPTION_COLORS => false,
         self::OPTION_VERBOSE => false,
     ];
@@ -122,7 +122,7 @@ class PrintOperation extends StandardOperation
         }
 
         $output = '';
-        if ($this->options[self::OPTION_RETURN_TYPE]) {
+        if ($this->options[self::OPTION_RETURN_TYPES]) {
             $output .= ($this->options[self::OPTION_COLORS] ? "\033[{$color}m{$type}\033[0m" : $type) . PHP_EOL;
         }
 
@@ -189,5 +189,29 @@ class PrintOperation extends StandardOperation
                     $stack
                 )
             );
+    }
+
+    /**
+     * @return FormBuilder
+     */
+    public function getFormBuilder(): FormBuilder
+    {
+        return $this->formBuilder;
+    }
+
+    /**
+     * @return Lexer
+     */
+    public function getLexer(): Lexer
+    {
+        return $this->lexer;
+    }
+
+    /**
+     * @return bool[]
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 }

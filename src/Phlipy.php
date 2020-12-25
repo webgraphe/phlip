@@ -4,9 +4,13 @@ namespace Webgraphe\Phlip;
 
 use RuntimeException;
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 
 class Phlipy
 {
+    /** @var string */
+    const LOOP_IDENTIFIER = 'loop';
+
     public static function basic(ContextContract $context = null): ContextContract
     {
         $context = $context ?? new Context;
@@ -24,9 +28,9 @@ class Phlipy
         return $context;
     }
 
-    public static function standard(ContextContract $context = null): ContextContract
+    public static function passive(ContextContract $context = null): ContextContract
     {
-        $context = self::basic($context);
+        $context = self::basic($context ?? new Context());
 
         self::withExtraLanguageConstructs($context);
         self::withTypeOperators($context);
@@ -34,10 +38,19 @@ class Phlipy
         self::withComparisonOperators($context);
         self::withLogicOperators($context);
         self::withBitwiseOperators($context);
-        self::withPhpInterop($context);
+        self::withPassivePhpInterop($context);
         self::withStringFunctions($context);
         self::withPhpMathFunctions($context);
         self::withErrors($context);
+
+        return $context;
+    }
+
+    public static function active(ContextContract $context = null): ContextContract
+    {
+        $context = self::passive($context ?? new PhpInteroperableContext());
+
+        self::withActivePhpInterop($context);
 
         return $context;
     }
@@ -125,13 +138,23 @@ class Phlipy
         return $context;
     }
 
-    protected static function withPhpInterop(ContextContract $context): ContextContract
+    protected static function withPassivePhpInterop(ContextContract $context): ContextContract
     {
-        self::defineOperation($context, new Operation\Interop\StaticOperation());
-        self::defineOperation($context, new Operation\Interop\NewOperation());
-        self::defineOperation($context, new Operation\Interop\ObjectOperation());
-        self::defineOperation($context, new Operation\Interop\CloneOperation());
         self::defineOperation($context, new Operation\Interop\InstanceOperation());
+
+        return $context;
+    }
+
+    protected static function withActivePhpInterop(ContextContract $context): ContextContract
+    {
+        if (!($context instanceof PhpClassInteroperableContract)) {
+            throw new RuntimeException("Context must be PHP Interoperable to support PHP interop operations");
+        }
+
+        self::defineOperation($context, new Operation\Interop\CloneOperation());
+        self::defineOperation($context, new Operation\Interop\NewOperation());
+        self::defineOperation($context, new Operation\Interop\StaticOperation());
+        self::defineOperation($context, new Operation\Interop\ObjectOperation());
 
         return $context;
     }
@@ -171,14 +194,14 @@ class Phlipy
         self::defineOperation(
             $context,
             !empty($options['read.multi-line'])
-                ? Operation\Repl\ReadOperation::multiLine()
-                : new Operation\Repl\ReadOperation()
+                ? Operation\Repl\ReadOperation::multiLine($options['read.prompt'] ?? null)
+                : new Operation\Repl\ReadOperation($options['read.prompt'] ?? null)
         );
 
         self::defineOperation(
             $context,
             new Operation\LanguageConstruct\WhileOperation(
-                isset($options['loop.identifier']) ? (string)$options['loop.identifier'] : 'loop'
+                isset($options['loop.identifier']) ? (string)$options['loop.identifier'] : self::LOOP_IDENTIFIER
             )
         );
         self::defineOperation($context, new Operation\Repl\EvalOperation);
@@ -270,7 +293,7 @@ class Phlipy
     public static function wrapPhpFunction(ContextContract $context, string $function, string $alias = null)
     {
         if (!function_exists($function)) {
-            throw new RuntimeException("Undefined function {$function}()");
+            throw new RuntimeException("Undefined function '{$function}()'");
         }
 
         $context->define($alias ?? $function, function () use ($function) {
