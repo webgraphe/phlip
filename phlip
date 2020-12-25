@@ -76,6 +76,7 @@ try {
     // Interactive REPL prompt
     echo 'Webgraphe Phlip' . PHP_EOL;
     echo 'Type (exit) to quit.' . PHP_EOL . PHP_EOL;
+    // TODO Make this less cool
     Program::parse('(loop (print (eval (read))))')->execute($context);
 } catch (\Throwable $exception) {
     echo "Webgraphe Phlip FATAL ERROR:" . PHP_EOL;

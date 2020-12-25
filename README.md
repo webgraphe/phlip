@@ -3,8 +3,6 @@
 [Phlip](https://github.com/webgraphe/phlip) (pronounced \\ˈflip\\) is an embeddable scripting language for
 [PHP](https://www.php.net) based on [s-expressions](https://en.wikipedia.org/wiki/S-expression). In a nutshell:
 
-> &laquo; _It's JSON with closures._ &raquo;
-
 A [lexer](https://en.wikipedia.org/wiki/Lexical_analysis) and a
 [parser](https://en.wikipedia.org/wiki/Parsing#Computer_languages) analyze scripts observing Phlip's syntax rules.
 A script's behavior originates from named data and code elements resolved from a controlled context. Integration
@@ -31,10 +29,10 @@ var_dump($square(M_PI)); // (double)9.8696044010894
 Install with [`composer require webgraphe/phlip`](https://packagist.org/packages/webgraphe/phlip)
 
 ### Why use Phlip
+* Build your own dialect!
 * Easy to use
 * Easy to learn
 * [Homoiconic](https://en.wikipedia.org/wiki/Homoiconicity) (code as data)
-* Transform existing JSON streams with closures and symbols
-* Build your own dialect!
+* Interoperable with PHP Classes
 * Create [test suites](https://en.wikipedia.org/wiki/Unit_testing) with `phlipunit` (built on top of [PHPUnit](https://phpunit.de))
-* Ships with a literal [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop)
+* Ships with a literal [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) `(loop (print (eval (read))))`
