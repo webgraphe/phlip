@@ -5,11 +5,13 @@ namespace Webgraphe\Phlip\Tests\Traits;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Phlipy;
+use Webgraphe\Phlip\PhpInteroperableContext;
 use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
 use Webgraphe\Phlip\Tests\Dummy;
 
@@ -108,7 +110,7 @@ trait DefinesAssertionsInContexts
                 }
             )
         );
-        if ($context instanceof Context) {
+        if ($context instanceof PhpInteroperableContext) {
             $context->enableClass(Dummy::class);
             $context->enableClass('Undefined');
         }

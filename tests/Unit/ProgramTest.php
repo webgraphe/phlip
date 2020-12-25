@@ -6,8 +6,6 @@ use DateTime;
 use Exception;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Context;
-use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\IOException;
