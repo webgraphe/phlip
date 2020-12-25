@@ -6,322 +6,381 @@ use RuntimeException;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 
+/**
+ * Phlipy is context builder that quickly scaffolds a usable dialect depending on your needs.
+ *
+ * @see Phlipy::__construct() Convenient to evaluate data only
+ * @see Phlipy::basic() For the hardcore developers, the bare minimum to achieve homoiconicity
+ * @see Phlipy::passive() For anything that doesn't require interoperability with PHP classes
+ * @see Phlipy::active() Should you need interoperability with PHP classes
+ */
 class Phlipy
 {
     /** @var string */
     const LOOP_IDENTIFIER = 'loop';
 
-    public static function basic(ContextContract $context = null): ContextContract
+    /** @var ContextContract */
+    private $context;
+
+    public function __construct(ContextContract $context)
     {
-        $context = $context ?? new Context;
-
-        self::defineOperation($context, new Operation\LanguageConstruct\DefineOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\QuoteOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\CarOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\CdrOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\ConsOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\AtomOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\EqualityOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\CondOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\LambdaOperation);
-
-        return $context;
+        $this->context = $context;
     }
 
-    public static function passive(ContextContract $context = null): ContextContract
+    /**
+     * @param ContextContract|null $context
+     * @return static
+     */
+    public static function basic(ContextContract $context = null): self
     {
-        $context = self::basic($context ?? new Context());
-
-        self::withExtraLanguageConstructs($context);
-        self::withTypeOperators($context);
-        self::withArithmeticOperators($context);
-        self::withComparisonOperators($context);
-        self::withLogicOperators($context);
-        self::withBitwiseOperators($context);
-        self::withPassivePhpInterop($context);
-        self::withStringFunctions($context);
-        self::withPhpMathFunctions($context);
-        self::withErrors($context);
-
-        return $context;
+        return (new static($context ?? new Context))
+            ->withOperation(new Operation\LanguageConstruct\DefineOperation)
+            ->withOperation(new Operation\LanguageConstruct\QuoteOperation)
+            ->withOperation(new Operation\LanguageConstruct\CarOperation)
+            ->withOperation(new Operation\LanguageConstruct\CdrOperation)
+            ->withOperation(new Operation\LanguageConstruct\ConsOperation)
+            ->withOperation(new Operation\LanguageConstruct\AtomOperation)
+            ->withOperation(new Operation\LanguageConstruct\EqualityOperation)
+            ->withOperation(new Operation\LanguageConstruct\CondOperation)
+            ->withOperation(new Operation\LanguageConstruct\LambdaOperation);
     }
 
-    public static function active(ContextContract $context = null): ContextContract
+    /**
+     * @param ContextContract|null $context
+     * @return static
+     */
+    public static function passive(ContextContract $context = null): self
     {
-        $context = self::passive($context ?? new PhpInteroperableContext());
-
-        self::withActivePhpInterop($context);
-
-        return $context;
+        return self::basic($context ?? new Context())
+            ->withExtraLanguageConstructs()
+            ->withTypeOperators()
+            ->withArithmeticOperators()
+            ->withComparisonOperators()
+            ->withLogicOperators()
+            ->withBitwiseOperators()
+            ->withPassivePhpInterop()
+            ->withErrors();
     }
 
-    protected static function withExtraLanguageConstructs(ContextContract $context): ContextContract
+    /**
+     * @param ContextContract|PhpClassInteroperableContext|null $context
+     * @return static
+     * @throws RuntimeException If the given content is not interoperable with PHP Classes
+     */
+    public static function active(ContextContract $context = null): self
     {
-        self::defineOperation($context, new Operation\LanguageConstruct\DefinedOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\LetOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\SetOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\IfOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\ListOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\WhileOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\BeginOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\ExecuteOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\MacroOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\LengthOperation);
-        self::defineOperation($context, new Operation\LanguageConstruct\MacroExpandOperation);
-
-        return $context;
+        return self::passive($context ?? new PhpClassInteroperableContext())
+            ->withActivePhpInterop();
     }
 
-    protected static function withTypeOperators(ContextContract $context): ContextContract
+    /**
+     * @return static
+     */
+    protected function withExtraLanguageConstructs(): self
     {
-        self::defineOperation($context, new Operation\Type\IsVectorOperation);
-        self::defineOperation($context, new Operation\Type\IsMapOperation);
-        self::defineOperation($context, new Operation\Type\IsCallableOperation);
-        self::defineOperation($context, new Operation\Type\IsFormOperation);
-        self::defineOperation($context, new Operation\Type\IsIdentifierOperation);
-        self::defineOperation($context, new Operation\Type\IsKeywordOperation);
-        self::defineOperation($context, new Operation\Type\IsLambdaOperation);
-        self::defineOperation($context, new Operation\Type\IsListOperation);
-        self::defineOperation($context, new Operation\Type\IsMacroOperation);
-        self::defineOperation($context, new Operation\Type\IsOperationOperation);
-        self::defineOperation($context, new Operation\Type\IsPairOperation);
-        self::defineOperation($context, new Operation\Type\IsNumberOperation);
-        self::defineOperation($context, new Operation\Type\IsStringOperation);
-
-        return $context;
+        return $this
+            ->withOperation(new Operation\LanguageConstruct\DefinedOperation)
+            ->withOperation(new Operation\LanguageConstruct\LetOperation)
+            ->withOperation(new Operation\LanguageConstruct\SetOperation)
+            ->withOperation(new Operation\LanguageConstruct\IfOperation)
+            ->withOperation(new Operation\LanguageConstruct\ListOperation)
+            ->withOperation(new Operation\LanguageConstruct\WhileOperation)
+            ->withOperation(new Operation\LanguageConstruct\BeginOperation)
+            ->withOperation(new Operation\LanguageConstruct\ExecuteOperation)
+            ->withOperation(new Operation\LanguageConstruct\MacroOperation)
+            ->withOperation(new Operation\LanguageConstruct\LengthOperation)
+            ->withOperation(new Operation\LanguageConstruct\MacroExpandOperation);
     }
 
-    protected static function withArithmeticOperators(ContextContract $context): ContextContract
+    /**
+     * @return static
+     */
+    protected function withTypeOperators(): self
     {
-        self::defineOperation($context, new Operation\Arithmetic\AdditionOperation);
-        self::defineOperation($context, new Operation\Arithmetic\SubtractionOperation);
-        self::defineOperation($context, new Operation\Arithmetic\MultiplicationOperation);
-        self::defineOperation($context, new Operation\Arithmetic\DivisionOperation);
-        self::defineOperation($context, new Operation\Arithmetic\ModuloOperation);
-        self::defineOperation($context, new Operation\Arithmetic\ExponentiationOperation);
-
-        return $context;
+        return $this
+            ->withOperation(new Operation\Type\IsVectorOperation)
+            ->withOperation(new Operation\Type\IsMapOperation)
+            ->withOperation(new Operation\Type\IsCallableOperation)
+            ->withOperation(new Operation\Type\IsFormOperation)
+            ->withOperation(new Operation\Type\IsIdentifierOperation)
+            ->withOperation(new Operation\Type\IsKeywordOperation)
+            ->withOperation(new Operation\Type\IsLambdaOperation)
+            ->withOperation(new Operation\Type\IsListOperation)
+            ->withOperation(new Operation\Type\IsMacroOperation)
+            ->withOperation(new Operation\Type\IsOperationOperation)
+            ->withOperation(new Operation\Type\IsPairOperation)
+            ->withOperation(new Operation\Type\IsNumberOperation)
+            ->withOperation(new Operation\Type\IsStringOperation);
     }
 
-    protected static function withComparisonOperators(ContextContract $context): ContextContract
+    /**
+     * @return static
+     */
+    protected function withArithmeticOperators(): self
     {
-        self::defineOperation($context, new Operation\Comparison\EqualityOperation);
-        self::defineOperation($context, new Operation\Comparison\NotEqualOperation);
-        self::defineOperation($context, new Operation\Comparison\GreaterThanOperation);
-        self::defineOperation($context, new Operation\Comparison\GreaterThanOrEqualToOperation);
-        self::defineOperation($context, new Operation\Comparison\LesserThanOperation);
-        self::defineOperation($context, new Operation\Comparison\LesserThanOrEqualToOperation);
-        self::defineOperation($context, new Operation\Comparison\SpaceshipOperation);
-
-        return $context;
+        return $this
+            ->withOperation(new Operation\Arithmetic\AdditionOperation)
+            ->withOperation(new Operation\Arithmetic\SubtractionOperation)
+            ->withOperation(new Operation\Arithmetic\MultiplicationOperation)
+            ->withOperation(new Operation\Arithmetic\DivisionOperation)
+            ->withOperation(new Operation\Arithmetic\ModuloOperation)
+            ->withOperation(new Operation\Arithmetic\ExponentiationOperation);
     }
 
-    protected static function withLogicOperators(ContextContract $context): ContextContract
+    /**
+     * @return static
+     */
+    protected function withComparisonOperators(): self
     {
-        self::defineOperation($context, new Operation\Logic\AndOperation);
-        self::defineOperation($context, new Operation\Logic\OrOperation);
-        self::defineOperation($context, new Operation\Logic\NotOperation);
-        self::defineOperation($context, new Operation\Logic\XorOperation);
-
-        return $context;
+        return $this
+            ->withOperation(new Operation\Comparison\EqualityOperation)
+            ->withOperation(new Operation\Comparison\NotEqualOperation)
+            ->withOperation(new Operation\Comparison\GreaterThanOperation)
+            ->withOperation(new Operation\Comparison\GreaterThanOrEqualToOperation)
+            ->withOperation(new Operation\Comparison\LesserThanOperation)
+            ->withOperation(new Operation\Comparison\LesserThanOrEqualToOperation)
+            ->withOperation(new Operation\Comparison\SpaceshipOperation);
     }
 
-    protected static function withBitwiseOperators(ContextContract $context): ContextContract
+    /**
+     * @return static
+     */
+    protected function withLogicOperators(): self
     {
-        self::defineOperation($context, new Operation\Bitwise\AndOperation);
-        self::defineOperation($context, new Operation\Bitwise\OrOperation);
-        self::defineOperation($context, new Operation\Bitwise\NotOperation);
-        self::defineOperation($context, new Operation\Bitwise\XorOperation);
-        self::defineOperation($context, new Operation\Bitwise\ShiftLeftOperation);
-        self::defineOperation($context, new Operation\Bitwise\ShiftRightOperation);
-
-        return $context;
+        return $this
+            ->withOperation(new Operation\Logic\AndOperation)
+            ->withOperation(new Operation\Logic\OrOperation)
+            ->withOperation(new Operation\Logic\NotOperation)
+            ->withOperation(new Operation\Logic\XorOperation);
     }
 
-    protected static function withPassivePhpInterop(ContextContract $context): ContextContract
+    /**
+     * @return static
+     */
+    protected function withBitwiseOperators(): self
     {
-        self::defineOperation($context, new Operation\Interop\InstanceOperation());
-
-        return $context;
+        return $this
+            ->withOperation(new Operation\Bitwise\AndOperation)
+            ->withOperation(new Operation\Bitwise\OrOperation)
+            ->withOperation(new Operation\Bitwise\NotOperation)
+            ->withOperation(new Operation\Bitwise\XorOperation)
+            ->withOperation(new Operation\Bitwise\ShiftLeftOperation)
+            ->withOperation(new Operation\Bitwise\ShiftRightOperation);
     }
 
-    protected static function withActivePhpInterop(ContextContract $context): ContextContract
+    /**
+     * @return static
+     */
+    protected function withPassivePhpInterop(): self
     {
-        if (!($context instanceof PhpClassInteroperableContract)) {
+        return $this->withOperation(new Operation\Interop\InstanceOperation());
+    }
+
+    /**
+     * @return static
+     * @throws RuntimeException If the inner context is not interoperable with PHP Classes
+     */
+    protected function withActivePhpInterop(): self
+    {
+        if (!($this->context instanceof PhpClassInteroperableContract)) {
             throw new RuntimeException("Context must be PHP Interoperable to support PHP interop operations");
         }
 
-        self::defineOperation($context, new Operation\Interop\CloneOperation());
-        self::defineOperation($context, new Operation\Interop\NewOperation());
-        self::defineOperation($context, new Operation\Interop\StaticOperation());
-        self::defineOperation($context, new Operation\Interop\ObjectOperation());
-
-        return $context;
+        return $this
+            ->withOperation(new Operation\Interop\CloneOperation())
+            ->withOperation(new Operation\Interop\NewOperation())
+            ->withOperation(new Operation\Interop\StaticOperation())
+            ->withOperation(new Operation\Interop\ObjectOperation());
     }
 
-    protected static function withErrors(ContextContract $context): ContextContract
+    /**
+     * @return static
+     */
+    protected function withErrors(): self
     {
-        $context->define(
+        $this->context->define(
             'notice',
             function ($message) {
                 trigger_error($message, E_USER_NOTICE);
             }
         );
-        $context->define(
+        $this->context->define(
             'warning',
             function ($message) {
                 trigger_error($message, E_USER_WARNING);
             }
         );
-        $context->define(
+        $this->context->define(
             'error',
             function ($message) {
                 trigger_error($message, E_USER_ERROR);
             }
         );
-        $context->define(
+        $this->context->define(
             'deprecated',
             function ($message) {
                 trigger_error($message, E_USER_DEPRECATED);
             }
         );
 
-        return $context;
-    }
-
-    public static function withRepl(ContextContract $context, array $options = []): ContextContract
-    {
-        self::defineOperation(
-            $context,
-            !empty($options['read.multi-line'])
-                ? Operation\Repl\ReadOperation::multiLine($options['read.prompt'] ?? null)
-                : new Operation\Repl\ReadOperation($options['read.prompt'] ?? null)
-        );
-
-        self::defineOperation(
-            $context,
-            new Operation\LanguageConstruct\WhileOperation(
-                isset($options['loop.identifier']) ? (string)$options['loop.identifier'] : self::LOOP_IDENTIFIER
-            )
-        );
-        self::defineOperation($context, new Operation\Repl\EvalOperation);
-        self::defineOperation(
-            $context,
-            $printOperation = new Operation\Repl\PrintOperation(
-                isset($options['print.form-builder']) && $options['print.form-builder'] instanceof FormBuilder
-                    ? $options['print.form-builder']
-                    : null,
-                isset($options['print.lexer']) && $options['print.lexer'] instanceof Lexer
-                    ? $options['print.lexer']
-                    : null,
-                $options
-            )
-        );
-        self::defineOperation($context, new Operation\Repl\ExitOperation);
-
-        return $context;
-    }
-
-    protected static function withPhpMathFunctions(ContextContract $context): ContextContract
-    {
-        self::wrapPhpFunction($context, 'abs');
-        self::wrapPhpFunction($context, 'acos');
-        self::wrapPhpFunction($context, 'acosh');
-        self::wrapPhpFunction($context, 'asin');
-        self::wrapPhpFunction($context, 'asinh');
-        self::wrapPhpFunction($context, 'atan2');
-        self::wrapPhpFunction($context, 'atan');
-        self::wrapPhpFunction($context, 'atanh');
-        self::wrapPhpFunction($context, 'base_convert', 'base-convert');
-        self::wrapPhpFunction($context, 'bindec');
-        self::wrapPhpFunction($context, 'ceil');
-        self::wrapPhpFunction($context, 'cos');
-        self::wrapPhpFunction($context, 'cosh');
-        self::wrapPhpFunction($context, 'decbin');
-        self::wrapPhpFunction($context, 'dechex');
-        self::wrapPhpFunction($context, 'decoct');
-        self::wrapPhpFunction($context, 'deg2rad');
-        self::wrapPhpFunction($context, 'exp');
-        self::wrapPhpFunction($context, 'expm1');
-        self::wrapPhpFunction($context, 'floor');
-        self::wrapPhpFunction($context, 'fmod');
-        self::wrapPhpFunction($context, 'getrandmax', 'rand-max');
-        self::wrapPhpFunction($context, 'hexdec');
-        self::wrapPhpFunction($context, 'hypot');
-        self::wrapPhpFunction($context, 'intdiv');
-        self::wrapPhpFunction($context, 'is_finite', 'finite?');
-        self::wrapPhpFunction($context, 'is_infinite', 'infinite?');
-        self::wrapPhpFunction($context, 'is_nan', 'nan?');
-        self::wrapPhpFunction($context, 'lcg_value', 'lcg-value');
-        self::wrapPhpFunction($context, 'log10');
-        self::wrapPhpFunction($context, 'log1p');
-        self::wrapPhpFunction($context, 'log');
-        self::wrapPhpFunction($context, 'max');
-        self::wrapPhpFunction($context, 'min');
-        self::wrapPhpFunction($context, 'octdec');
-        self::wrapPhpFunction($context, 'pi');
-        self::wrapPhpFunction($context, 'pow');
-        self::wrapPhpFunction($context, 'rad2deg');
-        self::wrapPhpFunction($context, 'rand');
-        self::wrapPhpFunction($context, 'round');
-        self::wrapPhpFunction($context, 'sin');
-        self::wrapPhpFunction($context, 'sinh');
-        self::wrapPhpFunction($context, 'sqrt');
-        self::wrapPhpFunction($context, 'srand', 'rand-seed');
-        self::wrapPhpFunction($context, 'tan');
-        self::wrapPhpFunction($context, 'tanh');
-
-        return $context;
-    }
-
-    protected static function defineOperation(ContextContract $context, Operation $operation)
-    {
-        array_map(
-            function (string $identifier) use ($context, $operation) {
-                $context->define($identifier, $operation);
-            },
-            $operation->getIdentifiers()
-        );
+        return $this;
     }
 
     /**
-     * @param ContextContract $context
+     * @param array $options
+     * @return static
+     */
+    public function withRepl(array $options = []): self
+    {
+        return $this
+            ->withOperation(
+                !empty($options['read.multi-line'])
+                    ? Operation\Repl\ReadOperation::multiLine($options['read.prompt'] ?? null)
+                    : new Operation\Repl\ReadOperation($options['read.prompt'] ?? null)
+            )
+            ->withOperation(
+                new Operation\LanguageConstruct\WhileOperation(
+                    isset($options['loop.identifier']) ? (string)$options['loop.identifier'] : self::LOOP_IDENTIFIER
+                )
+            )
+            ->withOperation(new Operation\Repl\EvalOperation)
+            ->withOperation(
+                $printOperation = new Operation\Repl\PrintOperation(
+                    isset($options['print.form-builder']) && $options['print.form-builder'] instanceof FormBuilder
+                        ? $options['print.form-builder']
+                        : null,
+                    isset($options['print.lexer']) && $options['print.lexer'] instanceof Lexer
+                        ? $options['print.lexer']
+                        : null,
+                    $options
+                )
+            )
+            ->withOperation(new Operation\Repl\ExitOperation);
+    }
+
+    /**
+     * @return static
+     */
+    public function withMathFunctions(): self
+    {
+        return $this
+            ->wrapPhpFunction('abs')
+            ->wrapPhpFunction('acos')
+            ->wrapPhpFunction('acosh')
+            ->wrapPhpFunction('asin')
+            ->wrapPhpFunction('asinh')
+            ->wrapPhpFunction('atan2')
+            ->wrapPhpFunction('atan')
+            ->wrapPhpFunction('atanh')
+            ->wrapPhpFunction('base_convert', 'base-convert')
+            ->wrapPhpFunction('bindec')
+            ->wrapPhpFunction('ceil')
+            ->wrapPhpFunction('cos')
+            ->wrapPhpFunction('cosh')
+            ->wrapPhpFunction('decbin')
+            ->wrapPhpFunction('dechex')
+            ->wrapPhpFunction('decoct')
+            ->wrapPhpFunction('deg2rad')
+            ->wrapPhpFunction('exp')
+            ->wrapPhpFunction('expm1')
+            ->wrapPhpFunction('floor')
+            ->wrapPhpFunction('fmod')
+            ->wrapPhpFunction('getrandmax', 'rand-max')
+            ->wrapPhpFunction('hexdec')
+            ->wrapPhpFunction('hypot')
+            ->wrapPhpFunction('intdiv')
+            ->wrapPhpFunction('is_finite', 'finite?')
+            ->wrapPhpFunction('is_infinite', 'infinite?')
+            ->wrapPhpFunction('is_nan', 'nan?')
+            ->wrapPhpFunction('lcg_value', 'lcg-value')
+            ->wrapPhpFunction('log10')
+            ->wrapPhpFunction('log1p')
+            ->wrapPhpFunction('log')
+            ->wrapPhpFunction('max')
+            ->wrapPhpFunction('min')
+            ->wrapPhpFunction('octdec')
+            ->wrapPhpFunction('pi')
+            ->wrapPhpFunction('pow')
+            ->wrapPhpFunction('rad2deg')
+            ->wrapPhpFunction('rand')
+            ->wrapPhpFunction('round')
+            ->wrapPhpFunction('sin')
+            ->wrapPhpFunction('sinh')
+            ->wrapPhpFunction('sqrt')
+            ->wrapPhpFunction('srand', 'rand-seed')
+            ->wrapPhpFunction('tan')
+            ->wrapPhpFunction('tanh');
+    }
+
+    /**
+     * @param Operation $operation
+     * @return static
+     */
+    public function withOperation(Operation $operation): self
+    {
+        array_map(
+            function (string $identifier) use ($operation) {
+                $this->context->define($identifier, $operation);
+            },
+            $operation->getIdentifiers()
+        );
+
+        return $this;
+    }
+
+    /**
      * @param string $function
      * @param string|null $alias
+     * @return Phlipy
      * @throws RuntimeException
      */
-    public static function wrapPhpFunction(ContextContract $context, string $function, string $alias = null)
+    public function wrapPhpFunction(string $function, string $alias = null): self
     {
         if (!function_exists($function)) {
             throw new RuntimeException("Undefined function '{$function}()'");
         }
 
-        $context->define($alias ?? $function, function () use ($function) {
-            return call_user_func_array($function, func_get_args());
-        });
+        $this->context->define(
+            $alias ?? $function,
+            function () use ($function) {
+                return call_user_func_array($function, func_get_args());
+            }
+        );
+
+        return $this;
     }
 
-    private static function withStringFunctions(ContextContract $context): ContextContract
+    /**
+     * @return static
+     */
+    public function withStringFunctions(): self
     {
-        self::wrapPhpFunction($context, 'crc32');
-        self::wrapPhpFunction($context, 'explode', 'split');
-        self::wrapPhpFunction($context, 'implode');
-        self::wrapPhpFunction($context, 'md5');
-        self::wrapPhpFunction($context, 'number_format', 'number-format');
-        self::wrapPhpFunction($context, 'sha1');
-        self::wrapPhpFunction($context, 'sprintf', 'string-format');
-        self::wrapPhpFunction($context, 'str_pad', 'string-pad');
-        self::wrapPhpFunction($context, 'str_repeat', 'string-repeat');
-        self::wrapPhpFunction($context, 'str_replace', 'string-replace');
-        self::wrapPhpFunction($context, 'mb_strtolower', 'lowercase');
-        self::wrapPhpFunction($context, 'mb_strtoupper', 'uppercase');
-        self::wrapPhpFunction($context, 'mb_substr', 'substring');
-        self::wrapPhpFunction($context, 'ltrim');
-        self::wrapPhpFunction($context, 'rtrim');
-        self::wrapPhpFunction($context, 'chop');
-        self::wrapPhpFunction($context, 'trim');
-        self::wrapPhpFunction($context, 'wordwrap');
+        return $this
+            ->wrapPhpFunction('crc32')
+            ->wrapPhpFunction('explode', 'split')
+            ->wrapPhpFunction('implode')
+            ->wrapPhpFunction('md5')
+            ->wrapPhpFunction('number_format', 'number-format')
+            ->wrapPhpFunction('sha1')
+            ->wrapPhpFunction('sprintf', 'string-format')
+            ->wrapPhpFunction('str_pad', 'string-pad')
+            ->wrapPhpFunction('str_repeat', 'string-repeat')
+            ->wrapPhpFunction('str_replace', 'string-replace')
+            ->wrapPhpFunction('mb_strtolower', 'lowercase')
+            ->wrapPhpFunction('mb_strtoupper', 'uppercase')
+            ->wrapPhpFunction('mb_substr', 'substring')
+            ->wrapPhpFunction('ltrim')
+            ->wrapPhpFunction('rtrim')
+            ->wrapPhpFunction('chop')
+            ->wrapPhpFunction('trim')
+            ->wrapPhpFunction('wordwrap');
+    }
 
-        return $context;
+    /**
+     * @return ContextContract
+     */
+    public function getContext(): ContextContract
+    {
+        return $this->context;
     }
 }

@@ -9,7 +9,7 @@ use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Phlipy;
-use Webgraphe\Phlip\PhpInteroperableContext;
+use Webgraphe\Phlip\PhpClassInteroperableContext;
 use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
 use Webgraphe\Phlip\Tests\Dummy;
 
@@ -32,9 +32,9 @@ trait DefinesAssertionsInContexts
         return is_object($anything) ? get_class($anything) : gettype($anything);
     }
 
-    protected function contextWithAssertions(ContextContract $context = null): ContextContract
+    protected function contextWithAssertions(): ContextContract
     {
-        $context = $context ?? Phlipy::active();
+        $context = Phlipy::active()->withStringFunctions()->withMathFunctions()->getContext();
         $context->define(
             'assert-true',
             new CallablePrimaryOperationOperation(
@@ -108,7 +108,7 @@ trait DefinesAssertionsInContexts
                 }
             )
         );
-        if ($context instanceof PhpInteroperableContext) {
+        if ($context instanceof PhpClassInteroperableContext) {
             $context->enableClass(Dummy::class);
             $context->enableClass('Undefined');
         }

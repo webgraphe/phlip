@@ -142,9 +142,8 @@ class ProgramTest extends TestCase
      */
     public function testNonInteroperableContextOnInterop()
     {
-        $context = Phlipy::passive();
+        $context = Phlipy::passive()->withOperation(new CloneOperation())->getContext();
         $context->define('now', new DateTime());
-        $context->define('clone', new CloneOperation());
 
         $this->expectException(ContextException::class);
         $this->expectExceptionMessage("Class 'DateTime' requires an PHP interoperable context");

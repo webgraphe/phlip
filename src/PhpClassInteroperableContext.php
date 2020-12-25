@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 
-class PhpInteroperableContext extends Context implements PhpClassInteroperableContract
+class PhpClassInteroperableContext extends Context implements PhpClassInteroperableContract
 {
     /** @var string[] */
     private $enabledClasses = [];

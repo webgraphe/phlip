@@ -24,7 +24,7 @@ class PhlipyTest extends TestCase
      */
     public function testEverything(array $options = [])
     {
-        $this->assertInstanceOf(Context::class, $context = Phlipy::withRepl(Phlipy::active(), $options));
+        $this->assertInstanceOf(Context::class, $context = Phlipy::active()->withRepl($options)->getContext());
 
         /** @var ReadOperation $read */
         $read = $context->get('read');
@@ -77,7 +77,7 @@ class PhlipyTest extends TestCase
 
     public function testUserErrors()
     {
-        $context = Phlipy::active();
+        $context = Phlipy::active()->getContext();
         $code = <<<CODE
 (notice "a notification")
 (warning "a warning")
@@ -119,7 +119,7 @@ CODE;
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("Undefined function 'not a function()'");
 
-        Phlipy::wrapPhpFunction(new Context(), 'not a function');
+        (new Phlipy(new Context()))->wrapPhpFunction('not a function');
     }
 
     public function testActiveInterop()
