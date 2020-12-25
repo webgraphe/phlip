@@ -174,7 +174,7 @@ class Lexer
      * @throws Exception\AssertionException
      * @throws Exception\StreamException
      */
-    private function extractLexeme(CharacterStream $stream): ?LexemeContract
+    protected function extractLexeme(CharacterStream $stream): ?LexemeContract
     {
         $current = $stream->current();
         if ($this->isWhitespace($current)) {
@@ -213,7 +213,7 @@ class Lexer
      * @return string
      * @throws Exception\StreamException
      */
-    private function extractWord(CharacterStream $stream): string
+    protected function extractWord(CharacterStream $stream): string
     {
         $word = '';
         while ($stream->valid()) {

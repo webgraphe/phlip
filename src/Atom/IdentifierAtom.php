@@ -18,7 +18,7 @@ class IdentifierAtom extends Atom
      */
     public static function fromString(string $value, CodeAnchorContract $codeAnchor = null): IdentifierAtom
     {
-        return new static(self::assertValidIdentifier($value), $codeAnchor);
+        return new static(static::assertValidIdentifier($value), $codeAnchor);
     }
 
     /**

@@ -19,7 +19,7 @@ class ReadOperation extends PrimaryOperation
 
     public function __construct(Closure $prompt = null)
     {
-        $this->prompt = $prompt ?? self::readPrompt();
+        $this->prompt = $prompt ?? static::readPrompt();
     }
 
     protected static function readPrompt(): Closure

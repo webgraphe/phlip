@@ -38,7 +38,7 @@ class ScriptsTest extends TestCase
      */
     public function scriptFiles(): array
     {
-        $files = self::globRecursive(
+        $files = static::globRecursive(
             $this->relativeProjectPath('tests/Data/Scripts'),
             function (DirectoryIterator $iterator) {
                 return $iterator->isFile() && preg_match('/Test\\.phlip$/', $iterator->getFilename());

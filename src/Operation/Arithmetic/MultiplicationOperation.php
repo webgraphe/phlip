@@ -17,7 +17,7 @@ class MultiplicationOperation extends StandardOperation
      */
     public function __invoke(...$arguments)
     {
-        return self::product(...$arguments);
+        return static::product(...$arguments);
     }
 
     /**

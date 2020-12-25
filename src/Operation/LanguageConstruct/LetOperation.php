@@ -49,7 +49,7 @@ class LetOperation extends PrimaryOperation
      * @return array
      * @throws AssertionException
      */
-    private function buildParameterArguments(ContextContract $context, ProperList $variables): array
+    protected function buildParameterArguments(ContextContract $context, ProperList $variables): array
     {
         $parameters = [];
         $arguments = [];
@@ -123,7 +123,7 @@ class LetOperation extends PrimaryOperation
      * @return ProperList
      * @throws AssertionException
      */
-    private function walkParameterArguments(WalkerContract $walker, ProperList $variables): ProperList
+    protected function walkParameterArguments(WalkerContract $walker, ProperList $variables): ProperList
     {
         $pairs = [];
 

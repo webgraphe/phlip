@@ -14,7 +14,7 @@ class IsVectorOperation extends StandardOperation
     {
         $argument = array_shift($arguments);
 
-        return self::isIndexedArray($argument) || $argument instanceof Vector;
+        return static::isIndexedArray($argument) || $argument instanceof Vector;
     }
 
     /**

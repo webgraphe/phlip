@@ -45,7 +45,7 @@ class LambdaOperation extends PrimaryOperation
         return function () use ($context, $parameters, $statements) {
             $context = $context->stack();
 
-            $arguments = self::assertArgumentsMatchingParameters($parameters, func_get_args());
+            $arguments = static::assertArgumentsMatchingParameters($parameters, func_get_args());
 
             while ($arguments) {
                 $argument = array_shift($arguments);
@@ -70,7 +70,7 @@ class LambdaOperation extends PrimaryOperation
      * @return array
      * @throws AssertionException
      */
-    private static function assertArgumentsMatchingParameters(ProperList $parameters, array $arguments): array
+    protected static function assertArgumentsMatchingParameters(ProperList $parameters, array $arguments): array
     {
         $argumentCount = count($arguments);
         $parameterCount = count($parameters);

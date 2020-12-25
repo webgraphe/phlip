@@ -18,7 +18,7 @@ class KeywordAtom extends Atom
      */
     public static function fromString(string $value, CodeAnchorContract $codeAnchor = null): KeywordAtom
     {
-        return new static(self::assertNormalizedKeyword($value), $codeAnchor);
+        return new static(static::assertNormalizedKeyword($value), $codeAnchor);
     }
 
     /**
@@ -46,6 +46,6 @@ class KeywordAtom extends Atom
             $value = substr($value, 1);
         }
 
-        return self::assertValidIdentifier($value);
+        return static::assertValidIdentifier($value);
     }
 }

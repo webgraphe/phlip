@@ -15,7 +15,7 @@ use Webgraphe\Phlip\Tests\TestCase;
 
 class LispTest extends TestCase
 {
-    private static function getScript(): ?string
+    protected static function getScript(): ?string
     {
         return file_get_contents(dirname(__DIR__) . "/Data/Lisp/Lisp.phlip") ?: null;
     }
@@ -32,7 +32,7 @@ class LispTest extends TestCase
     public function testHomoiconicity($script)
     {
         $context = Phlipy::basic(new Context())->getContext();
-        $init = Program::parse(self::getScript());
+        $init = Program::parse(static::getScript());
         $init->execute($context);
 
         /** @var FormContract $left */

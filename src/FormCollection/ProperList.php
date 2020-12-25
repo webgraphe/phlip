@@ -77,7 +77,7 @@ class ProperList extends FormCollection
             return null;
         }
 
-        $callable = self::assertCallable($context, $this->getHead());
+        $callable = static::assertCallable($context, $this->getHead());
         $arguments = $callable instanceof PrimaryOperationContract
             ? array_merge([$context], $this->getTail()->all())
             : array_map(

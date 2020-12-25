@@ -36,7 +36,7 @@ class PhlipScriptTestSuite extends TestSuite
                 $realPath = $fileInfo->getRealPath();
                 $files[$realPath] = $realPath;
             } elseif ($fileInfo->isDir()) {
-                $directoryFiles = self::globRecursive($fileInfo->getRealPath(), $phlipTestFileFilter);
+                $directoryFiles = static::globRecursive($fileInfo->getRealPath(), $phlipTestFileFilter);
                 $files = array_merge($files, array_combine($directoryFiles, $directoryFiles));
             }
         }

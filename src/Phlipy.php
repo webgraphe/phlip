@@ -51,7 +51,7 @@ class Phlipy
      */
     public static function passive(ContextContract $context = null): self
     {
-        return self::basic($context ?? new Context())
+        return static::basic($context ?? new Context())
             ->withExtraLanguageConstructs()
             ->withTypeOperators()
             ->withArithmeticOperators()
@@ -69,7 +69,7 @@ class Phlipy
      */
     public static function active(ContextContract $context = null): self
     {
-        return self::passive($context ?? new PhpClassInteroperableContext())
+        return static::passive($context ?? new PhpClassInteroperableContext())
             ->withActivePhpInterop();
     }
 

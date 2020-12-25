@@ -17,8 +17,8 @@ class SpaceshipOperation extends Operation\Comparison
      */
     public function __invoke(...$arguments): int
     {
-        $left = self::assertNativeValue(array_shift($arguments));
-        $right = self::assertNativeValue(array_shift($arguments));
+        $left = static::assertNativeValue(array_shift($arguments));
+        $right = static::assertNativeValue(array_shift($arguments));
 
         return $left <=> $right;
     }

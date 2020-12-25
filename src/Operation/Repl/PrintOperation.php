@@ -140,10 +140,10 @@ class PrintOperation extends StandardOperation
         return true;
     }
 
-    private function stringifyLexemeStream(LexemeStream $stream): string
+    protected function stringifyLexemeStream(LexemeStream $stream): string
     {
         if ($this->options[self::OPTION_COLORS]) {
-            return $stream->withLexemeStylizer(self::cliColors());
+            return $stream->withLexemeStylizer(static::cliColors());
         }
 
         return $stream;
@@ -165,7 +165,7 @@ class PrintOperation extends StandardOperation
      * @return string
      * @throws LexerException
      */
-    private function dumpProgramExceptionStackTrace(ProgramException $exception): string
+    protected function dumpProgramExceptionStackTrace(ProgramException $exception): string
     {
         $stack = [];
         $context = $exception->getContext();
