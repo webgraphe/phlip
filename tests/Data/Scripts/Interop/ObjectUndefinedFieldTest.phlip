@@ -1,5 +1,5 @@
 (assert-exception
     AssertionException
     (-> (new Webgraphe\Phlip\Tests\Dummy) undefined)
-    "Cannot access 'Webgraphe\\Phlip\\Tests\\Dummy->undefined'"
+    "Cannot access undefined 'Webgraphe\\Phlip\\Tests\\Dummy->undefined'"
 )

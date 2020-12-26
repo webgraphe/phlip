@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (-> (new Webgraphe\Phlip\Tests\Dummy) privateInstanceField)
+    "Cannot access non-public 'Webgraphe\\Phlip\\Tests\\Dummy->privateInstanceField'"
+)

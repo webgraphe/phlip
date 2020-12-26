@@ -1,5 +1,5 @@
 (assert-exception
     AssertionException
     (:: Webgraphe\Phlip\Tests\Dummy PROTECTED_CONSTANT)
-    "Cannot access undefined 'Webgraphe\\Phlip\\Tests\\Dummy::PROTECTED_CONSTANT'"
+    "Cannot access non-public 'Webgraphe\\Phlip\\Tests\\Dummy::PROTECTED_CONSTANT'"
 )

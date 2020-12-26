@@ -2,6 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Interop;
 
+use Reflection;
+use ReflectionObject;
+use RuntimeException;
 use Throwable;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
@@ -45,7 +48,7 @@ class ObjectOperation extends PhpInteroperableOperation
         $member = IdentifierAtom::assertStaticType($tail->assertHead())->getValue();
         if (method_exists($object, $member)) {
             if (!is_callable($callable = [$object, $member])) {
-                throw new AssertionException("Cannot call '{$identifier}->{$member}()'");
+                throw new AssertionException("Cannot call non-public '{$identifier}->{$member}()'");
             }
 
             return call_user_func(
@@ -67,11 +70,7 @@ class ObjectOperation extends PhpInteroperableOperation
             $member = substr($member, 1);
         }
 
-        try {
-            return $object->$member;
-        } catch (Throwable $t) {
-            throw new AssertionException("Cannot access '{$identifier}->{$member}'", 0, $t);
-        }
+        return $this->getPropertyValue($object, $member);
     }
 
     /**
@@ -90,5 +89,29 @@ class ObjectOperation extends PhpInteroperableOperation
 
             throw new AssertionException("Cannot access '{$class}->{$member}'", 0, $t);
         }
+    }
+
+    /**
+     * @param object $object
+     * @param string $member
+     * @return mixed
+     * @throws AssertionException
+     */
+    private function getPropertyValue(object $object, string $member)
+    {
+        $reflectionObject = new ReflectionObject($object);
+        $identifier = get_class($object);
+
+        try {
+            $reflectionProperty = $reflectionObject->getProperty($member);
+        } catch (Throwable $t) {
+            throw new AssertionException("Cannot access undefined '{$identifier}->{$member}'", 0, $t);
+        }
+
+        if (!$reflectionProperty->isPublic()) {
+            throw new AssertionException("Cannot access non-public '{$identifier}->{$reflectionProperty->getName()}'");
+        }
+
+        return $reflectionProperty->getValue($object);
     }
 }
