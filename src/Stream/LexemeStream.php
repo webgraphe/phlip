@@ -50,7 +50,7 @@ class LexemeStream extends Stream implements StringConvertibleContract
     }
 
     /**
-     * @return string
+     * @return string A string representation of the stream, with platform compliant EOL
      */
     public function __toString(): string
     {

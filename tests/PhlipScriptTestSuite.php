@@ -20,7 +20,7 @@ class PhlipScriptTestSuite extends TestSuite
         parent::__construct();
 
         $phlipTestFileFilter = function (DirectoryIterator $iterator) {
-            return $iterator->isFile() && preg_match('/Test\\.phlip$/', $iterator->getFilename());
+            return $iterator->isFile() && self::isTestFile($iterator->getFilename());
         };
 
         $files = [];
@@ -30,7 +30,7 @@ class PhlipScriptTestSuite extends TestSuite
                 throw new RuntimeException("Cannot open file/directory {$fileInfo->getPathname()}");
             }
             if ($fileInfo->isFile()) {
-                if (!preg_match('/Test\\.phlip$/', $fileInfo->getFilename())) {
+                if (!self::isTestFile($fileInfo->getPathname())) {
                     throw new RuntimeException("{$fileInfo->getPathname()} is not a test file");
                 }
                 $realPath = $fileInfo->getRealPath();
@@ -44,5 +44,10 @@ class PhlipScriptTestSuite extends TestSuite
         foreach ($files as $file) {
             $this->addTest(new PhlipScriptTestCase($file));
         }
+    }
+
+    private static function isTestFile(string $name): bool
+    {
+        return (bool)preg_match('/Test\\.phlip$/', $name);
     }
 }

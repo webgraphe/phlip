@@ -118,7 +118,7 @@ class Lexer
         $anchor = new CodeAnchor($stream);
         $string = '';
         while ($delimiter !== ($character = $stream->next()->current())) {
-            if ("\\" === $character) {
+            if (StringAtom::ESCAPE_CHARACTER === $character) {
                 $character = $this->replaceEscapedCharacter($stream->next()->current());
             }
             $string .= $character;
@@ -135,7 +135,7 @@ class Lexer
     protected function parseComment(CharacterStream $stream): Comment
     {
         $comment = '';
-        while ($stream->next()->valid() && "\n" !== $stream->current()) {
+        while ($stream->next()->valid() && "\n" !== $stream->current() && "\r" !== $stream->current()) {
             $comment .= $stream->current();
         }
 

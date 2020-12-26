@@ -78,13 +78,14 @@ class ProperList extends FormCollection
         }
 
         $callable = static::assertCallable($context, $this->getHead());
+        $tailForms = $this->getTail()->all();
         $arguments = $callable instanceof PrimaryOperationContract
-            ? array_merge([$context], $this->getTail()->all())
+            ? array_merge([$context], $tailForms)
             : array_map(
                 function (FormContract $form) use ($context) {
                     return $context->execute($form);
                 },
-                $this->getTail()->forms
+                $tailForms
             );
 
         return call_user_func($callable, ...$arguments);

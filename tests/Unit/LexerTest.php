@@ -120,7 +120,7 @@ SOURCE;
 )
 SOURCE;
 
-        $this->assertEquals($toString, (string)$lexemeStream);
+        $this->assertEquals(self::platformEol($toString), (string)$lexemeStream);
     }
 
     /**

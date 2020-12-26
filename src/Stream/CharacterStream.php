@@ -12,8 +12,6 @@ class CharacterStream extends Stream
 {
     public static function fromString(string $stream, string $name = null): CharacterStream
     {
-        $stream = str_replace(["\r\n", "\r"], ["\n", "\n"], $stream);
-
         return new static($stream, strlen($stream), $name);
     }
 
