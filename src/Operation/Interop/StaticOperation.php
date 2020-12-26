@@ -70,7 +70,7 @@ class StaticOperation extends PhpInteroperableOperation
         $reflectionClass = new ReflectionClass($class);
 
         return '$' === substr($member, 0, 1)
-            ? $this->getPropertyValue($reflectionClass, substr($member, 1))
+            ? $this->getPropertyValue($reflectionClass, $member)
             : $this->getConstantValue($reflectionClass, $member);
     }
 
@@ -84,20 +84,20 @@ class StaticOperation extends PhpInteroperableOperation
      */
     public function assignPropertyValue(string $class, string $member, $value)
     {
-        $this->getPropertyReflection(new ReflectionClass($class), substr($member, 1))->setValue($value);
+        $this->getPropertyReflection(new ReflectionClass($class), $member)->setValue($value);
 
         return $value;
     }
 
     /**
      * @param ReflectionClass $reflectionClass
-     * @param string $field
+     * @param string $member
      * @return mixed
      * @throws AssertionException
      */
-    private function getPropertyValue(ReflectionClass $reflectionClass, string $field)
+    private function getPropertyValue(ReflectionClass $reflectionClass, string $member)
     {
-        return $this->getPropertyReflection($reflectionClass, $field)->getValue();
+        return $this->getPropertyReflection($reflectionClass, $member)->getValue();
     }
 
     /**
@@ -113,17 +113,19 @@ class StaticOperation extends PhpInteroperableOperation
 
     /**
      * @param ReflectionClass $reflectionClass
-     * @param string $field
+     * @param string $member
      * @return ReflectionProperty
      * @throws AssertionException
      */
-    private function getPropertyReflection(ReflectionClass $reflectionClass, string $field): ReflectionProperty
+    private function getPropertyReflection(ReflectionClass $reflectionClass, string $member): ReflectionProperty
     {
         $class = $reflectionClass->getName();
-        $member = "\${$field}";
+        if (!strlen($member) || '$' !== $member[0]) {
+            throw new AssertionException("Invalid static field identifier '{$class}::{$member}'; must be prefixed by '$'");
+        }
 
         try {
-            $reflectionProperty = $reflectionClass->getProperty($field);
+            $reflectionProperty = $reflectionClass->getProperty(substr($member, 1));
         } catch (Throwable $t) {
             throw new AssertionException("Cannot access undefined '{$class}::{$member}'", 0, $t);
         }

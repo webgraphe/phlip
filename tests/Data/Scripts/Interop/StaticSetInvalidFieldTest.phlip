@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (set! (:: Webgraphe\Phlip\Tests\Dummy protectedStaticField) 123)
+    "Invalid static field identifier 'Webgraphe\\Phlip\\Tests\\Dummy::protectedStaticField'; must be prefixed by '$'"
+)
