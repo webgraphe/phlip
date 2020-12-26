@@ -8,7 +8,7 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 
 class StringAtom extends Atom
 {
-    /** @var string */
+    /** @var string It is not possible to support the single quote as it would conflict with quoting of expressions */
     const DELIMITER = '"';
     /** @var string */
     const CARRIAGE_RETURN = "\r";
@@ -20,7 +20,7 @@ class StringAtom extends Atom
     /** @var string[] */
     const SEARCH_AND_REPLACE = [
         self::ESCAPE_CHARACTER => self::ESCAPE_CHARACTER . self::ESCAPE_CHARACTER,
-        self::DELIMITER => '\\' . self::DELIMITER,
+        self::DELIMITER => self::ESCAPE_CHARACTER . self::DELIMITER,
         self::CARRIAGE_RETURN => self::ESCAPE_CHARACTER . 'r',
         self::NEW_LINE => self::ESCAPE_CHARACTER . 'n'
     ];

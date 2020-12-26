@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class XorOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'bit-xor';
 
     /**

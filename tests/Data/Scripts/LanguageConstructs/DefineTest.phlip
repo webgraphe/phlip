@@ -1,1 +1,1 @@
-(assert-exception ProgramException (define 'wtf true))
+(assert-exception AssertionException (define 'wtf true))

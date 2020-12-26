@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (new Undefined)
+    "Class 'Undefined' not found"
+)

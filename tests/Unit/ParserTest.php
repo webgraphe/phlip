@@ -2,6 +2,7 @@
 
 namespace Webgraphe\Phlip\Tests\Unit;
 
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
@@ -19,7 +20,7 @@ class ParserTest extends TestCase
     public function testIncoherentStatement()
     {
         $this->expectException(ParserException::class);
-        (new Parser)->parseLexemeStream((new Lexer)->parseSource(')'));
+        (new Parser())->parseLexemeStream((new Lexer())->parseSource(')'));
     }
 
     /**
@@ -28,8 +29,11 @@ class ParserTest extends TestCase
      */
     public function testStringConvertibleList()
     {
-        $source = '(identifier1 "string" `(identifier2 \'x ~y 42 3.14 [a b] {#key "value"}))';
-        $this->assertEquals("($source)", (string)(new Parser)->parseLexemeStream((new Lexer)->parseSource($source)));
+        $source = '(identifier1 "string" `(identifier2 \'x ,y 42 3.14 [a b] {#key "value"}))';
+        $this->assertEquals(
+            "($source)",
+            (string)(new Parser())->parseLexemeStream((new Lexer())->parseSource($source))
+        );
     }
 
     /**
@@ -38,7 +42,7 @@ class ParserTest extends TestCase
     public function testFailedParse()
     {
         $this->expectException(ParserException::class);
-        (new Parser)->parseLexemeStream(LexemeStream::fromLexemes(OpenListSymbol::instance()));
+        (new Parser())->parseLexemeStream(LexemeStream::fromLexemes(OpenListSymbol::instance()));
     }
 
     /**
@@ -48,7 +52,7 @@ class ParserTest extends TestCase
     public function testMalformedPairMissingLeftHandSide()
     {
         $this->expectException(ParserException::class);
-        (new Parser)->parseLexemeStream((new Lexer)->parseSource("(. 2)"));
+        (new Parser())->parseLexemeStream((new Lexer())->parseSource("(. 2)"));
     }
 
     /**
@@ -58,7 +62,7 @@ class ParserTest extends TestCase
     public function testMalformedPairMissingRightHandSide()
     {
         $this->expectException(ParserException::class);
-        (new Parser)->parseLexemeStream((new Lexer)->parseSource("(2 .)"));
+        (new Parser())->parseLexemeStream((new Lexer())->parseSource("(2 .)"));
     }
 
     /**
@@ -68,7 +72,7 @@ class ParserTest extends TestCase
     public function testMalformedPairTooManyFormsOnRightHandSide()
     {
         $this->expectException(ParserException::class);
-        (new Parser)->parseLexemeStream((new Lexer)->parseSource("(1 . 2 3)"));
+        (new Parser())->parseLexemeStream((new Lexer())->parseSource("(1 . 2 3)"));
     }
 
     /**
@@ -79,7 +83,7 @@ class ParserTest extends TestCase
     {
         $this->assertEquals(
             '((1 . 2))',
-            (string)(new Parser)->parseLexemeStream((new Lexer)->parseSource("(1 . 2)"))
+            (string)(new Parser())->parseLexemeStream((new Lexer())->parseSource("(1 . 2)"))
         );
     }
 
@@ -91,7 +95,7 @@ class ParserTest extends TestCase
     {
         $this->assertEquals(
             '((1 2 . 3))',
-            (string)(new Parser)->parseLexemeStream((new Lexer)->parseSource("(1 . (2 . 3))"))
+            (string)(new Parser())->parseLexemeStream((new Lexer())->parseSource("(1 . (2 . 3))"))
         );
     }
 
@@ -103,7 +107,21 @@ class ParserTest extends TestCase
     {
         $this->assertEquals(
             '((1 2 3))',
-            (string)(new Parser)->parseLexemeStream((new Lexer)->parseSource("(1 . (2 3))"))
+            (string)(new Parser())->parseLexemeStream((new Lexer())->parseSource("(1 . (2 3))"))
         );
+    }
+
+    /**
+     * @throws LexerException
+     */
+    public function testInvalidMap()
+    {
+        try {
+            (new Parser())->parseLexemeStream((new Lexer())->parseSource("{#a 1 #b}"));
+            $this->fail("Expected ParserException for malformed map");
+        } catch (ParserException $e) {
+            $this->assertInstanceOf(AssertionException::class, $previous = $e->getPrevious());
+            $this->assertEquals("Malformed map; non-even number of key-value items", $previous->getMessage());
+        }
     }
 }

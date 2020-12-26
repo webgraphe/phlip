@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Webgraphe\Phlip\Unit;
+namespace Webgraphe\Phlip\Tests\Unit;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
@@ -22,10 +22,10 @@ class LexerTest extends TestCase
      */
     public function testParse()
     {
-        $lexer = new Lexer;
+        $lexer = new Lexer();
         $source = <<<SOURCE
 ; A comment
-(identifier1 "string" (identifier2 'x `(+ ~x ~y) 42 3.14 #keyword (key . value) [1 2 3] . {(key value)}))
+(identifier1 "string" (identifier2 'x `(+ ,x ,y) 42 3.14 #keyword (key . value) [1 2 3] . {(key value)}))
 SOURCE;
         $lexemeStream = $lexer->parseSource($source);
         $this->assertNotNull($lexemeStream);
@@ -36,14 +36,14 @@ SOURCE;
             StringAtom::fromString('string'),
             Symbol\Opening\OpenListSymbol::instance(),
             IdentifierAtom::fromString('identifier2'),
-            Symbol\Mark\StraightSingleMarkSymbol::instance(),
+            Symbol\Mark\QuoteSymbol::instance(),
             IdentifierAtom::fromString('x'),
-            Symbol\Mark\GraveAccentSymbol::instance(),
+            Symbol\Mark\QuasiquoteSymbol::instance(),
             Symbol\Opening\OpenListSymbol::instance(),
             IdentifierAtom::fromString('+'),
-            Symbol\Mark\TildeSymbol::instance(),
+            Symbol\Mark\UnquoteSymbol::instance(),
             IdentifierAtom::fromString('x'),
-            Symbol\Mark\TildeSymbol::instance(),
+            Symbol\Mark\UnquoteSymbol::instance(),
             IdentifierAtom::fromString('y'),
             Symbol\Closing\CloseListSymbol::instance(),
             NumberAtom::fromString('42'),
@@ -80,6 +80,47 @@ SOURCE;
             ++$i;
         }
 
+        $toString = <<<SOURCE
+(
+    identifier1
+    "string"
+    (
+        identifier2
+        '
+        x
+        `
+        (
+            +
+            ,
+            x
+            ,
+            y
+        )
+        42
+        3.14
+        #keyword
+        (
+            key
+            .
+            value
+        )
+        [
+            1
+            2
+            3
+        ]
+        .
+        {
+            (
+                key
+                value
+            )
+        }
+    )
+)
+SOURCE;
+
+        $this->assertEquals(self::platformEol($toString), (string)$lexemeStream);
     }
 
     /**
@@ -87,7 +128,7 @@ SOURCE;
      */
     public function testUnexpectedEndOfString()
     {
-        $lexer = new Lexer;
+        $lexer = new Lexer();
 
         $this->expectException(LexerException::class);
         $lexer->parseSource('"non-terminated string');
@@ -98,7 +139,7 @@ SOURCE;
      */
     public function testUnexpectedEndOfEscapedString()
     {
-        $lexer = new Lexer;
+        $lexer = new Lexer();
 
         $this->expectException(LexerException::class);
         $lexer->parseSource('"non-terminated escaped string\\');

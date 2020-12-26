@@ -28,7 +28,7 @@ class CarOperation extends PrimaryOperation
      * @return FormContract|null
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms)
+    protected function invoke(ContextContract $context, ProperList $forms): ?FormContract
     {
         $consCell = $context->execute($forms->assertHead());
         if ($consCell instanceof DottedPair) {

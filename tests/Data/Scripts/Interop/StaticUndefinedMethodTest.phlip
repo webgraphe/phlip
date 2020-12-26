@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (:: Webgraphe\Phlip\Tests\Dummy undefined arg1 arg2 arg3)
+    "Cannot call undefined 'Webgraphe\\Phlip\\Tests\\Dummy::undefined()'"
+)

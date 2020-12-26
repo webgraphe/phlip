@@ -12,7 +12,8 @@ class WhileOperation extends PrimaryOperation
     /** @var string */
     const IDENTIFIER = 'while';
 
-    private string $identifier;
+    /** @var string */
+    private $identifier;
 
     public function __construct(string $identifier = self::IDENTIFIER)
     {

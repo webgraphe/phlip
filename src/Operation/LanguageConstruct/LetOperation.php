@@ -23,21 +23,21 @@ class LetOperation extends PrimaryOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $localContext = $context->stack();
+        $context = $context->stack();
         $head = $forms->assertHead();
         $tail = $forms->getTail();
 
         $letName = $head instanceof IdentifierAtom ? $head->getValue() : null;
         [$parameters, $arguments] = $this->buildParameterArguments(
-            $localContext,
+            $context,
             ProperList::assertStaticType($letName ? $tail->assertHead() : $head)
         );
         $statements = $letName ? $tail->getTail() : $tail;
 
-        $lambda = LambdaOperation::invokeStatic($localContext, $parameters, ...$statements);
+        $lambda = LambdaOperation::invokeStatic($context, $parameters, ...$statements);
 
         if ($letName) {
-            $localContext->let($letName, $lambda);
+            $context->let($letName, $lambda);
         }
 
         return call_user_func($lambda, ...$arguments);
@@ -49,11 +49,11 @@ class LetOperation extends PrimaryOperation
      * @return array
      * @throws AssertionException
      */
-    private function buildParameterArguments(ContextContract $context, ProperList $variables): array
+    protected function buildParameterArguments(ContextContract $context, ProperList $variables): array
     {
         $parameters = [];
         $arguments = [];
-        while ($variables && $variable = ProperList::assertStaticType($variables->getHead())) {
+        while (($head = $variables->getHead()) && $variable = ProperList::assertStaticType($head)) {
             $variables = $variables->getTail();
             $name = $variable->assertHead();
             if ($name instanceof ProperList) {
@@ -123,11 +123,11 @@ class LetOperation extends PrimaryOperation
      * @return ProperList
      * @throws AssertionException
      */
-    private function walkParameterArguments(WalkerContract $walker, ProperList $variables): ProperList
+    protected function walkParameterArguments(WalkerContract $walker, ProperList $variables): ProperList
     {
         $pairs = [];
 
-        while ($variables && $variable = ProperList::assertStaticType($variables->getHead())) {
+        while (($head = $variables->getHead()) && $variable = ProperList::assertStaticType($head)) {
             $variables = $variables->getTail();
             $name = $variable->getHead();
             $pairs[] = $name instanceof ProperList

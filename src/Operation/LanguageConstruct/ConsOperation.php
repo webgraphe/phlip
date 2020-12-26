@@ -20,11 +20,12 @@ class ConsOperation extends StandardOperation
     /** @var string */
     const IDENTIFIER = 'cons';
 
-    private FormBuilder $formBuilder;
+    /** @var FormBuilder */
+    private $formBuilder;
 
     public function __construct(FormBuilder $formBuilder = null)
     {
-        $this->formBuilder = $formBuilder ?? new FormBuilder;
+        $this->formBuilder = $formBuilder ?? new FormBuilder();
     }
 
     /**

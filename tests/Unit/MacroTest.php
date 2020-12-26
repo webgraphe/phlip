@@ -7,6 +7,7 @@ use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Macro;
 use Webgraphe\Phlip\MarkedForm\QuasiquotedForm;
@@ -18,10 +19,11 @@ class MacroTest extends TestCase
     /**
      * @return Context
      * @throws AssertionException
+     * @throws ContextException
      */
-    public function testSingleMacroExpansion()
+    public function testSingleMacroExpansion(): Context
     {
-        $context = new Context;
+        $context = new Context();
         $square = $this->defineSquareMacro($context);
 
         $this->assertTrue(
@@ -37,6 +39,7 @@ class MacroTest extends TestCase
      * @depends testSingleMacroExpansion
      * @param ContextContract $context
      * @throws AssertionException
+     * @throws ContextException
      */
     public function testNestedMacroExpansion(ContextContract $context)
     {
@@ -46,8 +49,8 @@ class MacroTest extends TestCase
             $this->getExpectedPythagorasExpansion(3, 4)->equals(
                 $pythagoras->expand(
                     new ProperList(
-                        IdentifierAtom::fromString('3'),
-                        IdentifierAtom::fromString('4')
+                        NumberAtom::fromString('3'),
+                        NumberAtom::fromString('4')
                     )
                 )
             )
@@ -58,6 +61,7 @@ class MacroTest extends TestCase
      * @param ContextContract $context
      * @return Macro
      * @throws AssertionException
+     * @throws ContextException
      */
     private function defineSquareMacro(ContextContract $context): Macro
     {
@@ -66,7 +70,7 @@ class MacroTest extends TestCase
         $a = IdentifierAtom::fromString('a');
         $context->define(
             'square',
-            // (macro square (a) `(* ~a ~a))
+            // (macro square (a) `(* ,a ,a))
             new Macro(
                 $context,
                 new ProperList($a),
@@ -87,6 +91,7 @@ class MacroTest extends TestCase
      * @param ContextContract $context
      * @return Macro
      * @throws AssertionException
+     * @throws ContextException
      */
     private function definePythagorasMacro(ContextContract $context): Macro
     {
@@ -99,7 +104,7 @@ class MacroTest extends TestCase
             new Macro(
                 $context,
                 new ProperList($a, $b),
-                // (macro pythagoras (a b) `(sqrt (+ (square ~a) (square ~a))))
+                // (macro pythagoras (a b) `(sqrt (+ (square ,a) (square ,b))))
                 new QuasiquotedForm(
                     new ProperList(
                         IdentifierAtom::fromString('square-root'),
@@ -143,7 +148,7 @@ class MacroTest extends TestCase
      * @return ProperList
      * @throws AssertionException
      */
-    private function getExpectedSquareExpansion(int $a)
+    private function getExpectedSquareExpansion(int $a): ProperList
     {
         $atomA = NumberAtom::fromString((string)$a);
 

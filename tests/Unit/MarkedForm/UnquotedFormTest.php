@@ -34,8 +34,8 @@ class UnquotedFormTest extends MarkedFormTest
      */
     public function testEvaluation()
     {
-        $context = new Context;
+        $context = new Context();
         $context->define('x', 3);
-        $this->assertEquals(3, $this->createMarkedForm($this->createForm())->evaluate($context));
+        $this->assertEquals(3, $context->execute($this->createMarkedForm($this->createForm())));
     }
 }

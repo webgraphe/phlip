@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (set! (-> "Not an object" protectedInstanceField) 123)
+    "Not an object"
+)

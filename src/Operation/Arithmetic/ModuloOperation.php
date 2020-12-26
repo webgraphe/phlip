@@ -6,10 +6,12 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class ModuloOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = '%';
+    /** @var string */
     const IDENTIFIER_ALTERNATIVE = 'mod';
 
-    public function __invoke(...$arguments)
+    public function __invoke(...$arguments): int
     {
         $left = array_shift($arguments);
         $right = array_shift($arguments);

@@ -1,1 +1,1 @@
-(assert-exception ProgramException (let (('x 2)) x))
+(assert-exception AssertionException (let (('x 2)) x))

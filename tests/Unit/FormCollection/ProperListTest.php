@@ -1,6 +1,6 @@
 <?php
 
-namespace Webgraphe\Phlip\Tests\Unit;
+namespace Webgraphe\Phlip\Tests\Unit\FormCollection;
 
 use Exception;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
@@ -19,6 +19,7 @@ use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\FormCollection\Map;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\FormCollection\Vector;
+use Webgraphe\Phlip\Tests\Unit\FormCollectionTest;
 
 class ProperListTest extends FormCollectionTest implements PrimaryOperationContract
 {
@@ -44,7 +45,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
      */
     public function testStringConvertible()
     {
-        $this->assertEquals('()', (string)new ProperList);
+        $this->assertEquals('()', (string)new ProperList());
         $this->assertEquals(
             '(test 1 2 3)',
             (string)new ProperList(
@@ -64,12 +65,12 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
     public function testEvaluation()
     {
         $list = $this->createFormCollection();
-        $context = new Context;
+        $context = new Context();
         $context->define(IdentifierAtom::assertStaticType($list->assertHead())->getValue(), $this);
-        $this->assertTrue($list->getTail()->equals(new ProperList(...$list->evaluate($context))));
+        $this->assertTrue($list->getTail()->equals(new ProperList(...$context->execute($list))));
 
         $list = $this->createFormCollection();
-        $context = new Context;
+        $context = new Context();
         $context->define(
             IdentifierAtom::assertStaticType($list->assertHead())->getValue(),
             function () {
@@ -83,7 +84,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
                 [1, 2, 3],
                 (object)['key' => 'value'],
             ],
-            $list->evaluate($context)
+            $context->execute($list)
         );
     }
 
@@ -93,12 +94,12 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
      */
     public function testEmptyList()
     {
-        $list = new ProperList;
+        $list = new ProperList();
         $this->assertEmpty($list->all());
         $this->assertCount(0, $list);
         $this->assertNull($list->getHead());
         $this->assertTrue($list->equals($list->getTail()));
-        $this->assertNull($list->evaluate(new Context));
+        $this->assertNull((new Context())->execute($list));
 
         $this->expectException(AssertionException::class);
         $list->assertHead();
@@ -110,7 +111,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
      */
     public function testAsList()
     {
-        $list = new ProperList;
+        $list = new ProperList();
         $this->assertEquals($list, ProperList::asList($list));
 
         $identifier = IdentifierAtom::fromString('identifier');
@@ -124,11 +125,11 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
     public function testNotCallable()
     {
         $list = new ProperList(IdentifierAtom::fromString('not-callable'));
-        $context = new Context;
+        $context = new Context();
         $context->define('not-callable', "This is a callable");
 
         $this->expectException(AssertionException::class);
-        $list->evaluate($context);
+        $context->execute($list);
     }
 
     public function __invoke(ContextContract $context, FormContract ...$forms): array
@@ -142,7 +143,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
      */
     public function testFailedEvaluation()
     {
-        $context = new Context;
+        $context = new Context();
         $context->define(
             'fail',
             function () {
@@ -154,7 +155,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Fail');
         $this->expectExceptionCode(666);
-        $list->evaluate($context);
+        $context->execute($list);
     }
 
     /**
@@ -170,9 +171,11 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
                 NumberAtom::fromString('42'),
                 NumberAtom::fromString('3.14'),
                 KeywordAtom::fromString('keyword')
-            ))->map(function (FormContract $form) {
-                return ProperList::asList($form);
-            })
+            ))->map(
+                function (FormContract $form) {
+                    return ProperList::asList($form);
+                }
+            )
         );
     }
 

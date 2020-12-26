@@ -3,3 +3,4 @@
 (define true #true)
 (assert-equals true #true)
 (assert-not-equals true #false)
+(assert-equals (string-format "%s" #true) "#true")

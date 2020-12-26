@@ -23,6 +23,6 @@ class Comment implements LexemeContract
 
     public function __toString(): string
     {
-        return "; {$this->getValue()}\n";
+        return "; {$this->getValue()}" . PHP_EOL;
     }
 }

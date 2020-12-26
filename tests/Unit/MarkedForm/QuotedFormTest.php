@@ -8,6 +8,7 @@ use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\CodeAnchorContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\MarkedForm;
 use Webgraphe\Phlip\Tests\Unit\MarkedFormTest;
@@ -35,11 +36,12 @@ class QuotedFormTest extends MarkedFormTest
 
     /**
      * @throws AssertionException
+     * @throws ContextException
      */
     public function testEvaluation()
     {
         $this->assertTrue(
-            $this->createForm()->equals($this->createMarkedForm($this->createForm())->evaluate(new Context))
+            $this->createForm()->equals((new Context())->execute($this->createMarkedForm($this->createForm())))
         );
     }
 }

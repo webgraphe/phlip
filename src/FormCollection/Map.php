@@ -14,7 +14,7 @@ use Webgraphe\Phlip\Symbol\Opening;
 class Map extends FormCollection
 {
     /** @var ProperList[] */
-    private array $pairs = [];
+    private $pairs = [];
 
     /**
      * @param ProperList ...$pairs
@@ -36,7 +36,7 @@ class Map extends FormCollection
      * @return string|integer
      * @throws AssertionException
      */
-    private static function assertScalarOrNull($key)
+    protected static function assertScalarOrNull($key)
     {
         if (!is_scalar($key) && null !== $key) {
             throw new AssertionException('Key is not a scalar');
@@ -55,7 +55,7 @@ class Map extends FormCollection
         $map = (object)[];
         foreach ($this->pairs as $pair) {
             $key = $context->execute($pair->getHead());
-            $map->{self::assertScalarOrNull($key)} = $context->execute($pair->getTail()->getHead());
+            $map->{static::assertScalarOrNull($key)} = $context->execute($pair->getTail()->getHead());
         }
 
         return $map;

@@ -23,13 +23,11 @@ class PrintOperation extends StandardOperation
     const IDENTIFIER = 'print';
 
     /** @var string */
-    const OPTION_RETURN_TYPE = 'return-types';
+    const OPTION_RETURN_TYPES = 'return-types';
     /** @var string */
     const OPTION_COLORS = 'colors';
     /** @var string */
     const OPTION_VERBOSE = 'verbose';
-    /** @var string */
-    const OPTION_JSON_ALIKE = 'json-alike';
 
     /** @var string */
     const CLI_COLOR_TYPE = '1;30';
@@ -55,17 +53,18 @@ class PrintOperation extends StandardOperation
         KeywordAtom::class => self::CLI_COLOR_KEYWORD,
     ];
 
-    private FormBuilder $formBuilder;
+    /** @var FormBuilder */
+    private $formBuilder;
 
     /** @var bool[] */
-    private array $options = [
-        self::OPTION_RETURN_TYPE => false,
+    private $options = [
+        self::OPTION_RETURN_TYPES => false,
         self::OPTION_COLORS => false,
         self::OPTION_VERBOSE => false,
-        self::OPTION_JSON_ALIKE => false,
     ];
 
-    private Lexer $lexer;
+    /** @var Lexer */
+    private $lexer;
 
     public function __construct(
         FormBuilder $formBuilder = null,
@@ -76,8 +75,8 @@ class PrintOperation extends StandardOperation
             $this->options[$key] = array_key_exists($key, $options) ? $options[$key] : $value;
         }
 
-        $this->formBuilder = $formBuilder ?? new FormBuilder;
-        $this->lexer = $lexer ?? new Lexer;
+        $this->formBuilder = $formBuilder ?? new FormBuilder();
+        $this->lexer = $lexer ?? new Lexer();
     }
 
     /**
@@ -90,10 +89,10 @@ class PrintOperation extends StandardOperation
 
     /**
      * @param array ...$arguments
-     * @return mixed
+     * @return bool
      * @throws LexerException
      */
-    public function __invoke(...$arguments)
+    public function __invoke(...$arguments): bool
     {
         $argument = $arguments ? $arguments[0] : null;
         $type = is_object($argument) ? $type = get_class($argument) : gettype($argument);
@@ -123,7 +122,7 @@ class PrintOperation extends StandardOperation
         }
 
         $output = '';
-        if ($this->options[self::OPTION_RETURN_TYPE]) {
+        if ($this->options[self::OPTION_RETURN_TYPES]) {
             $output .= ($this->options[self::OPTION_COLORS] ? "\033[{$color}m{$type}\033[0m" : $type) . PHP_EOL;
         }
 
@@ -141,14 +140,10 @@ class PrintOperation extends StandardOperation
         return true;
     }
 
-    private function stringifyLexemeStream(LexemeStream $stream): string
+    protected function stringifyLexemeStream(LexemeStream $stream): string
     {
-        if ($this->options[self::OPTION_JSON_ALIKE]) {
-            $stream = $stream->jsonAlike();
-        }
-
         if ($this->options[self::OPTION_COLORS]) {
-            return $stream->withLexemeStylizer(self::cliColors());
+            return $stream->withLexemeStylizer(static::cliColors());
         }
 
         return $stream;
@@ -170,7 +165,7 @@ class PrintOperation extends StandardOperation
      * @return string
      * @throws LexerException
      */
-    private function dumpProgramExceptionStackTrace(ProgramException $exception): string
+    protected function dumpProgramExceptionStackTrace(ProgramException $exception): string
     {
         $stack = [];
         $context = $exception->getContext();
@@ -194,5 +189,29 @@ class PrintOperation extends StandardOperation
                     $stack
                 )
             );
+    }
+
+    /**
+     * @return FormBuilder
+     */
+    public function getFormBuilder(): FormBuilder
+    {
+        return $this->formBuilder;
+    }
+
+    /**
+     * @return Lexer
+     */
+    public function getLexer(): Lexer
+    {
+        return $this->lexer;
+    }
+
+    /**
+     * @return bool[]
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 }

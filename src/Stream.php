@@ -9,10 +9,13 @@ abstract class Stream implements Iterator
 {
     /** @var mixed */
     protected $stream;
-    protected int $length = 0;
-    protected ?string $name;
+    /** @var int */
+    protected $length;
+    /** @var string|null */
+    protected $name;
 
-    private int $cursor = 0;
+    /** @var int */
+    private $cursor;
     /** @var mixed */
     private $current;
 
@@ -21,6 +24,7 @@ abstract class Stream implements Iterator
         $this->stream = $stream;
         $this->length = $length;
         $this->name = $name;
+        $this->cursor = 0;
         $this->updateCurrent();
     }
 

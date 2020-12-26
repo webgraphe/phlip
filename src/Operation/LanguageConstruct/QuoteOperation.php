@@ -19,7 +19,7 @@ class QuoteOperation extends PrimaryOperation
      * @return FormContract
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms)
+    protected function invoke(ContextContract $context, ProperList $forms): FormContract
     {
         return $forms->assertHead();
     }

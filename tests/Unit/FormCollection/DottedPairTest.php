@@ -16,6 +16,6 @@ class DottedPairTest extends TestCase
     public function testUnexpectedProperList()
     {
         $this->expectException(AssertionException::class);
-        DottedPair::fromForms(IdentifierAtom::fromString('+'), new ProperList);
+        DottedPair::fromForms(IdentifierAtom::fromString('+'), new ProperList());
     }
 }

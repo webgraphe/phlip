@@ -3,11 +3,12 @@
 namespace Webgraphe\Phlip\Exception;
 
 use Throwable;
-use Webgraphe\Phlip\Exception;
+use Webgraphe\Phlip\PhlipException;
 
-class IOException extends Exception
+class IOException extends PhlipException
 {
-    private string $path = '';
+    /** @var string */
+    private $path = '';
 
     public static function fromPath(
         string $path,
@@ -15,7 +16,7 @@ class IOException extends Exception
         int $code = 0,
         Throwable $previous = null
     ): IOException {
-        $exception = new self($message, $code, $previous);
+        $exception = new static($message, $code, $previous);
         $exception->path = $path;
 
         return $exception;

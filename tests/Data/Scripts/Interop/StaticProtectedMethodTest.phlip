@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (:: Webgraphe\Phlip\Tests\Dummy protectedStaticMethod)
+    "Cannot call 'Webgraphe\\Phlip\\Tests\\Dummy::protectedStaticMethod()'"
+)

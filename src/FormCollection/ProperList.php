@@ -17,7 +17,7 @@ class ProperList extends FormCollection
     use AssertsStaticType;
 
     /** @var FormContract[] */
-    private array $forms;
+    private $forms;
 
     final public function __construct(FormContract ...$forms)
     {
@@ -77,14 +77,15 @@ class ProperList extends FormCollection
             return null;
         }
 
-        $callable = self::assertCallable($context, $this->getHead());
+        $callable = static::assertCallable($context, $this->getHead());
+        $tailForms = $this->getTail()->all();
         $arguments = $callable instanceof PrimaryOperationContract
-            ? array_merge([$context], $this->getTail()->all())
+            ? array_merge([$context], $tailForms)
             : array_map(
                 function (FormContract $form) use ($context) {
                     return $context->execute($form);
                 },
-                $this->getTail()->forms
+                $tailForms
             );
 
         return call_user_func($callable, ...$arguments);
@@ -100,6 +101,7 @@ class ProperList extends FormCollection
     {
         if (!is_callable($thing = $context->execute($form))) {
             $type = is_object($thing) ? get_class($thing) : gettype($thing);
+
             throw new AssertionException("Not a callable; got '$type' from $form");
         }
 

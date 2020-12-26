@@ -2,9 +2,12 @@
 
 namespace Webgraphe\Phlip\Exception;
 
-use Webgraphe\Phlip\Exception;
+use Webgraphe\Phlip\PhlipException;
 
-class ContextException extends Exception
+/**
+ * Thrown when the context is explicitly involved.
+ */
+class ContextException extends PhlipException
 {
 
 }

@@ -7,11 +7,9 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class IsNumberOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'number?';
-    /**
-     * @param array ...$arguments
-     * @return bool
-     */
+
     public function __invoke(...$arguments): bool
     {
         $argument = array_shift($arguments);

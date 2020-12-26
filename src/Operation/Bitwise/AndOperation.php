@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class AndOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'bit-and';
 
     /**

@@ -10,12 +10,12 @@ use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\DotSymbol;
-use Webgraphe\Phlip\Symbol\Mark\TildeSymbol;
+use Webgraphe\Phlip\Symbol\Mark\UnquoteSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenListSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenMapSymbol;
 use Webgraphe\Phlip\Symbol\Opening\OpenVectorSymbol;
-use Webgraphe\Phlip\Symbol\Mark\GraveAccentSymbol;
-use Webgraphe\Phlip\Symbol\Mark\StraightSingleMarkSymbol;
+use Webgraphe\Phlip\Symbol\Mark\QuasiquoteSymbol;
+use Webgraphe\Phlip\Symbol\Mark\QuoteSymbol;
 
 class Parser
 {
@@ -36,7 +36,7 @@ class Parser
             }
         } catch (Exception\ParserException $parserException) {
             throw $parserException;
-        } catch (Exception $exception) {
+        } catch (PhlipException $exception) {
             throw new Exception\ParserException('Failed parsing lexeme stream', 0, $exception);
         }
 
@@ -55,15 +55,15 @@ class Parser
         $lexeme = $stream->current();
         $stream->next();
 
-        if ($lexeme instanceof StraightSingleMarkSymbol) {
+        if ($lexeme instanceof QuoteSymbol) {
             return new MarkedForm\QuotedForm($this->parseNextForm($stream));
         }
 
-        if ($lexeme instanceof GraveAccentSymbol) {
+        if ($lexeme instanceof QuasiquoteSymbol) {
             return new MarkedForm\QuasiquotedForm($this->parseNextForm($stream));
         }
 
-        if ($lexeme instanceof TildeSymbol) {
+        if ($lexeme instanceof UnquoteSymbol) {
             return new MarkedForm\UnquotedForm($this->parseNextForm($stream));
         }
 

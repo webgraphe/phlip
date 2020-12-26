@@ -20,6 +20,6 @@ class QuotedForm extends MarkedForm
 
     public function getMarkSymbol(): Symbol\Mark
     {
-        return Symbol\Mark\StraightSingleMarkSymbol::instance();
+        return Symbol\Mark\QuoteSymbol::instance();
     }
 }

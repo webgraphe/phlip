@@ -13,7 +13,7 @@ trait AssertsStaticType
      * @return static
      * @throws AssertionException
      */
-    public static function assertStaticType($thing)
+    public static function assertStaticType($thing): self
     {
         return static::assertType(static::class, $thing);
     }

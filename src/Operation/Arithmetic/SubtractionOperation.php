@@ -6,7 +6,9 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class SubtractionOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = '-';
+    /** @var string */
     const IDENTIFIER_ALTERNATIVE = 'sub';
 
     public function __invoke(...$arguments)

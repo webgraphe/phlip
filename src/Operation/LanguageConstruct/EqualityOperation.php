@@ -7,13 +7,14 @@ use Webgraphe\Phlip\Operation\StandardOperation;
 
 class EqualityOperation extends StandardOperation
 {
+    /** @var string */
     const IDENTIFIER = 'equals?';
 
     /**
      * @param array ...$arguments
-     * @return mixed
+     * @return bool
      */
-    public function __invoke(...$arguments)
+    public function __invoke(...$arguments): bool
     {
         $left = array_shift($arguments);
         $right = array_shift($arguments);

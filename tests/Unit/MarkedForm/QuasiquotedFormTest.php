@@ -36,7 +36,7 @@ class QuasiquotedFormTest extends MarkedFormTest
      */
     private function getContext(): ContextContract
     {
-        $context = new Context;
+        $context = new Context();
         $context->define('x', 2);
         $context->define('y', 3);
 
@@ -69,7 +69,7 @@ class QuasiquotedFormTest extends MarkedFormTest
     {
         $this->assertTrue(
             $this->createForm()->equals(
-                $this->createMarkedForm($this->getFormWithUnquotedIdentifiers())->evaluate($this->getContext())
+                $this->getContext()->execute($this->createMarkedForm($this->getFormWithUnquotedIdentifiers()))
             )
         );
     }

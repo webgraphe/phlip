@@ -1,1 +1,1 @@
-(assert-exception ProgramException (/ 0))
+(assert-exception AssertionException (/ 0))

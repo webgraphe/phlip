@@ -4,11 +4,14 @@ namespace Webgraphe\Phlip\Tests\Traits;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Phlipy;
+use Webgraphe\Phlip\PhpClassInteroperableContext;
 use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
+use Webgraphe\Phlip\Tests\Dummy;
 
 /**
  * @method void assertTrue($condition, $message = '')
@@ -20,15 +23,24 @@ use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
  */
 trait DefinesAssertionsInContexts
 {
-    protected function contextWithAssertions(ContextContract $context = null): ContextContract
+    private function stringize($anything): string
     {
-        $context = $context ?? Phlipy::bootstrap();
+        if (is_scalar($anything) || (is_object($anything) && method_exists($anything, '__toString'))) {
+            return (string)$anything;
+        }
+
+        return is_object($anything) ? get_class($anything) : gettype($anything);
+    }
+
+    protected function contextWithAssertions(): ContextContract
+    {
+        $context = Phlipy::active()->withStringFunctions()->withMathFunctions()->getContext();
         $context->define(
             'assert-true',
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead();
-                    $this->assertTrue((bool)$head->evaluate($context), "Expected $head to be true");
+                    $this->assertTrue((bool)$context->execute($head), "Expected $head to be true");
                 }
             )
         );
@@ -37,7 +49,7 @@ trait DefinesAssertionsInContexts
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead();
-                    $this->assertFalse((bool)$head->evaluate($context), "Expected $head to be false");
+                    $this->assertFalse((bool)$context->execute($head), "Expected $head to be false");
                 }
             )
         );
@@ -45,18 +57,18 @@ trait DefinesAssertionsInContexts
             'assert-equals',
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
-                    $head = $expressions->assertHead()->evaluate($context);
+                    $head = $context->execute($expressions->assertHead());
                     $toeExpression = $expressions->getTail()->assertHead();
-                    $toe = $toeExpression->evaluate($context);
+                    $toe = $context->execute($toeExpression);
                     if ($head instanceof FormContract && $toe instanceof FormContract) {
                         $this->assertTrue(
                             $head->equals($toe),
                             "Expected $head out of $toeExpression; got $toe"
                         );
                     } else {
-                        $headType = is_object($head) ? get_class($head) : gettype($head);
-                        $toeType = is_object($toe) ? get_class($toe) : gettype($toe);
-                        $this->assertEquals($head, $toe, "Expected $headType out of $toeExpression; got $toeType");
+                        $headString = $this->stringize($head);
+                        $toeString = $this->stringize($toe);
+                        $this->assertEquals($head, $toe, "Expected $headString out of $toeExpression; got $toeString");
                     }
                 }
             )
@@ -65,9 +77,9 @@ trait DefinesAssertionsInContexts
             'assert-not-equals',
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
-                    $head = $expressions->assertHead()->evaluate($context);
+                    $head = $context->execute($expressions->assertHead());
                     $toeExpression = $expressions->getTail()->assertHead();
-                    $toe = $toeExpression->evaluate($context);
+                    $toe = $context->execute($toeExpression);
                     if ($head instanceof FormContract && $toe instanceof FormContract) {
                         $this->assertTrue(!$head->equals($toe), "Didn't expect $head out of $toeExpression");
                     } else {
@@ -79,6 +91,7 @@ trait DefinesAssertionsInContexts
             )
         );
 
+        $context->define('AssertionException', AssertionException::class);
         $context->define('ContextException', ContextException::class);
         $context->define('ProgramException', ProgramException::class);
         $context->define(
@@ -86,12 +99,19 @@ trait DefinesAssertionsInContexts
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     /** @var self $test */
-                    $name = $expressions->assertHead()->evaluate($context);
+                    $name = $context->execute($expressions->assertHead());
                     $this->expectException($name);
-                    $expressions->getTail()->assertHead()->evaluate($context);
+                    if ($message = $expressions->getTail()->getTail()->getHead()) {
+                        $this->expectExceptionMessage($context->execute($message));
+                    }
+                    $context->execute($expressions->getTail()->assertHead());
                 }
             )
         );
+        if ($context instanceof PhpClassInteroperableContext) {
+            $context->enableClass(Dummy::class);
+            $context->enableClass('Undefined');
+        }
 
         return $context;
     }

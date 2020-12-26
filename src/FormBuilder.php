@@ -30,7 +30,7 @@ class FormBuilder
         }
 
         if (null === $thing || false === $thing) {
-            return new ProperList;
+            return new ProperList();
         }
 
         if (true === $thing) {

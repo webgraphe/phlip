@@ -1,0 +1,10 @@
+(assert-true
+    (instance?
+        (define instance (new Webgraphe\Phlip\Tests\Dummy "string" 42 1.23 ()))
+        Webgraphe\Phlip\Tests\Dummy
+    )
+)
+(assert-equals "string" (-> instance string))
+(assert-equals 42 (-> instance int))
+(assert-equals 1.23 (-> instance float))
+(assert-equals () (-> instance bool))

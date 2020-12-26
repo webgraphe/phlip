@@ -3,9 +3,12 @@
 namespace Webgraphe\Phlip\Tests\System;
 
 use DirectoryIterator;
+use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\IOException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
+use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInContexts;
@@ -20,8 +23,11 @@ class ScriptsTest extends TestCase
      * @throws IOException
      * @throws LexerException
      * @throws ParserException
+     * @throws AssertionException
+     * @throws ContextException
+     * @throws ProgramException
      */
-    public function testScript($file)
+    public function testScript(string $file)
     {
         $context = $this->contextWithAssertions();
         Program::parseFile($file)->execute($context);
@@ -32,10 +38,10 @@ class ScriptsTest extends TestCase
      */
     public function scriptFiles(): array
     {
-        $files = self::globRecursive(
+        $files = static::globRecursive(
             $this->relativeProjectPath('tests/Data/Scripts'),
             function (DirectoryIterator $iterator) {
-                return $iterator->isFile() && preg_match('/Test\\.phlip$/', $iterator->getFilename());
+                return $iterator->isFile() && self::isTestFile($iterator->getFilename());
             }
         );
 
@@ -45,5 +51,10 @@ class ScriptsTest extends TestCase
             },
             array_combine($files, $files)
         );
+    }
+
+    private static function isTestFile(string $name): bool
+    {
+        return (bool)preg_match('/Test\\.phlip$/', $name);
     }
 }

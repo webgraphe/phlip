@@ -6,6 +6,7 @@ use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\CodeAnchorContract;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
 
 class IdentifierAtom extends Atom
 {
@@ -17,12 +18,13 @@ class IdentifierAtom extends Atom
      */
     public static function fromString(string $value, CodeAnchorContract $codeAnchor = null): IdentifierAtom
     {
-        return new static(self::assertValidIdentifier($value), $codeAnchor);
+        return new static(static::assertValidIdentifier($value), $codeAnchor);
     }
 
     /**
      * @param ContextContract $context
      * @return mixed
+     * @throws ContextException
      */
     public function evaluate(ContextContract $context)
     {

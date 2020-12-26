@@ -1,0 +1,4 @@
+(define original (new Webgraphe\Phlip\Tests\Dummy))
+(assert-true (-> original hasCloneIndex 0))
+(define myClone (clone original))
+(assert-true (-> myClone hasCloneIndex 1))

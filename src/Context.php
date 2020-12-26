@@ -9,12 +9,16 @@ use Webgraphe\Phlip\Exception\ContextException;
 
 class Context implements ContextContract
 {
-    private array $data = [];
-    private ?Context $parent = null;
+    /** @var array */
+    private $data = [];
+    /** @var ContextContract|null */
+    private $parent;
     /** @var FormContract[] */
-    private array $formStack = [];
-    private WalkerContract $walker;
-    private int $ticks = 0;
+    private $formStack = [];
+    /** @var WalkerContract */
+    private $walker;
+    /** @var int */
+    private $ticks = 0;
 
     public function __construct(FormBuilder $formBuilder = null)
     {
@@ -27,7 +31,7 @@ class Context implements ContextContract
      * @return mixed
      * @throws ContextException
      */
-    public function define($key, $value)
+    public function define(string $key, $value)
     {
         if ($this->parent) {
             return $this->parent->define($key, $value);
@@ -41,25 +45,25 @@ class Context implements ContextContract
     }
 
     /**
-     * @param mixed $offset
+     * @param mixed $key
      * @param mixed $value
      * @return mixed
      * @throws ContextException
      */
-    public function set($offset, $value)
+    public function set(string $key, $value)
     {
-        if (array_key_exists($offset, $this->data)) {
-            $previous = $this->data[$offset];
-            $this->data[$offset] = $value;
+        if (array_key_exists($key, $this->data)) {
+            $previous = $this->data[$key];
+            $this->data[$key] = $value;
 
             return $previous;
         }
 
         if ($this->parent) {
-            return $this->parent->set($offset, $value);
+            return $this->parent->set($key, $value);
         }
 
-        throw new ContextException("Undefined '$offset'");
+        throw new ContextException("Undefined '$key'");
     }
 
     /**
@@ -68,7 +72,7 @@ class Context implements ContextContract
      * @return mixed
      * @throws ContextException
      */
-    public function let($key, $value)
+    public function let(string $key, $value)
     {
         if (array_key_exists($key, $this->data)) {
             throw new ContextException("Can't redefine local '$key'");
@@ -78,21 +82,21 @@ class Context implements ContextContract
     }
 
     /**
-     * @param $offset
+     * @param $key
      * @return mixed|null
      * @throws ContextException
      */
-    public function get($offset)
+    public function get($key)
     {
-        if (array_key_exists($offset, $this->data)) {
-            return $this->data[$offset];
+        if (array_key_exists($key, $this->data)) {
+            return $this->data[$key];
         }
 
         if ($this->parent) {
             return $this->parent->get(...func_get_args());
         }
 
-        throw new ContextException("Undefined '$offset'");
+        throw new ContextException("Undefined '$key'");
     }
 
     public function has(string $key): bool
@@ -110,7 +114,8 @@ class Context implements ContextContract
 
     public function stack(): ContextContract
     {
-        $self = new self;
+        $self = new static();
+        $self->walker = $this->walker;
         $self->parent = $this;
 
         return $self;
@@ -119,6 +124,7 @@ class Context implements ContextContract
     /**
      * @param FormContract $form
      * @return mixed
+     * @throws ContextException
      */
     public function execute(FormContract $form)
     {

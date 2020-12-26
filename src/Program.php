@@ -4,11 +4,15 @@ namespace Webgraphe\Phlip;
 
 use Closure;
 use Throwable;
+use Webgraphe\Phlip\Exception\AssertionException;
+use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 
 class Program
 {
-    private ProperList $statements;
+    /** @var ProperList */
+    private $statements;
 
     public function __construct(ProperList $statements)
     {
@@ -26,10 +30,10 @@ class Program
      */
     public static function parse(string $code, string $name = null, Lexer $lexer = null, Parser $parser = null): Program
     {
-        $lexer = $lexer ?? new Lexer;
-        $parser = $parser ?? new Parser;
+        $lexer = $lexer ?? new Lexer();
+        $parser = $parser ?? new Parser();
 
-        return new self($parser->parseLexemeStream($lexer->parseSource($code, $name)));
+        return new static($parser->parseLexemeStream($lexer->parseSource($code, $name)));
     }
 
     /**
@@ -58,7 +62,7 @@ class Program
      * @param Contracts\ContextContract $context
      * @return Closure
      */
-    public function compile(Contracts\ContextContract $context)
+    public function compile(Contracts\ContextContract $context): Closure
     {
         return function (...$arguments) use ($context) {
             if ($arguments) {
@@ -75,6 +79,8 @@ class Program
                     $statements = $statements->getTail();
                     $result = $context->execute($head);
                 }
+            } catch (PhlipException $t) {
+                throw $t;
             } catch (Throwable $t) {
                 throw Exception\ProgramException::fromContext(clone $context, 'Program execution failed', 0, $t);
             }
@@ -84,11 +90,15 @@ class Program
     }
 
     /**
+     * @noinspection PhpDocRedundantThrowsInspection These exception
      * @param Contracts\ContextContract $context
-     * @param array $arguments
+     * @param mixed ...$arguments
      * @return mixed
+     * @throws ProgramException
+     * @throws AssertionException
+     * @throws ContextException
      */
-    public function execute(Contracts\ContextContract $context, array $arguments = [])
+    public function execute(Contracts\ContextContract $context, ...$arguments)
     {
         return call_user_func($this->compile($context), ...$arguments);
     }
