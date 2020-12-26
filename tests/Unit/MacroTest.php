@@ -28,7 +28,7 @@ class MacroTest extends TestCase
 
         $this->assertTrue(
             $this->getExpectedSquareExpansion(3)->equals(
-                $square->expand(new ProperList(NumberAtom::fromString('3')))
+                $square->expand($context, new ProperList(NumberAtom::fromString('3')))
             )
         );
 
@@ -48,6 +48,7 @@ class MacroTest extends TestCase
         $this->assertTrue(
             $this->getExpectedPythagorasExpansion(3, 4)->equals(
                 $pythagoras->expand(
+                    $context,
                     new ProperList(
                         NumberAtom::fromString('3'),
                         NumberAtom::fromString('4')

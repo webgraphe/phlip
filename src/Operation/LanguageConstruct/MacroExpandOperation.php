@@ -31,6 +31,6 @@ class MacroExpandOperation extends PrimaryOperation
     {
         $macro = Macro::assertStaticType($context->execute($forms->assertHead()));
 
-        return $macro->expand(ProperList::assertStaticType($context->execute($forms->getTail()->assertHead())));
+        return $macro->expand($context, ProperList::assertStaticType($context->execute($forms->getTail()->assertHead())));
     }
 }

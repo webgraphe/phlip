@@ -115,7 +115,6 @@ class Context implements ContextContract
     public function stack(): ContextContract
     {
         $self = new static();
-        $self->walker = $this->walker;
         $self->parent = $this;
 
         return $self;

@@ -28,12 +28,13 @@ class Macro
     }
 
     /**
+     * @param ContextContract $context
      * @param ProperList $body
      * @param FormBuilder|null $formBuilder
      * @return FormContract
      * @throws Exception\AssertionException
      */
-    public function expand(ProperList $body, FormBuilder $formBuilder = null): FormContract
+    public function expand(ContextContract $context, ProperList $body, FormBuilder $formBuilder = null): FormContract
     {
         $formBuilder = $formBuilder ?? new FormBuilder();
 

@@ -47,7 +47,7 @@ class Walker implements WalkerContract
         $definition = $this->context->get($head->getValue());
 
         if ($definition instanceof Macro) {
-            return $this($definition->expand($form->getTail(), $this->formBuilder));
+            return $this($definition->expand($this->context, $form->getTail(), $this->formBuilder));
         }
 
         return $definition instanceof PrimaryOperationContract
