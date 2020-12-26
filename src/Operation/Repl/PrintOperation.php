@@ -8,6 +8,7 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
+use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\LexemeContract;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ProgramException;
@@ -114,7 +115,7 @@ class PrintOperation extends StandardOperation
             }
         } else {
             try {
-                $form = $this->formBuilder->asForm($argument);
+                $form = $this->formBuilder->asForm(new Context(), $argument);
                 $value = $this->stringifyLexemeStream($this->lexer->parseSource((string)$form));
             } catch (Throwable $t) {
                 // do nothing

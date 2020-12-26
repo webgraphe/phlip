@@ -18,12 +18,13 @@ class FormBuilderTest extends TestCase
     public function testForm()
     {
         $builder = new FormBuilder();
+        $context = new Context();
 
         $identifier = IdentifierAtom::fromString('identifier');
-        $this->assertTrue($identifier->equals($builder->asForm($identifier)));
+        $this->assertTrue($identifier->equals($builder->asForm($context, $identifier)));
 
         $list = new FormCollection\ProperList($identifier);
-        $this->assertTrue($list->equals($builder->asForm($list)));
+        $this->assertTrue($list->equals($builder->asForm($context, $list)));
     }
 
     /**
@@ -34,7 +35,7 @@ class FormBuilderTest extends TestCase
     {
         $builder = new FormBuilder();
 
-        $this->assertNull((new Context())->execute($builder->asForm(null)));
+        $this->assertNull((new Context())->execute($builder->asForm(new Context(), null)));
     }
 
     /**
@@ -45,7 +46,7 @@ class FormBuilderTest extends TestCase
     {
         $builder = new FormBuilder();
 
-        $this->assertNotEmpty((new Context())->execute($builder->asForm(true)));
+        $this->assertNotEmpty((new Context())->execute($builder->asForm(new Context(), true)));
     }
 
     /**
@@ -56,7 +57,7 @@ class FormBuilderTest extends TestCase
     {
         $builder = new FormBuilder();
 
-        $this->assertEmpty((new Context())->execute($builder->asForm(false)));
+        $this->assertEmpty((new Context())->execute($builder->asForm(new Context(), false)));
     }
 
     /**
@@ -67,7 +68,7 @@ class FormBuilderTest extends TestCase
     {
         $builder = new FormBuilder();
 
-        $this->assertEquals("string", (new Context())->execute($builder->asForm("string")));
+        $this->assertEquals("string", (new Context())->execute($builder->asForm(new Context(), "string")));
     }
 
     /**
@@ -77,10 +78,11 @@ class FormBuilderTest extends TestCase
     public function testNumeric()
     {
         $builder = new FormBuilder();
+        $context = new Context();
 
-        $this->assertEquals(0, (new Context())->execute($builder->asForm(0)));
-        $this->assertEquals(42, (new Context())->execute($builder->asForm(42)));
-        $this->assertEquals(3.14, (new Context())->execute($builder->asForm(3.14)));
+        $this->assertEquals(0, (new Context())->execute($builder->asForm($context, 0)));
+        $this->assertEquals(42, (new Context())->execute($builder->asForm($context, 42)));
+        $this->assertEquals(3.14, (new Context())->execute($builder->asForm($context, 3.14)));
     }
 
     /**
@@ -90,9 +92,10 @@ class FormBuilderTest extends TestCase
     public function testVector()
     {
         $builder = new FormBuilder();
+        $context = new Context();
 
-        $this->assertEquals([], (new Context())->execute($builder->asForm([])));
-        $this->assertEquals([1, 2, 3], (new Context())->execute($builder->asForm([1, 2, 3])));
+        $this->assertEquals([], (new Context())->execute($builder->asForm($context, [])));
+        $this->assertEquals([1, 2, 3], (new Context())->execute($builder->asForm($context, [1, 2, 3])));
     }
 
     /**
@@ -102,10 +105,11 @@ class FormBuilderTest extends TestCase
     public function testMap()
     {
         $builder = new FormBuilder();
+        $context = new Context();
 
-        $this->assertEquals((object)[], (new Context())->execute($builder->asForm((object)[])));
+        $this->assertEquals((object)[], (new Context())->execute($builder->asForm($context, (object)[])));
         $object = (object)['key' => 'value', 'values' => [1, 2]];
-        $this->assertEquals($object, (new Context())->execute($builder->asForm($object)));
+        $this->assertEquals($object, (new Context())->execute($builder->asForm($context, $object)));
     }
 
     /**
@@ -116,6 +120,6 @@ class FormBuilderTest extends TestCase
         $builder = new FormBuilder();
 
         $this->expectException(AssertionException::class);
-        $builder->asForm($this);
+        $builder->asForm(new Context(), $this);
     }
 }

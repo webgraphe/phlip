@@ -38,6 +38,6 @@ class Macro
     {
         $formBuilder = $formBuilder ?? new FormBuilder();
 
-        return $formBuilder->asForm(call_user_func($this->lambda, ...ProperList::asList($body)->all()));
+        return $formBuilder->asForm($context, call_user_func($this->lambda, ...ProperList::asList($body)->all()));
     }
 }

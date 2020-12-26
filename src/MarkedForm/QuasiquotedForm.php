@@ -17,7 +17,6 @@ class QuasiquotedForm extends MarkedForm
      * @param ContextContract $context
      * @return FormContract
      * @throws AssertionException
-     * @throws ContextException
      */
     public function evaluate(ContextContract $context): FormContract
     {
@@ -33,7 +32,7 @@ class QuasiquotedForm extends MarkedForm
     protected function apply(ContextContract $context, FormContract $form): FormContract
     {
         if ($form instanceof UnquotedForm) {
-            return (new FormBuilder())->asForm($context->execute($form));
+            return (new FormBuilder())->asForm($context, $context->execute($form));
         }
 
         if ($form instanceof FormCollection) {
