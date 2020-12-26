@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (:: Webgraphe\Phlip\Tests\Dummy $string)
+    "Cannot access non-static 'Webgraphe\\Phlip\\Tests\\Dummy::$string'"
+)

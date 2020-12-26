@@ -3,7 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Interop;
 
 use ReflectionClass;
+use ReflectionClassConstant;
 use ReflectionException;
+use ReflectionProperty;
 use Throwable;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
@@ -66,15 +68,10 @@ class StaticOperation extends PhpInteroperableOperation
         }
 
         $reflectionClass = new ReflectionClass($class);
-        if ('$' === substr($member, 0, 1)) {
-            return $this->getPropertyValue($reflectionClass, substr($member, 1));
-        }
 
-        if ('-' === substr($member, 0, 1)) {
-            $member = substr($member, 1);
-        }
-
-        return $this->getConstantValue($reflectionClass, $member);
+        return '$' === substr($member, 0, 1)
+            ? $this->getPropertyValue($reflectionClass, substr($member, 1))
+            : $this->getConstantValue($reflectionClass, $member);
     }
 
     /**
@@ -83,14 +80,13 @@ class StaticOperation extends PhpInteroperableOperation
      * @param mixed $value
      * @return mixed
      * @throws AssertionException
+     * @throws ReflectionException
      */
-    public function assign(string $class, string $member, $value)
+    public function assignPropertyValue(string $class, string $member, $value)
     {
-        try {
-            return $class::$$member = $value;
-        } catch (Throwable $t) {
-            throw new AssertionException("Cannot access '{$class}::{$member}'", 0, $t);
-        }
+        $this->getPropertyReflection(new ReflectionClass($class), substr($member, 1))->setValue($value);
+
+        return $value;
     }
 
     /**
@@ -101,6 +97,28 @@ class StaticOperation extends PhpInteroperableOperation
      */
     private function getPropertyValue(ReflectionClass $reflectionClass, string $field)
     {
+        return $this->getPropertyReflection($reflectionClass, $field)->getValue();
+    }
+
+    /**
+     * @param ReflectionClass $reflectionClass
+     * @param string $member
+     * @return mixed
+     * @throws AssertionException
+     */
+    private function getConstantValue(ReflectionClass $reflectionClass, string $member)
+    {
+        return $this->getConstantReflection($reflectionClass, $member)->getValue();
+    }
+
+    /**
+     * @param ReflectionClass $reflectionClass
+     * @param string $field
+     * @return ReflectionProperty
+     * @throws AssertionException
+     */
+    private function getPropertyReflection(ReflectionClass $reflectionClass, string $field): ReflectionProperty
+    {
         $class = $reflectionClass->getName();
         $member = "\${$field}";
 
@@ -110,31 +128,40 @@ class StaticOperation extends PhpInteroperableOperation
             throw new AssertionException("Cannot access undefined '{$class}::{$member}'", 0, $t);
         }
 
-        if (!$reflectionProperty->isStatic() || !$reflectionProperty->isPublic()) {
-            throw new AssertionException("Cannot access '{$class}::{$member}'");
+        if (!$reflectionProperty->isPublic()) {
+            throw new AssertionException("Cannot access non-public '{$class}::{$member}'");
         }
 
-        return $reflectionProperty->getValue();
+        if (!$reflectionProperty->isStatic()) {
+            throw new AssertionException("Cannot access non-static '{$class}::{$member}'");
+        }
+
+        return $reflectionProperty;
     }
 
     /**
      * @param ReflectionClass $reflectionClass
-     * @param string $field
-     * @return mixed
+     * @param string $member
+     * @return ReflectionClassConstant
      * @throws AssertionException
      */
-    private function getConstantValue(ReflectionClass $reflectionClass, string $field)
+    private function getConstantReflection(ReflectionClass $reflectionClass, string $member): ReflectionClassConstant
     {
         $class = $reflectionClass->getName();
 
-        if ($reflectionClassConstant = $reflectionClass->getReflectionConstant($field)) {
-            if (!$reflectionClassConstant->isPublic()) {
-                throw new AssertionException("Cannot access non-public '{$class}::{$field}'");
-            }
-
-            return $reflectionClassConstant->getValue();
+        if ('-' === substr($member, 0, 1)) {
+            $member = substr($member, 1);
         }
 
-        throw new AssertionException("Cannot access undefined '{$class}::{$field}'");
+        if ($reflectionClassConstant = $reflectionClass->getReflectionConstant($member)) {
+            if (!$reflectionClassConstant->isPublic()) {
+                throw new AssertionException("Cannot access non-public '{$class}::{$member}'");
+            }
+
+            return $reflectionClassConstant;
+        }
+
+        throw new AssertionException("Cannot access undefined '{$class}::{$member}'");
+
     }
 }

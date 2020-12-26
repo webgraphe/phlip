@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (-> (new Webgraphe\Phlip\Tests\Dummy) publicStaticField)
+    "Cannot access 'Webgraphe\\Phlip\\Tests\\Dummy->publicStaticField' as non-static"
+)

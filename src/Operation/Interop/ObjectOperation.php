@@ -2,9 +2,8 @@
 
 namespace Webgraphe\Phlip\Operation\Interop;
 
-use Reflection;
 use ReflectionObject;
-use RuntimeException;
+use ReflectionProperty;
 use Throwable;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
@@ -43,9 +42,9 @@ class ObjectOperation extends PhpInteroperableOperation
         $object = static::assertObject($context->execute($forms->assertHead()));
         $identifier = is_object($object) ? get_class($object) : gettype($object);
         static::assertClassEnabled($this->assertPhpInteroperableContext($context, static::class), $object);
-
         $tail = $forms->getTail();
         $member = IdentifierAtom::assertStaticType($tail->assertHead())->getValue();
+
         if (method_exists($object, $member)) {
             if (!is_callable($callable = [$object, $member])) {
                 throw new AssertionException("Cannot call non-public '{$identifier}->{$member}()'");
@@ -80,15 +79,11 @@ class ObjectOperation extends PhpInteroperableOperation
      * @return mixed
      * @throws AssertionException
      */
-    public function assign(object $object, string $member, $value)
+    public function assignPropertyValue(object $object, string $member, $value)
     {
-        try {
-            return $object->{$member} = $value;
-        } catch (Throwable $t) {
-            $class = get_class($object);
+        $this->getReflectionProperty($object, $member)->setValue($object, $value);
 
-            throw new AssertionException("Cannot access '{$class}->{$member}'", 0, $t);
-        }
+        return $value;
     }
 
     /**
@@ -98,6 +93,17 @@ class ObjectOperation extends PhpInteroperableOperation
      * @throws AssertionException
      */
     private function getPropertyValue(object $object, string $member)
+    {
+        return $this->getReflectionProperty($object, $member)->getValue($object);
+    }
+
+    /**
+     * @param object $object
+     * @param string $member
+     * @return ReflectionProperty
+     * @throws AssertionException
+     */
+    private function getReflectionProperty(object $object, string $member): ReflectionProperty
     {
         $reflectionObject = new ReflectionObject($object);
         $identifier = get_class($object);
@@ -112,6 +118,12 @@ class ObjectOperation extends PhpInteroperableOperation
             throw new AssertionException("Cannot access non-public '{$identifier}->{$reflectionProperty->getName()}'");
         }
 
-        return $reflectionProperty->getValue($object);
+        if ($reflectionProperty->isStatic()) {
+            throw new AssertionException(
+                "Cannot access '{$identifier}->{$reflectionProperty->getName()}' as non-static"
+            );
+        }
+
+        return $reflectionProperty;
     }
 }

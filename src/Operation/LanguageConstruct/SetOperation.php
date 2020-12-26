@@ -2,10 +2,10 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
+use ReflectionException;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\Interop\ObjectOperation;
 use Webgraphe\Phlip\Operation\Interop\StaticOperation;
@@ -23,7 +23,7 @@ class SetOperation extends PrimaryOperation
      * @param ProperList $forms
      * @return mixed
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ReflectionException
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
@@ -36,11 +36,15 @@ class SetOperation extends PrimaryOperation
             $member = IdentifierAtom::assertStaticType($tail->getTail()->assertHead())->getValue();
 
             if ($head instanceof ObjectOperation) {
-                return $head->assign(static::assertObject($context->execute($tail->assertHead())), $member, $value);
+                return $head->assignPropertyValue(
+                    static::assertObject($context->execute($tail->assertHead())),
+                    $member,
+                    $value
+                );
             }
 
             if ($head instanceof StaticOperation) {
-                return $head->assign(
+                return $head->assignPropertyValue(
                     IdentifierAtom::assertStaticType($tail->assertHead())->getValue(),
                     $member,
                     $value

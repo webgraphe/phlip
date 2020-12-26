@@ -3,3 +3,5 @@
 (assert-equals "public static method" (:: Webgraphe\Phlip\Tests\Dummy publicStaticMethod))
 (assert-equals "same static name method" (:: Webgraphe\Phlip\Tests\Dummy sameStaticName))
 (assert-equals "same static name constant" (:: Webgraphe\Phlip\Tests\Dummy -sameStaticName))
+(assert-equals "changed static public field" (set! (:: Webgraphe\Phlip\Tests\Dummy $publicStaticField) "changed static public field"))
+(assert-equals "changed static public field" (:: Webgraphe\Phlip\Tests\Dummy $publicStaticField))
