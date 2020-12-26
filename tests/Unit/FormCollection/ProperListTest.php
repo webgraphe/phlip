@@ -67,7 +67,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         $list = $this->createFormCollection();
         $context = new Context();
         $context->define(IdentifierAtom::assertStaticType($list->assertHead())->getValue(), $this);
-        $this->assertTrue($list->getTail()->equals(new ProperList(...$list->evaluate($context))));
+        $this->assertTrue($list->getTail()->equals(new ProperList(...$context->execute($list))));
 
         $list = $this->createFormCollection();
         $context = new Context();
@@ -84,7 +84,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
                 [1, 2, 3],
                 (object)['key' => 'value'],
             ],
-            $list->evaluate($context)
+            $context->execute($list)
         );
     }
 
@@ -99,7 +99,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         $this->assertCount(0, $list);
         $this->assertNull($list->getHead());
         $this->assertTrue($list->equals($list->getTail()));
-        $this->assertNull($list->evaluate(new Context()));
+        $this->assertNull((new Context())->execute($list));
 
         $this->expectException(AssertionException::class);
         $list->assertHead();
@@ -129,7 +129,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         $context->define('not-callable', "This is a callable");
 
         $this->expectException(AssertionException::class);
-        $list->evaluate($context);
+        $context->execute($list);
     }
 
     public function __invoke(ContextContract $context, FormContract ...$forms): array
@@ -155,7 +155,7 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Fail');
         $this->expectExceptionCode(666);
-        $list->evaluate($context);
+        $context->execute($list);
     }
 
     /**

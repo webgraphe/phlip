@@ -51,7 +51,7 @@ class StaticOperation extends PhpInteroperableOperation
                 [$class, $member],
                 ...array_map(
                     function (FormContract $form) use ($context) {
-                        return $form->evaluate($context);
+                        return $context->execute($form);
                     },
                     $tail->getTail()->all()
                 )

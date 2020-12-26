@@ -29,11 +29,10 @@ class InstanceOperation extends PrimaryOperation
      * @param ProperList $forms
      * @return bool
      * @throws AssertionException
-     * @throws ContextException
      */
     protected function invoke(ContextContract $context, ProperList $forms): bool
     {
-        $thing = $forms->assertHead()->evaluate($context);
+        $thing = $context->execute($forms->assertHead());
         $class = static::assertClassExists($forms->getTail()->getHead());
 
         return $thing instanceof $class;

@@ -30,13 +30,13 @@ class SetOperation extends PrimaryOperation
         $expression = $forms->getHead();
 
         if ($expression instanceof ProperList) {
-            $head = $expression->assertHead()->evaluate($context);
-            $value = $forms->getTail()->assertHead()->evaluate($context);
+            $head = $context->execute($expression->assertHead());
+            $value = $context->execute($forms->getTail()->assertHead());
             $tail = $expression->getTail();
             $member = IdentifierAtom::assertStaticType($tail->getTail()->assertHead())->getValue();
 
             if ($head instanceof ObjectOperation) {
-                return $head->assign(static::assertObject($tail->assertHead()->evaluate($context)), $member, $value);
+                return $head->assign(static::assertObject($context->execute($tail->assertHead())), $member, $value);
             }
 
             if ($head instanceof StaticOperation) {

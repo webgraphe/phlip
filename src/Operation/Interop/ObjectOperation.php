@@ -37,7 +37,7 @@ class ObjectOperation extends PhpInteroperableOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
-        $object = static::assertObject($forms->assertHead()->evaluate($context));
+        $object = static::assertObject($context->execute($forms->assertHead()));
         $identifier = is_object($object) ? get_class($object) : gettype($object);
         static::assertClassEnabled($this->assertPhpInteroperableContext($context, static::class), $object);
 
@@ -52,7 +52,7 @@ class ObjectOperation extends PhpInteroperableOperation
                 [$object, $member],
                 ...array_map(
                     function (FormContract $form) use ($context) {
-                        return $form->evaluate($context);
+                        return $context->execute($form);
                     },
                     $tail->getTail()->all()
                 )

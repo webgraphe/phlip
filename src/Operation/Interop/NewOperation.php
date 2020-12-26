@@ -42,7 +42,7 @@ class NewOperation extends PhpInteroperableOperation
         return new $class(
             ...array_map(
                    function (FormContract $form) use ($context) {
-                       return $form->evaluate($context);
+                       return $context->execute($form);
                    },
                    $forms->getTail()->all()
                )

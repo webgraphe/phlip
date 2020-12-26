@@ -69,7 +69,7 @@ class QuasiquotedFormTest extends MarkedFormTest
     {
         $this->assertTrue(
             $this->createForm()->equals(
-                $this->createMarkedForm($this->getFormWithUnquotedIdentifiers())->evaluate($this->getContext())
+                $this->getContext()->execute($this->createMarkedForm($this->getFormWithUnquotedIdentifiers()))
             )
         );
     }

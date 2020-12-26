@@ -32,7 +32,7 @@ class CloneOperation extends PhpInteroperableOperation
      */
     protected function invoke(ContextContract $context, ProperList $forms): object
     {
-        $original = static::assertObject($forms->assertHead()->evaluate($context));
+        $original = static::assertObject($context->execute($forms->assertHead()));
         $this->assertPhpInteroperableContext($context, get_class($original));
 
         return clone $original;

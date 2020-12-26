@@ -40,7 +40,7 @@ trait DefinesAssertionsInContexts
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead();
-                    $this->assertTrue((bool)$head->evaluate($context), "Expected $head to be true");
+                    $this->assertTrue((bool)$context->execute($head), "Expected $head to be true");
                 }
             )
         );
@@ -49,7 +49,7 @@ trait DefinesAssertionsInContexts
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead();
-                    $this->assertFalse((bool)$head->evaluate($context), "Expected $head to be false");
+                    $this->assertFalse((bool)$context->execute($head), "Expected $head to be false");
                 }
             )
         );
@@ -57,9 +57,9 @@ trait DefinesAssertionsInContexts
             'assert-equals',
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
-                    $head = $expressions->assertHead()->evaluate($context);
+                    $head = $context->execute($expressions->assertHead());
                     $toeExpression = $expressions->getTail()->assertHead();
-                    $toe = $toeExpression->evaluate($context);
+                    $toe = $context->execute($toeExpression);
                     if ($head instanceof FormContract && $toe instanceof FormContract) {
                         $this->assertTrue(
                             $head->equals($toe),
@@ -77,9 +77,9 @@ trait DefinesAssertionsInContexts
             'assert-not-equals',
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
-                    $head = $expressions->assertHead()->evaluate($context);
+                    $head = $context->execute($expressions->assertHead());
                     $toeExpression = $expressions->getTail()->assertHead();
-                    $toe = $toeExpression->evaluate($context);
+                    $toe = $context->execute($toeExpression);
                     if ($head instanceof FormContract && $toe instanceof FormContract) {
                         $this->assertTrue(!$head->equals($toe), "Didn't expect $head out of $toeExpression");
                     } else {
@@ -99,12 +99,12 @@ trait DefinesAssertionsInContexts
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     /** @var self $test */
-                    $name = $expressions->assertHead()->evaluate($context);
+                    $name = $context->execute($expressions->assertHead());
                     $this->expectException($name);
                     if ($message = $expressions->getTail()->getTail()->getHead()) {
-                        $this->expectExceptionMessage($message->evaluate($context));
+                        $this->expectExceptionMessage($context->execute($message));
                     }
-                    $expressions->getTail()->assertHead()->evaluate($context);
+                    $context->execute($expressions->getTail()->assertHead());
                 }
             )
         );
