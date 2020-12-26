@@ -89,7 +89,7 @@ class ReadOperation extends PrimaryOperation
                 )
             );
             $break = $this->multiLine && !$line
-                || !$this->multiLine && '\\' !== $line[strlen($line) - 1];
+                || !$this->multiLine && $line && '\\' !== $line[strlen($line) - 1];
             if ($line) {
                 $lines[] = rtrim($line, '\\');
             }
