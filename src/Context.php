@@ -121,6 +121,16 @@ class Context implements ContextContract
         return $self;
     }
 
+    public function global(): ContextContract
+    {
+        $global = $this;
+        while ($global->parent) {
+            $global = $global->parent;
+        }
+
+        return $global;
+    }
+
     /**
      * @param FormContract $form
      * @return mixed

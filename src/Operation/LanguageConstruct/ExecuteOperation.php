@@ -4,9 +4,9 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation;
+use Webgraphe\Phlip\Operation\PrimaryOperation;
 
-class ExecuteOperation extends Operation\PrimaryOperation
+class ExecuteOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'execute';
 
@@ -27,9 +27,10 @@ class ExecuteOperation extends Operation\PrimaryOperation
     {
         $result = null;
 
+        $global = $context->global();
         while ($head = $forms->getHead()) {
             $forms = $forms->getTail();
-            $result = $context->execute($context->execute($head));
+            $result = $global->execute($context->execute($head));
         }
 
         return $result;

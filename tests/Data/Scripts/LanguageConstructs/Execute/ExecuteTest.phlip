@@ -7,12 +7,3 @@
 (assert-equals 5 (eval-formula '(+ x y)))
 (assert-equals 6 (eval-formula '(* x y)))
 (assert-equals -1 (eval-formula '(- x y)))
-
-; execute is "sort-of" an equivalent of eval except that it's not lexically scoped here
-; In a lexically scoped language (e.g. Racket) the assertions below would fail
-; as normally such a lexically scoped language wouldn't be able to reference an identifier before its definition
-; (in this case, x would fail to be referenced)
-(define (eval-formula-indefinite formula) (let ((x 2) (y 3)) (execute formula)))
-(assert-equals 5 (eval-formula-indefinite '(+ x y)))
-(assert-equals 6 (eval-formula-indefinite '(* x y)))
-(assert-equals -1 (eval-formula-indefinite '(- x y)))
