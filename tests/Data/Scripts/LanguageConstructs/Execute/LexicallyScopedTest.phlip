@@ -1,0 +1,6 @@
+(define (f) (let ((x 2)) (let ((y 3)) (let ((formula '(+ x y))) (execute formula)))))
+(assert-exception
+    ContextException
+    (f)
+    "Undefined 'x'"
+)
