@@ -60,8 +60,6 @@ interface ContextContract
      */
     public function stack(): ContextContract;
 
-    public function global(): ContextContract;
-
     /**
      * @param FormContract $form
      * @return mixed

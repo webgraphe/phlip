@@ -3,12 +3,23 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 
 class ExecuteOperation extends PrimaryOperation
 {
     const IDENTIFIER = 'execute';
+
+    /**
+     * @param ContextContract $context
+     * @return static
+     * @throws ContextException
+     */
+    public static function contextBounded(ContextContract $context): self
+    {
+        return (new static())->withBoundedContext($context);
+    }
 
     /**
      * @return string[]
@@ -22,15 +33,16 @@ class ExecuteOperation extends PrimaryOperation
      * @param ContextContract $context
      * @param ProperList $forms
      * @return mixed
+     * @throws ContextException
      */
     protected function invoke(ContextContract $context, ProperList $forms)
     {
         $result = null;
 
-        $global = $context->global();
+        $boundedContext = $this->assertBoundedContext();
         while ($head = $forms->getHead()) {
             $forms = $forms->getTail();
-            $result = $global->execute($context->execute($head));
+            $result = $boundedContext->execute($context->execute($head));
         }
 
         return $result;

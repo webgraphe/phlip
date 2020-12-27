@@ -75,6 +75,7 @@ class Phlipy
 
     /**
      * @return static
+     * @throws Exception\ContextException
      */
     protected function withExtraLanguageConstructs(): self
     {
@@ -86,7 +87,7 @@ class Phlipy
             ->withOperation(new Operation\LanguageConstruct\ListOperation())
             ->withOperation(new Operation\LanguageConstruct\WhileOperation())
             ->withOperation(new Operation\LanguageConstruct\BeginOperation())
-            ->withOperation(new Operation\LanguageConstruct\ExecuteOperation())
+            ->withOperation(Operation\LanguageConstruct\ExecuteOperation::contextBounded($this->context))
             ->withOperation(new Operation\LanguageConstruct\MacroOperation())
             ->withOperation(new Operation\LanguageConstruct\LengthOperation())
             ->withOperation(new Operation\LanguageConstruct\MacroExpandOperation());

@@ -4,6 +4,7 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Contracts\OperationContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\ContextException;
 
@@ -39,6 +40,10 @@ class Context implements ContextContract
 
         if (array_key_exists($key, $this->data)) {
             throw new ContextException("Can't redefine global '$key'");
+        }
+
+        if ($value instanceof OperationContract && $value->isBounded() && !$value->isBoundedTo($this)) {
+            throw new ContextException("Failed to define operation '{$key}'; operation is bound to a different context");
         }
 
         return $this->data[$key] = $value;
@@ -119,16 +124,6 @@ class Context implements ContextContract
         $self->parent = $this;
 
         return $self;
-    }
-
-    public function global(): ContextContract
-    {
-        $global = $this;
-        while ($global->parent) {
-            $global = $global->parent;
-        }
-
-        return $global;
     }
 
     /**
