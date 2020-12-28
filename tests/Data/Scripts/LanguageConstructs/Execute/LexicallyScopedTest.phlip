@@ -1,4 +1,4 @@
-(define (f) (let ((x 2)) (let ((y 3)) (let ((formula '(+ x y))) (execute formula)))))
+(define (f) (let ((x 2)) (let ((y 3)) (let ((formula '(+ x y))) (eval formula (context-anchor))))))
 (assert-exception
     ContextException
     (f)

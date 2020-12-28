@@ -58,7 +58,7 @@ trait DefinesAssertionsInContexts
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $context->execute($expressions->assertHead());
-                    $toeExpression = $expressions->getTail()->assertHead();
+                    $toeExpression = $expressions->assertTailHead();
                     $toe = $context->execute($toeExpression);
                     if ($head instanceof FormContract && $toe instanceof FormContract) {
                         $this->assertTrue(
@@ -78,7 +78,7 @@ trait DefinesAssertionsInContexts
             new CallablePrimaryOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $context->execute($expressions->assertHead());
-                    $toeExpression = $expressions->getTail()->assertHead();
+                    $toeExpression = $expressions->assertTailHead();
                     $toe = $context->execute($toeExpression);
                     if ($head instanceof FormContract && $toe instanceof FormContract) {
                         $this->assertTrue(!$head->equals($toe), "Didn't expect $head out of $toeExpression");
@@ -104,7 +104,7 @@ trait DefinesAssertionsInContexts
                     if ($message = $expressions->getTail()->getTail()->getHead()) {
                         $this->expectExceptionMessage($context->execute($message));
                     }
-                    $context->execute($expressions->getTail()->assertHead());
+                    $context->execute($expressions->assertTailHead());
                 }
             )
         );

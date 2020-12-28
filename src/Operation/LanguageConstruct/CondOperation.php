@@ -24,7 +24,7 @@ class CondOperation extends PrimaryOperation
             $forms = $forms->getTail();
             $condition = ProperList::assertStaticType($condition);
             if ($context->execute($condition->assertHead())) {
-                return $context->execute($condition->getTail()->assertHead());
+                return $context->execute($condition->assertTailHead());
             }
         }
 

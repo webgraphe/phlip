@@ -92,17 +92,37 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
      * @throws AssertionException
      * @throws Exception
      */
-    public function testEmptyList()
+    public function testNoHead()
     {
         $list = new ProperList();
         $this->assertEmpty($list->all());
         $this->assertCount(0, $list);
+        $this->assertTrue($list->isEmpty());
         $this->assertNull($list->getHead());
         $this->assertTrue($list->equals($list->getTail()));
         $this->assertNull((new Context())->execute($list));
 
         $this->expectException(AssertionException::class);
         $list->assertHead();
+    }
+
+    /**
+     * @throws AssertionException
+     * @throws Exception
+     */
+    public function testEmptyTail()
+    {
+        $form = NumberAtom::fromString('42');
+        $list = new ProperList($form);
+        $this->assertEmpty($list->getTail()->all());
+        $this->assertCount(1, $list);
+        $this->assertFalse($list->isEmpty());
+        $this->assertTrue($list->getTail()->isEmpty());
+        $this->assertNotNull($list->getHead());
+        $this->assertTrue($list->getHead()->equals($form));
+
+        $this->expectException(AssertionException::class);
+        $list->assertTailHead();
     }
 
     /**

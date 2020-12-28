@@ -28,7 +28,7 @@ class IfOperation extends PrimaryOperation
             return $context->execute($then);
         }
 
-        if ($else = $tail->getTail()->getHead()) {
+        if ($else = $tail->getTailHead()) {
             return $context->execute($else);
         }
 

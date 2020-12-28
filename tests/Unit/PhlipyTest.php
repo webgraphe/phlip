@@ -8,9 +8,9 @@ use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\Lexer;
-use Webgraphe\Phlip\Operation\LanguageConstruct\WhileOperation;
 use Webgraphe\Phlip\Operation\Repl\PrintOperation;
 use Webgraphe\Phlip\Operation\Repl\ReadOperation;
+use Webgraphe\Phlip\Parser;
 use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
@@ -52,9 +52,6 @@ class PhlipyTest extends TestCase
             ],
             $print->getOptions()
         );
-
-        $loop = $context->get($options['loop.identifier'] ?? Phlipy::LOOP_IDENTIFIER);
-        $this->assertInstanceOf(WhileOperation::class, $loop);
     }
 
     public static function everythingData(): array
@@ -67,9 +64,10 @@ class PhlipyTest extends TestCase
                     'read.prompt' => function () {
                         return "custom prompt > ";
                     },
+                    'read.lexer' => new Lexer(),
+                    'read.parser' => new Parser(),
                     'print.form-builder' => new FormBuilder(),
                     'print.lexer' => new Lexer(),
-                    'loop.identifier' => 'my-loop',
                 ],
             ],
         ];

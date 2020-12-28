@@ -17,6 +17,7 @@ class OrOperation extends PrimaryOperation
             if ($result = $context->execute($form)) {
                 return $result;
             }
+
             $forms = $forms->getTail();
         }
 

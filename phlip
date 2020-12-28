@@ -3,6 +3,9 @@
 
 namespace Webgraphe\Phlip;
 
+use Throwable;
+use Webgraphe\Phlip\Operation\LanguageConstruct\EvalOperation;
+
 $autoloadFiles = [
     __DIR__ . '/../../autoload.php',
     __DIR__ . '/../vendor/autoload.php',
@@ -64,6 +67,7 @@ USAGE;
 
 try {
     $context = Phlipy::active()->withRepl($options)->getContext();
+    EvalOperation::assertStaticType($context->get(EvalOperation::IDENTIFIER))->boundToContext($context);
 
     $io = new IOMode(STDIN);
     if ($io->getSize() && ($io->isRegularFile() || $io->isNamedPipe())) {
@@ -76,12 +80,13 @@ try {
     // Interactive REPL prompt
     echo 'Webgraphe Phlip' . PHP_EOL;
     echo 'Type (exit) to quit.' . PHP_EOL . PHP_EOL;
-    // TODO Make this less cool
+
     Program::parse('(loop (print (eval (read))))')->execute($context);
-} catch (\Throwable $exception) {
-    echo "Webgraphe Phlip FATAL ERROR:" . PHP_EOL;
+} catch (Throwable $exception) {
+    echo "Webgraphe Phlip FATAL ERROR:" . PHP_EOL . PHP_EOL;
     while ($exception) {
-        echo '- ' . get_class($exception) . ': ' . $exception->getMessage() . PHP_EOL;
+        echo get_class($exception) . ': ' . $exception->getMessage() . PHP_EOL;
+        echo $exception->getTraceAsString() . PHP_EOL . PHP_EOL;
         $exception = $exception->getPrevious();
     }
     exit(1);

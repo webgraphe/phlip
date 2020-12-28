@@ -15,6 +15,7 @@
             <exclude>
                 <directory suffix=".php">src/Operation/Repl/</directory>
                 <file>src/IOMode.php</file>
+                <file>src/System.php</file>
             </exclude>
         </whitelist>
     </filter>

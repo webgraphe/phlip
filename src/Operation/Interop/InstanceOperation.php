@@ -33,7 +33,7 @@ class InstanceOperation extends PrimaryOperation
     protected function invoke(ContextContract $context, ProperList $forms): bool
     {
         $thing = $context->execute($forms->assertHead());
-        $class = static::assertClassExists($forms->getTail()->getHead());
+        $class = static::assertClassExists($forms->assertTailHead());
 
         return $thing instanceof $class;
     }

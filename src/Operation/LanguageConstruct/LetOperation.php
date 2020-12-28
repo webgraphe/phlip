@@ -34,6 +34,7 @@ class LetOperation extends PrimaryOperation
         );
         $statements = $letName ? $tail->getTail() : $tail;
 
+        // TODO Validate that argument unpacking works with ProperList
         $lambda = LambdaOperation::invokeStatic($context, $parameters, ...$statements);
 
         if ($letName) {
@@ -65,7 +66,7 @@ class LetOperation extends PrimaryOperation
                 );
             } elseif ($name instanceof IdentifierAtom) {
                 $parameter = $name;
-                $argument = $context->execute($variable->getTail()->assertHead());
+                $argument = $context->execute($variable->assertTailHead());
             } else {
                 throw new AssertionException('Malformed let');
             }

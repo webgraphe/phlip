@@ -1,0 +1,13 @@
+(let
+    ((env (context-anchor)))
+
+    (assert-equals 3 (eval '(+ 1 2) env))
+    (assert-equals 3 (eval '3 env))
+    (assert-equals 3 (eval (cons '+ (cons 1 (cons 2 '()))) env))
+    (assert-equals 3 (eval '(+ 1 2) env))
+
+    (define (eval-formula formula) (eval `(let ((x 2) (y 3)) ,formula) env))
+    (assert-equals 5 (eval-formula '(+ x y)))
+    (assert-equals 6 (eval-formula '(* x y)))
+    (assert-equals -1 (eval-formula '(- x y)))
+)

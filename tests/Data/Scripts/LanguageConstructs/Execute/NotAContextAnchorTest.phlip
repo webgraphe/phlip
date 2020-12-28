@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (eval '1 "Can't get much out of a string")
+    "Not a context anchor"
+)

@@ -32,7 +32,7 @@ class MacroOperation extends PrimaryOperation
         return new Macro(
             $context,
             ProperList::assertStaticType($forms->assertHead()),
-            $forms->getTail()->assertHead()
+            $forms->assertTailHead()
         );
     }
 }

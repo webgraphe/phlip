@@ -63,7 +63,7 @@ class StaticOperation extends PhpInteroperableOperation
             );
         }
 
-        if (count($tail->getTail())) {
+        if (count($tail) > 1) {
             throw new AssertionException("Cannot call undefined '{$class}::{$member}()'");
         }
 

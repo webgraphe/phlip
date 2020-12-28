@@ -40,7 +40,7 @@ class DefineOperation extends PrimaryOperation
         if ($variable instanceof IdentifierAtom) {
             return $context->define(
                 $variable->getValue(),
-                $context->execute($forms->getTail()->assertHead())
+                $context->execute($forms->assertTailHead())
             );
         }
 

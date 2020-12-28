@@ -43,14 +43,32 @@ class ProperList extends FormCollection
      * @return FormContract
      * @throws AssertionException
      */
-    public function assertHead($message = "List is empty"): FormContract
+    public function assertHead($message = "List has no head"): FormContract
     {
-        $head = $this->getHead();
-        if (!$head) {
-            throw new AssertionException($message);
+        if ($head = $this->getHead()) {
+            return $head;
         }
 
-        return $head;
+        throw new AssertionException($message);
+    }
+
+    public function getTailHead(): ?FormContract
+    {
+        return $this->forms[1] ?? null;
+    }
+
+    /**
+     * @param string $message
+     * @return FormContract
+     * @throws AssertionException
+     */
+    public function assertTailHead($message = "List's tail is empty"): FormContract
+    {
+        if ($head = $this->getTailHead()) {
+            return $head;
+        }
+
+        throw new AssertionException($message);
     }
 
     public function getTail(): ProperList
@@ -111,6 +129,11 @@ class ProperList extends FormCollection
     public function count(): int
     {
         return count($this->forms);
+    }
+
+    public function isEmpty(): bool
+    {
+        return !$this->forms;
     }
 
     public function getOpeningSymbol(): Opening

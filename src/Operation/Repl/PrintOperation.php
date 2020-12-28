@@ -8,16 +8,20 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
+use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\LexemeContract;
-use Webgraphe\Phlip\Exception\LexerException;
-use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormBuilder;
+use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Lexer;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\PrimaryOperation;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol;
+use Webgraphe\Phlip\System;
 
-class PrintOperation extends StandardOperation
+/**
+ * Prints a form given
+ */
+class PrintOperation extends PrimaryOperation
 {
     /** @var string */
     const IDENTIFIER = 'print';
@@ -88,29 +92,32 @@ class PrintOperation extends StandardOperation
     }
 
     /**
-     * @param array ...$arguments
+     * @param ContextContract $context
+     * @param ProperList $forms
      * @return bool
-     * @throws LexerException
      */
-    public function __invoke(...$arguments): bool
+    protected function invoke(ContextContract $context, ProperList $forms): bool
     {
-        $argument = $arguments ? $arguments[0] : null;
+        try {
+            $argument = $context->execute($forms->assertHead());
+        } catch (Throwable $t) {
+            $argument = $t;
+        }
+
         $type = is_object($argument) ? $type = get_class($argument) : gettype($argument);
-        $stackTraces = [];
         $color = self::CLI_COLOR_TYPE;
         $value = null;
 
         if ($argument instanceof Throwable) {
             $color = self::CLI_COLOR_EXCEPTION;
-            if ($previous = $argument->getPrevious()) {
-                call_user_func($this, $previous);
-            }
-            $value = $argument->getMessage();
-            if ($this->options[self::OPTION_VERBOSE]) {
-                if ($argument instanceof ProgramException) {
-                    $stackTraces[] = $this->dumpProgramExceptionStackTrace($argument);
+            while ($argument) {
+                $value = [];
+                $value[] = $argument->getMessage();
+                if ($this->options[self::OPTION_VERBOSE]) {
+                    $value[] = '    ' . implode(PHP_EOL . '    ', System::backtrace($argument->getTrace()));
                 }
-                $stackTraces[] = "PHP Stack Trace:" . PHP_EOL . $argument->getTraceAsString();
+                $argument = $argument->getPrevious();
+                $this->output($type, implode(PHP_EOL, $value), $color);
             }
         } else {
             try {
@@ -119,25 +126,14 @@ class PrintOperation extends StandardOperation
             } catch (Throwable $t) {
                 // do nothing
             }
+            $this->output($type, $value, $color);
         }
 
-        $output = '';
-        if ($this->options[self::OPTION_RETURN_TYPES]) {
-            $output .= ($this->options[self::OPTION_COLORS] ? "\033[{$color}m{$type}\033[0m" : $type) . PHP_EOL;
-        }
+        $tail = $forms->getTail();
 
-        // The value could be "0"
-        if (strlen($value = trim($value))) {
-            $output .= $value . PHP_EOL;
-        }
-
-        if ($stackTraces) {
-            $output .= PHP_EOL . implode(PHP_EOL . PHP_EOL, $stackTraces) . PHP_EOL;
-        }
-
-        echo $output . PHP_EOL;
-
-        return true;
+        return $tail->isEmpty()
+            ? true
+            : $this->invoke($context, $tail);
     }
 
     protected function stringifyLexemeStream(LexemeStream $stream): string
@@ -155,40 +151,9 @@ class PrintOperation extends StandardOperation
             $class = get_class($lexeme);
 
             return isset(self::CLI_LEXEME_COLORS[$class])
-                ? "\033[" . self::CLI_LEXEME_COLORS[$class] . 'm' . $lexeme . "\033[0m"
+                ? "\e[" . self::CLI_LEXEME_COLORS[$class] . 'm' . $lexeme . "\e[0m"
                 : (string)$lexeme;
         };
-    }
-
-    /**
-     * @param ProgramException $exception
-     * @return string
-     * @throws LexerException
-     */
-    protected function dumpProgramExceptionStackTrace(ProgramException $exception): string
-    {
-        $stack = [];
-        $context = $exception->getContext();
-        while ($context) {
-            $forms = $exception->getContext()->getFormStack();
-            while ($forms) {
-                $stack[] = $this->stringifyLexemeStream($this->lexer->parseSource((string)array_pop($forms)));
-            }
-            $context = $context->getParent();
-        }
-
-        return 'Phlip Stack Trace:'
-            . PHP_EOL
-            . implode(
-                PHP_EOL,
-                array_map(
-                    function ($key, $value) {
-                        return '#' . $key . ' ' . $value;
-                    },
-                    array_keys($stack),
-                    $stack
-                )
-            );
     }
 
     /**
@@ -213,5 +178,19 @@ class PrintOperation extends StandardOperation
     public function getOptions(): array
     {
         return $this->options;
+    }
+
+    private function output(string $type, ?string $value, string $typeColor)
+    {
+        $output = '';
+        if ($this->options[self::OPTION_RETURN_TYPES]) {
+            $output .= ($this->options[self::OPTION_COLORS] ? "\e[{$typeColor}m{$type}\e[0m" : $type) . PHP_EOL;
+        }
+
+        if (strlen($value = trim($value))) {
+            $output .= $value . PHP_EOL;
+        }
+
+        echo $output;
     }
 }

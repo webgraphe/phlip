@@ -16,9 +16,6 @@ use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
  */
 class Phlipy
 {
-    /** @var string */
-    const LOOP_IDENTIFIER = 'loop';
-
     /** @var ContextContract */
     private $context;
 
@@ -48,6 +45,7 @@ class Phlipy
     /**
      * @param ContextContract|null $context
      * @return static
+     * @throws Exception\ContextException
      */
     public static function passive(ContextContract $context = null): self
     {
@@ -66,6 +64,7 @@ class Phlipy
      * @param ContextContract|PhpClassInteroperableContext|null $context
      * @return static
      * @throws RuntimeException If the given content is not interoperable with PHP Classes
+     * @throws Exception\ContextException
      */
     public static function active(ContextContract $context = null): self
     {
@@ -87,7 +86,9 @@ class Phlipy
             ->withOperation(new Operation\LanguageConstruct\ListOperation())
             ->withOperation(new Operation\LanguageConstruct\WhileOperation())
             ->withOperation(new Operation\LanguageConstruct\BeginOperation())
-            ->withOperation(Operation\LanguageConstruct\ExecuteOperation::contextBounded($this->context))
+            ->withOperation(new Operation\LanguageConstruct\ContextAnchorOperation())
+            ->withOperation(new Operation\LanguageConstruct\EvalOperation())
+            ->withOperation(new Operation\LanguageConstruct\ExitOperation())
             ->withOperation(new Operation\LanguageConstruct\MacroOperation())
             ->withOperation(new Operation\LanguageConstruct\LengthOperation())
             ->withOperation(new Operation\LanguageConstruct\MacroExpandOperation());
@@ -233,18 +234,24 @@ class Phlipy
      */
     public function withRepl(array $options = []): self
     {
+        $readParams = [
+            isset($options['read.lexer']) && $options['read.lexer'] instanceof Lexer
+                ? $options['read.lexer']
+                : null,
+            isset($options['read.parser']) && $options['read.parser'] instanceof Parser
+                ? $options['read.parser']
+                : null,
+            isset($options['read.prompt']) && is_callable($options['read.prompt'])
+                ? $options['read.prompt']
+                : null,
+        ];
+
         return $this
             ->withOperation(
                 !empty($options['read.multi-line'])
-                    ? Operation\Repl\ReadOperation::multiLine($options['read.prompt'] ?? null)
-                    : new Operation\Repl\ReadOperation($options['read.prompt'] ?? null)
+                    ? Operation\Repl\ReadOperation::multiLine(...$readParams)
+                    : new Operation\Repl\ReadOperation(...$readParams)
             )
-            ->withOperation(
-                new Operation\LanguageConstruct\WhileOperation(
-                    isset($options['loop.identifier']) ? (string)$options['loop.identifier'] : self::LOOP_IDENTIFIER
-                )
-            )
-            ->withOperation(new Operation\Repl\EvalOperation())
             ->withOperation(
                 $printOperation = new Operation\Repl\PrintOperation(
                     isset($options['print.form-builder']) && $options['print.form-builder'] instanceof FormBuilder
@@ -255,8 +262,7 @@ class Phlipy
                         : null,
                     $options
                 )
-            )
-            ->withOperation(new Operation\Repl\ExitOperation());
+            );
     }
 
     /**

@@ -11,21 +11,15 @@ class WhileOperation extends PrimaryOperation
 {
     /** @var string */
     const IDENTIFIER = 'while';
-
     /** @var string */
-    private $identifier;
-
-    public function __construct(string $identifier = self::IDENTIFIER)
-    {
-        $this->identifier = $identifier;
-    }
+    const IDENTIFIER_ALTERNATIVE = 'loop';
 
     /**
      * @return string[]
      */
     public function getIdentifiers(): array
     {
-        return [$this->identifier];
+        return [self::IDENTIFIER, self::IDENTIFIER_ALTERNATIVE];
     }
 
     /**
