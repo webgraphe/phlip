@@ -4,7 +4,6 @@ namespace Webgraphe\Phlip\Operation\Interop;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\PrimaryOperation;
 use Webgraphe\Phlip\Traits\AssertsClasses;

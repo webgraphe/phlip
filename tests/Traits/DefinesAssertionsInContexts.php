@@ -32,6 +32,10 @@ trait DefinesAssertionsInContexts
         return is_object($anything) ? get_class($anything) : gettype($anything);
     }
 
+    /**
+     * @return ContextContract
+     * @throws ContextException
+     */
     protected function contextWithAssertions(): ContextContract
     {
         $context = Phlipy::active()->withStringFunctions()->withMathFunctions()->getContext();

@@ -45,7 +45,6 @@ class Phlipy
     /**
      * @param ContextContract|null $context
      * @return static
-     * @throws Exception\ContextException
      */
     public static function passive(ContextContract $context = null): self
     {
@@ -64,7 +63,6 @@ class Phlipy
      * @param ContextContract|PhpClassInteroperableContext|null $context
      * @return static
      * @throws RuntimeException If the given content is not interoperable with PHP Classes
-     * @throws Exception\ContextException
      */
     public static function active(ContextContract $context = null): self
     {
@@ -74,7 +72,6 @@ class Phlipy
 
     /**
      * @return static
-     * @throws Exception\ContextException
      */
     protected function withExtraLanguageConstructs(): self
     {
