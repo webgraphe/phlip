@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Bitwise;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class XorOperation extends StandardOperation
+class XorOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'bit-xor';

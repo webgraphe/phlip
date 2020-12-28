@@ -10,7 +10,7 @@ use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Lexer;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 use Webgraphe\Phlip\Parser;
 
 /**
@@ -18,7 +18,7 @@ use Webgraphe\Phlip\Parser;
  * list is empty, which makes this operation behave like a generator as it will shift statements from the last input
  * parsed until the resulting ProperList is empty.
  */
-class ReadOperation extends PrimaryOperation
+class ReadOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'read';

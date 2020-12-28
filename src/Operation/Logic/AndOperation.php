@@ -4,9 +4,9 @@ namespace Webgraphe\Phlip\Operation\Logic;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class AndOperation extends PrimaryOperation
+class AndOperation extends ManualOperation
 {
     const IDENTIFIER = 'and';
 

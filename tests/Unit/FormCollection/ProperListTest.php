@@ -11,7 +11,7 @@ use Webgraphe\Phlip\CodeAnchor;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
+use Webgraphe\Phlip\Contracts\ManualOperationContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
@@ -21,7 +21,7 @@ use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Tests\Unit\FormCollectionTest;
 
-class ProperListTest extends FormCollectionTest implements PrimaryOperationContract
+class ProperListTest extends FormCollectionTest implements ManualOperationContract
 {
     /**
      * @param CodeAnchor|null $anchor

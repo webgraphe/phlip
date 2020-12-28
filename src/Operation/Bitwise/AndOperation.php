@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Bitwise;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class AndOperation extends StandardOperation
+class AndOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'bit-and';

@@ -9,10 +9,10 @@ use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\Interop\ObjectOperation;
 use Webgraphe\Phlip\Operation\Interop\StaticOperation;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 use Webgraphe\Phlip\Traits\AssertsObjects;
 
-class SetOperation extends PrimaryOperation
+class SetOperation extends ManualOperation
 {
     use AssertsObjects;
 

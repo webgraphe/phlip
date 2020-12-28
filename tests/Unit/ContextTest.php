@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Tests\Unit;
 use Exception;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Exception\ContextException;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 use Webgraphe\Phlip\Tests\TestCase;
 
 class ContextTest extends TestCase
@@ -100,7 +100,7 @@ class ContextTest extends TestCase
 
     public function testOperationBoundedToAContext()
     {
-        $operation = new class() extends StandardOperation {
+        $operation = new class() extends AutomaticOperation {
             public function getIdentifiers(): array
             {
                 return [];
@@ -117,13 +117,13 @@ class ContextTest extends TestCase
             }
         };
 
-        $operation->boundToContext(new Context());
+        $operation->bindToContext(new Context());
         $this->assertTrue($operation->isBounded());
     }
 
     public function testOperationNotBoundedToAContext()
     {
-        $operation = new class() extends StandardOperation {
+        $operation = new class() extends AutomaticOperation {
             public function getIdentifiers(): array
             {
                 return [];

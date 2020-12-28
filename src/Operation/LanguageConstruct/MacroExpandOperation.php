@@ -6,9 +6,9 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Macro;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class MacroExpandOperation extends StandardOperation
+class MacroExpandOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'macro-expand';

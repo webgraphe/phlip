@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Closure;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class IsLambdaOperation extends StandardOperation
+class IsLambdaOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'lambda?';

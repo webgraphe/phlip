@@ -9,10 +9,10 @@ use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 /**
  * Phlipy is context builder that quickly scaffolds a usable dialect depending on your needs.
  *
- * @see Phlipy::__construct() Convenient to evaluate data only
- * @see Phlipy::basic() For the hardcore developers, the bare minimum to achieve homoiconicity
- * @see Phlipy::passive() For anything that doesn't require interoperability with PHP classes
- * @see Phlipy::active() Should you need interoperability with PHP classes
+ * @see Phlipy::__construct() Can't do much beyond evaluating data
+ * @see Phlipy::roots() For the hardcore developers, for instance, it's used to reproduce McCarthy's eval
+ * @see Phlipy::basic() Declares additional functionalities such as comparison and arithmetic operators.
+ * @see Phlipy::interoperable() Should you need interoperability with PHP classes
  */
 class Phlipy
 {
@@ -28,7 +28,7 @@ class Phlipy
      * @param ContextContract|null $context
      * @return static
      */
-    public static function basic(ContextContract $context = null): self
+    public static function roots(ContextContract $context = null): self
     {
         return (new static($context ?? new Context()))
             ->withOperation(new Operation\LanguageConstruct\DefineOperation())
@@ -46,9 +46,9 @@ class Phlipy
      * @param ContextContract|null $context
      * @return static
      */
-    public static function passive(ContextContract $context = null): self
+    public static function basic(ContextContract $context = null): self
     {
-        return static::basic($context ?? new Context())
+        return static::roots($context ?? new Context())
             ->withExtraLanguageConstructs()
             ->withTypeOperators()
             ->withArithmeticOperators()
@@ -64,9 +64,9 @@ class Phlipy
      * @return static
      * @throws RuntimeException If the given content is not interoperable with PHP Classes
      */
-    public static function active(ContextContract $context = null): self
+    public static function interoperable(ContextContract $context = null): self
     {
-        return static::passive($context ?? new PhpClassInteroperableContext())
+        return static::basic($context ?? new PhpClassInteroperableContext())
             ->withActivePhpInterop();
     }
 

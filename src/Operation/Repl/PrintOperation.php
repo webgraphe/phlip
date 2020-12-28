@@ -13,7 +13,7 @@ use Webgraphe\Phlip\Contracts\LexemeContract;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Lexer;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol;
 use Webgraphe\Phlip\System;
@@ -21,7 +21,7 @@ use Webgraphe\Phlip\System;
 /**
  * Prints a form given
  */
-class PrintOperation extends PrimaryOperation
+class PrintOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'print';

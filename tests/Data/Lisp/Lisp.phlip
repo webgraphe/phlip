@@ -1,3 +1,6 @@
+; http://www.paulgraham.com/rootsoflisp.html
+; An attempt at reproducing McCarthy's eval
+
 (define (caar l)
     (car (car l)))
 

@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormCollectionContract;
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
+use Webgraphe\Phlip\Contracts\ManualOperationContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Symbol\Closing;
@@ -97,7 +97,7 @@ class ProperList extends FormCollection
 
         $callable = static::assertCallable($context, $this->getHead());
         $tailForms = $this->getTail()->all();
-        $arguments = $callable instanceof PrimaryOperationContract
+        $arguments = $callable instanceof ManualOperationContract
             ? array_merge([$context], $tailForms)
             : array_map(
                 function (FormContract $form) use ($context) {

@@ -5,9 +5,9 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class CondOperation extends PrimaryOperation
+class CondOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'cond';

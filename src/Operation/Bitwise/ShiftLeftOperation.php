@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Bitwise;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class ShiftLeftOperation extends StandardOperation
+class ShiftLeftOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'bit-shift-left';

@@ -66,8 +66,8 @@ USAGE;
 }
 
 try {
-    $context = Phlipy::active()->withRepl($options)->getContext();
-    EvalOperation::assertStaticType($context->get(EvalOperation::IDENTIFIER))->boundToContext($context);
+    $context = Phlipy::interoperable()->withRepl($options)->getContext();
+    EvalOperation::assertStaticType($context->get(EvalOperation::IDENTIFIER))->bindToContext($context);
 
     $io = new IOMode(STDIN);
     if ($io->getSize() && ($io->isRegularFile() || $io->isNamedPipe())) {

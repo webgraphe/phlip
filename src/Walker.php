@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
+use Webgraphe\Phlip\Contracts\ManualOperationContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
 
@@ -50,7 +50,7 @@ class Walker implements WalkerContract
             return $this($definition->expand($form->getTail(), $this->formBuilder));
         }
 
-        return $definition instanceof PrimaryOperationContract
+        return $definition instanceof ManualOperationContract
             ? new ProperList($head, ...$definition->walk($this, ...$form->getTail()->all()))
             : $form->map($this);
     }

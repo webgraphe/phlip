@@ -10,7 +10,7 @@ use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\PhpClassInteroperableContext;
-use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
+use Webgraphe\Phlip\Tests\CallableManualOperationOperation;
 use Webgraphe\Phlip\Tests\Dummy;
 
 /**
@@ -38,10 +38,10 @@ trait DefinesAssertionsInContexts
      */
     protected function contextWithAssertions(): ContextContract
     {
-        $context = Phlipy::active()->withStringFunctions()->withMathFunctions()->getContext();
+        $context = Phlipy::interoperable()->withStringFunctions()->withMathFunctions()->getContext();
         $context->define(
             'assert-true',
-            new CallablePrimaryOperationOperation(
+            new CallableManualOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead();
                     $this->assertTrue((bool)$context->execute($head), "Expected $head to be true");
@@ -50,7 +50,7 @@ trait DefinesAssertionsInContexts
         );
         $context->define(
             'assert-false',
-            new CallablePrimaryOperationOperation(
+            new CallableManualOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead();
                     $this->assertFalse((bool)$context->execute($head), "Expected $head to be false");
@@ -59,7 +59,7 @@ trait DefinesAssertionsInContexts
         );
         $context->define(
             'assert-equals',
-            new CallablePrimaryOperationOperation(
+            new CallableManualOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $context->execute($expressions->assertHead());
                     $toeExpression = $expressions->assertTailHead();
@@ -79,7 +79,7 @@ trait DefinesAssertionsInContexts
         );
         $context->define(
             'assert-not-equals',
-            new CallablePrimaryOperationOperation(
+            new CallableManualOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $context->execute($expressions->assertHead());
                     $toeExpression = $expressions->assertTailHead();
@@ -100,7 +100,7 @@ trait DefinesAssertionsInContexts
         $context->define('ProgramException', ProgramException::class);
         $context->define(
             'assert-exception',
-            new CallablePrimaryOperationOperation(
+            new CallableManualOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     /** @var self $test */
                     $name = $context->execute($expressions->assertHead());

@@ -24,7 +24,7 @@ class PhlipyTest extends TestCase
      */
     public function testEverything(array $options = [])
     {
-        $this->assertInstanceOf(Context::class, $context = Phlipy::active()->withRepl($options)->getContext());
+        $this->assertInstanceOf(Context::class, $context = Phlipy::interoperable()->withRepl($options)->getContext());
 
         /** @var ReadOperation $read */
         $read = $context->get('read');
@@ -78,7 +78,7 @@ class PhlipyTest extends TestCase
      */
     public function testUserErrors()
     {
-        $context = Phlipy::active()->getContext();
+        $context = Phlipy::interoperable()->getContext();
         $code = <<<CODE
 (notice "a notification")
 (warning "a warning")
@@ -131,6 +131,6 @@ CODE;
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("Context must be PHP Interoperable to support PHP interop operations");
 
-        Phlipy::active(new Context());
+        Phlipy::interoperable(new Context());
     }
 }

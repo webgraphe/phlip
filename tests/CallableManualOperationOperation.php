@@ -4,11 +4,11 @@ namespace Webgraphe\Phlip\Tests;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
+use Webgraphe\Phlip\Contracts\ManualOperationContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
 
-class CallablePrimaryOperationOperation implements PrimaryOperationContract
+class CallableManualOperationOperation implements ManualOperationContract
 {
     /** @var callable */
     private $callback;

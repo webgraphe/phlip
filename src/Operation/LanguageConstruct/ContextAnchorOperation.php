@@ -5,9 +5,9 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\ContextAnchor;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class ContextAnchorOperation extends PrimaryOperation
+class ContextAnchorOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'context-anchor';

@@ -8,9 +8,9 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class LetOperation extends PrimaryOperation
+class LetOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'let';

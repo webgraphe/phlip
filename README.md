@@ -3,10 +3,10 @@
 [Phlip](https://github.com/webgraphe/phlip) (pronounced \\ˈflip\\) is an embeddable scripting language for
 [PHP](https://www.php.net) based on [s-expressions](https://en.wikipedia.org/wiki/S-expression). In a nutshell:
 
-A [lexer](https://en.wikipedia.org/wiki/Lexical_analysis) and a
-[parser](https://en.wikipedia.org/wiki/Parsing#Computer_languages) analyze scripts observing Phlip's syntax rules.
-A script's behavior originates from named data and code elements resolved from a controlled context. Integration
-is simpler with the _Phlipy_
+A [lexer](https://en.wikipedia.org/wiki/Lexical_analysis) tokenizes scripts and a
+[parser](https://en.wikipedia.org/wiki/Parsing#Computer_languages) assembles data structures analyze scripts observing
+the Phlip's syntax rules. A script's behavior originates from data and code elements resolved from a controlled context.
+Integration is simpler with the _Phlipy_
 [dialect](https://en.wikipedia.org/wiki/Programming_language#Dialects,_flavors_and_implementations).
 
 ```php
@@ -17,12 +17,13 @@ use Webgraphe\Phlip\Program;
 
 // Tokenize and parse code into a program
 $program = Program::parse('(lambda (x) (* x x))');
-// Bootstrap a new context with the Phlipy dialect
-$context = Phlipy::active()->getContext();
+// Bootstrap a new context with different level of Phlipy dialects
+$context = Phlipy::basic()->getContext();
 // Execute program within said context
 $square = $program->execute($context);
 
 // In this case, return value is an anonymous function - a lambda - calculating the square of a number
+// as per source code "(* x x)"
 var_dump($square(M_PI)); // (double)9.8696044010894
 ```
 

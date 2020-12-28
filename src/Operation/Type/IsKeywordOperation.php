@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\Atom\KeywordAtom;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class IsKeywordOperation extends StandardOperation
+class IsKeywordOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'keyword?';

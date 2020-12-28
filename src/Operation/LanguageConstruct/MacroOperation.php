@@ -6,9 +6,9 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Macro;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class MacroOperation extends PrimaryOperation
+class MacroOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'macro';

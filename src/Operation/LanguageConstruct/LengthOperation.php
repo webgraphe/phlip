@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class LengthOperation extends StandardOperation
+class LengthOperation extends AutomaticOperation
 {
     const IDENTIFIER = 'length';
 

@@ -13,6 +13,11 @@ use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
 
+/**
+ * This test is an attempt at reproducing McCarthy's eval.
+ *
+ * @link http://www.paulgraham.com/rootsoflisp.html
+ */
 class LispTest extends TestCase
 {
     protected static function getScript(): ?string
@@ -22,16 +27,16 @@ class LispTest extends TestCase
 
     /**
      * @dataProvider scripts
-     * @param $script
+     * @param string $script
      * @throws ContextException
      * @throws LexerException
      * @throws ParserException
      * @throws AssertionException
      * @throws ProgramException
      */
-    public function testHomoiconicity($script)
+    public function testMcCarthyEval(string $script)
     {
-        $context = Phlipy::basic(new Context())->getContext();
+        $context = Phlipy::roots(new Context())->getContext();
         $init = Program::parse(static::getScript());
         $init->execute($context);
 
@@ -45,7 +50,6 @@ class LispTest extends TestCase
     }
 
     /**
-     * @todo Add more test to prove homoiconicity further more.
      * @return array
      */
     public function scripts(): array

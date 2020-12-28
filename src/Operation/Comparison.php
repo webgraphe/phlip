@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Operation;
 use stdClass;
 use Webgraphe\Phlip\Exception\AssertionException;
 
-abstract class Comparison extends StandardOperation
+abstract class Comparison extends AutomaticOperation
 {
     /**
      * @param bool|int|float|string|stdClass|array $thing

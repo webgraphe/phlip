@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class ExitOperation extends StandardOperation
+class ExitOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'exit';

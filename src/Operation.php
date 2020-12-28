@@ -23,7 +23,7 @@ abstract class Operation implements OperationContract
      * @param ContextContract|null $context
      * @return static
      */
-    public function boundToContext(?ContextContract $context): self
+    public function bindToContext(?ContextContract $context): self
     {
         $this->boundedContext = $context;
 

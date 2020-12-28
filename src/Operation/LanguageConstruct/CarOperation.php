@@ -7,9 +7,9 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\DottedPair;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class CarOperation extends PrimaryOperation
+class CarOperation extends ManualOperation
 {
     const IDENTIFIER = 'car';
     const IDENTIFIER_ALTERNATIVE = 'head';

@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Arithmetic;
 
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class DivisionOperation extends StandardOperation
+class DivisionOperation extends AutomaticOperation
 {
     const IDENTIFIER = '/';
     const IDENTIFIER_ALTERNATIVE = 'div';

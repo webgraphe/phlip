@@ -8,14 +8,14 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
 /**
  * Evaluates a given expression in the bound context of the operation.
  *
  * Because it's lexically scoped, the given expression cannot be evaluated in the local context.
  */
-class EvalOperation extends PrimaryOperation
+class EvalOperation extends ManualOperation
 {
     const IDENTIFIER = 'eval';
 
