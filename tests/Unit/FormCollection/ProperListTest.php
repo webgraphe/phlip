@@ -199,6 +199,21 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         );
     }
 
+
+    public function testUnpacking()
+    {
+        $list = new ProperList(
+            NumberAtom::fromString('3'),
+            NumberAtom::fromString('4'),
+            NumberAtom::fromString('5')
+        );
+
+        $array = [];
+        array_push($array, ...$list);
+
+        $this->assertEquals($array, $list->all());
+    }
+
     /**
      * @param WalkerContract $walker
      * @param FormContract ...$forms
@@ -207,15 +222,5 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
     public function walk(WalkerContract $walker, FormContract ...$forms): array
     {
         return array_map($walker, $forms);
-    }
-
-    public function isBounded(): bool
-    {
-        return false;
-    }
-
-    public function isBoundedTo(ContextContract $context): bool
-    {
-        return false;
     }
 }

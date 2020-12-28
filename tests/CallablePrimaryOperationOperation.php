@@ -37,14 +37,4 @@ class CallablePrimaryOperationOperation implements PrimaryOperationContract
     {
         return array_map($walker, $forms);
     }
-
-    public function isBounded(): bool
-    {
-        return false;
-    }
-
-    public function isBoundedTo(ContextContract $context): bool
-    {
-        return false;
-    }
 }
