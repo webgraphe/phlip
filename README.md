@@ -9,6 +9,7 @@ the Phlip's syntax rules. A script's behavior originates from data and code elem
 Integration is simpler with the _Phlipy_
 [dialect](https://en.wikipedia.org/wiki/Programming_language#Dialects,_flavors_and_implementations).
 
+See `tests/Unit/ReadmeTest.php` for the example below:
 ```php
 <?php
 
