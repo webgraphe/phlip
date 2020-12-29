@@ -12,7 +12,7 @@ A [lexer](https://en.wikipedia.org/wiki/Lexical_analysis) tokenizes scripts and 
 originates from data and code elements resolved from a controlled context. Integration is simpler with the _Phlipy_
 [dialect](https://en.wikipedia.org/wiki/Programming_language#Dialects,_flavors_and_implementations).
 
-Refer to `tests/Unit/ReadmeTest.php` for the example below:
+Refer to `Webgraphe\Phlip\Tests\Unit\ReadmeTest` for the example below:
 ```php
 <?php
 
@@ -38,6 +38,16 @@ Install with [`composer require webgraphe/phlip`](https://packagist.org/packages
 * Easy to learn
 * Build your own dialect!
 * Interoperable with PHP Classes
-* [Homoiconic](https://en.wikipedia.org/wiki/Homoiconicity) (code as data)
 * Create [test suites](https://en.wikipedia.org/wiki/Unit_testing) with `phlipunit` (built on top of [PHPUnit](https://phpunit.de))
 * Ships with a literal [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) `(loop (print (eval (read))))`
+
+**DISCLAIMER**
+
+Lisp is a often considered a [Homoiconic](https://en.wikipedia.org/wiki/Homoiconicity) (code as data) language.
+Despite S-expressions being a subset of Phlip's syntax, and even a somewhat successful attempt at reproducing
+McCarthy's eval (see `Webgraphe\Phlip\Tests\System\LispTest::testMcCarthyEval()`), internally, Phlip is not homoiconic
+as it relies on PHP's internal data structures such as `array`, `stdClass`, native scalars, `Closure` and invokable
+classes for performance and convenience. 
+
+After all, Phlip is embeddable in PHP and was built to allow transportation of code and data in a manner that can stay
+relatively secure, provided that functionalities interoperable with PHP stay in check.

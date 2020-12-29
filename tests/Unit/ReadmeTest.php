@@ -1,5 +1,7 @@
 <?php
 
+namespace Webgraphe\Phlip\Tests\Unit;
+
 use Webgraphe\Phlip\PhlipException;
 use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
