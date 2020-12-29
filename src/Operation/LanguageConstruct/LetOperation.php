@@ -61,7 +61,7 @@ class LetOperation extends ManualOperation
                 $argument = LambdaOperation::invokeStatic(
                     $context,
                     $name->getTail(),
-                    ...$variable->getTail()->all()
+                    ...$variable->getTail()
                 );
             } elseif ($name instanceof IdentifierAtom) {
                 $parameter = $name;

@@ -30,11 +30,7 @@ class Walker implements WalkerContract
      */
     public function __invoke(FormContract $form): FormContract
     {
-        if ($form instanceof MarkedForm) {
-            return $form->createNew($this($form->getForm()));
-        }
-
-        if (!($form instanceof ProperList) || !count($form)) {
+        if ($form instanceof MarkedForm || !($form instanceof ProperList) || !count($form)) {
             return $form;
         }
 
@@ -51,7 +47,7 @@ class Walker implements WalkerContract
         }
 
         return $definition instanceof ManualOperationContract
-            ? new ProperList($head, ...$definition->walk($this, ...$form->getTail()->all()))
+            ? new ProperList($head, ...$definition->walk($this, ...$form->getTail()))
             : $form->map($this);
     }
 }

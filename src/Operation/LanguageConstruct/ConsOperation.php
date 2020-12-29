@@ -39,7 +39,7 @@ class ConsOperation extends AutomaticOperation
         $tail = $this->formBuilder->asForm(array_shift($arguments));
 
         if ($tail instanceof ProperList) {
-            return new ProperList($head, ...$tail->all());
+            return new ProperList($head, ...$tail);
         }
 
         return DottedPair::fromForms($head, $tail);
