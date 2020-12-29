@@ -44,10 +44,10 @@ Install with [`composer require webgraphe/phlip`](https://packagist.org/packages
 **DISCLAIMER**
 
 Lisp is a often considered a [Homoiconic](https://en.wikipedia.org/wiki/Homoiconicity) (code as data) language.
-Despite S-expressions being a subset of Phlip's syntax, and even a somewhat successful attempt at reproducing
-McCarthy's eval (see `Webgraphe\Phlip\Tests\System\LispTest::testMcCarthyEval()`), internally, Phlip is not homoiconic
-as it relies on PHP's internal data structures such as `array`, `stdClass`, native scalars, `Closure` and invokable
-classes for performance and convenience. 
+Despite Phlip's usage of S-expressions and a somewhat successful attempt at reproducing McCarthy's eval
+&mdash; see `Webgraphe\Phlip\Tests\System\LispTest::testMcCarthyEval()` &mdash; internally, as the author I do not
+consider Phlip be an homoiconic language as it relies on PHP's internal data structures such as `array`, `stdClass`,
+native scalars, `Closure` and invokable classes for performance and convenience. 
 
-After all, Phlip is embeddable in PHP and was built to allow transportation of code and data in a manner that can stay
+Phlip is embeddable in PHP and was built to allow transportation of code and data in a manner that can stay
 relatively secure, provided that functionalities interoperable with PHP stay in check.
