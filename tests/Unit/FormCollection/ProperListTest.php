@@ -12,7 +12,6 @@ use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\ManualOperationContract;
-use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection;
@@ -212,15 +211,5 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
         array_push($array, ...$list);
 
         $this->assertEquals($array, $list->all());
-    }
-
-    /**
-     * @param WalkerContract $walker
-     * @param FormContract ...$forms
-     * @return FormContract[]
-     */
-    public function walk(WalkerContract $walker, FormContract ...$forms): array
-    {
-        return array_map($walker, $forms);
     }
 }

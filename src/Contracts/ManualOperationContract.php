@@ -14,14 +14,4 @@ interface ManualOperationContract extends OperationContract
      * @return mixed
      */
     public function __invoke(ContextContract $context, FormContract ...$forms);
-
-    /**
-     * Walks the tail of a statement and returns the forms. For example, for (a b c), this method would walk b and c.
-     * Convenient to protect some forms to be expanded.
-     *
-     * @param WalkerContract $walker
-     * @param FormContract ...$forms
-     * @return FormContract[]
-     */
-    public function walk(WalkerContract $walker, FormContract ...$forms): array;
 }

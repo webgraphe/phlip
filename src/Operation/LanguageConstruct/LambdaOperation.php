@@ -6,7 +6,6 @@ use Closure;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\ManualOperation;
@@ -87,18 +86,5 @@ class LambdaOperation extends ManualOperation
     public function getIdentifiers(): array
     {
         return [self::IDENTIFIER];
-    }
-
-    /**
-     * @param WalkerContract $walker
-     * @param FormContract ...$forms
-     * @return array
-     * @throws AssertionException
-     */
-    public function walk(WalkerContract $walker, FormContract ...$forms): array
-    {
-        $statement = new ProperList(...$forms);
-
-        return array_merge([$statement->assertHead()], array_map($walker, $statement->getTail()->all()));
     }
 }

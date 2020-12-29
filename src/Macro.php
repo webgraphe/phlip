@@ -5,11 +5,12 @@ namespace Webgraphe\Phlip;
 use Closure;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
+use Webgraphe\Phlip\Contracts\ManualOperationContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\LanguageConstruct\LambdaOperation;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
 
-class Macro
+class Macro implements ManualOperationContract
 {
     use AssertsStaticType;
 
@@ -38,5 +39,16 @@ class Macro
         $formBuilder = $formBuilder ?? new FormBuilder();
 
         return $formBuilder->asForm(call_user_func($this->lambda, ...ProperList::asList($body)));
+    }
+
+    /**
+     * @param ContextContract $context
+     * @param FormContract ...$forms
+     * @return mixed
+     * @throws Exception\AssertionException
+     */
+    public function __invoke(ContextContract $context, FormContract ...$forms)
+    {
+        return $context->execute($this->expand(new ProperList(...$forms)));
     }
 }
