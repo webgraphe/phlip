@@ -1,5 +1,9 @@
 ## Embeddable scripts for PHP
 
+<a href="https://packagist.org/packages/webgraphe/phlip"><img src="https://img.shields.io/packagist/dt/webgraphe/phlip" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/webgraphe/phlip"><img src="https://img.shields.io/packagist/v/webgraphe/phlip" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/webgraphe/phlip"><img src="https://img.shields.io/packagist/l/webgraphe/phlip" alt="License"></a>
+
 [Phlip](https://github.com/webgraphe/phlip) (pronounced \\ˈflip\\) is an embeddable scripting language for
 [PHP](https://www.php.net) based on [s-expressions](https://en.wikipedia.org/wiki/S-expression). In a nutshell:
 
