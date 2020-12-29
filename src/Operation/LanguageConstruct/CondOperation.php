@@ -5,9 +5,9 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class CondOperation extends PrimaryOperation
+class CondOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'cond';
@@ -24,7 +24,7 @@ class CondOperation extends PrimaryOperation
             $forms = $forms->getTail();
             $condition = ProperList::assertStaticType($condition);
             if ($context->execute($condition->assertHead())) {
-                return $context->execute($condition->getTail()->assertHead());
+                return $context->execute($condition->assertTailHead());
             }
         }
 

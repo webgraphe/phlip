@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Arithmetic;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class AdditionOperation extends StandardOperation
+class AdditionOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = '+';

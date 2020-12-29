@@ -10,7 +10,6 @@ class IOMode
     /** @var array */
     private $stat;
 
-
     /**
      * @param resource $resource
      */

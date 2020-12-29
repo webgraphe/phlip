@@ -3,10 +3,10 @@
 namespace Webgraphe\Phlip\Tests\Unit;
 
 use Exception;
-use Webgraphe\Phlip\Operation\StandardOperation;
-use Webgraphe\Phlip\Tests\TestCase;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
+use Webgraphe\Phlip\Tests\TestCase;
 
 class ContextTest extends TestCase
 {
@@ -98,9 +98,9 @@ class ContextTest extends TestCase
         $this->assertFalse($child->has('y'));
     }
 
-    public function testOperationBoundToDifferentContext()
+    public function testOperationBoundedToAContext()
     {
-        $operation = new class() extends StandardOperation {
+        $operation = new class() extends AutomaticOperation {
             public function getIdentifiers(): array
             {
                 return [];
@@ -113,51 +113,17 @@ class ContextTest extends TestCase
 
             public function isBounded(): bool
             {
-                return true;
+                return (bool)$this->assertBoundedContext();
             }
         };
 
-        $this->expectException(ContextException::class);
-        $this->expectExceptionMessage(
-            "Failed to define operation 'out-of-context'; operation is bound to a different context"
-        );
-
-        (new Context())->define('out-of-context', $operation);
+        $operation->bindToContext(new Context());
+        $this->assertTrue($operation->isBounded());
     }
 
-    public function testOperationAlreadyBound()
+    public function testOperationNotBoundedToAContext()
     {
-        $this->expectException(ContextException::class);
-        $this->expectExceptionMessage(
-            "instance is already bound to another context"
-        );
-
-        new class() extends StandardOperation {
-            public function __construct()
-            {
-                $this->withBoundedContext(new Context())->withBoundedContext(new Context());
-            }
-
-            public function getIdentifiers(): array
-            {
-                return [];
-            }
-
-            public function __invoke(...$arguments)
-            {
-                throw new Exception("Test operation");
-            }
-
-            public function isBounded(): bool
-            {
-                return true;
-            }
-        };
-    }
-
-    public function testOperationNotBoundToAContext()
-    {
-        $operation = new class() extends StandardOperation {
+        $operation = new class() extends AutomaticOperation {
             public function getIdentifiers(): array
             {
                 return [];
@@ -176,7 +142,7 @@ class ContextTest extends TestCase
 
         $this->expectException(ContextException::class);
         $this->expectExceptionMessage(
-            "is not bound to a context"
+            "is not bounded to a context"
         );
 
         $operation->isBounded();

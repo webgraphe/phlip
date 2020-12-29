@@ -11,8 +11,7 @@ use Webgraphe\Phlip\CodeAnchor;
 use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\PrimaryOperationContract;
-use Webgraphe\Phlip\Contracts\WalkerContract;
+use Webgraphe\Phlip\Contracts\ManualOperationContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection;
@@ -21,7 +20,7 @@ use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Tests\Unit\FormCollectionTest;
 
-class ProperListTest extends FormCollectionTest implements PrimaryOperationContract
+class ProperListTest extends FormCollectionTest implements ManualOperationContract
 {
     /**
      * @param CodeAnchor|null $anchor
@@ -92,17 +91,37 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
      * @throws AssertionException
      * @throws Exception
      */
-    public function testEmptyList()
+    public function testNoHead()
     {
         $list = new ProperList();
         $this->assertEmpty($list->all());
         $this->assertCount(0, $list);
+        $this->assertTrue($list->isEmpty());
         $this->assertNull($list->getHead());
         $this->assertTrue($list->equals($list->getTail()));
         $this->assertNull((new Context())->execute($list));
 
         $this->expectException(AssertionException::class);
         $list->assertHead();
+    }
+
+    /**
+     * @throws AssertionException
+     * @throws Exception
+     */
+    public function testEmptyTail()
+    {
+        $form = NumberAtom::fromString('42');
+        $list = new ProperList($form);
+        $this->assertEmpty($list->getTail()->all());
+        $this->assertCount(1, $list);
+        $this->assertFalse($list->isEmpty());
+        $this->assertTrue($list->getTail()->isEmpty());
+        $this->assertNotNull($list->getHead());
+        $this->assertTrue($list->getHead()->equals($form));
+
+        $this->expectException(AssertionException::class);
+        $list->assertTailHead();
     }
 
     /**
@@ -179,23 +198,17 @@ class ProperListTest extends FormCollectionTest implements PrimaryOperationContr
         );
     }
 
-    /**
-     * @param WalkerContract $walker
-     * @param FormContract ...$forms
-     * @return FormContract[]
-     */
-    public function walk(WalkerContract $walker, FormContract ...$forms): array
+    public function testUnpacking()
     {
-        return array_map($walker, $forms);
-    }
+        $list = new ProperList(
+            NumberAtom::fromString('3'),
+            NumberAtom::fromString('4'),
+            NumberAtom::fromString('5')
+        );
 
-    public function isBounded(): bool
-    {
-        return false;
-    }
+        $array = [];
+        array_push($array, ...$list);
 
-    public function isBoundedTo(ContextContract $context): bool
-    {
-        return false;
+        $this->assertEquals($array, $list->all());
     }
 }

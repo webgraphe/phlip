@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\Atom\StringAtom;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class IsStringOperation extends StandardOperation
+class IsStringOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'string?';

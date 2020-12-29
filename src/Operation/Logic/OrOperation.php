@@ -4,9 +4,9 @@ namespace Webgraphe\Phlip\Operation\Logic;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class OrOperation extends PrimaryOperation
+class OrOperation extends ManualOperation
 {
     const IDENTIFIER = 'or';
 
@@ -17,6 +17,7 @@ class OrOperation extends PrimaryOperation
             if ($result = $context->execute($form)) {
                 return $result;
             }
+
             $forms = $forms->getTail();
         }
 

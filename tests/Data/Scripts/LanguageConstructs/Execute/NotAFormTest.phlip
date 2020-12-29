@@ -1,0 +1,5 @@
+(assert-exception
+    AssertionException
+    (eval 1 (context-anchor))
+    "Can't evaluate; not a form: (integer) 1"
+)

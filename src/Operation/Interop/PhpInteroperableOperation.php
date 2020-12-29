@@ -5,9 +5,9 @@ namespace Webgraphe\Phlip\Operation\Interop;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 use Webgraphe\Phlip\Exception\ContextException;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-abstract class PhpInteroperableOperation extends PrimaryOperation
+abstract class PhpInteroperableOperation extends ManualOperation
 {
     /**
      * @param ContextContract $context

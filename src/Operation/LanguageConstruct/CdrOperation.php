@@ -7,9 +7,9 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\DottedPair;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class CdrOperation extends PrimaryOperation
+class CdrOperation extends ManualOperation
 {
     const IDENTIFIER = 'cdr';
     const IDENTIFIER_ALTERNATIVE = 'tail';

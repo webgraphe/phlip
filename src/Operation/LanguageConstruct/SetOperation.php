@@ -9,10 +9,10 @@ use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Operation\Interop\ObjectOperation;
 use Webgraphe\Phlip\Operation\Interop\StaticOperation;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 use Webgraphe\Phlip\Traits\AssertsObjects;
 
-class SetOperation extends PrimaryOperation
+class SetOperation extends ManualOperation
 {
     use AssertsObjects;
 
@@ -31,9 +31,9 @@ class SetOperation extends PrimaryOperation
 
         if ($expression instanceof ProperList) {
             $head = $context->execute($expression->assertHead());
-            $value = $context->execute($forms->getTail()->assertHead());
+            $value = $context->execute($forms->assertTailHead());
             $tail = $expression->getTail();
-            $member = IdentifierAtom::assertStaticType($tail->getTail()->assertHead())->getValue();
+            $member = IdentifierAtom::assertStaticType($tail->assertTailHead())->getValue();
 
             if ($head instanceof ObjectOperation) {
                 return $head->assignPropertyValue(
@@ -57,7 +57,7 @@ class SetOperation extends PrimaryOperation
         if ($expression instanceof IdentifierAtom) {
             return $context->set(
                 $expression->getValue(),
-                $context->execute($forms->getTail()->assertHead())
+                $context->execute($forms->assertTailHead())
             );
         }
 

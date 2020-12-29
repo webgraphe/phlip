@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class IsCallableOperation extends StandardOperation
+class IsCallableOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'callable?';

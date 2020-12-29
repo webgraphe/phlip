@@ -20,32 +20,14 @@ abstract class Operation implements OperationContract
     abstract public function getIdentifiers(): array;
 
     /**
-     * @param ContextContract $context
+     * @param ContextContract|null $context
      * @return static
-     * @throws ContextException
      */
-    protected function withBoundedContext(ContextContract $context): self
+    public function bindToContext(?ContextContract $context): self
     {
-        if ($this->isBounded()) {
-            if (!$this->isBoundedTo($context)) {
-                $class = get_class($this);
-                throw new ContextException("{$class} instance is already bound to another context");
-            }
-        } else {
-            $this->boundedContext = $context;
-        }
+        $this->boundedContext = $context;
 
         return $this;
-    }
-
-    public function isBounded(): bool
-    {
-        return (bool)$this->boundedContext;
-    }
-
-    public function isBoundedTo(ContextContract $context): bool
-    {
-        return $this->boundedContext === $context;
     }
 
     /**
@@ -60,6 +42,6 @@ abstract class Operation implements OperationContract
 
         $class = get_class($this);
 
-        throw new ContextException("{$class} is not bound to a context");
+        throw new ContextException("{$class} is not bounded to a context");
     }
 }

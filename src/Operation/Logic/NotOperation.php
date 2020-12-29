@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Logic;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class NotOperation extends StandardOperation
+class NotOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER_ALTERNATIVE = 'not';

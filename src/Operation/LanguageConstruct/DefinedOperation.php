@@ -6,9 +6,9 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class DefinedOperation extends PrimaryOperation
+class DefinedOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'defined?';

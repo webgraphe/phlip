@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class EqualityOperation extends StandardOperation
+class EqualityOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'equals?';

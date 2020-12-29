@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\FormCollection\DottedPair;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class IsPairOperation extends StandardOperation
+class IsPairOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'pair?';

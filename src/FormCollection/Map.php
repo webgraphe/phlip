@@ -54,8 +54,8 @@ class Map extends FormCollection
     {
         $map = (object)[];
         foreach ($this->pairs as $pair) {
-            $key = $context->execute($pair->getHead());
-            $map->{static::assertScalarOrNull($key)} = $context->execute($pair->getTail()->getHead());
+            $key = $context->execute($pair->assertHead());
+            $map->{static::assertScalarOrNull($key)} = $context->execute($pair->assertTailHead());
         }
 
         return $map;
@@ -103,6 +103,6 @@ class Map extends FormCollection
     {
         $list = ProperList::assertStaticType($form);
 
-        return (string)$list->getHead() . ' ' . (string)$list->getTail()->getHead();
+        return (string)$list->assertHead() . ' ' . (string)$list->assertTailHead();
     }
 }

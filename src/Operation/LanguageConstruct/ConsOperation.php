@@ -7,13 +7,13 @@ use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection\DottedPair;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 use Webgraphe\Phlip\Traits\AssertsTypes;
 
 /**
  * Differs from the traditional cons. This operation un-shifts an element in a proper list.
  */
-class ConsOperation extends StandardOperation
+class ConsOperation extends AutomaticOperation
 {
     use AssertsTypes;
 
@@ -39,7 +39,7 @@ class ConsOperation extends StandardOperation
         $tail = $this->formBuilder->asForm(array_shift($arguments));
 
         if ($tail instanceof ProperList) {
-            return new ProperList($head, ...$tail->all());
+            return new ProperList($head, ...$tail);
         }
 
         return DottedPair::fromForms($head, $tail);

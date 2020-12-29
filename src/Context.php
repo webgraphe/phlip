@@ -4,8 +4,6 @@ namespace Webgraphe\Phlip;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\OperationContract;
-use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\ContextException;
 
 class Context implements ContextContract
@@ -16,15 +14,8 @@ class Context implements ContextContract
     private $parent;
     /** @var FormContract[] */
     private $formStack = [];
-    /** @var WalkerContract */
-    private $walker;
     /** @var int */
     private $ticks = 0;
-
-    public function __construct(FormBuilder $formBuilder = null)
-    {
-        $this->walker = new Walker($this, $formBuilder);
-    }
 
     /**
      * @param string $key $offset
@@ -40,10 +31,6 @@ class Context implements ContextContract
 
         if (array_key_exists($key, $this->data)) {
             throw new ContextException("Can't redefine global '$key'");
-        }
-
-        if ($value instanceof OperationContract && $value->isBounded() && !$value->isBoundedTo($this)) {
-            throw new ContextException("Failed to define operation '{$key}'; operation is bound to a different context");
         }
 
         return $this->data[$key] = $value;
@@ -120,7 +107,6 @@ class Context implements ContextContract
     public function stack(): ContextContract
     {
         $self = new static();
-        $self->walker = $this->walker;
         $self->parent = $this;
 
         return $self;
@@ -133,7 +119,6 @@ class Context implements ContextContract
      */
     public function execute(FormContract $form)
     {
-        $form = call_user_func($this->walker, $form);
         $this->formStack[] = $form;
         $result = $this->tick($form)->evaluate($this);
         array_pop($this->formStack);

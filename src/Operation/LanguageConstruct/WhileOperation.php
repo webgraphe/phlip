@@ -5,27 +5,21 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class WhileOperation extends PrimaryOperation
+class WhileOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'while';
-
     /** @var string */
-    private $identifier;
-
-    public function __construct(string $identifier = self::IDENTIFIER)
-    {
-        $this->identifier = $identifier;
-    }
+    const IDENTIFIER_ALTERNATIVE = 'loop';
 
     /**
      * @return string[]
      */
     public function getIdentifiers(): array
     {
-        return [$this->identifier];
+        return [self::IDENTIFIER, self::IDENTIFIER_ALTERNATIVE];
     }
 
     /**

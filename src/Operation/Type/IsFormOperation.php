@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class IsFormOperation extends StandardOperation
+class IsFormOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'form?';

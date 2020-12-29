@@ -10,7 +10,7 @@ use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\ProperList;
 use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\PhpClassInteroperableContext;
-use Webgraphe\Phlip\Tests\CallablePrimaryOperationOperation;
+use Webgraphe\Phlip\Tests\CallableManualOperationOperation;
 use Webgraphe\Phlip\Tests\Dummy;
 
 /**
@@ -32,12 +32,15 @@ trait DefinesAssertionsInContexts
         return is_object($anything) ? get_class($anything) : gettype($anything);
     }
 
+    /**
+     * @return ContextContract
+     */
     protected function contextWithAssertions(): ContextContract
     {
-        $context = Phlipy::active()->withStringFunctions()->withMathFunctions()->getContext();
+        $context = Phlipy::interoperable()->withStringFunctions()->withMathFunctions()->getContext();
         $context->define(
             'assert-true',
-            new CallablePrimaryOperationOperation(
+            new CallableManualOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead();
                     $this->assertTrue((bool)$context->execute($head), "Expected $head to be true");
@@ -46,7 +49,7 @@ trait DefinesAssertionsInContexts
         );
         $context->define(
             'assert-false',
-            new CallablePrimaryOperationOperation(
+            new CallableManualOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $expressions->assertHead();
                     $this->assertFalse((bool)$context->execute($head), "Expected $head to be false");
@@ -55,10 +58,10 @@ trait DefinesAssertionsInContexts
         );
         $context->define(
             'assert-equals',
-            new CallablePrimaryOperationOperation(
+            new CallableManualOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $context->execute($expressions->assertHead());
-                    $toeExpression = $expressions->getTail()->assertHead();
+                    $toeExpression = $expressions->assertTailHead();
                     $toe = $context->execute($toeExpression);
                     if ($head instanceof FormContract && $toe instanceof FormContract) {
                         $this->assertTrue(
@@ -75,10 +78,10 @@ trait DefinesAssertionsInContexts
         );
         $context->define(
             'assert-not-equals',
-            new CallablePrimaryOperationOperation(
+            new CallableManualOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     $head = $context->execute($expressions->assertHead());
-                    $toeExpression = $expressions->getTail()->assertHead();
+                    $toeExpression = $expressions->assertTailHead();
                     $toe = $context->execute($toeExpression);
                     if ($head instanceof FormContract && $toe instanceof FormContract) {
                         $this->assertTrue(!$head->equals($toe), "Didn't expect $head out of $toeExpression");
@@ -96,7 +99,7 @@ trait DefinesAssertionsInContexts
         $context->define('ProgramException', ProgramException::class);
         $context->define(
             'assert-exception',
-            new CallablePrimaryOperationOperation(
+            new CallableManualOperationOperation(
                 function (ContextContract $context, ProperList $expressions) {
                     /** @var self $test */
                     $name = $context->execute($expressions->assertHead());
@@ -104,7 +107,7 @@ trait DefinesAssertionsInContexts
                     if ($message = $expressions->getTail()->getTail()->getHead()) {
                         $this->expectExceptionMessage($context->execute($message));
                     }
-                    $context->execute($expressions->getTail()->assertHead());
+                    $context->execute($expressions->assertTailHead());
                 }
             )
         );

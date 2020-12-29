@@ -4,13 +4,11 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Contracts\WalkerContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class LetOperation extends PrimaryOperation
+class LetOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'let';
@@ -61,11 +59,11 @@ class LetOperation extends PrimaryOperation
                 $argument = LambdaOperation::invokeStatic(
                     $context,
                     $name->getTail(),
-                    ...$variable->getTail()->all()
+                    ...$variable->getTail()
                 );
             } elseif ($name instanceof IdentifierAtom) {
                 $parameter = $name;
-                $argument = $context->execute($variable->getTail()->assertHead());
+                $argument = $context->execute($variable->assertTailHead());
             } else {
                 throw new AssertionException('Malformed let');
             }
@@ -87,54 +85,5 @@ class LetOperation extends PrimaryOperation
     public function getIdentifiers(): array
     {
         return [self::IDENTIFIER];
-    }
-
-    /**
-     * @param WalkerContract $walker
-     * @param FormContract ...$forms
-     * @return FormContract[]
-     * @throws AssertionException
-     */
-    public function walk(WalkerContract $walker, FormContract ...$forms): array
-    {
-        $statement = new ProperList(...$forms);
-        $head = $statement->assertHead();
-        $tail = $statement->getTail();
-
-        if ($head instanceof IdentifierAtom) {
-            return array_merge(
-                [
-                    $walker($head),
-                    $this->walkParameterArguments($walker, ProperList::assertStaticType($tail->assertHead()))
-                ],
-                array_map($walker, $tail->getTail()->all())
-            );
-        }
-
-        return array_merge(
-            [$this->walkParameterArguments($walker, ProperList::assertStaticType($head))],
-            array_map($walker, $tail->all())
-        );
-    }
-
-    /**
-     * @param WalkerContract $walker
-     * @param ProperList $variables
-     * @return ProperList
-     * @throws AssertionException
-     */
-    protected function walkParameterArguments(WalkerContract $walker, ProperList $variables): ProperList
-    {
-        $pairs = [];
-
-        while (($head = $variables->getHead()) && $variable = ProperList::assertStaticType($head)) {
-            $variables = $variables->getTail();
-            $name = $variable->getHead();
-            $pairs[] = $name instanceof ProperList
-                ? new ProperList($name, ...array_map($walker, $variable->getTail()->all()))
-                : new ProperList(...array_map($walker, $variable->all()));
-        }
-
-        return new ProperList(...$pairs);
     }
 }

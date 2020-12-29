@@ -9,16 +9,13 @@ use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 /**
  * Phlipy is context builder that quickly scaffolds a usable dialect depending on your needs.
  *
- * @see Phlipy::__construct() Convenient to evaluate data only
- * @see Phlipy::basic() For the hardcore developers, the bare minimum to achieve homoiconicity
- * @see Phlipy::passive() For anything that doesn't require interoperability with PHP classes
- * @see Phlipy::active() Should you need interoperability with PHP classes
+ * @see Phlipy::__construct() Can't do much beyond evaluating data
+ * @see Phlipy::roots() For the hardcore developers, for instance, it's used to reproduce McCarthy's eval
+ * @see Phlipy::basic() Declares additional functionalities such as comparison and arithmetic operators.
+ * @see Phlipy::interoperable() Should you need interoperability with PHP classes
  */
 class Phlipy
 {
-    /** @var string */
-    const LOOP_IDENTIFIER = 'loop';
-
     /** @var ContextContract */
     private $context;
 
@@ -31,7 +28,7 @@ class Phlipy
      * @param ContextContract|null $context
      * @return static
      */
-    public static function basic(ContextContract $context = null): self
+    public static function roots(ContextContract $context = null): self
     {
         return (new static($context ?? new Context()))
             ->withOperation(new Operation\LanguageConstruct\DefineOperation())
@@ -49,9 +46,9 @@ class Phlipy
      * @param ContextContract|null $context
      * @return static
      */
-    public static function passive(ContextContract $context = null): self
+    public static function basic(ContextContract $context = null): self
     {
-        return static::basic($context ?? new Context())
+        return static::roots($context ?? new Context())
             ->withExtraLanguageConstructs()
             ->withTypeOperators()
             ->withArithmeticOperators()
@@ -67,15 +64,14 @@ class Phlipy
      * @return static
      * @throws RuntimeException If the given content is not interoperable with PHP Classes
      */
-    public static function active(ContextContract $context = null): self
+    public static function interoperable(ContextContract $context = null): self
     {
-        return static::passive($context ?? new PhpClassInteroperableContext())
+        return static::basic($context ?? new PhpClassInteroperableContext())
             ->withActivePhpInterop();
     }
 
     /**
      * @return static
-     * @throws Exception\ContextException
      */
     protected function withExtraLanguageConstructs(): self
     {
@@ -87,7 +83,9 @@ class Phlipy
             ->withOperation(new Operation\LanguageConstruct\ListOperation())
             ->withOperation(new Operation\LanguageConstruct\WhileOperation())
             ->withOperation(new Operation\LanguageConstruct\BeginOperation())
-            ->withOperation(Operation\LanguageConstruct\ExecuteOperation::contextBounded($this->context))
+            ->withOperation(new Operation\LanguageConstruct\ContextAnchorOperation())
+            ->withOperation(new Operation\LanguageConstruct\EvalOperation())
+            ->withOperation(new Operation\LanguageConstruct\ExitOperation())
             ->withOperation(new Operation\LanguageConstruct\MacroOperation())
             ->withOperation(new Operation\LanguageConstruct\LengthOperation())
             ->withOperation(new Operation\LanguageConstruct\MacroExpandOperation());
@@ -233,18 +231,24 @@ class Phlipy
      */
     public function withRepl(array $options = []): self
     {
+        $readParams = [
+            isset($options['read.lexer']) && $options['read.lexer'] instanceof Lexer
+                ? $options['read.lexer']
+                : null,
+            isset($options['read.parser']) && $options['read.parser'] instanceof Parser
+                ? $options['read.parser']
+                : null,
+            isset($options['read.prompt']) && is_callable($options['read.prompt'])
+                ? $options['read.prompt']
+                : null,
+        ];
+
         return $this
             ->withOperation(
                 !empty($options['read.multi-line'])
-                    ? Operation\Repl\ReadOperation::multiLine($options['read.prompt'] ?? null)
-                    : new Operation\Repl\ReadOperation($options['read.prompt'] ?? null)
+                    ? Operation\Repl\ReadOperation::multiLine(...$readParams)
+                    : new Operation\Repl\ReadOperation(...$readParams)
             )
-            ->withOperation(
-                new Operation\LanguageConstruct\WhileOperation(
-                    isset($options['loop.identifier']) ? (string)$options['loop.identifier'] : self::LOOP_IDENTIFIER
-                )
-            )
-            ->withOperation(new Operation\Repl\EvalOperation())
             ->withOperation(
                 $printOperation = new Operation\Repl\PrintOperation(
                     isset($options['print.form-builder']) && $options['print.form-builder'] instanceof FormBuilder
@@ -255,8 +259,7 @@ class Phlipy
                         : null,
                     $options
                 )
-            )
-            ->withOperation(new Operation\Repl\ExitOperation());
+            );
     }
 
     /**

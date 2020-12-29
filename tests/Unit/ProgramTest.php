@@ -142,7 +142,7 @@ class ProgramTest extends TestCase
      */
     public function testNonInteroperableContextOnInterop()
     {
-        $context = Phlipy::passive()->withOperation(new CloneOperation())->getContext();
+        $context = Phlipy::basic()->withOperation(new CloneOperation())->getContext();
         $context->define('now', new DateTime());
 
         $this->expectException(ContextException::class);

@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\Atom\NumberAtom;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class IsNumberOperation extends StandardOperation
+class IsNumberOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'number?';

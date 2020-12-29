@@ -61,7 +61,7 @@ class ObjectOperation extends PhpInteroperableOperation
             );
         }
 
-        if ($tail->getTail()->count()) {
+        if (count($tail) > 1) {
             throw new AssertionException("Cannot call undefined '{$identifier}->{$member}()'");
         }
 

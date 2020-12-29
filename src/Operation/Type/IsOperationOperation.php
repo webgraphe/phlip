@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Operation\Type;
 
 use Webgraphe\Phlip\Contracts\OperationContract;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class IsOperationOperation extends StandardOperation
+class IsOperationOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'operation?';

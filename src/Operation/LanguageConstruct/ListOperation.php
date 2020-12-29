@@ -5,9 +5,9 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class ListOperation extends StandardOperation
+class ListOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'list';

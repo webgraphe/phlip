@@ -12,6 +12,12 @@
 (assert-equals 5 (pythagorean-length 3 4))
 
 (define plus-3 (macro (x) `(+ ,x 3)))
-(assert-equals 5 (plus-3 2))
+; (assert-equals 5 (plus-3 2))
 
-(assert-equals '(+ 4 3) (macro-expand plus-3 `(4)))
+(assert-equals '(+ 4 3) (macro-expand '(plus-3 4)))
+
+; (define update (macro (what with) `(set! ,what ,with)))
+; (assert-equals '(set! x y) (macro-expand '(update x y)))
+; (define x 10)
+; (let ((y 20)) (update x y))
+; (assert-equals 20 x)

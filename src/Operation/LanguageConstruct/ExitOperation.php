@@ -1,10 +1,10 @@
 <?php
 
-namespace Webgraphe\Phlip\Operation\Repl;
+namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class ExitOperation extends StandardOperation
+class ExitOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'exit';
@@ -20,10 +20,10 @@ class ExitOperation extends StandardOperation
     /**
      * @param array ...$arguments
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function __invoke(...$arguments)
     {
-        echo "Good bye!" . PHP_EOL . PHP_EOL;
         exit($arguments ? (int)$arguments[0] : 0);
     }
 }

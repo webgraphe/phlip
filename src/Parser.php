@@ -109,7 +109,7 @@ class Parser
                         );
                     }
                     if ($rest[0] instanceof ProperList) {
-                        return new ProperList(...$list, ...$rest[0]->all());
+                        return new ProperList(...$list, ...$rest[0]);
                     }
 
                     return DottedPair::fromForms(...array_merge($list, $rest));

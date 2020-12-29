@@ -1,6 +1,6 @@
 (define key "key")
 (define value "value")
-(define my-map (execute `{,key ,value}))
+(define my-map (eval `{,key ,value} (context-anchor)))
 (assert-equals my-map {"key" "value"})
 (assert-equals (list {key "value"}) '({key "value"}))
 ; (define three 3)

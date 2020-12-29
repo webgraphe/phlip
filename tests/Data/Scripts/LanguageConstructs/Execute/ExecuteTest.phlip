@@ -1,9 +1,0 @@
-(assert-equals 3 (execute '(+ 1 2)))
-(assert-equals 3 (execute '3))
-(assert-equals 3 (execute (cons '+ (cons 1 (cons 2 '())))))
-(assert-equals 7 (execute '(+ 1 2) '(+ 3 4)))
-
-(define (eval-formula formula) (execute `(let ((x 2) (y 3)) ,formula)))
-(assert-equals 5 (eval-formula '(+ x y)))
-(assert-equals 6 (eval-formula '(* x y)))
-(assert-equals -1 (eval-formula '(- x y)))

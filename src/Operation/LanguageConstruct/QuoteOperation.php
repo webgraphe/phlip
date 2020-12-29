@@ -6,9 +6,9 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\ProperList;
-use Webgraphe\Phlip\Operation\PrimaryOperation;
+use Webgraphe\Phlip\Operation\ManualOperation;
 
-class QuoteOperation extends PrimaryOperation
+class QuoteOperation extends ManualOperation
 {
     /** @var string */
     const IDENTIFIER = 'quote';

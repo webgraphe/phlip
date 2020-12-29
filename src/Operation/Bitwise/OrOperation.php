@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Bitwise;
 
-use Webgraphe\Phlip\Operation\StandardOperation;
+use Webgraphe\Phlip\Operation\AutomaticOperation;
 
-class OrOperation extends StandardOperation
+class OrOperation extends AutomaticOperation
 {
     /** @var string */
     const IDENTIFIER = 'bit-or';
