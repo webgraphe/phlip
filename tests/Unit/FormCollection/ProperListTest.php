@@ -198,7 +198,6 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
         );
     }
 
-
     public function testUnpacking()
     {
         $list = new ProperList(

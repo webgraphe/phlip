@@ -34,7 +34,6 @@ trait DefinesAssertionsInContexts
 
     /**
      * @return ContextContract
-     * @throws ContextException
      */
     protected function contextWithAssertions(): ContextContract
     {

@@ -73,9 +73,6 @@ class PhlipyTest extends TestCase
         ];
     }
 
-    /**
-     * @throws ContextException
-     */
     public function testUserErrors()
     {
         $context = Phlipy::interoperable()->getContext();
@@ -123,9 +120,6 @@ CODE;
         (new Phlipy(new Context()))->wrapPhpFunction('not a function');
     }
 
-    /**
-     * @throws ContextException
-     */
     public function testActiveInterop()
     {
         $this->expectException(RuntimeException::class);
