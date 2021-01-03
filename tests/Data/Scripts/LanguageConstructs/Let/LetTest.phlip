@@ -31,3 +31,11 @@
 )
 
 (assert-false (defined? factorial))
+
+(assert-equals
+    7
+    (let ((x 2))
+    (let (
+        (x 5)
+        (y x))
+        (+ x y))))

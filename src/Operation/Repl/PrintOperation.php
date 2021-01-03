@@ -11,7 +11,7 @@ use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\LexemeContract;
 use Webgraphe\Phlip\FormBuilder;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Operation\ManualOperation;
 use Webgraphe\Phlip\Stream\LexemeStream;
@@ -93,10 +93,10 @@ class PrintOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return bool
      */
-    protected function invoke(ContextContract $context, ProperList $forms): bool
+    protected function invoke(ContextContract $context, FormList $forms): bool
     {
         try {
             $argument = $context->execute($forms->assertHead());

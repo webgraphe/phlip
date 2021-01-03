@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\AutomaticOperation;
 
 class AtomOperation extends AutomaticOperation
@@ -19,7 +19,7 @@ class AtomOperation extends AutomaticOperation
             || null === $variable
             || is_array($variable) && 0 === count($variable)
             || $variable instanceof Atom
-            || $variable instanceof ProperList && 0 === count($variable);
+            || $variable instanceof FormList && 0 === count($variable);
     }
 
     /**

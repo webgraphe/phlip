@@ -9,7 +9,7 @@ use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\Map;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\FormCollection\Vector;
 
 class FormBuilder
@@ -30,7 +30,7 @@ class FormBuilder
         }
 
         if (null === $thing || false === $thing) {
-            return new ProperList();
+            return new FormList();
         }
 
         if (true === $thing) {
@@ -61,7 +61,7 @@ class FormBuilder
             return new Map(
                 ...array_map(
                     function ($key, $value) {
-                        return new ProperList($this->asForm($key), $this->asForm($value));
+                        return new FormList($this->asForm($key), $this->asForm($value));
                     },
                     array_keys($properties),
                     array_values($properties)

@@ -10,7 +10,7 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Traits\AssertsClasses;
 use Webgraphe\Phlip\Traits\AssertsObjects;
 
@@ -32,12 +32,12 @@ class ObjectOperation extends PhpInteroperableOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return mixed|void
      * @throws AssertionException
      * @throws ContextException
      */
-    protected function invoke(ContextContract $context, ProperList $forms)
+    protected function invoke(ContextContract $context, FormList $forms)
     {
         $object = static::assertObject($context->execute($forms->assertHead()));
         $identifier = is_object($object) ? get_class($object) : gettype($object);

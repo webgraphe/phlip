@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
 /**
@@ -29,12 +29,12 @@ class EvalOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return mixed
      * @throws ContextException
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms)
+    protected function invoke(ContextContract $context, FormList $forms)
     {
         $result = null;
 

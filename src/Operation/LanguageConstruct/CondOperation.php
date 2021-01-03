@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
 class CondOperation extends ManualOperation
@@ -14,15 +14,15 @@ class CondOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return mixed
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms)
+    protected function invoke(ContextContract $context, FormList $forms)
     {
         while ($condition = $forms->getHead()) {
             $forms = $forms->getTail();
-            $condition = ProperList::assertStaticType($condition);
+            $condition = FormList::assertStaticType($condition);
             if ($context->execute($condition->assertHead())) {
                 return $context->execute($condition->assertTailHead());
             }

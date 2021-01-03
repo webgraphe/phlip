@@ -7,14 +7,14 @@ use Throwable;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\ProgramException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 
 class Program
 {
-    /** @var ProperList */
+    /** @var FormList */
     private $statements;
 
-    public function __construct(ProperList $statements)
+    public function __construct(FormList $statements)
     {
         $this->statements = $statements;
     }

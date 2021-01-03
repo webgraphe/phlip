@@ -22,7 +22,7 @@ class FormBuilderTest extends TestCase
         $identifier = IdentifierAtom::fromString('identifier');
         $this->assertTrue($identifier->equals($builder->asForm($identifier)));
 
-        $list = new FormCollection\ProperList($identifier);
+        $list = new FormCollection\FormList($identifier);
         $this->assertTrue($list->equals($builder->asForm($list)));
     }
 

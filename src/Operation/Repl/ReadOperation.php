@@ -8,7 +8,7 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Operation\ManualOperation;
 use Webgraphe\Phlip\Parser;
@@ -31,7 +31,7 @@ class ReadOperation extends ManualOperation
     private $lexer;
     /** @var Parser */
     private $parser;
-    /** @var ProperList|null */
+    /** @var FormList|null */
     private $result;
 
     public function __construct(Lexer $lexer = null, Parser $parser = null, Closure $prompt = null)
@@ -94,13 +94,13 @@ class ReadOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return FormContract
      * @throws AssertionException
      * @throws LexerException
      * @throws ParserException
      */
-    protected function invoke(ContextContract $context, ProperList $forms): FormContract
+    protected function invoke(ContextContract $context, FormList $forms): FormContract
     {
         if ($this->result && ($head = $this->result->getHead())) {
             $this->result = $this->result->getTail();

@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\ContextAnchor;
 use Webgraphe\Phlip\Contracts\ContextContract;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
 class ContextAnchorOperation extends ManualOperation
@@ -19,10 +19,10 @@ class ContextAnchorOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return mixed|void
      */
-    protected function invoke(ContextContract $context, ProperList $forms): ContextAnchor
+    protected function invoke(ContextContract $context, FormList $forms): ContextAnchor
     {
         $global = $context;
         while ($global->getParent()) {

@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Macro;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
@@ -24,13 +24,13 @@ class MacroExpandOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return FormContract
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms): FormContract
+    protected function invoke(ContextContract $context, FormList $forms): FormContract
     {
-        $statement = ProperList::assertStaticType($context->execute($forms->assertHead()));
+        $statement = FormList::assertStaticType($context->execute($forms->assertHead()));
         $macro = Macro::assertStaticType($context->execute($statement->assertHead()));
 
         return $macro->expand($statement->getTail());

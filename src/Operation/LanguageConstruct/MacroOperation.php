@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Macro;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
@@ -23,15 +23,15 @@ class MacroOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return Macro
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms): Macro
+    protected function invoke(ContextContract $context, FormList $forms): Macro
     {
         return new Macro(
             $context,
-            ProperList::assertStaticType($forms->assertHead()),
+            FormList::assertStaticType($forms->assertHead()),
             $forms->assertTailHead()
         );
     }

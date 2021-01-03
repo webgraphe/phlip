@@ -9,7 +9,7 @@ use Webgraphe\Phlip\Contracts\CodeAnchorContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\MarkedForm;
 use Webgraphe\Phlip\Tests\Unit\MarkedFormTest;
 
@@ -22,7 +22,7 @@ class QuotedFormTest extends MarkedFormTest
      */
     protected function createForm(CodeAnchorContract $codeAnchor = null): FormContract
     {
-        return new ProperList(
+        return new FormList(
             IdentifierAtom::fromString('+', $codeAnchor),
             NumberAtom::fromString('2'),
             NumberAtom::fromString('3')

@@ -52,6 +52,6 @@ abstract class Atom implements LexemeContract, FormContract
             return $value;
         }
 
-        throw new AssertionException('Invalid identifier');
+        throw new AssertionException("Invalid identifier '{$value}'");
     }
 }

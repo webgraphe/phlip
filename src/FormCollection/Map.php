@@ -13,14 +13,14 @@ use Webgraphe\Phlip\Symbol\Opening;
 
 class Map extends FormCollection
 {
-    /** @var ProperList[] */
+    /** @var FormList[] */
     private $pairs = [];
 
     /**
-     * @param ProperList ...$pairs
+     * @param FormList ...$pairs
      * @throws AssertionException
      */
-    final public function __construct(ProperList ...$pairs)
+    final public function __construct(FormList ...$pairs)
     {
         foreach ($pairs as $pair) {
             if (2 !== ($count = $pair->count())) {
@@ -77,7 +77,7 @@ class Map extends FormCollection
     }
 
     /**
-     * @return ProperList[]
+     * @return FormList[]
      */
     public function all(): array
     {
@@ -101,7 +101,7 @@ class Map extends FormCollection
      */
     protected function stringifyFormItem(FormContract $form): string
     {
-        $list = ProperList::assertStaticType($form);
+        $list = FormList::assertStaticType($form);
 
         return (string)$list->assertHead() . ' ' . (string)$list->assertTailHead();
     }

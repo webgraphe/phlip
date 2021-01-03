@@ -12,7 +12,7 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Traits\AssertsClasses;
 
 class StaticOperation extends PhpInteroperableOperation
@@ -32,13 +32,13 @@ class StaticOperation extends PhpInteroperableOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return mixed|void
      * @throws AssertionException
      * @throws ContextException
      * @throws ReflectionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms)
+    protected function invoke(ContextContract $context, FormList $forms)
     {
         $class = static::assertClassEnabled(
             $this->assertPhpInteroperableContext($context, static::class),

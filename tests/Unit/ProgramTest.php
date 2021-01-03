@@ -12,7 +12,7 @@ use Webgraphe\Phlip\Exception\IOException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Exception\ProgramException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\Interop\CloneOperation;
 use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\Program;
@@ -26,7 +26,7 @@ class ProgramTest extends TestCase
     public function testProgram()
     {
         $program = new Program(
-            new ProperList(
+            new FormList(
                 NumberAtom::fromString('1'),
                 NumberAtom::fromString('2'),
                 NumberAtom::fromString('3')
@@ -93,7 +93,7 @@ class ProgramTest extends TestCase
     public function testExecuteWithParameters()
     {
         $this->assertEquals(
-            (string)(new ProperList(
+            (string)(new FormList(
                 NumberAtom::fromString('1'),
                 NumberAtom::fromString('2'),
                 NumberAtom::fromString('3')

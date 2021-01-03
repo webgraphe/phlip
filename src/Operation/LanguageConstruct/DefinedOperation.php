@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
 class DefinedOperation extends ManualOperation
@@ -15,11 +15,11 @@ class DefinedOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return bool
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms): bool
+    protected function invoke(ContextContract $context, FormList $forms): bool
     {
         $variable = IdentifierAtom::assertStaticType($forms->getHead());
 

@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormBuilder;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\AutomaticOperation;
 
 class ListOperation extends AutomaticOperation
@@ -22,12 +22,12 @@ class ListOperation extends AutomaticOperation
 
     /**
      * @param array ...$arguments
-     * @return ProperList
+     * @return FormList
      * @throws AssertionException
      */
-    public function __invoke(...$arguments): ProperList
+    public function __invoke(...$arguments): FormList
     {
-        return new ProperList(
+        return new FormList(
             ...array_map(
                 function ($argument) {
                     return $this->formBuilder->asForm($argument);

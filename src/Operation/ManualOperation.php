@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Operation;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\ManualOperationContract;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation;
 
 abstract class ManualOperation extends Operation implements ManualOperationContract
@@ -17,13 +17,13 @@ abstract class ManualOperation extends Operation implements ManualOperationContr
      */
     public final function __invoke(ContextContract $context, FormContract ...$forms)
     {
-        return $this->invoke($context, new ProperList(...$forms));
+        return $this->invoke($context, new FormList(...$forms));
     }
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return mixed
      */
-    abstract protected function invoke(ContextContract $context, ProperList $forms);
+    abstract protected function invoke(ContextContract $context, FormList $forms);
 }

@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\FormCollection\Map;
 use Webgraphe\Phlip\FormCollection\DottedPair;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Stream\LexemeStream;
 use Webgraphe\Phlip\Symbol\Closing;
@@ -21,12 +21,12 @@ class Parser
 {
     /**
      * @param LexemeStream $stream
-     * @return ProperList
+     * @return FormList
      * @throws Exception\ParserException
      */
-    public function parseLexemeStream(LexemeStream $stream): ProperList
+    public function parseLexemeStream(LexemeStream $stream): FormList
     {
-        /** @var ProperList[] $statements */
+        /** @var FormList[] $statements */
         $statements = [];
         try {
             while ($stream->valid()) {
@@ -40,7 +40,7 @@ class Parser
             throw new Exception\ParserException('Failed parsing lexeme stream', 0, $exception);
         }
 
-        return new ProperList(...$statements);
+        return new FormList(...$statements);
     }
 
     /**
@@ -108,8 +108,8 @@ class Parser
                             "Malformed dot-notation pair; right-hand side has too many forms"
                         );
                     }
-                    if ($rest[0] instanceof ProperList) {
-                        return new ProperList(...$list, ...$rest[0]);
+                    if ($rest[0] instanceof FormList) {
+                        return new FormList(...$list, ...$rest[0]);
                     }
 
                     return DottedPair::fromForms(...array_merge($list, $rest));
@@ -121,7 +121,7 @@ class Parser
         }
         $stream->next();
 
-        return new ProperList(...$list);
+        return new FormList(...$list);
     }
 
     /**
@@ -161,7 +161,7 @@ class Parser
 
         $pairs = [];
         for ($i = 0; $i < $count; $i += 2) {
-            $pairs[] = new ProperList($keyValues[$i], $keyValues[$i + 1]);
+            $pairs[] = new FormList($keyValues[$i], $keyValues[$i + 1]);
         }
 
         return new Map(...$pairs);

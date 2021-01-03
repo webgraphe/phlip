@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
 class LetOperation extends ManualOperation
@@ -15,11 +15,11 @@ class LetOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return mixed
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms)
+    protected function invoke(ContextContract $context, FormList $forms)
     {
         $context = $context->stack();
         $head = $forms->assertHead();
@@ -28,7 +28,7 @@ class LetOperation extends ManualOperation
         $letName = $head instanceof IdentifierAtom ? $head->getValue() : null;
         [$parameters, $arguments] = $this->buildParameterArguments(
             $context,
-            ProperList::assertStaticType($letName ? $tail->assertHead() : $head)
+            FormList::assertStaticType($letName ? $tail->assertHead() : $head)
         );
         $statements = $letName ? $tail->getTail() : $tail;
 
@@ -43,18 +43,18 @@ class LetOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $variables
+     * @param FormList $variables
      * @return array
      * @throws AssertionException
      */
-    protected function buildParameterArguments(ContextContract $context, ProperList $variables): array
+    protected function buildParameterArguments(ContextContract $context, FormList $variables): array
     {
         $parameters = [];
         $arguments = [];
-        while (($head = $variables->getHead()) && $variable = ProperList::assertStaticType($head)) {
+        while (($head = $variables->getHead()) && $variable = FormList::assertStaticType($head)) {
             $variables = $variables->getTail();
             $name = $variable->assertHead();
-            if ($name instanceof ProperList) {
+            if ($name instanceof FormList) {
                 $parameter = IdentifierAtom::assertStaticType($name->getHead());
                 $argument = LambdaOperation::invokeStatic(
                     $context,
@@ -76,7 +76,7 @@ class LetOperation extends ManualOperation
             $arguments[] = $argument;
         }
 
-        return [new ProperList(...$parameters), $arguments];
+        return [new FormList(...$parameters), $arguments];
     }
 
     /**

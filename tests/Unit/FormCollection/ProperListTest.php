@@ -16,7 +16,7 @@ use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\FormCollection\Map;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\FormCollection\Vector;
 use Webgraphe\Phlip\Tests\Unit\FormCollectionTest;
 
@@ -24,17 +24,17 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
 {
     /**
      * @param CodeAnchor|null $anchor
-     * @return FormCollection|ProperList
+     * @return FormCollection|FormList
      * @throws AssertionException
      */
     protected function createFormCollection(CodeAnchor $anchor = null): FormCollection
     {
-        return new ProperList(
+        return new FormList(
             IdentifierAtom::fromString('test', $anchor),
             KeywordAtom::fromString('keyword'),
             StringAtom::fromString('string'),
             new Vector(NumberAtom::fromString('1'), NumberAtom::fromString('2'), NumberAtom::fromString('3')),
-            new Map(new ProperList(StringAtom::fromString('key'), StringAtom::fromString('value')))
+            new Map(new FormList(StringAtom::fromString('key'), StringAtom::fromString('value')))
         );
     }
 
@@ -44,10 +44,10 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
      */
     public function testStringConvertible()
     {
-        $this->assertEquals('()', (string)new ProperList());
+        $this->assertEquals('()', (string)new FormList());
         $this->assertEquals(
             '(test 1 2 3)',
-            (string)new ProperList(
+            (string)new FormList(
                 IdentifierAtom::fromString('test'),
                 NumberAtom::fromString('1'),
                 NumberAtom::fromString('2'),
@@ -66,7 +66,7 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
         $list = $this->createFormCollection();
         $context = new Context();
         $context->define(IdentifierAtom::assertStaticType($list->assertHead())->getValue(), $this);
-        $this->assertTrue($list->getTail()->equals(new ProperList(...$context->execute($list))));
+        $this->assertTrue($list->getTail()->equals(new FormList(...$context->execute($list))));
 
         $list = $this->createFormCollection();
         $context = new Context();
@@ -93,7 +93,7 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
      */
     public function testNoHead()
     {
-        $list = new ProperList();
+        $list = new FormList();
         $this->assertEmpty($list->all());
         $this->assertCount(0, $list);
         $this->assertTrue($list->isEmpty());
@@ -112,7 +112,7 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
     public function testEmptyTail()
     {
         $form = NumberAtom::fromString('42');
-        $list = new ProperList($form);
+        $list = new FormList($form);
         $this->assertEmpty($list->getTail()->all());
         $this->assertCount(1, $list);
         $this->assertFalse($list->isEmpty());
@@ -130,11 +130,11 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
      */
     public function testAsList()
     {
-        $list = new ProperList();
-        $this->assertEquals($list, ProperList::asList($list));
+        $list = new FormList();
+        $this->assertEquals($list, FormList::asList($list));
 
         $identifier = IdentifierAtom::fromString('identifier');
-        $this->assertTrue(ProperList::asList($identifier)->equals(new ProperList($identifier)));
+        $this->assertTrue(FormList::asList($identifier)->equals(new FormList($identifier)));
     }
 
     /**
@@ -143,7 +143,7 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
      */
     public function testNotCallable()
     {
-        $list = new ProperList(IdentifierAtom::fromString('not-callable'));
+        $list = new FormList(IdentifierAtom::fromString('not-callable'));
         $context = new Context();
         $context->define('not-callable', "This is a callable");
 
@@ -169,7 +169,7 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
                 throw new Exception('Fail', 666);
             }
         );
-        $list = new ProperList(IdentifierAtom::fromString('fail'));
+        $list = new FormList(IdentifierAtom::fromString('fail'));
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Fail');
@@ -185,14 +185,14 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
     {
         $this->assertEquals(
             '((test) (42) (3.14) (#keyword))',
-            (string)(new ProperList(
+            (string)(new FormList(
                 IdentifierAtom::fromString('test'),
                 NumberAtom::fromString('42'),
                 NumberAtom::fromString('3.14'),
                 KeywordAtom::fromString('keyword')
             ))->map(
                 function (FormContract $form) {
-                    return ProperList::asList($form);
+                    return FormList::asList($form);
                 }
             )
         );
@@ -200,7 +200,7 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
 
     public function testUnpacking()
     {
-        $list = new ProperList(
+        $list = new FormList(
             NumberAtom::fromString('3'),
             NumberAtom::fromString('4'),
             NumberAtom::fromString('5')

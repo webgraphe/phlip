@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
 class LambdaOperation extends ManualOperation
@@ -17,28 +17,28 @@ class LambdaOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $parameters
+     * @param FormList $parameters
      * @param FormContract ...$statements
      * @return Closure
      * @throws AssertionException
      */
     public static function invokeStatic(
         ContextContract $context,
-        ProperList $parameters,
+        FormList $parameters,
         FormContract ...$statements
     ): Closure {
-        return (new static())->invoke($context, new ProperList($parameters, ...$statements));
+        return (new static())->invoke($context, new FormList($parameters, ...$statements));
     }
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return Closure
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms): Closure
+    protected function invoke(ContextContract $context, FormList $forms): Closure
     {
-        $parameters = ProperList::assertStaticType($forms->assertHead());
+        $parameters = FormList::assertStaticType($forms->assertHead());
         $statements = $forms->getTail();
 
         return function () use ($context, $parameters, $statements) {
@@ -64,12 +64,12 @@ class LambdaOperation extends ManualOperation
     }
 
     /**
-     * @param ProperList $parameters
+     * @param FormList $parameters
      * @param array $arguments
      * @return array
      * @throws AssertionException
      */
-    protected static function assertArgumentsMatchingParameters(ProperList $parameters, array $arguments): array
+    protected static function assertArgumentsMatchingParameters(FormList $parameters, array $arguments): array
     {
         $argumentCount = count($arguments);
         $parameterCount = count($parameters);

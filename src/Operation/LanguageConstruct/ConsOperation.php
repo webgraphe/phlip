@@ -6,7 +6,7 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection\DottedPair;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\AutomaticOperation;
 use Webgraphe\Phlip\Traits\AssertsTypes;
 
@@ -30,7 +30,7 @@ class ConsOperation extends AutomaticOperation
 
     /**
      * @param FormContract ...$arguments
-     * @return ProperList|DottedPair|FormContract
+     * @return FormList|DottedPair|FormContract
      * @throws AssertionException
      */
     public function __invoke(...$arguments): FormContract
@@ -38,8 +38,8 @@ class ConsOperation extends AutomaticOperation
         $head = $this->formBuilder->asForm(array_shift($arguments));
         $tail = $this->formBuilder->asForm(array_shift($arguments));
 
-        if ($tail instanceof ProperList) {
-            return new ProperList($head, ...$tail);
+        if ($tail instanceof FormList) {
+            return new FormList($head, ...$tail);
         }
 
         return DottedPair::fromForms($head, $tail);

@@ -7,7 +7,7 @@ use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
 use Webgraphe\Phlip\Exception\ProgramException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Phlipy;
 use Webgraphe\Phlip\PhpClassInteroperableContext;
 use Webgraphe\Phlip\Tests\CallableManualOperationOperation;
@@ -41,7 +41,7 @@ trait DefinesAssertionsInContexts
         $context->define(
             'assert-true',
             new CallableManualOperationOperation(
-                function (ContextContract $context, ProperList $expressions) {
+                function (ContextContract $context, FormList $expressions) {
                     $head = $expressions->assertHead();
                     $this->assertTrue((bool)$context->execute($head), "Expected $head to be true");
                 }
@@ -50,7 +50,7 @@ trait DefinesAssertionsInContexts
         $context->define(
             'assert-false',
             new CallableManualOperationOperation(
-                function (ContextContract $context, ProperList $expressions) {
+                function (ContextContract $context, FormList $expressions) {
                     $head = $expressions->assertHead();
                     $this->assertFalse((bool)$context->execute($head), "Expected $head to be false");
                 }
@@ -59,7 +59,7 @@ trait DefinesAssertionsInContexts
         $context->define(
             'assert-equals',
             new CallableManualOperationOperation(
-                function (ContextContract $context, ProperList $expressions) {
+                function (ContextContract $context, FormList $expressions) {
                     $head = $context->execute($expressions->assertHead());
                     $toeExpression = $expressions->assertTailHead();
                     $toe = $context->execute($toeExpression);
@@ -79,7 +79,7 @@ trait DefinesAssertionsInContexts
         $context->define(
             'assert-not-equals',
             new CallableManualOperationOperation(
-                function (ContextContract $context, ProperList $expressions) {
+                function (ContextContract $context, FormList $expressions) {
                     $head = $context->execute($expressions->assertHead());
                     $toeExpression = $expressions->assertTailHead();
                     $toe = $context->execute($toeExpression);
@@ -100,7 +100,7 @@ trait DefinesAssertionsInContexts
         $context->define(
             'assert-exception',
             new CallableManualOperationOperation(
-                function (ContextContract $context, ProperList $expressions) {
+                function (ContextContract $context, FormList $expressions) {
                     /** @var self $test */
                     $name = $context->execute($expressions->assertHead());
                     $this->expectException($name);

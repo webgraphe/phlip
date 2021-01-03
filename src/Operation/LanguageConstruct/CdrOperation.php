@@ -6,7 +6,7 @@ use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\DottedPair;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
 class CdrOperation extends ManualOperation
@@ -24,17 +24,17 @@ class CdrOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return FormContract
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms): FormContract
+    protected function invoke(ContextContract $context, FormList $forms): FormContract
     {
         $consCell = $context->execute($forms->assertHead());
         if ($consCell instanceof DottedPair) {
             return $consCell->getSecond();
         }
 
-        return ProperList::assertStaticType($consCell)->getTail();
+        return FormList::assertStaticType($consCell)->getTail();
     }
 }

@@ -12,7 +12,7 @@ use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
 
-class ProperList extends FormCollection
+class FormList extends FormCollection
 {
     use AssertsStaticType;
 
@@ -24,13 +24,13 @@ class ProperList extends FormCollection
         $this->forms = $forms;
     }
 
-    public static function asList(FormContract $form): ProperList
+    public static function asList(FormContract $form): FormList
     {
-        if ($form instanceof ProperList) {
+        if ($form instanceof FormList) {
             return $form;
         }
 
-        return new ProperList($form);
+        return new FormList($form);
     }
 
     public function getHead(): ?FormContract
@@ -71,9 +71,9 @@ class ProperList extends FormCollection
         throw new AssertionException($message);
     }
 
-    public function getTail(): ProperList
+    public function getTail(): FormList
     {
-        return new ProperList(...array_slice($this->forms, 1, null, false));
+        return new FormList(...array_slice($this->forms, 1, null, false));
     }
 
     /**

@@ -40,7 +40,7 @@ class DottedPair extends FormCollection
             return new static($left, static::fromForms($right, ...$others));
         }
 
-        if ($right instanceof ProperList) {
+        if ($right instanceof FormList) {
             throw new AssertionException("Unexpected proper list");
         }
 

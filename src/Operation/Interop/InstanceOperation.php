@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\Interop;
 
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
 use Webgraphe\Phlip\Traits\AssertsClasses;
 
@@ -25,11 +25,11 @@ class InstanceOperation extends ManualOperation
 
     /**
      * @param ContextContract $context
-     * @param ProperList $forms
+     * @param FormList $forms
      * @return bool
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, ProperList $forms): bool
+    protected function invoke(ContextContract $context, FormList $forms): bool
     {
         $thing = $context->execute($forms->assertHead());
         $class = static::assertClassExists($forms->assertTailHead());

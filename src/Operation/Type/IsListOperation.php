@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Type;
 
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\AutomaticOperation;
 
 class IsListOperation extends AutomaticOperation
@@ -14,7 +14,7 @@ class IsListOperation extends AutomaticOperation
     {
         $argument = array_shift($arguments);
 
-        return $argument instanceof ProperList;
+        return $argument instanceof FormList;
     }
 
     /**

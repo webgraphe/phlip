@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip\Tests;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\ManualOperationContract;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 
 class CallableManualOperationOperation implements ManualOperationContract
 {
@@ -24,6 +24,6 @@ class CallableManualOperationOperation implements ManualOperationContract
      */
     public function __invoke(ContextContract $context, FormContract ...$forms)
     {
-        return call_user_func($this->callback, $context, new ProperList(...$forms));
+        return call_user_func($this->callback, $context, new FormList(...$forms));
     }
 }

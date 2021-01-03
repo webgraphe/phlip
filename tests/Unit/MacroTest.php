@@ -8,7 +8,7 @@ use Webgraphe\Phlip\Context;
 use Webgraphe\Phlip\Contracts\ContextContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\ContextException;
-use Webgraphe\Phlip\FormCollection\ProperList;
+use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Macro;
 use Webgraphe\Phlip\MarkedForm\QuasiquotedForm;
 use Webgraphe\Phlip\MarkedForm\UnquotedForm;
@@ -28,7 +28,7 @@ class MacroTest extends TestCase
 
         $this->assertTrue(
             $this->getExpectedSquareExpansion(3)->equals(
-                $square->expand(new ProperList(NumberAtom::fromString('3')))
+                $square->expand(new FormList(NumberAtom::fromString('3')))
             )
         );
 
@@ -48,7 +48,7 @@ class MacroTest extends TestCase
         $this->assertTrue(
             $this->getExpectedPythagorasExpansion(3, 4)->equals(
                 $pythagoras->expand(
-                    new ProperList(
+                    new FormList(
                         NumberAtom::fromString('3'),
                         NumberAtom::fromString('4')
                     )
@@ -73,9 +73,9 @@ class MacroTest extends TestCase
             // (macro square (a) `(* ,a ,a))
             new Macro(
                 $context,
-                new ProperList($a),
+                new FormList($a),
                 new QuasiquotedForm(
-                    new ProperList(
+                    new FormList(
                         IdentifierAtom::fromString('*'),
                         new UnquotedForm($a),
                         new UnquotedForm($a)
@@ -103,15 +103,15 @@ class MacroTest extends TestCase
             'pythagoras',
             new Macro(
                 $context,
-                new ProperList($a, $b),
+                new FormList($a, $b),
                 // (macro pythagoras (a b) `(sqrt (+ (square ,a) (square ,b))))
                 new QuasiquotedForm(
-                    new ProperList(
+                    new FormList(
                         IdentifierAtom::fromString('square-root'),
-                        new ProperList(
+                        new FormList(
                             IdentifierAtom::fromString('+'),
-                            new ProperList(IdentifierAtom::fromString('square'), new UnquotedForm($a)),
-                            new ProperList(IdentifierAtom::fromString('square'), new UnquotedForm($b))
+                            new FormList(IdentifierAtom::fromString('square'), new UnquotedForm($a)),
+                            new FormList(IdentifierAtom::fromString('square'), new UnquotedForm($b))
                         )
                     )
                 )
@@ -124,35 +124,35 @@ class MacroTest extends TestCase
     /**
      * @param int $a
      * @param int $b
-     * @return ProperList
+     * @return FormList
      * @throws AssertionException
      */
-    private function getExpectedPythagorasExpansion(int $a, int $b): ProperList
+    private function getExpectedPythagorasExpansion(int $a, int $b): FormList
     {
         $atomA = NumberAtom::fromString((string)$a);
         $atomB = NumberAtom::fromString((string)$b);
 
         // (square-root (+ (* a a) (* b b)))
-        return new ProperList(
+        return new FormList(
             IdentifierAtom::fromString('square-root'),
-            new ProperList(
+            new FormList(
                 IdentifierAtom::fromString('+'),
-                new ProperList(IdentifierAtom::fromString('*'), $atomA, $atomA),
-                new ProperList(IdentifierAtom::fromString('*'), $atomB, $atomB)
+                new FormList(IdentifierAtom::fromString('*'), $atomA, $atomA),
+                new FormList(IdentifierAtom::fromString('*'), $atomB, $atomB)
             )
         );
     }
 
     /**
      * @param int $a
-     * @return ProperList
+     * @return FormList
      * @throws AssertionException
      */
-    private function getExpectedSquareExpansion(int $a): ProperList
+    private function getExpectedSquareExpansion(int $a): FormList
     {
         $atomA = NumberAtom::fromString((string)$a);
 
         // (* a a)
-        return new ProperList(IdentifierAtom::fromString('*'), $atomA, $atomA);
+        return new FormList(IdentifierAtom::fromString('*'), $atomA, $atomA);
     }
 }
