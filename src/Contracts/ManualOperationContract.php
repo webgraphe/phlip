@@ -3,8 +3,7 @@
 namespace Webgraphe\Phlip\Contracts;
 
 /**
- * Mandatory for operations that require non-evaluated forms.
- * @see AutomaticOperationContract A mutually exclusive contract for operations that expect evaluated forms.
+ * An operation that inherits this contract is in charge of evaluating every single form.
  */
 interface ManualOperationContract extends OperationContract
 {
