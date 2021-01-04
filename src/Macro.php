@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip;
 
 use Closure;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\ManualOperationContract;
 use Webgraphe\Phlip\FormCollection\FormList;
@@ -18,14 +18,14 @@ class Macro implements ManualOperationContract
     private $lambda;
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $parameters
      * @param FormContract $body
      * @throws Exception\AssertionException
      */
-    public function __construct(ContextContract $context, FormList $parameters, FormContract $body)
+    public function __construct(ScopeContract $scope, FormList $parameters, FormContract $body)
     {
-        $this->lambda = LambdaOperation::invokeStatic($context, $parameters, $body);
+        $this->lambda = LambdaOperation::invokeStatic($scope, $parameters, $body);
     }
 
     /**
@@ -42,13 +42,13 @@ class Macro implements ManualOperationContract
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormContract ...$forms
      * @return mixed
      * @throws Exception\AssertionException
      */
-    public function __invoke(ContextContract $context, FormContract ...$forms)
+    public function __invoke(ScopeContract $scope, FormContract ...$forms)
     {
-        return $context->execute($this->expand(new FormList(...$forms)));
+        return $scope->execute($this->expand(new FormList(...$forms)));
     }
 }

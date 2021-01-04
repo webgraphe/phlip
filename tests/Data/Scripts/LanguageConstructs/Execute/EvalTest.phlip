@@ -1,5 +1,5 @@
 (let
-    ((env (context-anchor)))
+    ((env (scope-anchor)))
 
     (assert-equals 3 (eval '(+ 1 2) env))
     (assert-equals 3 (eval '3 env))

@@ -3,9 +3,9 @@
 namespace Webgraphe\Phlip\Tests\Unit;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Scope;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\Tests\TestCase;
@@ -28,84 +28,84 @@ class FormBuilderTest extends TestCase
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testNull()
     {
         $builder = new FormBuilder();
 
-        $this->assertNull((new Context())->execute($builder->asForm(null)));
+        $this->assertNull((new Scope())->execute($builder->asForm(null)));
     }
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testTrue()
     {
         $builder = new FormBuilder();
 
-        $this->assertNotEmpty((new Context())->execute($builder->asForm(true)));
+        $this->assertNotEmpty((new Scope())->execute($builder->asForm(true)));
     }
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testFalse()
     {
         $builder = new FormBuilder();
 
-        $this->assertEmpty((new Context())->execute($builder->asForm(false)));
+        $this->assertEmpty((new Scope())->execute($builder->asForm(false)));
     }
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testString()
     {
         $builder = new FormBuilder();
 
-        $this->assertEquals("string", (new Context())->execute($builder->asForm("string")));
+        $this->assertEquals("string", (new Scope())->execute($builder->asForm("string")));
     }
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testNumeric()
     {
         $builder = new FormBuilder();
 
-        $this->assertEquals(0, (new Context())->execute($builder->asForm(0)));
-        $this->assertEquals(42, (new Context())->execute($builder->asForm(42)));
-        $this->assertEquals(3.14, (new Context())->execute($builder->asForm(3.14)));
+        $this->assertEquals(0, (new Scope())->execute($builder->asForm(0)));
+        $this->assertEquals(42, (new Scope())->execute($builder->asForm(42)));
+        $this->assertEquals(3.14, (new Scope())->execute($builder->asForm(3.14)));
     }
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testVector()
     {
         $builder = new FormBuilder();
 
-        $this->assertEquals([], (new Context())->execute($builder->asForm([])));
-        $this->assertEquals([1, 2, 3], (new Context())->execute($builder->asForm([1, 2, 3])));
+        $this->assertEquals([], (new Scope())->execute($builder->asForm([])));
+        $this->assertEquals([1, 2, 3], (new Scope())->execute($builder->asForm([1, 2, 3])));
     }
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testMap()
     {
         $builder = new FormBuilder();
 
-        $this->assertEquals((object)[], (new Context())->execute($builder->asForm((object)[])));
+        $this->assertEquals((object)[], (new Scope())->execute($builder->asForm((object)[])));
         $object = (object)['key' => 'value', 'values' => [1, 2]];
-        $this->assertEquals($object, (new Context())->execute($builder->asForm($object)));
+        $this->assertEquals($object, (new Scope())->execute($builder->asForm($object)));
     }
 
     /**

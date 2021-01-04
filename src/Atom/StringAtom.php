@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Atom;
 
 use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\CodeAnchorContract;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 
 class StringAtom extends Atom
 {
@@ -35,7 +35,7 @@ class StringAtom extends Atom
         return parent::getValue();
     }
 
-    public function evaluate(ContextContract $context): string
+    public function evaluate(ScopeContract $scope): string
     {
         return $this->getValue();
     }

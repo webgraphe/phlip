@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Closure;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\FormList;
@@ -16,33 +16,33 @@ class LambdaOperation extends ManualOperation
     const IDENTIFIER = 'lambda';
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $parameters
      * @param FormContract ...$statements
      * @return Closure
      * @throws AssertionException
      */
     public static function invokeStatic(
-        ContextContract $context,
+        ScopeContract $scope,
         FormList $parameters,
         FormContract ...$statements
     ): Closure {
-        return (new static())->invoke($context, new FormList($parameters, ...$statements));
+        return (new static())->invoke($scope, new FormList($parameters, ...$statements));
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return Closure
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, FormList $forms): Closure
+    protected function invoke(ScopeContract $scope, FormList $forms): Closure
     {
         $parameters = FormList::assertStaticType($forms->assertHead());
         $statements = $forms->getTail();
 
-        return function () use ($context, $parameters, $statements) {
-            $context = $context->stack();
+        return function () use ($scope, $parameters, $statements) {
+            $scope = $scope->stack();
 
             $arguments = static::assertArgumentsMatchingParameters($parameters, func_get_args());
 
@@ -50,12 +50,12 @@ class LambdaOperation extends ManualOperation
                 $argument = array_shift($arguments);
                 $parameter = IdentifierAtom::assertStaticType($parameters->assertHead());
                 $parameters = $parameters->getTail();
-                $context->let($parameter->getValue(), $argument);
+                $scope->let($parameter->getValue(), $argument);
             }
 
             $result = null;
             while ($statement = $statements->getHead()) {
-                $result = $context->execute($statement);
+                $result = $scope->execute($statement);
                 $statements = $statements->getTail();
             }
 

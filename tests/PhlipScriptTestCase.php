@@ -3,13 +3,13 @@
 namespace Webgraphe\Phlip\Tests;
 
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\Exception\IOException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\Program;
-use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInContexts;
+use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInScopes;
 
 /**
  * Used by phlipunit.
@@ -17,7 +17,7 @@ use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInContexts;
  */
 class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
 {
-    use DefinesAssertionsInContexts;
+    use DefinesAssertionsInScopes;
 
     private $file;
 
@@ -32,13 +32,13 @@ class PhlipScriptTestCase extends \PHPUnit\Framework\TestCase
      * @throws LexerException
      * @throws ParserException
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      * @throws ProgramException
      */
     public function testScript()
     {
-        $context = $this->contextWithAssertions();
-        Program::parseFile($this->file)->execute($context);
+        $scope = $this->scopeWithAssertions();
+        Program::parseFile($this->file)->execute($scope);
     }
 
     public function count(): int

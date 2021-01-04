@@ -4,8 +4,8 @@ namespace Webgraphe\Phlip\Tests\Unit;
 
 use RuntimeException;
 use Throwable;
-use Webgraphe\Phlip\Context;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Scope;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\Lexer;
 use Webgraphe\Phlip\Operation\Repl\PrintOperation;
@@ -20,14 +20,14 @@ class PhlipyTest extends TestCase
     /**
      * @dataProvider everythingData
      * @param array $options
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testEverything(array $options = [])
     {
-        $this->assertInstanceOf(Context::class, $context = Phlipy::interoperable()->withRepl($options)->getContext());
+        $this->assertInstanceOf(Scope::class, $scope = Phlipy::interoperable()->withRepl($options)->getScope());
 
         /** @var ReadOperation $read */
-        $read = $context->get('read');
+        $read = $scope->get('read');
         $this->assertInstanceOf(ReadOperation::class, $read);
 
         $this->assertEquals($read->isMultiLine(), !empty($options['read.multi-line']));
@@ -36,7 +36,7 @@ class PhlipyTest extends TestCase
         }
 
         /** @var PrintOperation $print */
-        $print = $context->get('print');
+        $print = $scope->get('print');
         $this->assertInstanceOf(PrintOperation::class, $print);
         if ($formBuilder = ($options['print.form-builder'] ?? null)) {
             $this->assertEquals($print->getFormBuilder(), $formBuilder);
@@ -75,7 +75,7 @@ class PhlipyTest extends TestCase
 
     public function testUserErrors()
     {
-        $context = Phlipy::interoperable()->getContext();
+        $scope = Phlipy::interoperable()->getScope();
         $code = <<<CODE
 (notice "a notification")
 (warning "a warning")
@@ -94,7 +94,7 @@ CODE;
         );
 
         try {
-            Program::parse($code)->execute($context);
+            Program::parse($code)->execute($scope);
         } catch (Throwable $t) {
             $this->fail($t->getMessage());
         } finally {
@@ -117,14 +117,14 @@ CODE;
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("Undefined function 'not a function()'");
 
-        (new Phlipy(new Context()))->wrapPhpFunction('not a function');
+        (new Phlipy(new Scope()))->wrapPhpFunction('not a function');
     }
 
     public function testActiveInterop()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage("Context must be PHP Interoperable to support PHP interop operations");
+        $this->expectExceptionMessage("Scope must be PHP Interoperable to support PHP interop operations");
 
-        Phlipy::interoperable(new Context());
+        Phlipy::interoperable(new Scope());
     }
 }

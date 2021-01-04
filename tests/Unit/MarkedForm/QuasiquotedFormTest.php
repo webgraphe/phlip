@@ -4,12 +4,12 @@ namespace Webgraphe\Phlip\Tests\Unit\MarkedForm;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
-use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Scope;
 use Webgraphe\Phlip\Contracts\CodeAnchorContract;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\MarkedForm;
 use Webgraphe\Phlip\Tests\Unit\MarkedFormTest;
@@ -31,16 +31,16 @@ class QuasiquotedFormTest extends MarkedFormTest
     }
 
     /**
-     * @return ContextContract
-     * @throws ContextException
+     * @return ScopeContract
+     * @throws ScopeException
      */
-    private function getContext(): ContextContract
+    private function getScope(): ScopeContract
     {
-        $context = new Context();
-        $context->define('x', 2);
-        $context->define('y', 3);
+        $scope = new Scope();
+        $scope->define('x', 2);
+        $scope->define('y', 3);
 
-        return $context;
+        return $scope;
     }
 
     /**
@@ -63,13 +63,13 @@ class QuasiquotedFormTest extends MarkedFormTest
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testEvaluation()
     {
         $this->assertTrue(
             $this->createForm()->equals(
-                $this->getContext()->execute($this->createMarkedForm($this->getFormWithUnquotedIdentifiers()))
+                $this->getScope()->execute($this->createMarkedForm($this->getFormWithUnquotedIdentifiers()))
             )
         );
     }

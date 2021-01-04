@@ -2,10 +2,10 @@
 
 namespace Webgraphe\Phlip\Tests\System;
 
-use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Scope;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Exception\ProgramException;
@@ -28,7 +28,7 @@ class LispTest extends TestCase
     /**
      * @dataProvider scripts
      * @param string $script
-     * @throws ContextException
+     * @throws ScopeException
      * @throws LexerException
      * @throws ParserException
      * @throws AssertionException
@@ -36,15 +36,15 @@ class LispTest extends TestCase
      */
     public function testMcCarthyEval(string $script)
     {
-        $context = Phlipy::roots(new Context())->getContext();
+        $scope = Phlipy::roots(new Scope())->getScope();
         $init = Program::parse(static::getScript());
-        $init->execute($context);
+        $init->execute($scope);
 
         /** @var FormContract $left */
-        $left = Program::parse($script)->execute($context);
+        $left = Program::parse($script)->execute($scope);
         $this->assertInstanceOf(FormContract::class, $left);
         /** @var FormContract $right */
-        $right = Program::parse("(eval (quote $script) (quote ()))")->execute($context);
+        $right = Program::parse("(eval (quote $script) (quote ()))")->execute($scope);
         $this->assertInstanceOf(FormContract::class, $right);
         $this->assertTrue($left->equals($right));
     }

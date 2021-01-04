@@ -2,18 +2,18 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\ContextAnchor;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\ScopeAnchor;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
 /**
- * Evaluates a given expression in the bound context of the operation.
+ * Evaluates a given expression in the bound scope of the operation.
  *
- * Because it's lexically scoped, the given expression cannot be evaluated in the local context.
+ * Because it's lexically scoped, the given expression cannot be evaluated in the local scope.
  */
 class EvalOperation extends ManualOperation
 {
@@ -28,20 +28,20 @@ class EvalOperation extends ManualOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return mixed
-     * @throws ContextException
+     * @throws ScopeException
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, FormList $forms)
+    protected function invoke(ScopeContract $scope, FormList $forms)
     {
         $result = null;
 
         $env = ($tailHead = $forms->getTailHead())
-            ? $this->assertContextAnchor($context->execute($tailHead))->getContext()
-            : $this->assertBoundedContext();
-        $result = $env->execute($this->assertForm($context->execute($forms->assertHead())));
+            ? $this->assertScopeAnchor($scope->execute($tailHead))->getScope()
+            : $this->assertBoundedScope();
+        $result = $env->execute($this->assertForm($scope->execute($forms->assertHead())));
 
         return $result;
     }
@@ -64,15 +64,15 @@ class EvalOperation extends ManualOperation
 
     /**
      * @param mixed $thing
-     * @return ContextAnchor
+     * @return ScopeAnchor
      * @throws AssertionException
      */
-    private function assertContextAnchor($thing): ContextAnchor
+    private function assertScopeAnchor($thing): ScopeAnchor
     {
-        if ($thing instanceof ContextAnchor) {
+        if ($thing instanceof ScopeAnchor) {
             return $thing;
         }
 
-        throw new AssertionException("Not a context anchor");
+        throw new AssertionException("Not a scope anchor");
     }
 }

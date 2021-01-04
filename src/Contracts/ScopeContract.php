@@ -2,12 +2,12 @@
 
 namespace Webgraphe\Phlip\Contracts;
 
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 
 /**
  * A multi-layered dictionary.
  */
-interface ContextContract
+interface ScopeContract
 {
     /**
      * Defines a dictionary entry at the topmost level (a level with no parent).
@@ -41,7 +41,7 @@ interface ContextContract
      *
      * @param $key
      * @return mixed
-     * @throws ContextException If not found
+     * @throws ScopeException If not found
      */
     public function get($key);
 
@@ -54,11 +54,11 @@ interface ContextContract
     public function has(string $key): bool;
 
     /**
-     * Stacks the current context and return a new instance pushed on top of it.
+     * Stacks the current scope and return a new instance pushed on top of it.
      *
-     * @return ContextContract
+     * @return ScopeContract
      */
-    public function stack(): ContextContract;
+    public function stack(): ScopeContract;
 
     /**
      * @param FormContract $form
@@ -75,5 +75,5 @@ interface ContextContract
      */
     public function getFormStack(): array;
 
-    public function getParent(): ?ContextContract;
+    public function getParent(): ?ScopeContract;
 }

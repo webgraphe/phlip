@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Tests;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\ManualOperationContract;
 use Webgraphe\Phlip\FormCollection\FormList;
@@ -18,12 +18,12 @@ class CallableManualOperationOperation implements ManualOperationContract
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormContract[] $forms
      * @return mixed
      */
-    public function __invoke(ContextContract $context, FormContract ...$forms)
+    public function __invoke(ScopeContract $scope, FormContract ...$forms)
     {
-        return call_user_func($this->callback, $context, new FormList(...$forms));
+        return call_user_func($this->callback, $scope, new FormList(...$forms));
     }
 }

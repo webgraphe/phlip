@@ -2,9 +2,9 @@
 
 namespace Webgraphe\Phlip\Operation\Interop;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Traits\AssertsObjects;
 
@@ -24,16 +24,16 @@ class CloneOperation extends PhpInteroperableOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return object
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
-    protected function invoke(ContextContract $context, FormList $forms): object
+    protected function invoke(ScopeContract $scope, FormList $forms): object
     {
-        $original = static::assertObject($context->execute($forms->assertHead()));
-        $this->assertPhpInteroperableContext($context, get_class($original));
+        $original = static::assertObject($scope->execute($forms->assertHead()));
+        $this->assertPhpInteroperableScope($scope, get_class($original));
 
         return clone $original;
     }

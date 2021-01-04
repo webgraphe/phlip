@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\Interop;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
@@ -24,14 +24,14 @@ class InstanceOperation extends ManualOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return bool
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, FormList $forms): bool
+    protected function invoke(ScopeContract $scope, FormList $forms): bool
     {
-        $thing = $context->execute($forms->assertHead());
+        $thing = $scope->execute($forms->assertHead());
         $class = static::assertClassExists($forms->assertTailHead());
 
         return $thing instanceof $class;

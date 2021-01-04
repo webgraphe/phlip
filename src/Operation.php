@@ -2,17 +2,17 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\OperationContract;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\Traits\AssertsStaticType;
 
 abstract class Operation implements OperationContract
 {
     use AssertsStaticType;
 
-    /** @var ContextContract|null */
-    private $boundedContext;
+    /** @var ScopeContract|null */
+    private $boundedScope;
 
     /**
      * @return string[]
@@ -20,28 +20,28 @@ abstract class Operation implements OperationContract
     abstract public function getIdentifiers(): array;
 
     /**
-     * @param ContextContract|null $context
+     * @param ScopeContract|null $scope
      * @return static
      */
-    public function bindToContext(?ContextContract $context): self
+    public function bindToScope(?ScopeContract $scope): self
     {
-        $this->boundedContext = $context;
+        $this->boundedScope = $scope;
 
         return $this;
     }
 
     /**
-     * @return ContextContract|null
-     * @throws ContextException
+     * @return ScopeContract|null
+     * @throws ScopeException
      */
-    protected function assertBoundedContext(): ?ContextContract
+    protected function assertBoundedScope(): ?ScopeContract
     {
-        if ($this->boundedContext) {
-            return $this->boundedContext;
+        if ($this->boundedScope) {
+            return $this->boundedScope;
         }
 
         $class = get_class($this);
 
-        throw new ContextException("{$class} is not bounded to a context");
+        throw new ScopeException("{$class} is not bounded to a scope");
     }
 }

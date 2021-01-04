@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
@@ -13,22 +13,22 @@ class DefineOperation extends ManualOperation
     const IDENTIFIER = 'define';
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return mixed
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, FormList $forms)
+    protected function invoke(ScopeContract $scope, FormList $forms)
     {
         $variable = $forms->assertHead();
 
         if ($variable instanceof FormList) {
             $name = IdentifierAtom::assertStaticType($variable->assertHead());
 
-            return $context->define(
+            return $scope->define(
                 $name->getValue(),
                 LambdaOperation::invokeStatic(
-                    $context,
+                    $scope,
                     $variable->getTail(),
                     ...$forms->getTail()
                 )
@@ -36,9 +36,9 @@ class DefineOperation extends ManualOperation
         }
 
         if ($variable instanceof IdentifierAtom) {
-            return $context->define(
+            return $scope->define(
                 $variable->getValue(),
-                $context->execute($forms->assertTailHead())
+                $scope->execute($forms->assertTailHead())
             );
         }
 

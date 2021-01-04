@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Atom;
 
 use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\CodeAnchorContract;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 
 class NumberAtom extends Atom
 {
@@ -37,10 +37,10 @@ class NumberAtom extends Atom
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return number
      */
-    public function evaluate(ContextContract $context)
+    public function evaluate(ScopeContract $scope)
     {
         return $this->getValue();
     }

@@ -2,14 +2,14 @@
 
 namespace Webgraphe\Phlip\Tests\Traits;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Phlipy;
-use Webgraphe\Phlip\PhpClassInteroperableContext;
+use Webgraphe\Phlip\PhpClassInteroperableScope;
 use Webgraphe\Phlip\Tests\CallableManualOperationOperation;
 use Webgraphe\Phlip\Tests\Dummy;
 
@@ -21,7 +21,7 @@ use Webgraphe\Phlip\Tests\Dummy;
  * @see \PHPUnit\Framework\Assert::assertEquals()
  * @see \PHPUnit\Framework\TestCase::expectException()
  */
-trait DefinesAssertionsInContexts
+trait DefinesAssertionsInScopes
 {
     private function stringize($anything): string
     {
@@ -33,36 +33,36 @@ trait DefinesAssertionsInContexts
     }
 
     /**
-     * @return ContextContract
+     * @return ScopeContract
      */
-    protected function contextWithAssertions(): ContextContract
+    protected function scopeWithAssertions(): ScopeContract
     {
-        $context = Phlipy::interoperable()->withStringFunctions()->withMathFunctions()->getContext();
-        $context->define(
+        $scope = Phlipy::interoperable()->withStringFunctions()->withMathFunctions()->getScope();
+        $scope->define(
             'assert-true',
             new CallableManualOperationOperation(
-                function (ContextContract $context, FormList $expressions) {
+                function (ScopeContract $scope, FormList $expressions) {
                     $head = $expressions->assertHead();
-                    $this->assertTrue((bool)$context->execute($head), "Expected $head to be true");
+                    $this->assertTrue((bool)$scope->execute($head), "Expected $head to be true");
                 }
             )
         );
-        $context->define(
+        $scope->define(
             'assert-false',
             new CallableManualOperationOperation(
-                function (ContextContract $context, FormList $expressions) {
+                function (ScopeContract $scope, FormList $expressions) {
                     $head = $expressions->assertHead();
-                    $this->assertFalse((bool)$context->execute($head), "Expected $head to be false");
+                    $this->assertFalse((bool)$scope->execute($head), "Expected $head to be false");
                 }
             )
         );
-        $context->define(
+        $scope->define(
             'assert-equals',
             new CallableManualOperationOperation(
-                function (ContextContract $context, FormList $expressions) {
-                    $head = $context->execute($expressions->assertHead());
+                function (ScopeContract $scope, FormList $expressions) {
+                    $head = $scope->execute($expressions->assertHead());
                     $toeExpression = $expressions->assertTailHead();
-                    $toe = $context->execute($toeExpression);
+                    $toe = $scope->execute($toeExpression);
                     if ($head instanceof FormContract && $toe instanceof FormContract) {
                         $this->assertTrue(
                             $head->equals($toe),
@@ -76,13 +76,13 @@ trait DefinesAssertionsInContexts
                 }
             )
         );
-        $context->define(
+        $scope->define(
             'assert-not-equals',
             new CallableManualOperationOperation(
-                function (ContextContract $context, FormList $expressions) {
-                    $head = $context->execute($expressions->assertHead());
+                function (ScopeContract $scope, FormList $expressions) {
+                    $head = $scope->execute($expressions->assertHead());
                     $toeExpression = $expressions->assertTailHead();
-                    $toe = $context->execute($toeExpression);
+                    $toe = $scope->execute($toeExpression);
                     if ($head instanceof FormContract && $toe instanceof FormContract) {
                         $this->assertTrue(!$head->equals($toe), "Didn't expect $head out of $toeExpression");
                     } else {
@@ -94,28 +94,28 @@ trait DefinesAssertionsInContexts
             )
         );
 
-        $context->define('AssertionException', AssertionException::class);
-        $context->define('ContextException', ContextException::class);
-        $context->define('ProgramException', ProgramException::class);
-        $context->define(
+        $scope->define('AssertionException', AssertionException::class);
+        $scope->define('ScopeException', ScopeException::class);
+        $scope->define('ProgramException', ProgramException::class);
+        $scope->define(
             'assert-exception',
             new CallableManualOperationOperation(
-                function (ContextContract $context, FormList $expressions) {
+                function (ScopeContract $scope, FormList $expressions) {
                     /** @var self $test */
-                    $name = $context->execute($expressions->assertHead());
+                    $name = $scope->execute($expressions->assertHead());
                     $this->expectException($name);
                     if ($message = $expressions->getTail()->getTail()->getHead()) {
-                        $this->expectExceptionMessage($context->execute($message));
+                        $this->expectExceptionMessage($scope->execute($message));
                     }
-                    $context->execute($expressions->assertTailHead());
+                    $scope->execute($expressions->assertTailHead());
                 }
             )
         );
-        if ($context instanceof PhpClassInteroperableContext) {
-            $context->enableClass(Dummy::class);
-            $context->enableClass('Undefined');
+        if ($scope instanceof PhpClassInteroperableScope) {
+            $scope->enableClass(Dummy::class);
+            $scope->enableClass('Undefined');
         }
 
-        return $context;
+        return $scope;
     }
 }

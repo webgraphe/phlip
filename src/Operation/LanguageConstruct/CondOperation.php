@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
@@ -13,18 +13,18 @@ class CondOperation extends ManualOperation
     const IDENTIFIER = 'cond';
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return mixed
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, FormList $forms)
+    protected function invoke(ScopeContract $scope, FormList $forms)
     {
         while ($condition = $forms->getHead()) {
             $forms = $forms->getTail();
             $condition = FormList::assertStaticType($condition);
-            if ($context->execute($condition->assertHead())) {
-                return $context->execute($condition->assertTailHead());
+            if ($scope->execute($condition->assertHead())) {
+                return $scope->execute($condition->assertTailHead());
             }
         }
 

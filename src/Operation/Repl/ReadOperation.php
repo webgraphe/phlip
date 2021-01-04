@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip\Operation\Repl;
 
 use Closure;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Exception\LexerException;
@@ -43,12 +43,12 @@ class ReadOperation extends ManualOperation
 
     protected static function readPrompt(): Closure
     {
-        return function (ContextContract $context) {
+        return function (ScopeContract $scope) {
             static $lastTicks;
             $ticks = null === $lastTicks
                 ? 0
-                : max(0, $context->getTicks() - $lastTicks - 6);
-            $lastTicks = $context->getTicks();
+                : max(0, $scope->getTicks() - $lastTicks - 6);
+            $lastTicks = $scope->getTicks();
 
             return sprintf('[%d] >>> ', $ticks);
         };
@@ -93,14 +93,14 @@ class ReadOperation extends ManualOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return FormContract
      * @throws AssertionException
      * @throws LexerException
      * @throws ParserException
      */
-    protected function invoke(ContextContract $context, FormList $forms): FormContract
+    protected function invoke(ScopeContract $scope, FormList $forms): FormContract
     {
         if ($this->result && ($head = $this->result->getHead())) {
             $this->result = $this->result->getTail();
@@ -114,7 +114,7 @@ class ReadOperation extends ManualOperation
             $line = rtrim(
                 readline(
                     is_callable($prompt)
-                        ? call_user_func($prompt, $context)
+                        ? call_user_func($prompt, $scope)
                         : $prompt
                 )
             );
@@ -125,7 +125,7 @@ class ReadOperation extends ManualOperation
             }
             if ($break) {
                 if (!$lines) {
-                    return $this->invoke($context, $forms);
+                    return $this->invoke($scope, $forms);
                 }
                 break;
             }

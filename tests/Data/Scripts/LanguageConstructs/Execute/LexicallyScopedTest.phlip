@@ -1,6 +1,6 @@
-(define (f) (let ((x 2)) (let ((y 3)) (let ((formula '(+ x y))) (eval formula (context-anchor))))))
+(define (f) (let ((x 2)) (let ((y 3)) (let ((formula '(+ x y))) (eval formula (scope-anchor))))))
 (assert-exception
-    ContextException
+    ScopeException
     (f)
     "Undefined 'x'"
 )

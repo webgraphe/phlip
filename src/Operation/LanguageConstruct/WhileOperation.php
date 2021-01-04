@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
@@ -23,19 +23,19 @@ class WhileOperation extends ManualOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return mixed
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, FormList $forms)
+    protected function invoke(ScopeContract $scope, FormList $forms)
     {
         $condition = $forms->assertHead();
-        while ($context->execute($condition)) {
+        while ($scope->execute($condition)) {
             $statements = $forms->getTail();
             while ($statement = $statements->getHead()) {
                 $statements = $statements->getTail();
-                $context->execute($statement);
+                $scope->execute($statement);
             }
         }
 

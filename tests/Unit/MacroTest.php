@@ -4,10 +4,10 @@ namespace Webgraphe\Phlip\Tests\Unit;
 
 use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
-use Webgraphe\Phlip\Context;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Scope;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Macro;
 use Webgraphe\Phlip\MarkedForm\QuasiquotedForm;
@@ -17,14 +17,14 @@ use Webgraphe\Phlip\Tests\TestCase;
 class MacroTest extends TestCase
 {
     /**
-     * @return Context
+     * @return Scope
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
-    public function testSingleMacroExpansion(): Context
+    public function testSingleMacroExpansion(): Scope
     {
-        $context = new Context();
-        $square = $this->defineSquareMacro($context);
+        $scope = new Scope();
+        $square = $this->defineSquareMacro($scope);
 
         $this->assertTrue(
             $this->getExpectedSquareExpansion(3)->equals(
@@ -32,18 +32,18 @@ class MacroTest extends TestCase
             )
         );
 
-        return $context;
+        return $scope;
     }
 
     /**
      * @depends testSingleMacroExpansion
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
-    public function testNestedMacroExpansion(ContextContract $context)
+    public function testNestedMacroExpansion(ScopeContract $scope)
     {
-        $pythagoras = $this->definePythagorasMacro($context);
+        $pythagoras = $this->definePythagorasMacro($scope);
 
         $this->assertTrue(
             $this->getExpectedPythagorasExpansion(3, 4)->equals(
@@ -58,21 +58,21 @@ class MacroTest extends TestCase
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return Macro
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
-    private function defineSquareMacro(ContextContract $context): Macro
+    private function defineSquareMacro(ScopeContract $scope): Macro
     {
-        $this->assertFalse($context->has('square'), 'square macro already defined');
+        $this->assertFalse($scope->has('square'), 'square macro already defined');
 
         $a = IdentifierAtom::fromString('a');
-        $context->define(
+        $scope->define(
             'square',
             // (macro square (a) `(* ,a ,a))
             new Macro(
-                $context,
+                $scope,
                 new FormList($a),
                 new QuasiquotedForm(
                     new FormList(
@@ -84,25 +84,25 @@ class MacroTest extends TestCase
             )
         );
 
-        return $context->get('square');
+        return $scope->get('square');
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return Macro
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
-    private function definePythagorasMacro(ContextContract $context): Macro
+    private function definePythagorasMacro(ScopeContract $scope): Macro
     {
-        $this->assertFalse($context->has('pythagoras'), 'square macro already defined');
+        $this->assertFalse($scope->has('pythagoras'), 'square macro already defined');
 
         $a = IdentifierAtom::fromString('a');
         $b = IdentifierAtom::fromString('b');
-        $context->define(
+        $scope->define(
             'pythagoras',
             new Macro(
-                $context,
+                $scope,
                 new FormList($a, $b),
                 // (macro pythagoras (a b) `(sqrt (+ (square ,a) (square ,b))))
                 new QuasiquotedForm(
@@ -118,7 +118,7 @@ class MacroTest extends TestCase
             )
         );
 
-        return $context->get('pythagoras');
+        return $scope->get('pythagoras');
     }
 
     /**

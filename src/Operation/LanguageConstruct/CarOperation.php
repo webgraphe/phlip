@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\DottedPair;
@@ -23,14 +23,14 @@ class CarOperation extends ManualOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return FormContract|null
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, FormList $forms): ?FormContract
+    protected function invoke(ScopeContract $scope, FormList $forms): ?FormContract
     {
-        $consCell = $context->execute($forms->assertHead());
+        $consCell = $scope->execute($forms->assertHead());
         if ($consCell instanceof DottedPair) {
             return $consCell->getFirst();
         }

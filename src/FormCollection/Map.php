@@ -3,7 +3,7 @@
 namespace Webgraphe\Phlip\FormCollection;
 
 use stdClass;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormCollectionContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
@@ -46,16 +46,16 @@ class Map extends FormCollection
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return stdClass
      * @throws AssertionException
      */
-    public function evaluate(ContextContract $context): stdClass
+    public function evaluate(ScopeContract $scope): stdClass
     {
         $map = (object)[];
         foreach ($this->pairs as $pair) {
-            $key = $context->execute($pair->assertHead());
-            $map->{static::assertScalarOrNull($key)} = $context->execute($pair->assertTailHead());
+            $key = $scope->execute($pair->assertHead());
+            $map->{static::assertScalarOrNull($key)} = $scope->execute($pair->assertTailHead());
         }
 
         return $map;

@@ -2,19 +2,19 @@
 
 namespace Webgraphe\Phlip\MarkedForm;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\MarkedForm;
 use Webgraphe\Phlip\Symbol;
 
 class UnquotedForm extends MarkedForm
 {
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return mixed
      */
-    public function evaluate(ContextContract $context)
+    public function evaluate(ScopeContract $scope)
     {
-        return $context->execute($this->getForm());
+        return $scope->execute($this->getForm());
     }
 
     public function getMarkSymbol(): Symbol\Mark

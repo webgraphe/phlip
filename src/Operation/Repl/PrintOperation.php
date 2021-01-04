@@ -8,7 +8,7 @@ use Webgraphe\Phlip\Atom\IdentifierAtom;
 use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\LexemeContract;
 use Webgraphe\Phlip\FormBuilder;
 use Webgraphe\Phlip\FormCollection\FormList;
@@ -92,14 +92,14 @@ class PrintOperation extends ManualOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return bool
      */
-    protected function invoke(ContextContract $context, FormList $forms): bool
+    protected function invoke(ScopeContract $scope, FormList $forms): bool
     {
         try {
-            $argument = $context->execute($forms->assertHead());
+            $argument = $scope->execute($forms->assertHead());
         } catch (Throwable $t) {
             $argument = $t;
         }
@@ -133,7 +133,7 @@ class PrintOperation extends ManualOperation
 
         return $tail->isEmpty()
             ? true
-            : $this->invoke($context, $tail);
+            : $this->invoke($scope, $tail);
     }
 
     protected function stringifyLexemeStream(LexemeStream $stream): string

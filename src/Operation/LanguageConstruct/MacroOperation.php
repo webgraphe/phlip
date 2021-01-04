@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Macro;
@@ -22,15 +22,15 @@ class MacroOperation extends ManualOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return Macro
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, FormList $forms): Macro
+    protected function invoke(ScopeContract $scope, FormList $forms): Macro
     {
         return new Macro(
-            $context,
+            $scope,
             FormList::assertStaticType($forms->assertHead()),
             $forms->assertTailHead()
         );

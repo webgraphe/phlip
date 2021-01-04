@@ -2,15 +2,15 @@
 
 namespace Webgraphe\Phlip;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 
-class Context implements ContextContract
+class Scope implements ScopeContract
 {
     /** @var array */
     private $data = [];
-    /** @var ContextContract|null */
+    /** @var ScopeContract|null */
     private $parent;
     /** @var FormContract[] */
     private $formStack = [];
@@ -21,7 +21,7 @@ class Context implements ContextContract
      * @param string $key $offset
      * @param mixed $value
      * @return mixed
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function define(string $key, $value)
     {
@@ -30,7 +30,7 @@ class Context implements ContextContract
         }
 
         if (array_key_exists($key, $this->data)) {
-            throw new ContextException("Can't redefine global '$key'");
+            throw new ScopeException("Can't redefine global '$key'");
         }
 
         return $this->data[$key] = $value;
@@ -40,7 +40,7 @@ class Context implements ContextContract
      * @param mixed $key
      * @param mixed $value
      * @return mixed
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function set(string $key, $value)
     {
@@ -55,19 +55,19 @@ class Context implements ContextContract
             return $this->parent->set($key, $value);
         }
 
-        throw new ContextException("Undefined '$key'");
+        throw new ScopeException("Undefined '$key'");
     }
 
     /**
      * @param string $key
      * @param mixed $value
      * @return mixed
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function let(string $key, $value)
     {
         if (array_key_exists($key, $this->data)) {
-            throw new ContextException("Can't redefine local '$key'");
+            throw new ScopeException("Can't redefine local '$key'");
         }
 
         return $this->data[$key] = $value;
@@ -76,7 +76,7 @@ class Context implements ContextContract
     /**
      * @param $key
      * @return mixed|null
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function get($key)
     {
@@ -88,7 +88,7 @@ class Context implements ContextContract
             return $this->parent->get(...func_get_args());
         }
 
-        throw new ContextException("Undefined '$key'");
+        throw new ScopeException("Undefined '$key'");
     }
 
     public function has(string $key): bool
@@ -104,7 +104,7 @@ class Context implements ContextContract
         return false;
     }
 
-    public function stack(): ContextContract
+    public function stack(): ScopeContract
     {
         $self = new static();
         $self->parent = $this;
@@ -115,7 +115,7 @@ class Context implements ContextContract
     /**
      * @param FormContract $form
      * @return mixed
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function execute(FormContract $form)
     {
@@ -135,9 +135,9 @@ class Context implements ContextContract
     }
 
     /**
-     * @return ContextContract
+     * @return ScopeContract
      */
-    public function getParent(): ?ContextContract
+    public function getParent(): ?ScopeContract
     {
         return $this->parent;
     }

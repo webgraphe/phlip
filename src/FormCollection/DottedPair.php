@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\FormCollection;
 
 use Webgraphe\Phlip\Contracts\FormCollectionContract;
 use Webgraphe\Phlip\FormCollection;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Symbol\Closing;
@@ -53,12 +53,12 @@ class DottedPair extends FormCollection
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return array
      */
-    public function evaluate(ContextContract $context): array
+    public function evaluate(ScopeContract $scope): array
     {
-        return [ $context->execute($this->first), $context->execute($this->second) ];
+        return [ $scope->execute($this->first), $scope->execute($this->second) ];
     }
 
     /**

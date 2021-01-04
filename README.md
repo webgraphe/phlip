@@ -5,14 +5,19 @@
 <a href="https://packagist.org/packages/webgraphe/phlip"><img src="https://img.shields.io/packagist/l/webgraphe/phlip" alt="License"></a>
 
 [Phlip](https://github.com/webgraphe/phlip) (pronounced \\ˈflip\\) is an embeddable scripting language for
-[PHP](https://www.php.net) based on [s-expressions](https://en.wikipedia.org/wiki/S-expression). In a nutshell:
+[PHP](https://www.php.net) based on [s-expressions](https://en.wikipedia.org/wiki/S-expression).
+
+### How does it work?
 
 A [lexer](https://en.wikipedia.org/wiki/Lexical_analysis) tokenizes scripts and a
 [parser](https://en.wikipedia.org/wiki/Parsing#Computer_languages) assembles data structures. A script's behavior
-originates from data and code elements resolved from a controlled context. Integration is simpler with the _Phlipy_
+originates from data and code elements resolved from a controlled scope.
+
+Integration is simpler with the _Phlipy_
 [dialect](https://en.wikipedia.org/wiki/Programming_language#Dialects,_flavors_and_implementations).
 
 Refer to `Webgraphe\Phlip\Tests\Unit\ReadmeTest` for the example below:
+
 ```php
 <?php
 
@@ -21,19 +26,24 @@ use Webgraphe\Phlip\Program;
 
 // Tokenize and parse code into a program
 $program = Program::parse('(lambda (x) (* x x))');
-// Bootstrap a new context with different level of Phlipy dialects
-$context = Phlipy::basic()->getContext();
-// Execute program within said context
-$square = $program->execute($context);
+// Bootstrap a new scope with different level of Phlipy dialects
+$scope = Phlipy::basic()->getScope();
+// Execute program within said scope
+$square = $program->execute($scope);
 
 // In this case, return value is an anonymous function - a lambda - calculating the square of a number
 // as per source code "(* x x)"
 var_dump($square(M_PI)); // (double)9.8696044010894
 ```
 
-Install with [`composer require webgraphe/phlip`](https://packagist.org/packages/webgraphe/phlip)
+### How to install
+
+Add a dependency on your projects with Composer, using
+[`composer require webgraphe/phlip`](https://packagist.org/packages/webgraphe/phlip).
+You may also install it globally with `composer global require webgraphe/phlip`.
 
 ### Why use Phlip
+* Embeddable scripts mean data becomes code
 * Easy to use
 * Easy to learn
 * Build your own dialect!

@@ -6,10 +6,10 @@ use ReflectionObject;
 use ReflectionProperty;
 use Throwable;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Traits\AssertsClasses;
 use Webgraphe\Phlip\Traits\AssertsObjects;
@@ -31,17 +31,17 @@ class ObjectOperation extends PhpInteroperableOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return mixed|void
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
-    protected function invoke(ContextContract $context, FormList $forms)
+    protected function invoke(ScopeContract $scope, FormList $forms)
     {
-        $object = static::assertObject($context->execute($forms->assertHead()));
+        $object = static::assertObject($scope->execute($forms->assertHead()));
         $identifier = is_object($object) ? get_class($object) : gettype($object);
-        static::assertClassEnabled($this->assertPhpInteroperableContext($context, static::class), $object);
+        static::assertClassEnabled($this->assertPhpInteroperableScope($scope, static::class), $object);
         $tail = $forms->getTail();
         $member = IdentifierAtom::assertStaticType($tail->assertHead())->getValue();
 
@@ -53,8 +53,8 @@ class ObjectOperation extends PhpInteroperableOperation
             return call_user_func(
                 [$object, $member],
                 ...array_map(
-                    function (FormContract $form) use ($context) {
-                        return $context->execute($form);
+                    function (FormContract $form) use ($scope) {
+                        return $scope->execute($form);
                     },
                     $tail->getTail()->all()
                 )

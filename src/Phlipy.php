@@ -3,11 +3,11 @@
 namespace Webgraphe\Phlip;
 
 use RuntimeException;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 
 /**
- * Phlipy is context builder that quickly scaffolds a usable dialect depending on your needs.
+ * Phlipy is a scope builder that quickly scaffolds a usable dialect depending on your needs.
  *
  * @see Phlipy::__construct() Can't do much beyond evaluating data
  * @see Phlipy::roots() For the hardcore developers, for instance, it's used to reproduce McCarthy's eval
@@ -16,21 +16,21 @@ use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
  */
 class Phlipy
 {
-    /** @var ContextContract */
-    private $context;
+    /** @var ScopeContract */
+    private $scope;
 
-    public function __construct(ContextContract $context)
+    public function __construct(ScopeContract $scope)
     {
-        $this->context = $context;
+        $this->scope = $scope;
     }
 
     /**
-     * @param ContextContract|null $context
+     * @param ScopeContract|null $scope
      * @return static
      */
-    public static function roots(ContextContract $context = null): self
+    public static function roots(ScopeContract $scope = null): self
     {
-        return (new static($context ?? new Context()))
+        return (new static($scope ?? new Scope()))
             ->withOperation(new Operation\LanguageConstruct\DefineOperation())
             ->withOperation(new Operation\LanguageConstruct\QuoteOperation())
             ->withOperation(new Operation\LanguageConstruct\CarOperation())
@@ -43,12 +43,12 @@ class Phlipy
     }
 
     /**
-     * @param ContextContract|null $context
+     * @param ScopeContract|null $scope
      * @return static
      */
-    public static function basic(ContextContract $context = null): self
+    public static function basic(ScopeContract $scope = null): self
     {
-        return static::roots($context ?? new Context())
+        return static::roots($scope ?? new Scope())
             ->withExtraLanguageConstructs()
             ->withTypeOperators()
             ->withArithmeticOperators()
@@ -60,13 +60,13 @@ class Phlipy
     }
 
     /**
-     * @param ContextContract|PhpClassInteroperableContext|null $context
+     * @param ScopeContract|PhpClassInteroperableScope|null $scope
      * @return static
      * @throws RuntimeException If the given content is not interoperable with PHP Classes
      */
-    public static function interoperable(ContextContract $context = null): self
+    public static function interoperable(ScopeContract $scope = null): self
     {
-        return static::basic($context ?? new PhpClassInteroperableContext())
+        return static::basic($scope ?? new PhpClassInteroperableScope())
             ->withActivePhpInterop();
     }
 
@@ -83,7 +83,7 @@ class Phlipy
             ->withOperation(new Operation\LanguageConstruct\ListOperation())
             ->withOperation(new Operation\LanguageConstruct\WhileOperation())
             ->withOperation(new Operation\LanguageConstruct\BeginOperation())
-            ->withOperation(new Operation\LanguageConstruct\ContextAnchorOperation())
+            ->withOperation(new Operation\LanguageConstruct\ScopeAnchorOperation())
             ->withOperation(new Operation\LanguageConstruct\EvalOperation())
             ->withOperation(new Operation\LanguageConstruct\ExitOperation())
             ->withOperation(new Operation\LanguageConstruct\MacroOperation())
@@ -177,12 +177,12 @@ class Phlipy
 
     /**
      * @return static
-     * @throws RuntimeException If the inner context is not interoperable with PHP Classes
+     * @throws RuntimeException If the inner scope is not interoperable with PHP Classes
      */
     protected function withActivePhpInterop(): self
     {
-        if (!($this->context instanceof PhpClassInteroperableContract)) {
-            throw new RuntimeException("Context must be PHP Interoperable to support PHP interop operations");
+        if (!($this->scope instanceof PhpClassInteroperableContract)) {
+            throw new RuntimeException("Scope must be PHP Interoperable to support PHP interop operations");
         }
 
         return $this
@@ -197,25 +197,25 @@ class Phlipy
      */
     protected function withErrors(): self
     {
-        $this->context->define(
+        $this->scope->define(
             'notice',
             function ($message) {
                 trigger_error($message, E_USER_NOTICE);
             }
         );
-        $this->context->define(
+        $this->scope->define(
             'warning',
             function ($message) {
                 trigger_error($message, E_USER_WARNING);
             }
         );
-        $this->context->define(
+        $this->scope->define(
             'error',
             function ($message) {
                 trigger_error($message, E_USER_ERROR);
             }
         );
-        $this->context->define(
+        $this->scope->define(
             'deprecated',
             function ($message) {
                 trigger_error($message, E_USER_DEPRECATED);
@@ -324,7 +324,7 @@ class Phlipy
     {
         array_map(
             function (string $identifier) use ($operation) {
-                $this->context->define($identifier, $operation);
+                $this->scope->define($identifier, $operation);
             },
             $operation->getIdentifiers()
         );
@@ -344,7 +344,7 @@ class Phlipy
             throw new RuntimeException("Undefined function '{$function}()'");
         }
 
-        $this->context->define(
+        $this->scope->define(
             $alias ?? $function,
             function () use ($function) {
                 return call_user_func_array($function, func_get_args());
@@ -381,10 +381,10 @@ class Phlipy
     }
 
     /**
-     * @return ContextContract
+     * @return ScopeContract
      */
-    public function getContext(): ContextContract
+    public function getScope(): ScopeContract
     {
-        return $this->context;
+        return $this->scope;
     }
 }

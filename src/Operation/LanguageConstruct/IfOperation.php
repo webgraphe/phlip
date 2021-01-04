@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
@@ -13,23 +13,23 @@ class IfOperation extends ManualOperation
     const IDENTIFIER = 'if';
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return mixed
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, FormList $forms)
+    protected function invoke(ScopeContract $scope, FormList $forms)
     {
         $tail = $forms->getTail();
 
-        if ($context->execute($forms->assertHead())) {
+        if ($scope->execute($forms->assertHead())) {
             $then = $tail->assertHead();
 
-            return $context->execute($then);
+            return $scope->execute($then);
         }
 
         if ($else = $tail->getTailHead()) {
-            return $context->execute($else);
+            return $scope->execute($else);
         }
 
         return null;

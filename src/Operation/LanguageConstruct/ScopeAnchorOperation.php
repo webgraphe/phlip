@@ -2,15 +2,15 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\ContextAnchor;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\ScopeAnchor;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
-class ContextAnchorOperation extends ManualOperation
+class ScopeAnchorOperation extends ManualOperation
 {
     /** @var string */
-    const IDENTIFIER = 'context-anchor';
+    const IDENTIFIER = 'scope-anchor';
 
     public function getIdentifiers(): array
     {
@@ -18,17 +18,17 @@ class ContextAnchorOperation extends ManualOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return mixed|void
      */
-    protected function invoke(ContextContract $context, FormList $forms): ContextAnchor
+    protected function invoke(ScopeContract $scope, FormList $forms): ScopeAnchor
     {
-        $global = $context;
+        $global = $scope;
         while ($global->getParent()) {
             $global = $global->getParent();
         }
 
-        return new ContextAnchor($global);
+        return new ScopeAnchor($global);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Contracts;
 
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 
 /**
  * An immutable object meant to be evaluated.
@@ -10,12 +10,12 @@ use Webgraphe\Phlip\Exception\ContextException;
 interface FormContract extends StringConvertibleContract
 {
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return mixed
-     * @throws ContextException
-     * @see ContextContract::execute() Should be the only caller
+     * @throws ScopeException
+     * @see ScopeContract::execute() Should be the only caller
      */
-    public function evaluate(ContextContract $context);
+    public function evaluate(ScopeContract $scope);
 
     public function equals(FormContract $against): bool;
 

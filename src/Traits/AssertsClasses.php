@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Traits;
 
 use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 
 trait AssertsClasses
 {
@@ -23,18 +23,18 @@ trait AssertsClasses
     }
 
     /**
-     * @param PhpClassInteroperableContract $context
+     * @param PhpClassInteroperableContract $scope
      * @param string|object $classOrInstance
      * @return object|string
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
-    public static function assertClassEnabled(PhpClassInteroperableContract $context, $classOrInstance)
+    public static function assertClassEnabled(PhpClassInteroperableContract $scope, $classOrInstance)
     {
         $class = is_object($classOrInstance) ? get_class($classOrInstance) : $classOrInstance;
 
-        if (!$context->isClassEnabled($class)) {
-            throw new ContextException("PHP Class '{$class}' interoperability is not enabled");
+        if (!$scope->isClassEnabled($class)) {
+            throw new ScopeException("PHP Class '{$class}' interoperability is not enabled");
         }
 
         return static::assertClassExists($class);

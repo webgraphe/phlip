@@ -1,5 +1,5 @@
 (assert-exception
-    ContextException
+    ScopeException
     (new DateTime)
     "PHP Class 'DateTime' interoperability is not enabled"
 )

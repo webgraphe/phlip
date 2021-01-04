@@ -15,8 +15,8 @@ class ReadmeTest extends TestCase
     public function testExample()
     {
         $program = Program::parse('(lambda (x) (* x x))');
-        $context = Phlipy::basic()->getContext();
-        $square = $program->execute($context);
+        $scope = Phlipy::basic()->getScope();
+        $square = $program->execute($scope);
         $this->assertEquals(M_PI ** 2, $square(M_PI));
     }
 }

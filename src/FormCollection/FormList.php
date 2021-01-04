@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\FormCollection;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormCollectionContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\ManualOperationContract;
@@ -85,23 +85,23 @@ class FormList extends FormCollection
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return mixed
      * @throws AssertionException
      */
-    public function evaluate(ContextContract $context)
+    public function evaluate(ScopeContract $scope)
     {
         if (!$this->getHead()) {
             return null;
         }
 
-        $callable = static::assertCallable($context, $this->getHead());
+        $callable = static::assertCallable($scope, $this->getHead());
         $tailForms = $this->getTail()->all();
         $arguments = $callable instanceof ManualOperationContract
-            ? array_merge([$context], $tailForms)
+            ? array_merge([$scope], $tailForms)
             : array_map(
-                function (FormContract $form) use ($context) {
-                    return $context->execute($form);
+                function (FormContract $form) use ($scope) {
+                    return $scope->execute($form);
                 },
                 $tailForms
             );
@@ -110,14 +110,14 @@ class FormList extends FormCollection
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormContract $form
      * @return callable
      * @throws AssertionException
      */
-    protected static function assertCallable(ContextContract $context, FormContract $form): callable
+    protected static function assertCallable(ScopeContract $scope, FormContract $form): callable
     {
-        if (!is_callable($thing = $context->execute($form))) {
+        if (!is_callable($thing = $scope->execute($form))) {
             $type = is_object($thing) ? get_class($thing) : gettype($thing);
 
             throw new AssertionException("Not a callable; got '$type' from $form");

@@ -2,25 +2,25 @@
 
 namespace Webgraphe\Phlip\Operation\Interop;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\PhpClassInteroperableContract;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\Operation\ManualOperation;
 
 abstract class PhpInteroperableOperation extends ManualOperation
 {
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param string $class
-     * @return ContextContract|PhpClassInteroperableContract
-     * @throws ContextException
+     * @return ScopeContract|PhpClassInteroperableContract
+     * @throws ScopeException
      */
-    protected function assertPhpInteroperableContext(ContextContract $context, string $class): ContextContract
+    protected function assertPhpInteroperableScope(ScopeContract $scope, string $class): ScopeContract
     {
-        if ($context instanceof PhpClassInteroperableContract) {
-            return $context;
+        if ($scope instanceof PhpClassInteroperableContract) {
+            return $scope;
         }
 
-        throw new ContextException("Class '{$class}' requires an PHP interoperable context");
+        throw new ScopeException("Class '{$class}' requires an PHP interoperable scope");
     }
 }

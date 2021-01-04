@@ -4,18 +4,18 @@ namespace Webgraphe\Phlip\Tests\System;
 
 use DirectoryIterator;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\Exception\IOException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\Program;
 use Webgraphe\Phlip\Tests\TestCase;
-use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInContexts;
+use Webgraphe\Phlip\Tests\Traits\DefinesAssertionsInScopes;
 
 class ScriptsTest extends TestCase
 {
-    use DefinesAssertionsInContexts;
+    use DefinesAssertionsInScopes;
 
     /**
      * @dataProvider scriptFiles
@@ -24,13 +24,12 @@ class ScriptsTest extends TestCase
      * @throws LexerException
      * @throws ParserException
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      * @throws ProgramException
      */
     public function testScript(string $file)
     {
-        $context = $this->contextWithAssertions();
-        Program::parseFile($file)->execute($context);
+        Program::parseFile($file)->execute($this->scopeWithAssertions());
     }
 
     /**

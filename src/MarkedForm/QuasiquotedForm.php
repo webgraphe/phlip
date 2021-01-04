@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\MarkedForm;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormBuilder;
@@ -13,31 +13,31 @@ use Webgraphe\Phlip\Symbol;
 class QuasiquotedForm extends MarkedForm
 {
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return FormContract
      * @throws AssertionException
      */
-    public function evaluate(ContextContract $context): FormContract
+    public function evaluate(ScopeContract $scope): FormContract
     {
-        return $this->apply($context, $this->getForm());
+        return $this->apply($scope, $this->getForm());
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormContract $form
      * @return FormContract
      * @throws AssertionException
      */
-    protected function apply(ContextContract $context, FormContract $form): FormContract
+    protected function apply(ScopeContract $scope, FormContract $form): FormContract
     {
         if ($form instanceof UnquotedForm) {
-            return (new FormBuilder())->asForm($context->execute($form));
+            return (new FormBuilder())->asForm($scope->execute($form));
         }
 
         if ($form instanceof FormCollection) {
             return $form->map(
-                function (FormContract $form) use ($context) {
-                    return $this->apply($context, $form);
+                function (FormContract $form) use ($scope) {
+                    return $this->apply($scope, $form);
                 }
             );
         }

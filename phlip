@@ -66,13 +66,13 @@ USAGE;
 }
 
 try {
-    $context = Phlipy::interoperable()->withRepl($options)->getContext();
-    EvalOperation::assertStaticType($context->get(EvalOperation::IDENTIFIER))->bindToContext($context);
+    $scope = Phlipy::interoperable()->withRepl($options)->getScope();
+    EvalOperation::assertStaticType($scope->get(EvalOperation::IDENTIFIER))->bindToScope($scope);
 
     $io = new IOMode(STDIN);
     if ($io->getSize() && ($io->isRegularFile() || $io->isNamedPipe())) {
-        $context->define('stdin', trim(file_get_contents('php://stdin')));
-        Program::parse('(print (eval stdin))')->execute($context);
+        $scope->define('stdin', trim(file_get_contents('php://stdin')));
+        Program::parse('(print (eval stdin))')->execute($scope);
 
         exit(0);
     }
@@ -81,7 +81,7 @@ try {
     echo 'Webgraphe Phlip' . PHP_EOL;
     echo 'Type (exit) to quit.' . PHP_EOL . PHP_EOL;
 
-    Program::parse('(loop (print (eval (read))))')->execute($context);
+    Program::parse('(loop (print (eval (read))))')->execute($scope);
 } catch (Throwable $exception) {
     echo "Webgraphe Phlip FATAL ERROR:" . PHP_EOL . PHP_EOL;
     while ($exception) {

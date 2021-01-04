@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\FormCollection;
 
 use Webgraphe\Phlip\Contracts\FormCollectionContract;
 use Webgraphe\Phlip\FormCollection;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Symbol\Closing;
 use Webgraphe\Phlip\Symbol\Opening;
@@ -20,14 +20,14 @@ class Vector extends FormCollection
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return array
      */
-    public function evaluate(ContextContract $context): array
+    public function evaluate(ScopeContract $scope): array
     {
         return array_map(
-            function (FormContract $form) use ($context) {
-                return $context->execute($form);
+            function (FormContract $form) use ($scope) {
+                return $scope->execute($form);
             },
             $this->elements
         );

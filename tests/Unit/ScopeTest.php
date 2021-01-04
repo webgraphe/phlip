@@ -3,38 +3,38 @@
 namespace Webgraphe\Phlip\Tests\Unit;
 
 use Exception;
-use Webgraphe\Phlip\Context;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\Operation\AutomaticOperation;
+use Webgraphe\Phlip\Scope;
 use Webgraphe\Phlip\Tests\TestCase;
 
-class ContextTest extends TestCase
+class ScopeTest extends TestCase
 {
     public function testInitialStates()
     {
-        $context = new Context();
-        $this->assertEquals(0, $context->getTicks());
-        $this->assertEmpty($context->getFormStack());
+        $scope = new Scope();
+        $this->assertEquals(0, $scope->getTicks());
+        $this->assertEmpty($scope->getFormStack());
     }
 
     /**
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testRedefinition()
     {
-        $context = new Context();
-        $context->define('x', 2);
+        $scope = new Scope();
+        $scope->define('x', 2);
 
-        $this->expectException(ContextException::class);
-        $context->define('x', 3);
+        $this->expectException(ScopeException::class);
+        $scope->define('x', 3);
     }
 
     /**
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testStackedDefinition()
     {
-        $child = ($parent = new Context())->stack();
+        $child = ($parent = new Scope())->stack();
         $this->assertFalse($parent->has('key'));
         $this->assertNotEquals($child, $parent);
         $child->define('key', 'value');
@@ -45,60 +45,60 @@ class ContextTest extends TestCase
     }
 
     /**
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testSet()
     {
-        $context = new Context();
-        $context->define('key', 'old value');
-        $oldValue = $context->set('key', 'new value');
+        $scope = new Scope();
+        $scope->define('key', 'old value');
+        $oldValue = $scope->set('key', 'new value');
         $this->assertEquals('old value', $oldValue);
-        $this->assertEquals('new value', $context->get('key'));
+        $this->assertEquals('new value', $scope->get('key'));
     }
 
     /**
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testSetUndefined()
     {
-        $context = new Context();
+        $scope = new Scope();
 
-        $this->expectException(ContextException::class);
-        $context->set('x', 2);
+        $this->expectException(ScopeException::class);
+        $scope->set('x', 2);
     }
 
     public function testLetAgain()
     {
-        $child = (new Context())->stack();
+        $child = (new Scope())->stack();
         $child->let('x', 2);
 
-        $this->expectException(ContextException::class);
+        $this->expectException(ScopeException::class);
         $child->let('x', 3);
     }
 
     /**
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testGetUndefined()
     {
-        $context = new Context();
+        $scope = new Scope();
 
-        $this->expectException(ContextException::class);
-        $context->get('x');
+        $this->expectException(ScopeException::class);
+        $scope->get('x');
     }
 
     /**
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testParentHas()
     {
-        $child = ($parent = new Context())->stack();
+        $child = ($parent = new Scope())->stack();
         $parent->define('x', 2);
         $this->assertTrue($child->has('x'));
         $this->assertFalse($child->has('y'));
     }
 
-    public function testOperationBoundedToAContext()
+    public function testOperationBoundedToAScope()
     {
         $operation = new class() extends AutomaticOperation {
             public function getIdentifiers(): array
@@ -113,15 +113,15 @@ class ContextTest extends TestCase
 
             public function isBounded(): bool
             {
-                return (bool)$this->assertBoundedContext();
+                return (bool)$this->assertBoundedScope();
             }
         };
 
-        $operation->bindToContext(new Context());
+        $operation->bindToScope(new Scope());
         $this->assertTrue($operation->isBounded());
     }
 
-    public function testOperationNotBoundedToAContext()
+    public function testOperationNotBoundedToAScope()
     {
         $operation = new class() extends AutomaticOperation {
             public function getIdentifiers(): array
@@ -136,14 +136,12 @@ class ContextTest extends TestCase
 
             public function isBounded(): bool
             {
-                return (bool)$this->assertBoundedContext();
+                return (bool)$this->assertBoundedScope();
             }
         };
 
-        $this->expectException(ContextException::class);
-        $this->expectExceptionMessage(
-            "is not bounded to a context"
-        );
+        $this->expectException(ScopeException::class);
+        $this->expectExceptionMessage("is not bounded to a scope");
 
         $operation->isBounded();
     }

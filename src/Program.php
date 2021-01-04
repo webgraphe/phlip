@@ -5,7 +5,7 @@ namespace Webgraphe\Phlip;
 use Closure;
 use Throwable;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\Exception\ProgramException;
 use Webgraphe\Phlip\FormCollection\FormList;
 
@@ -59,16 +59,16 @@ class Program
     }
 
     /**
-     * @param Contracts\ContextContract $context
+     * @param Contracts\ScopeContract $scope
      * @return Closure
      */
-    public function compile(Contracts\ContextContract $context): Closure
+    public function compile(Contracts\ScopeContract $scope): Closure
     {
-        return function (...$arguments) use ($context) {
+        return function (...$arguments) use ($scope) {
             if ($arguments) {
-                $context = $context->stack();
+                $scope = $scope->stack();
                 foreach ($arguments as $key => $value) {
-                    $context->let('$' . $key, $value);
+                    $scope->let('$' . $key, $value);
                 }
             }
 
@@ -77,12 +77,12 @@ class Program
                 $statements = $this->statements;
                 while ($head = $statements->getHead()) {
                     $statements = $statements->getTail();
-                    $result = $context->execute($head);
+                    $result = $scope->execute($head);
                 }
             } catch (PhlipException $t) {
                 throw $t;
             } catch (Throwable $t) {
-                throw Exception\ProgramException::fromContext(clone $context, 'Program execution failed', 0, $t);
+                throw Exception\ProgramException::fromScope(clone $scope, 'Program execution failed', 0, $t);
             }
 
             return $result;
@@ -91,15 +91,15 @@ class Program
 
     /**
      * @noinspection PhpDocRedundantThrowsInspection These exception
-     * @param Contracts\ContextContract $context
+     * @param Contracts\ScopeContract $scope
      * @param mixed ...$arguments
      * @return mixed
      * @throws ProgramException
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
-    public function execute(Contracts\ContextContract $context, ...$arguments)
+    public function execute(Contracts\ScopeContract $scope, ...$arguments)
     {
-        return call_user_func($this->compile($context), ...$arguments);
+        return call_user_func($this->compile($scope), ...$arguments);
     }
 }

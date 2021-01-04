@@ -5,9 +5,9 @@ namespace Webgraphe\Phlip\Tests\Unit;
 use DateTime;
 use Exception;
 use Webgraphe\Phlip\Atom\NumberAtom;
-use Webgraphe\Phlip\Context;
+use Webgraphe\Phlip\Scope;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\Exception\IOException;
 use Webgraphe\Phlip\Exception\LexerException;
 use Webgraphe\Phlip\Exception\ParserException;
@@ -32,7 +32,7 @@ class ProgramTest extends TestCase
                 NumberAtom::fromString('3')
             )
         );
-        $this->assertEquals(3, $program->execute(new Context()));
+        $this->assertEquals(3, $program->execute(new Scope()));
     }
 
     /**
@@ -42,8 +42,8 @@ class ProgramTest extends TestCase
     {
         $message = 'Fail';
 
-        $context = new Context();
-        $context->define(
+        $scope = new Scope();
+        $scope->define(
             'fail',
             function () use ($message) {
                 throw new Exception($message);
@@ -51,12 +51,12 @@ class ProgramTest extends TestCase
         );
 
         try {
-            Program::parse('(fail)')->execute($context);
+            Program::parse('(fail)')->execute($scope);
             $this->fail("Failed to fail");
         } catch (ProgramException $e) {
             $this->assertInstanceOf(Exception::class, $previous = $e->getPrevious());
             $this->assertEquals($message, $previous->getMessage());
-            $this->assertEquals($context, $e->getContext());
+            $this->assertEquals($scope, $e->getScope());
         }
     }
 
@@ -67,7 +67,7 @@ class ProgramTest extends TestCase
      */
     public function testParse()
     {
-        $this->assertEquals(3, Program::parse('1 2 3')->execute(new Context()));
+        $this->assertEquals(3, Program::parse('1 2 3')->execute(new Scope()));
     }
 
     /**
@@ -80,7 +80,7 @@ class ProgramTest extends TestCase
     {
         $file = __DIR__ . '/ProgramTest.phlip';
         $program = Program::parseFile($file);
-        $this->assertEquals(file_get_contents($file), '"' . $program->execute(new Context()) . '"');
+        $this->assertEquals(file_get_contents($file), '"' . $program->execute(new Scope()) . '"');
     }
 
     /**
@@ -88,7 +88,7 @@ class ProgramTest extends TestCase
      * @throws ParserException
      * @throws ProgramException
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testExecuteWithParameters()
     {
@@ -98,7 +98,7 @@ class ProgramTest extends TestCase
                 NumberAtom::fromString('2'),
                 NumberAtom::fromString('3')
             )),
-            Program::parse('`(,$0 ,$1 ,$2)')->execute(new Context(), 1, 2, 3)
+            Program::parse('`(,$0 ,$1 ,$2)')->execute(new Scope(), 1, 2, 3)
         );
     }
 
@@ -135,19 +135,19 @@ class ProgramTest extends TestCase
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      * @throws LexerException
      * @throws ParserException
      * @throws ProgramException
      */
-    public function testNonInteroperableContextOnInterop()
+    public function testNonInteroperableScopeOnInterop()
     {
-        $context = Phlipy::basic()->withOperation(new CloneOperation())->getContext();
-        $context->define('now', new DateTime());
+        $scope = Phlipy::basic()->withOperation(new CloneOperation())->getScope();
+        $scope->define('now', new DateTime());
 
-        $this->expectException(ContextException::class);
-        $this->expectExceptionMessage("Class 'DateTime' requires an PHP interoperable context");
+        $this->expectException(ScopeException::class);
+        $this->expectExceptionMessage("Class 'DateTime' requires an PHP interoperable scope");
 
-        Program::parse('(clone now)')->execute($context);
+        Program::parse('(clone now)')->execute($scope);
     }
 }

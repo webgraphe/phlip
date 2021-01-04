@@ -2,7 +2,7 @@
 
 namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\FormList;
@@ -14,12 +14,12 @@ class QuoteOperation extends ManualOperation
     const IDENTIFIER = 'quote';
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return FormContract
      * @throws AssertionException
      */
-    protected function invoke(ContextContract $context, FormList $forms): FormContract
+    protected function invoke(ScopeContract $scope, FormList $forms): FormContract
     {
         return $forms->assertHead();
     }

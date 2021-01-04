@@ -8,12 +8,12 @@ use Webgraphe\Phlip\Atom\KeywordAtom;
 use Webgraphe\Phlip\Atom\NumberAtom;
 use Webgraphe\Phlip\Atom\StringAtom;
 use Webgraphe\Phlip\CodeAnchor;
-use Webgraphe\Phlip\Context;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Scope;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Contracts\ManualOperationContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\FormCollection;
 use Webgraphe\Phlip\FormCollection\Map;
 use Webgraphe\Phlip\FormCollection\FormList;
@@ -59,18 +59,18 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
     /**
      * @throws AssertionException
      * @throws Exception
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testEvaluation()
     {
         $list = $this->createFormCollection();
-        $context = new Context();
-        $context->define(IdentifierAtom::assertStaticType($list->assertHead())->getValue(), $this);
-        $this->assertTrue($list->getTail()->equals(new FormList(...$context->execute($list))));
+        $scope = new Scope();
+        $scope->define(IdentifierAtom::assertStaticType($list->assertHead())->getValue(), $this);
+        $this->assertTrue($list->getTail()->equals(new FormList(...$scope->execute($list))));
 
         $list = $this->createFormCollection();
-        $context = new Context();
-        $context->define(
+        $scope = new Scope();
+        $scope->define(
             IdentifierAtom::assertStaticType($list->assertHead())->getValue(),
             function () {
                 return func_get_args();
@@ -83,7 +83,7 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
                 [1, 2, 3],
                 (object)['key' => 'value'],
             ],
-            $context->execute($list)
+            $scope->execute($list)
         );
     }
 
@@ -99,7 +99,7 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
         $this->assertTrue($list->isEmpty());
         $this->assertNull($list->getHead());
         $this->assertTrue($list->equals($list->getTail()));
-        $this->assertNull((new Context())->execute($list));
+        $this->assertNull((new Scope())->execute($list));
 
         $this->expectException(AssertionException::class);
         $list->assertHead();
@@ -139,31 +139,31 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testNotCallable()
     {
         $list = new FormList(IdentifierAtom::fromString('not-callable'));
-        $context = new Context();
-        $context->define('not-callable', "This is a callable");
+        $scope = new Scope();
+        $scope->define('not-callable', "This is a callable");
 
         $this->expectException(AssertionException::class);
-        $context->execute($list);
+        $scope->execute($list);
     }
 
-    public function __invoke(ContextContract $context, FormContract ...$forms): array
+    public function __invoke(ScopeContract $scope, FormContract ...$forms): array
     {
         return $forms;
     }
 
     /**
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      */
     public function testFailedEvaluation()
     {
-        $context = new Context();
-        $context->define(
+        $scope = new Scope();
+        $scope->define(
             'fail',
             function () {
                 throw new Exception('Fail', 666);
@@ -174,7 +174,7 @@ class ProperListTest extends FormCollectionTest implements ManualOperationContra
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Fail');
         $this->expectExceptionCode(666);
-        $context->execute($list);
+        $scope->execute($list);
     }
 
     /**

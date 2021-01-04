@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Operation\LanguageConstruct;
 
 use ReflectionException;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Operation\Interop\ObjectOperation;
@@ -19,25 +19,25 @@ class SetOperation extends ManualOperation
     const IDENTIFIER = 'set!';
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return mixed
      * @throws AssertionException
      * @throws ReflectionException
      */
-    protected function invoke(ContextContract $context, FormList $forms)
+    protected function invoke(ScopeContract $scope, FormList $forms)
     {
         $expression = $forms->getHead();
 
         if ($expression instanceof FormList) {
-            $head = $context->execute($expression->assertHead());
-            $value = $context->execute($forms->assertTailHead());
+            $head = $scope->execute($expression->assertHead());
+            $value = $scope->execute($forms->assertTailHead());
             $tail = $expression->getTail();
             $member = IdentifierAtom::assertStaticType($tail->assertTailHead())->getValue();
 
             if ($head instanceof ObjectOperation) {
                 return $head->assignPropertyValue(
-                    static::assertObject($context->execute($tail->assertHead())),
+                    static::assertObject($scope->execute($tail->assertHead())),
                     $member,
                     $value
                 );
@@ -55,9 +55,9 @@ class SetOperation extends ManualOperation
         }
 
         if ($expression instanceof IdentifierAtom) {
-            return $context->set(
+            return $scope->set(
                 $expression->getValue(),
-                $context->execute($forms->assertTailHead())
+                $scope->execute($forms->assertTailHead())
             );
         }
 

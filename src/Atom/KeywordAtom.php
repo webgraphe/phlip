@@ -4,7 +4,7 @@ namespace Webgraphe\Phlip\Atom;
 
 use Webgraphe\Phlip\Atom;
 use Webgraphe\Phlip\Contracts\CodeAnchorContract;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Exception\AssertionException;
 use Webgraphe\Phlip\Symbol\KeywordSymbol;
 
@@ -22,10 +22,10 @@ class KeywordAtom extends Atom
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @return mixed
      */
-    public function evaluate(ContextContract $context)
+    public function evaluate(ScopeContract $scope)
     {
         return $this;
     }

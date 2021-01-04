@@ -8,10 +8,10 @@ use ReflectionException;
 use ReflectionProperty;
 use Throwable;
 use Webgraphe\Phlip\Atom\IdentifierAtom;
-use Webgraphe\Phlip\Contracts\ContextContract;
+use Webgraphe\Phlip\Contracts\ScopeContract;
 use Webgraphe\Phlip\Contracts\FormContract;
 use Webgraphe\Phlip\Exception\AssertionException;
-use Webgraphe\Phlip\Exception\ContextException;
+use Webgraphe\Phlip\Exception\ScopeException;
 use Webgraphe\Phlip\FormCollection\FormList;
 use Webgraphe\Phlip\Traits\AssertsClasses;
 
@@ -31,17 +31,17 @@ class StaticOperation extends PhpInteroperableOperation
     }
 
     /**
-     * @param ContextContract $context
+     * @param ScopeContract $scope
      * @param FormList $forms
      * @return mixed|void
      * @throws AssertionException
-     * @throws ContextException
+     * @throws ScopeException
      * @throws ReflectionException
      */
-    protected function invoke(ContextContract $context, FormList $forms)
+    protected function invoke(ScopeContract $scope, FormList $forms)
     {
         $class = static::assertClassEnabled(
-            $this->assertPhpInteroperableContext($context, static::class),
+            $this->assertPhpInteroperableScope($scope, static::class),
             IdentifierAtom::assertStaticType($forms->assertHead())->getValue()
         );
 
@@ -55,8 +55,8 @@ class StaticOperation extends PhpInteroperableOperation
             return call_user_func(
                 [$class, $member],
                 ...array_map(
-                    function (FormContract $form) use ($context) {
-                        return $context->execute($form);
+                    function (FormContract $form) use ($scope) {
+                        return $scope->execute($form);
                     },
                     $tail->getTail()->all()
                 )
